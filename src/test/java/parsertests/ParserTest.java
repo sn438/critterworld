@@ -22,7 +22,6 @@ public class ParserTest {
     @Test
     public void testProgramIsNotNull() {
         InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
-        assertNotNull(in);
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
