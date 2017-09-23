@@ -1,0 +1,9 @@
+tomcat.*
+build
+.gradle
+gradle
+content
+.classpath
+.project
+.settings
+/bin/

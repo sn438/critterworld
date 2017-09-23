@@ -1,0 +1,52 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.4'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+    // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-juli
+    compile group: 'org.apache.tomcat', name: 'tomcat-juli', version: '7.0.16'
+    // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina
+    compile group: 'org.apache.tomcat', name: 'tomcat-catalina', version: '7.0.16'
+    // https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '7.0.16'
+
+
+    // https://mvnrepository.com/artifact/junit/junit
+    compile group: 'junit', name: 'junit', version: '4.12'
+
+    // Declare the dependency for your favourite test framework you want to use in your tests.
+    // TestNG is also supported by the Gradle Test task. Just change the
+    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
+    // 'test.useTestNG()' to your build script.
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'jakob.viewcontroller.Hexworld'
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
