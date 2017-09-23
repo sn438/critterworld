@@ -43,7 +43,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'jakob.viewcontroller.Hexworld'
+        attributes 'Main-Class': 'main.Main'
     }
 
     from {
