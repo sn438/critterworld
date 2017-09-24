@@ -10,6 +10,10 @@ Included in this README is information on using Git and Gradle, which are a part
 
 First Time Setup
 ================
+The final project will require Gradle and Git. Downloads can be found here:
+* Gradle: https://gradle.org/install/
+* Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
 To get started, you will want to clone your git repository, which we have already set up for you. To do this, look for the green "Clone or download" button on the right. Once you click on this, a url should pop up. Copy this url, and then pull up your terminal and navigate to whatever folder you would like to download your repository to. Then, run the following command:
 
 ```
@@ -55,17 +59,24 @@ When working with multiple people, there is still only one remote repository. Ho
 * `git merge`- This takes any changes that were fetched, and attempts to merge those with your version of the code. Say your partner pushed their changes, you would typically fetch those changes, and then merge them in with your code. This may cause merge conflicts, which must be resolved by hand and the final result must be committed.
 Because of how often you'll want to merge all the new changes you fetch, there is a command `git pull` that runs both fetch and merge.
 
+Another important command is `git checkout`, which is how you navigate to previous commits. As mentioned above, each commit has a SHA-1 checksum as an identifier. These can be found by browsing through the output of `git log` or by looking through github at your previous commits. From there, you can run `git checkout <commit SHA-1 here>` to revert back to that commit.
+
 
 ### Getting Started With Git
 
 Git installation instructions can be found here: https://git-scm.com/book/id/v2/Getting-Started-Installing-Git
 This website also contains official documentation for all git commands, and is very good reference material.
-We recommend using Git from terminal.
+We recommend using Git from terminal. We described the bare minimum functionality, so if you're interesetd in improving your workflow further, here is a list of useful git commands:
+* `git branch`: https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging This one is especially useful and relevant for this project. It allows multiple people to work on different versions of the code without directly affecting the others.
+* `git rebase`: https://git-scm.com/book/en/v2/Git-Branching-Rebasing A good tool that goes along with git branch.
+* `git remote`: https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes
+* `git bisect`: https://git-scm.com/docs/git-bisect Kind of a cool option- it lets you do a binary search in your commit history for a bug.
+* `git submodule`: https://git-scm.com/docs/git-submodule Good for if you work on a project that references another git project.
 
 ---
 # Gradle
 
-Gradle is a build system that helps with managing dependencies and automating common tasks. In your final project, you will have to use a few extra libraries which we will provide and have you use through Gradle. These extra libraries come as .jar files, and Gradle automatically handles the rest.
+Gradle is a build system that helps with managing dependencies and automating common tasks. In your final project, you will have to use a few extra libraries which we will provide and have you use through Gradle. You can specify these libraries in the Gradle build file, and Gradle automatically handles the rest.
 
 We have provided you with a build file to be used for A4-A7.
 You should not need to make any changes to this file, unless you want to use other libraries as part of your project.
