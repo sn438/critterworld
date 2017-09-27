@@ -7,3 +7,8 @@ content
 .project
 .settings
 /bin/
+*.class
+*.jar
+*.pdf
+*.DS_Store
+
