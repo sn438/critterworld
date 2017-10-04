@@ -13,9 +13,7 @@ import ast.Program;
 import parse.Parser;
 import parse.ParserFactory;
 
-/**
- * This class contains tests for the Critter parser.
- */
+/** This class contains tests for the Critter parser. */
 public class ParserTest {
 
     /** Checks that a valid critter program is not {@code null} when parsed. */

@@ -8,14 +8,17 @@ public class ParseAndMutateApp {
 		try {
 			if (args.length == 1) {
 				file = args[0];
-			} else if (args.length == 3 && args[0].equals("--mutate")) {
+			}
+			else if (args.length == 3 && args[0].equals("--mutate")) {
 				n = parsePositive(args[1]);
 				file = args[2];
-			} else {
+			}
+			else {
 				throw new IllegalArgumentException();
 			}
 			// TODO print program and mutations
-		} catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+		}
+		catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             System.out.println("Usage:\n" + "  <input_file>\n" + " --mutate <n> <input_file");
 		}
 	}
@@ -23,17 +26,16 @@ public class ParseAndMutateApp {
 	/**
      * Parses {@code str} to an integer.
      * 
-     * @param str
-     *            the string to parse
+     * @param str - the string to parse
      * @return the integer represented by {@code str}
-     * @throws NumberFormatException
-     *             if {@code str} does not contain a parsable integer
-     * @throws IllegalArgumentException
-     *             if {@code str} represents a negative integer
+     * @throws NumberFormatException if {@code str} does not contain a parsable integer
+     * @throws IllegalArgumentException if {@code str} represents a negative integer
      */
 	public static int parsePositive(String str) {
 		int n = Integer.parseInt(str);
-		if (n < 0) { throw new IllegalArgumentException(); }
-		else { return n; }
+		if (n < 0)
+			throw new IllegalArgumentException();
+		else 
+			return n;
 	}
 }

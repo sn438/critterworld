@@ -1,8 +1,6 @@
 package ast;
 
-/**
- * A representation of a critter rule.
- */
+/** A representation of a critter rule. */
 public class Rule implements Node {
 
    @Override

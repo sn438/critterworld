@@ -23,8 +23,7 @@ class ParserImpl implements Parser {
     * name "parseX" have the same spec except that they parse syntactic form X.
     * 
     * @return the created AST
-    * @throws SyntaxError
-    *            if there the input tokens have invalid syntax
+    * @throws SyntaxError if there the input tokens have invalid syntax
     */
    public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
       // TODO
@@ -61,9 +60,7 @@ class ParserImpl implements Parser {
 
    /**
     * Consumes a token of the expected type.
-    * 
-    * @throws SyntaxError
-    *            if the wrong kind of token is encountered.
+    * @throws SyntaxError if the wrong kind of token is encountered.
     */
    public static void consume(Tokenizer t, TokenType tt) throws SyntaxError {
       // TODO

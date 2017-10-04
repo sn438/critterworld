@@ -1,13 +1,10 @@
 package ast;
 
-/**
- * A node in the abstract syntax tree of a program.
- */
+/** A node in the abstract syntax tree of a program. */
 public interface Node {
 
    /**
     * The number of nodes in the AST rooted at this node, including this node
-    * 
     * @return The size of the AST rooted at this node
     */
    int size();
@@ -20,11 +17,9 @@ public interface Node {
     * 3. All nodes in the AST rooted at {@code this} must be reachable by a call
     * to {@code this.nodeAt(i)} with an appropriate index {@code i}
     * 
-    * @param index
-    *           The index of the node to retrieve
+    * @param index - The index of the node to retrieve
     * @return The node at {@code index}
-    * @throws IndexOutOfBoundsException
-    *            if {@code index} is not in the range of valid indices
+    * @throws IndexOutOfBoundsException if {@code index} is not in the range of valid indices
     */
    Node nodeAt(int index);
 
@@ -40,8 +35,7 @@ public interface Node {
     * parsing the program must yield an AST which contains a subtree identical
     * to the one rooted at {@code this}
     * 
-    * @param sb
-    *           The {@code StringBuilder} to which the program will be appended
+    * @param sb - The {@code StringBuilder} to which the program will be appended
     * @return The {@code StringBuilder} to which this program was appended
     */
    StringBuilder prettyPrint(StringBuilder sb);

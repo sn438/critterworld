@@ -1,8 +1,6 @@
 package parse;
 
-/**
- * Type of token representing a terminal in the critter language.
- */
+/** Type of token representing a terminal in the critter language. */
 public enum TokenCategory {
 	ACTION,
 	RELOP,

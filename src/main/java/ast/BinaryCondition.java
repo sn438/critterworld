@@ -1,14 +1,10 @@
 package ast;
 
-/**
- * A representation of a binary Boolean condition: 'and' or 'or'
- *
- */
+/** A representation of a binary Boolean condition: 'and' or 'or' */
 public class BinaryCondition implements Condition {
 
    /**
     * Create an AST representation of l op r.
-    * 
     * @param l
     * @param op
     * @param r
@@ -41,9 +37,7 @@ public class BinaryCondition implements Condition {
       return null;
    }
 
-   /**
-    * An enumeration of all possible binary condition operators.
-    */
+   /** An enumeration of all possible binary condition operators. */
    public enum Operator {
       OR, AND;
    }
