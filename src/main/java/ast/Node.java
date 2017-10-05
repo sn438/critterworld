@@ -1,6 +1,6 @@
 package ast;
 
-/** A node in the abstract syntax tree of a program. */
+/** A node in the abstract syntax tree of a program. */ //test
 public interface Node {
 
    /**
