@@ -1,7 +1,8 @@
 package ast;
 
 /** An abstraction of a critter program. */
-public interface Program extends Node {
+public interface Program extends Node
+{
    /**
     * Mutates this program with a single mutation
     * @return The root of the mutated AST
