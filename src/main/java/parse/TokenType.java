@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * An instance represents a Token with a category and a string representation.
- */
+/** An instance represents a Token with a category and a string representation. */
 public enum TokenType {
    MEM(TokenCategory.OTHER, "mem"),
    WAIT(TokenCategory.ACTION, "wait"),
@@ -79,10 +77,8 @@ public enum TokenType {
      * Constructs a new {@code TokenType} with category {@code cat} and string
      * representation {@code s}.
      * 
-     * @param tcat
-     *            token category, checks {@code tcat != null}
-     * @param s
-     *            string representation of this token, check {@code s != null}
+     * @param tcat - token category, checks {@code tcat != null}
+     * @param s - string representation of this token, check {@code s != null}
      */
    private TokenType(TokenCategory tcat, String s) {
        assert tcat != null : "TokenType must have a category";
@@ -93,7 +89,6 @@ public enum TokenType {
    
    /**
      * Returns this {@code TokenType}'s category.
-     * 
      * @return this {@code TokenType}'s category
      */
    public TokenCategory category() {
@@ -101,11 +96,9 @@ public enum TokenType {
    }
 
    /**
-     * Returns the {@code TokenType} that is represented by the string
-     * {@code rep}.
+     * Returns the {@code TokenType} that is represented by the string {@code rep}.
      * 
-     * @param rep
-     *            the string representing the {@code TokenType}, checks
+     * @param rep - the string representing the {@code TokenType}, checks
      *            {@code rep} indeed represents a valid {@code TokenType}
      * @return the {@code TokenType} represented by the string {@code rep}
      */

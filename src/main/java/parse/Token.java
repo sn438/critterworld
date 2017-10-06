@@ -8,21 +8,17 @@ class Token {
 	/** The type of this Token. */
 	private final TokenType type;
 
-	/**
-	 * The line number in the input file containing this token. Must be positive, or
-	 * -1 for the error token.
-	 */
+	/** The line number in the input file containing this token. Must be positive, or
+	 * -1 for the error token. */
 	private final int lineNo;
 
 	/**
 	 * Create a token with the specified type.
 	 *
-	 * @param type
-	 *            - The ID of the desired token type. Checks {@code type != null}.
-	 * @param lineNum
-	 *            - The line number in the input file containing this token, or
-	 *            {code -1} for an error token. Checks {@code lineNum > 0} or
-	 *            {@code lineNum == -1}.
+	 * @param type - The ID of the desired token type. Checks {@code type != null}.
+	 * @param lineNum - The line number in the input file containing this token, or
+	 *            		{code -1} for an error token. Checks {@code lineNum > 0} or
+	 *            		{@code lineNum == -1}.
 	 */
 	Token(TokenType t, int lineNum) {
 		assert t != null : "TokenType may not be null";
@@ -51,7 +47,6 @@ class Token {
 
 	/**
 	 * Returns the number token associated with this Token.
-	 * 
 	 * @return The number token associated with this token.
 	 * @throws InputMismatchException if this token is not of number type
 	 */
