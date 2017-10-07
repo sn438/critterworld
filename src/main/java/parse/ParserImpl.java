@@ -25,8 +25,7 @@ class ParserImpl implements Parser
 	 * "parseX" have the same spec except that they parse syntactic form X.
 	 * 
 	 * @return the created AST
-	 * @throws SyntaxError
-	 *             if there the input tokens have invalid syntax
+	 * @throws SyntaxError if there the input tokens have invalid syntax
 	 */
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError
 	{

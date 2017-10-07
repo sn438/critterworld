@@ -1,7 +1,7 @@
 package ast;
 
 /** A data structure representing a critter program. */
-public class ProgramImpl implements Program
+public class ProgramImpl extends AbstractNode implements Program
 {
 
 	@Override
