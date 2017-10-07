@@ -1,8 +1,14 @@
 package ast;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /** A node in the abstract syntax tree of a program. */ 
 public interface Node {
+=======
+/** A node in the abstract syntax tree of a program. */
+public interface Node
+{
+>>>>>>> 53c4c2b2145a668b9c209d5424c0d100e8456a74
 =======
 /** A node in the abstract syntax tree of a program. */
 public interface Node
