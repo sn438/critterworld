@@ -86,8 +86,8 @@ public enum TokenType
    {
        assert tcat != null : "TokenType must have a category";
        assert s != null : "TokenType must have a string representation";
-      category = tcat;
-      stringRep = s;
+       category = tcat;
+       stringRep = s;
    }
    
    /**
