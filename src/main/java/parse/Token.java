@@ -3,28 +3,26 @@ package parse;
 import java.util.InputMismatchException;
 
 /** A Token represents a legal token (symbol) in the critter language */
-class Token {
+class Token
+{
 
 	/** The type of this Token. */
 	private final TokenType type;
 
-	/**
-	 * The line number in the input file containing this token. Must be positive, or
-	 * -1 for the error token.
-	 */
+	/** The line number in the input file containing this token. Must be positive, or
+	 * -1 for the error token. */
 	private final int lineNo;
 
 	/**
 	 * Create a token with the specified type.
 	 *
-	 * @param type
-	 *            - The ID of the desired token type. Checks {@code type != null}.
-	 * @param lineNum
-	 *            - The line number in the input file containing this token, or
-	 *            {code -1} for an error token. Checks {@code lineNum > 0} or
-	 *            {@code lineNum == -1}.
+	 * @param type - The ID of the desired token type. Checks {@code type != null}.
+	 * @param lineNum - The line number in the input file containing this token, or
+	 *            		{code -1} for an error token. Checks {@code lineNum > 0} or
+	 *            		{@code lineNum == -1}.
 	 */
-	Token(TokenType t, int lineNum) {
+	Token(TokenType t, int lineNum)
+	{
 		assert t != null : "TokenType may not be null";
 		assert lineNum > 0 || lineNum == -1 : "lineNum must be positive or -1 for an error token, but is; " + lineNum;
 		type = t;
@@ -32,12 +30,14 @@ class Token {
 	}
 
 	/** @return The type of this token */
-	TokenType getType() {
+	TokenType getType()
+	{
 		return type;
 	}
 
 	/** @return The line number in the input file of this token. */
-	int lineNumber() {
+	int lineNumber()
+	{
 		return lineNo;
 	}
 
@@ -45,17 +45,18 @@ class Token {
 	 * Determine whether this token is of number type.
 	 * @return true if this token is of number type
 	 */
-	boolean isNum() {
+	boolean isNum()
+	{
 		return type == TokenType.NUM;
 	}
 
 	/**
 	 * Returns the number token associated with this Token.
-	 * 
 	 * @return The number token associated with this token.
 	 * @throws InputMismatchException if this token is not of number type
 	 */
-	NumToken toNumToken() {
+	NumToken toNumToken()
+	{
 		if (isNum())
 			return (NumToken) this;
 		throw new InputMismatchException("Token is not a number.");
@@ -65,7 +66,8 @@ class Token {
 	 * Determine whether this token is of action type.
 	 * @return true if this token is of action type
 	 */
-	boolean isAction() {
+	boolean isAction()
+	{
 		return type.category() == TokenCategory.ACTION;
 	}
 
@@ -73,7 +75,8 @@ class Token {
 	 * Determine whether this token is of addop type.
 	 * @return true if this token is of addop type
 	 */
-	boolean isAddOp() {
+	boolean isAddOp()
+	{
 		return type.category() == TokenCategory.ADDOP;
 	}
 
@@ -81,7 +84,8 @@ class Token {
 	 * Determine whether this token is of mulop type.shorthand.
 	 * @return true if this token is of mulop type.shorthand
 	 */
-	boolean isMulOp() {
+	boolean isMulOp()
+	{
 		return type.category() == TokenCategory.MULOP;
 	}
 
@@ -89,7 +93,8 @@ class Token {
 	 * Determine whether this token is of sensor type.shorthand.
 	 * @return true if this token is of sensor type.shorthand
 	 */
-	boolean isSensor() {
+	boolean isSensor()
+	{
 		return type.category() == TokenCategory.SENSOR;
 	}
 
@@ -97,17 +102,20 @@ class Token {
 	 * Determine whether this token is syntactic sugar for memory locations
 	 * @return true if this token is syntactic sugar for memory locations
 	 */
-	boolean isMemSugar() {
+	boolean isMemSugar()
+	{
 		return type.category() == TokenCategory.MEMSUGAR;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return type.toString();
 	}
 
 	/** A NumToken is a token containing a number. */
-	static class NumToken extends Token {
+	static class NumToken extends Token
+	{
 
 		/** The int value this token represents. */
 		private final int value;
@@ -121,7 +129,8 @@ class Token {
 		 *            		{@code lineNum > 0}. Note that a {@code NumToken} is not an error
 		 *            		token, so the line number must be positive.
 		 */
-		NumToken(int v, int lineNum) {
+		NumToken(int v, int lineNum)
+		{
 			super(TokenType.NUM, lineNum);
 			assert lineNum > 0 : "NumToken line number must be positive.";
 			value = v;
@@ -131,18 +140,21 @@ class Token {
 		 * Returns the value of the number this token represents.
 		 * @return the value of the number this token represents
 		 */
-		int getValue() {
+		int getValue()
+		{
 			return value;
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return Integer.toString(value);
 		}
 	}
 
 	/** Helper class to represent an end of file token. */
-	static class EOFToken extends Token {
+	static class EOFToken extends Token
+	{
 
 		/** Contents of the string builder at the time the EOF was encountered. */
 		private final String builderContents;
@@ -156,7 +168,8 @@ class Token {
 		 *            		{@code lineNum > 0}. Note that an {@code EOFToken} is not an error
 		 *            		token, so the line number must be positive.
 		 */
-		EOFToken(String sbContents, int lineNum) {
+		EOFToken(String sbContents, int lineNum)
+		{
 			super(TokenType.EOF, lineNum);
 			assert lineNum > 0 : "EOFToken lineNum must be positive.";
 			builderContents = sbContents;
@@ -166,18 +179,21 @@ class Token {
 		 * Returns the contents of the string builder when the EOF was encountered.
 		 * @return the contents of the string builder when the EOF was encountered
 		 */
-		String getBufferContents() {
+		String getBufferContents()
+		{
 			return builderContents;
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "Buffer contained " + builderContents + " at EOF";
 		}
 	}
 
 	/** Helper class to represent an error token. */
-	static class ErrorToken extends Token {
+	static class ErrorToken extends Token
+	{
 
 		/** String value stored by this error token. */
 		private final String value;
@@ -186,7 +202,8 @@ class Token {
 		 * Constructs a new error token containing the value {@code v}.
 		 * @param v - String value for this error token.
 		 */
-		ErrorToken(String v) {
+		ErrorToken(String v)
+		{
 			super(TokenType.ERROR, -1);
 			value = v;
 		}
@@ -195,12 +212,14 @@ class Token {
 		 * Returns the string value stored by this error token.
 		 * @return the string value stored by this error token
 		 */
-		String getValue() {
+		String getValue()
+		{
 			return value;
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "[error@" + lineNumber() + "]: " + value;
 		}
 	}

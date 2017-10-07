@@ -1,7 +1,6 @@
 package ast;
 
-/** A representation of a critter rule. */
-public class Rule extends AbstractNode
+public abstract class AbstractNode implements Node
 {
 
 	@Override
@@ -25,10 +24,4 @@ public class Rule extends AbstractNode
 		return null;
 	}
 
-	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -14,11 +14,13 @@ import parse.Parser;
 import parse.ParserFactory;
 
 /** This class contains tests for the Critter parser. */
-public class ParserTest {
+public class ParserTest
+{
 
     /** Checks that a valid critter program is not {@code null} when parsed. */
     @Test
-    public void testProgramIsNotNull() {
+    public void testProgramIsNotNull()
+    {
         InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
