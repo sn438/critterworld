@@ -2,7 +2,9 @@ package ast;
 
 public abstract class AbstractNode implements Node
 {
-
+	/** The number of nodes rooted at a node, not including itself. */
+	protected int size;
+	
 	@Override
 	public int size()
 	{
@@ -23,5 +25,10 @@ public abstract class AbstractNode implements Node
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return prettyPrint(new StringBuilder()).toString();
+	}
 }

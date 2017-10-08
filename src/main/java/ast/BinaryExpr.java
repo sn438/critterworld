@@ -3,11 +3,14 @@ package ast;
 /** A representation of a binary numerical expression that evaluates to an integer. */
 public class BinaryExpr extends AbstractNode implements Expr
 {
-	
+	/** The left child of this node. */
 	private Expr left;
+	/** The operation to be performed on the two children. */
 	private MathOp op;
+	/** The right child of this node. */
 	private Expr right;
 	
+	/** Creates a BinaryExpr node. */
 	public BinaryExpr(Expr l, MathOp operator, Expr r)
 	{
 		this.left = l;
@@ -23,13 +26,14 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}*/
 	
 	@Override
-	//TODO fix
+	//TODO implement
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		return null;
 	}
 	
-	//TODO
+	/* To be done in A5
+	@Override
 	public int evaluateNode()
 	{
 		int leftValue = left.evaluateNode();
@@ -50,8 +54,9 @@ public class BinaryExpr extends AbstractNode implements Expr
 				return 0;
 		}
 	}
+	*/
 	
-	/** Enumerates all the possible binary mathematical operations. */
+	/** Enumerates all the accepted binary mathematical operations. */
 	public enum MathOp
 	{
 		ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD;

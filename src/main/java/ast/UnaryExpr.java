@@ -3,22 +3,40 @@ package ast;
 public class UnaryExpr extends AbstractNode implements Expr
 {
 	
-	private Factor factor;
-	private Expr expression;
+	private Expr exp;
+	private UnaryExprType type;
 	
-	public UnaryExpr(Factor factor, Expr expression) {
-		this.factor = factor;
-		this.expression = expression;
+	public UnaryExpr(Expr e, UnaryExprType t)
+	{
+		this.exp = e;
+		this.type = t;
 	}
 	
+	/* To be done in A5
 	@Override
 	public int evaluateNode()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		int val = exp.evaluateNode();
+		switch(type)
+		{
+			case CONSTANT:
+				return val;
+			case MEMORYVAL:
+				return mem[val];
+			case EXPRESSION:
+				return val;
+			case NEGATION:
+				return -1 * val;
+			case SENSORVAL:
+				
+			default:
+				return 0;
+		}
 	}
+	*/
 	
-	public enum Factor{
-		CONSTANT, MEMORY, EXPRESSION, NEGATE, SENSOR
+	public enum UnaryExprType
+	{
+		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL
 	}
 }
