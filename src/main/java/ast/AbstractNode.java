@@ -20,11 +20,7 @@ public abstract class AbstractNode implements Node
 	}
 
 	@Override
-	public StringBuilder prettyPrint(StringBuilder sb)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract StringBuilder prettyPrint(StringBuilder sb);
 	
 	@Override
 	public String toString()

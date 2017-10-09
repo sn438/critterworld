@@ -41,8 +41,10 @@ public class BinaryCondition extends AbstractNode implements Condition
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		sb.append(left.toString());
+		sb.append(op == Operator.OR ? "or" : "and");
+		sb.append(right.toString());
+		return sb;
 	}
 
 	/** An enumeration of all possible binary condition operators. */

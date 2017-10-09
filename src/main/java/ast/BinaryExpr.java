@@ -18,42 +18,36 @@ public class BinaryExpr extends AbstractNode implements Expr
 		this.right = r;
 	}
 	
-	/*public BinaryExpr(Expr l)
-	{
-		this.left = l;
-		this.op = null;
-		this.right = null;
-	}*/
-	
 	@Override
-	//TODO implement
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		return null;
+		sb.append(left.toString());
+		switch(operator)
+		{
+			case ADD:
+				sb.append(" + ");
+				break;
+			case SUBTRACT:
+				sb.append(" - ");
+				break;
+			case MULTIPLY:
+				sb.append(" * ");
+				break;
+			case DIVIDE:
+				sb.append(" / ");
+				break;
+			case MOD:
+				sb.append(" % ");
+				break;
+			default:
+				break;
+		}
+		return sb;
 	}
 	
 	@Override
 	public int evaluateNode()
 	{
-		/*
-		int leftValue = left.evaluateNode();
-		int rightValue = right.evaluateNode();
-		switch(operator)
-		{
-			case ADD:
-				return leftValue + rightValue;
-			case SUBTRACT:
-				return leftValue - rightValue;
-			case MULTIPLY:
-				return leftValue * rightValue;
-			case DIVIDE:
-				return leftValue / rightValue;
-			case MOD:
-				return leftValue % rightValue;
-			default:
-				return 0;
-		}
-		*/
 		throw new UnsupportedOperationException();
 	}
 
