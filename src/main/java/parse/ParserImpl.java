@@ -9,14 +9,24 @@ import ast.ProgramImpl;
 import ast.Rule;
 import exceptions.SyntaxError;
 
-class ParserImpl implements Parser
-{
+class ParserImpl implements Parser {
+	/**
+	 * tokens is the Tokenizer that contains all the tokens from which the AST is
+	 * built.
+	 */
+	private Tokenizer tokens;
+	private Program programAST;
 
 	@Override
-	public Program parse(Reader r)
-	{
-		// TODO
-		throw new UnsupportedOperationException();
+	public Program parse(Reader r) {
+		this.tokens = new Tokenizer(r);
+		try {
+			this.programAST = parseProgram(tokens);
+		} catch (SyntaxError e) {
+			System.out.println("The program inputted does not have the proper syntax.");
+			System.exit(0);
+		}
+		return this.programAST;
 	}
 
 	/**
@@ -25,40 +35,38 @@ class ParserImpl implements Parser
 	 * "parseX" have the same spec except that they parse syntactic form X.
 	 * 
 	 * @return the created AST
-	 * @throws SyntaxError if there the input tokens have invalid syntax
+	 * @throws SyntaxError
+	 *             if there the input tokens have invalid syntax
 	 */
-	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError
-	{
+	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
+		while (t.hasNext()) {
+			if (t.next().toString().equals("-->")) {
+				parseRule(t);
+			}
+		}
+		return new ProgramImpl();
+	}
+
+	public static Rule parseRule(Tokenizer t) throws SyntaxError {
+		return new Rule();
+	}
+
+	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
 		// TODO
 		throw new UnsupportedOperationException();
 	}
 
-	public static Rule parseRule(Tokenizer t) throws SyntaxError
-	{
+	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		// TODO
 		throw new UnsupportedOperationException();
 	}
 
-	public static Condition parseCondition(Tokenizer t) throws SyntaxError
-	{
+	public static Expr parseTerm(Tokenizer t) throws SyntaxError {
 		// TODO
 		throw new UnsupportedOperationException();
 	}
 
-	public static Expr parseExpression(Tokenizer t) throws SyntaxError
-	{
-		// TODO
-		throw new UnsupportedOperationException();
-	}
-
-	public static Expr parseTerm(Tokenizer t) throws SyntaxError
-	{
-		// TODO
-		throw new UnsupportedOperationException();
-	}
-
-	public static Expr parseFactor(Tokenizer t) throws SyntaxError
-	{
+	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
 		// TODO
 		throw new UnsupportedOperationException();
 	}
@@ -68,10 +76,11 @@ class ParserImpl implements Parser
 
 	/**
 	 * Consumes a token of the expected type.
-	 * @throws SyntaxError if the wrong kind of token is encountered.
+	 * 
+	 * @throws SyntaxError
+	 *             if the wrong kind of token is encountered.
 	 */
-	public static void consume(Tokenizer t, TokenType tt) throws SyntaxError
-	{
+	public static void consume(Tokenizer t, TokenType tt) throws SyntaxError {
 		// TODO
 		throw new UnsupportedOperationException();
 	}

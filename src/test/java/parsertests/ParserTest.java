@@ -12,6 +12,7 @@ import org.junit.Test;
 import ast.Program;
 import parse.Parser;
 import parse.ParserFactory;
+import parse.Tokenizer;
 
 /** This class contains tests for the Critter parser. */
 public class ParserTest
@@ -23,6 +24,7 @@ public class ParserTest
     {
         InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
+        Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         assertNotNull("A valid critter program should not be null.", prog);

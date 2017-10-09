@@ -2,41 +2,24 @@ package ast;
 
 public class UnaryExpr extends AbstractNode implements Expr
 {
+	/**
+	 * factor is the enum that indicates what kind of factor is stored in the AST.
+	 * expression is the 
+	 */
+	private Factor factor;
+	private Expr expression;
+	private int value;
 	
-	private Expr exp;
-	private UnaryExprType type;
-	
-	public UnaryExpr(Expr e, UnaryExprType t)
-	{
-		this.exp = e;
-		this.type = t;
+	public UnaryExpr(Factor factor, Expr expression) {
+		this.factor = factor;
+		this.expression = expression;
 	}
 	
-	/* To be done in A5
-	@Override
-	public int evaluateNode()
-	{
-		int val = exp.evaluateNode();
-		switch(type)
-		{
-			case CONSTANT:
-				return val;
-			case MEMORYVAL:
-				return mem[val];
-			case EXPRESSION:
-				return val;
-			case NEGATION:
-				return -1 * val;
-			case SENSORVAL:
-				
-			default:
-				return 0;
-		}
+	public UnaryExpr(int value) {
+		this.value = value;
 	}
-	*/
 	
-	public enum UnaryExprType
-	{
-		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL
+	public enum Factor{
+		CONSTANT, MEMORY, EXPRESSION, NEGATE, SENSOR
 	}
 }
