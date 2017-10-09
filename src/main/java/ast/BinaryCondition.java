@@ -4,14 +4,17 @@ package ast;
 public class BinaryCondition extends AbstractNode implements Condition
 {
 
+	/** The left child of this node. */
 	private Condition left;
+	/** The operation to be performed on the two children. */
 	private Operator op;
+	/** The right child of this node. */
 	private Condition right;
 	
 	/**
-	 * Create an AST representation of l op r.
+	 * Creates an AST representation of l op r.
 	 * @param l
-	 * @param op
+	 * @param o
 	 * @param r
 	 */
 	public BinaryCondition(Condition l, Operator o, Condition r)

@@ -10,7 +10,7 @@ public class BinaryExpr extends AbstractNode implements Expr
 	/** The right child of this node. */
 	private Expr right;
 	
-	/** Creates a BinaryExpr node. */
+	/** Creates a BinaryExpr node, an AST representation of left op right. */
 	public BinaryExpr(Expr l, MathOp op, Expr r)
 	{
 		this.left = l;
@@ -32,10 +32,10 @@ public class BinaryExpr extends AbstractNode implements Expr
 		return null;
 	}
 	
-	/* To be done in A5
 	@Override
 	public int evaluateNode()
 	{
+		/*
 		int leftValue = left.evaluateNode();
 		int rightValue = right.evaluateNode();
 		switch(operator)
@@ -53,8 +53,10 @@ public class BinaryExpr extends AbstractNode implements Expr
 			default:
 				return 0;
 		}
+		*/
+		throw new UnsupportedOperationException();
 	}
-	*/
+
 	
 	/** Enumerates all the accepted binary mathematical operations. */
 	public enum MathOp

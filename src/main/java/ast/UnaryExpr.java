@@ -12,10 +12,10 @@ public class UnaryExpr extends AbstractNode implements Expr
 		this.type = t;
 	}
 	
-	/* To be done in A5
 	@Override
 	public int evaluateNode()
 	{
+		/*
 		int val = exp.evaluateNode();
 		switch(type)
 		{
@@ -32,8 +32,9 @@ public class UnaryExpr extends AbstractNode implements Expr
 			default:
 				return 0;
 		}
+		*/
+		throw new UnsupportedOperationException();
 	}
-	*/
 	
 	public enum UnaryExprType
 	{

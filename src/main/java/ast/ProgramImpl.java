@@ -38,12 +38,4 @@ public class ProgramImpl extends AbstractNode implements Program
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
