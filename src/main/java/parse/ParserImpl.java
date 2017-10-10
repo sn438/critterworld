@@ -41,7 +41,6 @@ class ParserImpl implements Parser {
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
 		while (t.hasNext()) {
 			if (t.peek().toString().equals("-->")) {
-				consume(t, t.peek().getType());
 				parseRule(t);
 			}
 			t.next();
@@ -50,7 +49,8 @@ class ParserImpl implements Parser {
 	}
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {
-		System.out.println(t.next());
+		Rule returnRule = new Rule();
+		returnRule.setCondition(parseCondition(t));
 		return new Rule();
 	}
 

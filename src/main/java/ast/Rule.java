@@ -3,6 +3,7 @@ package ast;
 /** A representation of a critter rule. */
 public class Rule extends AbstractNode
 {
+	private Condition condition;
 	
 	@Override
 	public int size()
@@ -23,5 +24,9 @@ public class Rule extends AbstractNode
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 }

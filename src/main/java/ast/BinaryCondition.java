@@ -4,7 +4,6 @@ package ast;
 public class BinaryCondition extends AbstractNode implements Condition
 {
 
-<<<<<<< HEAD
 
 	/**
 	 * Create an AST representation of l op r.
@@ -12,8 +11,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	 * @param l 
 	 * @param op
 
-=======
->>>>>>> bcbac9a71a41a75cc4a622474fdf2d9fa785a8ad
+
 	/** The left child of this node. */
 	private Condition left;
 	/** The operation to be performed on the two children. */
@@ -25,10 +23,6 @@ public class BinaryCondition extends AbstractNode implements Condition
 	 * Creates an AST representation of l op r.
 	 * @param l
 	 * @param o
-<<<<<<< HEAD
-
-=======
->>>>>>> bcbac9a71a41a75cc4a622474fdf2d9fa785a8ad
 	 * @param r
 	 */
 	
