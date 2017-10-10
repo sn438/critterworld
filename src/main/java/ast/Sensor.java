@@ -19,12 +19,6 @@ public class Sensor extends AbstractNode implements Expr
 		type = SensorType.SMELL;
 		index = null;
 	}
-	
-	@Override
-	public int evaluate()
-	{
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
@@ -47,6 +41,20 @@ public class Sensor extends AbstractNode implements Expr
 				break;
 		}
 		return sb;
+	}
+	
+	@Override
+	public int size()
+	{
+		if(type == SensorType.SMELL)
+			return 1;
+		return 1 + index.size();
+	}
+	
+	@Override
+	public int evaluate()
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	/** An enumeration of all the possible Sensor types. */

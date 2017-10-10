@@ -47,6 +47,12 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
+	public int size()
+	{
+		return 1 + left.size() + right.size();
+	}
+	
+	@Override
 	public int evaluate()
 	{
 		throw new UnsupportedOperationException();

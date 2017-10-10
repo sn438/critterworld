@@ -1,7 +1,7 @@
 package ast;
 
 /** A representation of a relational comparison between two numerical expressions. */
-public class Relation extends AbstractNode
+public class Relation extends AbstractNode implements Condition
 {
 	/** The left child of this node. */
 	private Expr left;
@@ -10,7 +10,6 @@ public class Relation extends AbstractNode
 	/** The right child of this node. */
 	private Expr right;
 	
-	private boolean isCond;
 	private Condition cond;
 	
 	/** */
@@ -19,59 +18,64 @@ public class Relation extends AbstractNode
 		this.left = l;
 		this.op = o;
 		this.right = r;
-		this.isCond = false;
 		this.cond = null;
 	}
 	
 	public Relation(Condition c)
 	{
 		this.left = null;
-		this.op = null;
+		this.op = RelOp.ISCOND;
 		this.right = null;
-		this.isCond = true;
 		this.cond = c;
 	}
 
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
-	{
-		if(isCond)
-		{
-			sb.append("{" + cond.toString() + "}");
-			return sb;
-		}
-		
-		sb.append(left.toString());
+	{	
 		switch(op)
 		{
 			case LESS:
-				sb.append(" < ");
+				sb.append(left.toString() + " < " + right.toString());
 				break;
 			case LESSOREQ:
-				sb.append(" <= ");
+				sb.append(left.toString() + " <= " + right.toString());
 				break;
 			case GREATER:
-				sb.append(" > ");
+				sb.append(left.toString() + " > " + right.toString());
 				break;
 			case GREATEROREQ:
-				sb.append(" >= ");
+				sb.append(left.toString() + " >= " + right.toString());
 				break;
 			case EQUAL:
-				sb.append(" = ");
+				sb.append(left.toString() + " = " + right.toString());
 				break;
 			case NOTEQUAL:
-				sb.append(" != ");
+				sb.append(left.toString() + " != " + right.toString());
 				break;
+			case ISCOND:
+				sb.append("{" + cond.toString() + "}");
 			default:
 				break;
 		}
-		sb.append(right.toString());
 		return sb;
 	}
+	
+	@Override
+	public int size()
+	{
+		if(op == RelOp.ISCOND)
+			return 1 + cond.size();
+		return 1 + left.size() + right.size();
+	}
 
+	@Override
+	public boolean evaluate()
+	{
+		throw new UnsupportedOperationException();
+	}
 	/** An enumeration of all the accepted mathematical relational operators. */
 	public enum RelOp
 	{
-		LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOTEQUAL;
+		LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOTEQUAL, ISCOND;
 	}
 }

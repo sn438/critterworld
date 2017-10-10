@@ -15,8 +15,7 @@ public class Rule extends AbstractNode
 	@Override
 	public int size()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return 1 + cond.size() + comm.size();
 	}
 
 	@Override

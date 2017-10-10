@@ -11,8 +11,10 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public int size()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 1;
+		for(Rule r : RulesList)
+			result += r.size();
+		return result;
 	}
 
 	@Override

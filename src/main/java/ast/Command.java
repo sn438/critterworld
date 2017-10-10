@@ -25,4 +25,13 @@ public class Command extends AbstractNode
 		sb.append(last.toString());
 		return sb;
 	}
+	@Override
+	public int size()
+	{
+		int result = 1;
+		for(Update u : UpdateList)
+			result += u.size();
+		result += last.size();
+		return result;
+	}
 }

@@ -24,4 +24,10 @@ public class Update extends AbstractNode implements CommandComponent
 		sb.append("mem[" + index.toString() + "] := " + value.toString());
 		return sb;
 	}
+	
+	@Override
+	public int size()
+	{
+		return 1 + index.size() + value.size();
+	}
 }

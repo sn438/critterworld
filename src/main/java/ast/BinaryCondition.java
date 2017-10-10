@@ -27,8 +27,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	@Override
 	public int size()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return 1 + left.size() + right.size();
 	}
 
 	@Override

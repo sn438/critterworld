@@ -3,10 +3,11 @@ package ast;
 /** A representation of a unary numerical expression that evaluates to an integer. */
 public class UnaryExpr extends AbstractNode implements Expr
 {
-
+	/** The type of this unary expression. */
 	private ExprType type;
 	private Expr exp;
 	private int value;
+	
 	
 	public UnaryExpr(Expr e, ExprType t)
 	{
@@ -48,6 +49,13 @@ public class UnaryExpr extends AbstractNode implements Expr
 		return sb;
 	}
 	
+	@Override
+	public int size()
+	{
+		if(type == ExprType.CONSTANT)
+			return 1;
+		return 1 + exp.size();
+	}
 	@Override
 	public int evaluate()
 	{

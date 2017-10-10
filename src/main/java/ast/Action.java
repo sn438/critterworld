@@ -68,6 +68,14 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
+	@Override
+	public int size()
+	{
+		if(act == ActType.TAG || act == ActType.SERVE)
+			return 1 + val.size();
+		return 1;
+	}
+	
 	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{
