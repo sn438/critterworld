@@ -13,16 +13,36 @@ public class UnaryExpr extends AbstractNode implements Expr
 		this.type = t;
 	}
 
-	public UnaryExpr(int value)
+	public UnaryExpr(int val)
 	{
-		this.value = value;
+		this.value = val;
+		this.exp = null;
+		this.type = ExprType.CONSTANT;
 	}
 	
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		switch(type)
+		{
+			case CONSTANT:
+				sb.append(value);
+				break;
+			case MEMORYVAL:
+				sb.append("mem[" + exp.toString() + "]");
+				break;
+			case EXPRESSION:
+				sb.append("(" + exp.toString() + ")");
+				break;
+			case NEGATION:
+				sb.append("-" + exp.toString());
+				break;
+			case SENSORVAL: //TODO fix
+				break;
+			default:
+				break;
+		}
+		return sb;
 	}
 	
 	@Override

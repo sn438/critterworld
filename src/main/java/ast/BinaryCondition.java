@@ -16,7 +16,6 @@ public class BinaryCondition extends AbstractNode implements Condition
 	 * @param o
 	 * @param r
 	 */
-	
 	public BinaryCondition(Condition l, Operator o, Condition r)
 	{
 		this.left = l;

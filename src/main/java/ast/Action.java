@@ -7,12 +7,14 @@ public class Action extends AbstractNode
 	private ActType act;
 	private Expr val;
 	
+	/** Creates an Action node that doesn't involve an Expr node. */
 	public Action(ActType a)
 	{
 		act = a;
 		val = null;
 	}
 	
+	/** Creates an Action node that is linked with an Expr node. */
 	public Action(ActType a, Expr e)
 	{
 		act = a;
@@ -70,5 +72,4 @@ public class Action extends AbstractNode
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
-
 }
