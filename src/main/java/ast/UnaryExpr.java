@@ -15,6 +15,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 		this.expression = expression;
 	}
 	
+<<<<<<< HEAD
 
 	public UnaryExpr(int value) {
 		this.value = value;
@@ -42,6 +43,19 @@ public class UnaryExpr extends AbstractNode implements Expr
 		*/
 		throw new UnsupportedOperationException();
 
+=======
+	@Override
+	public StringBuilder prettyPrint(StringBuilder sb)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public int evaluateNode()
+	{
+		throw new UnsupportedOperationException();
+>>>>>>> bcbac9a71a41a75cc4a622474fdf2d9fa785a8ad
 	}
 	
 	public enum Factor{
