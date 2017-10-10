@@ -1,9 +1,9 @@
 package ast;
 
-public class Action extends AbstractNode
+public class Action extends AbstractNode implements CommandComponent
 {
 
-	/** The type of action that this Action node stores. */
+	/** The type of action that this node stores. */
 	private ActType act;
 	private Expr val;
 	
@@ -68,6 +68,7 @@ public class Action extends AbstractNode
 		return sb;
 	}
 	
+	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;

@@ -2,12 +2,7 @@ package ast;
 
 /** A representation of a relational comparison between two numerical expressions. */
 public class Relation extends AbstractNode
-<<<<<<< HEAD
 {
-
-=======
-{	
->>>>>>> 98c4bd3a5a800d9369962d220742cc0b2b9c1275
 	/** The left child of this node. */
 	private Expr left;
 	/** The operation to be performed on the two children. */

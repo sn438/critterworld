@@ -5,10 +5,8 @@ import java.util.List;
 /** A data structure representing a critter program. */
 public class ProgramImpl extends AbstractNode implements Program
 {
-	/**
-	 * rulesList will contain all the rules detailed in the program.
-	 */
-	private List<Rule> rulesList;
+	/** RulesList will contain all the rules detailed in the program. */
+	private List<Rule> RulesList;
 
 	@Override
 	public int size()
@@ -41,7 +39,8 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		for(Rule r : RulesList)
+			sb.append(r.toString());
+		return sb;
 	}
 }

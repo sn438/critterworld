@@ -3,10 +3,6 @@ package ast;
 /** A representation of a binary Boolean condition: 'and' or 'or' */
 public class BinaryCondition extends AbstractNode implements Condition
 {
-<<<<<<< HEAD
-
-=======
->>>>>>> 98c4bd3a5a800d9369962d220742cc0b2b9c1275
 	/** The left child of this node. */
 	private Condition left;
 	/** The operation to be performed on the two children. */
