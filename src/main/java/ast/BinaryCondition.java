@@ -3,15 +3,6 @@ package ast;
 /** A representation of a binary Boolean condition: 'and' or 'or' */
 public class BinaryCondition extends AbstractNode implements Condition
 {
-
-
-	/**
-	 * Create an AST representation of l op r.
-	 * 
-	 * @param l 
-	 * @param op
-
-
 	/** The left child of this node. */
 	private Condition left;
 	/** The operation to be performed on the two children. */
@@ -26,9 +17,11 @@ public class BinaryCondition extends AbstractNode implements Condition
 	 * @param r
 	 */
 	
-	public BinaryCondition(Condition l, Operator op, Condition r)
+	public BinaryCondition(Condition l, Operator o, Condition r)
 	{
-		// TODO
+		this.left = l;
+		this.op = o;
+		this.right = r;
 	}
 
 	@Override

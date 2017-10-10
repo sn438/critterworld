@@ -2,22 +2,21 @@ package ast;
 
 public class UnaryExpr extends AbstractNode implements Expr
 {
-	/**
-	 * factor is the enum that indicates what kind of factor is stored in the AST.
-	 * expression is the 
-	 */
-	private Factor factor;
-	private Expr expression;
+
+	private ExprType type;
+	private Expr exp;
 	private int value;
 	
-	public UnaryExpr(Factor factor, Expr expression) {
-		this.factor = factor;
-		this.expression = expression;
+	public UnaryExpr(Expr e, ExprType t)
+	{
+		this.exp = e;
+		this.type = t;
 	}
 
-	public UnaryExpr(int value) {
+	public UnaryExpr(int value)
+	{
 		this.value = value;
-}
+	}
 	
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
@@ -32,7 +31,8 @@ public class UnaryExpr extends AbstractNode implements Expr
 		throw new UnsupportedOperationException();
 	}
 	
-	public enum Factor{
-		CONSTANT, MEMORY, EXPRESSION, NEGATE, SENSOR
+	public enum ExprType
+	{
+		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;
 	}
 }

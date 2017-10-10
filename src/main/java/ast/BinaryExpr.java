@@ -21,10 +21,30 @@ public class BinaryExpr extends AbstractNode implements Expr
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		return null;
+		sb.append(left.toString());
+		switch(operator)
+		{
+			case ADD:
+				sb.append(" + ");
+				break;
+			case SUBTRACT:
+				sb.append(" - ");
+				break;
+			case MULTIPLY:
+				sb.append(" * ");
+				break;
+			case DIVIDE:
+				sb.append(" / ");
+				break;
+			case MOD:
+				sb.append(" % ");
+				break;
+			default:
+				break;
+		}
+		sb.append(right.toString());
+		return sb;
 	}
-	
-
 	
 	@Override
 	public int evaluateNode()
