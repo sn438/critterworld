@@ -1,9 +1,16 @@
 package ast;
 
-/** A representation of a critter rule. */
+/** A representation of a critter rule, which is composed of a condition and a command. */
 public class Rule extends AbstractNode
 {
-	private Condition condition;
+	private Condition cond;
+	private Command comm;
+	
+	public Rule(Condition c1, Command c2)
+	{
+		cond = c1;
+		comm = c2;
+	}
 	
 	@Override
 	public int size()
@@ -22,11 +29,7 @@ public class Rule extends AbstractNode
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void setCondition(Condition condition) {
-		this.condition = condition;
+		sb.append(cond.toString() + " --> " + comm.toString());
+		return sb;
 	}
 }
