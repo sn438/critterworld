@@ -2,9 +2,7 @@ package ast;
 
 public class Action extends AbstractNode
 {
-<<<<<<< HEAD
 
-=======
 	/** The type of action that this Action node stores. */
 	private ActType act;
 	private Expr val;
@@ -72,5 +70,5 @@ public class Action extends AbstractNode
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
->>>>>>> bcbac9a71a41a75cc4a622474fdf2d9fa785a8ad
+
 }
