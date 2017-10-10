@@ -37,7 +37,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 				sb.append("(" + exp.toString() + ")");
 				break;
 			case NEGATION:
-				sb.append("-" + exp.toString());
+				sb.append("-(" + exp.toString() + ")");
 				break;
 			case SENSORVAL:
 				//if this UnaryExpr has the type of SENSORVAL, then the class type of exp should be Sensor

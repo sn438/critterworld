@@ -25,8 +25,7 @@ public interface Node
 	Node nodeAt(int index);
 
 	/**
-	 * Appends the program represented by this node prettily to the given
-	 * StringBuilder.
+	 * Appends the program represented by this node prettily to the given StringBuilder.
 	 * <p>
 	 * The output of this method must be consistent with both the critter grammar
 	 * and itself; that is:<br>
