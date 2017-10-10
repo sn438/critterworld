@@ -4,7 +4,6 @@ package ast;
 public class Relation extends AbstractNode
 {
 
-	
 	/** The left child of this node. */
 	private Expr left;
 	/** The operation to be performed on the two children. */

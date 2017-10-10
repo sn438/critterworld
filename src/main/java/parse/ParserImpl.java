@@ -55,7 +55,7 @@ class ParserImpl implements Parser {
 	}
 
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
-		// TODO
+		
 		throw new UnsupportedOperationException();
 	}
 
