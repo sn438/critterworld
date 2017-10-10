@@ -40,14 +40,17 @@ class ParserImpl implements Parser {
 	 */
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
 		while (t.hasNext()) {
-			if (t.next().toString().equals("-->")) {
+			if (t.peek().toString().equals("-->")) {
+				consume(t, t.peek().getType());
 				parseRule(t);
 			}
+			t.next();
 		}
 		return new ProgramImpl();
 	}
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {
+		System.out.println(t.next());
 		return new Rule();
 	}
 
@@ -81,7 +84,8 @@ class ParserImpl implements Parser {
 	 *             if the wrong kind of token is encountered.
 	 */
 	public static void consume(Tokenizer t, TokenType tt) throws SyntaxError {
-		// TODO
-		throw new UnsupportedOperationException();
+		if (t.peek().toString().equals(tt.toString())) {
+			t.next();
+		}
 	}
 }

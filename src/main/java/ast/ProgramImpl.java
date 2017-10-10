@@ -1,8 +1,14 @@
 package ast;
 
+import java.util.List;
+
 /** A data structure representing a critter program. */
 public class ProgramImpl extends AbstractNode implements Program
 {
+	/**
+	 * rulesList will contain all the rules detailed in the program.
+	 */
+	private List<Rule> rulesList;
 
 	@Override
 	public int size()
@@ -38,12 +44,4 @@ public class ProgramImpl extends AbstractNode implements Program
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public String toString()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
