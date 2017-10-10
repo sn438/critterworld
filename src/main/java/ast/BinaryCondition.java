@@ -48,10 +48,9 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 
 	@Override
-	public String toString()
+	public boolean evaluate()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	/** An enumeration of all possible binary condition operators. */

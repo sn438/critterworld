@@ -5,5 +5,5 @@ public interface Expr extends Node
 {
 	
 	/** Returns the integer value of this expression. */
-	public int evaluateNode(); // to be done in A5
+	public int evaluate(); // to be done in A5
 }

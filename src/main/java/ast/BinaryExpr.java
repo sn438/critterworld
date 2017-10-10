@@ -47,12 +47,11 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public int evaluateNode()
+	public int evaluate()
 	{
 		throw new UnsupportedOperationException();
 	}
 
-	
 	/** Enumerates all the accepted binary mathematical operations. */
 	public enum MathOp
 	{

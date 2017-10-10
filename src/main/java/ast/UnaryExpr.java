@@ -49,7 +49,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public int evaluateNode()
+	public int evaluate()
 	{
 		throw new UnsupportedOperationException();
 	}
