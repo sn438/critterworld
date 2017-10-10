@@ -10,23 +10,63 @@ public class Relation extends AbstractNode
 	/** The right child of this node. */
 	private Expr right;
 	
+	private boolean isCond;
+	private Condition cond;
+	
 	/** */
 	public Relation(Expr l, RelOp o, Expr r)
 	{
 		this.left = l;
 		this.op = o;
 		this.right = r;
+		this.isCond = false;
+		this.cond = null;
 	}
 	
 	public Relation(Condition c)
 	{
-		
+		this.left = null;
+		this.op = null;
+		this.right = null;
+		this.isCond = true;
+		this.cond = c;
 	}
 
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		return null;
+		if(isCond)
+		{
+			sb.append("{" + cond.toString() + "}");
+			return sb;
+		}
+		
+		sb.append(left.toString());
+		switch(op)
+		{
+			case LESS:
+				sb.append(" < ");
+				break;
+			case LESSOREQ:
+				sb.append(" <= ");
+				break;
+			case GREATER:
+				sb.append(" > ");
+				break;
+			case GREATEROREQ:
+				sb.append(" >= ");
+				break;
+			case EQUAL:
+				sb.append(" = ");
+				break;
+			case NOTEQUAL:
+				sb.append(" != ");
+				break;
+			default:
+				break;
+		}
+		sb.append(right.toString());
+		return sb;
 	}
 
 	/** An enumeration of all the accepted mathematical relational operators. */

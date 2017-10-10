@@ -1,5 +1,6 @@
 package ast;
 
+/** A representation of a unary numerical expression that evaluates to an integer. */
 public class UnaryExpr extends AbstractNode implements Expr
 {
 
@@ -53,6 +54,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 		throw new UnsupportedOperationException();
 	}
 	
+	/** An enumeration of all the possible unary expression types. */
 	public enum ExprType
 	{
 		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;

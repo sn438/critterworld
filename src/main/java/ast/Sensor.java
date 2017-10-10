@@ -32,13 +32,13 @@ public class Sensor extends AbstractNode implements Expr
 		switch(type)
 		{
 			case NEARBY:
-				sb.append("nearby[" + index.toString());
+				sb.append("nearby[" + index.toString() + "]");
 				break;
 			case AHEAD:
-				sb.append("ahead[" + index.toString());
+				sb.append("ahead[" + index.toString() + "]");
 				break;
 			case RANDOM:
-				sb.append("random[" + index.toString());
+				sb.append("random[" + index.toString() + "]");
 				break;
 			case SMELL:
 				sb.append("smell");
