@@ -11,6 +11,7 @@ import ast.Condition;
 import ast.Expr;
 import ast.Program;
 import ast.ProgramImpl;
+import ast.Relation;
 import ast.Rule;
 import ast.Sensor;
 import ast.UnaryExpr;
@@ -52,24 +53,32 @@ class ParserImpl implements Parser {
 		 */
 		while (t.hasNext()) {
 			parseRule(t);
+			break;
 		}
 		return new ProgramImpl();
 	}
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {
 		Condition condition = parseCondition(t);
-
 		return new Rule(condition, new Command(null, null));
 	}
 
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
 		Expr expression = parseExpression(t);
+		Condition returnCondition;
+		if (t.peek().getType().category() == TokenCategory.RELOP) {
+			String relationOperator = t.next().toString();
+			switch(relationOperator) {
+				case "<":
+					
+			}
+		}
 		return new BinaryCondition(null, null, null);
 	}
 
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		Expr expression = parseTerm(t);
-		System.out.println(expression.prettyPrint(new StringBuilder()));
+		Expr returnExpression;
 		return expression;
 	}
 
@@ -81,17 +90,17 @@ class ParserImpl implements Parser {
 			switch (addOperator) {
 			case "+":
 				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD, parseFactor(t));
+				return returnExpression;
 			case "-":
 				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.SUBTRACT, parseFactor(t));
+				return returnExpression;
 			}
 		}
-		if (returnExpression == null) {
-			return expression;
-		}
-		return returnExpression;
+		return expression;
 	}
 
 	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
+		
 		Expr returnExpression = null;
 		Expr expression = null;
 		if (!t.peek().isAddOp() && t.peek().getType().category() != TokenCategory.RELOP) {
