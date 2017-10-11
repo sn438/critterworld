@@ -1,12 +1,19 @@
 package parse;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.math.BigInteger;
 
+import ast.BinaryCondition;
+import ast.BinaryExpr;
+import ast.Command;
 import ast.Condition;
 import ast.Expr;
 import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
+import ast.Sensor;
+import ast.UnaryExpr;
 import exceptions.SyntaxError;
 
 class ParserImpl implements Parser {
@@ -39,39 +46,129 @@ class ParserImpl implements Parser {
 	 *             if there the input tokens have invalid syntax
 	 */
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
+
+		/*
+		 * if (!t.peek().toString().equals("-->")) { parseFactor(t); } }
+		 */
 		while (t.hasNext()) {
-			if (t.peek().toString().equals("-->")) {
-				parseRule(t);
-			}
-			t.next();
+			parseRule(t);
 		}
 		return new ProgramImpl();
 	}
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {
-		Rule returnRule = new Rule();
-		returnRule.setCondition(parseCondition(t));
-		return new Rule();
+		Condition condition = parseCondition(t);
+
+		return new Rule(condition, new Command(null, null));
 	}
 
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
-		
-		throw new UnsupportedOperationException();
+		Expr expression = parseExpression(t);
+		return new BinaryCondition(null, null, null);
 	}
 
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
-		// TODO
-		throw new UnsupportedOperationException();
+		Expr expression = parseTerm(t);
+		System.out.println(expression.prettyPrint(new StringBuilder()));
+		return expression;
 	}
 
 	public static Expr parseTerm(Tokenizer t) throws SyntaxError {
-		// TODO
-		throw new UnsupportedOperationException();
+		Expr expression = parseFactor(t);
+		Expr returnExpression = null;
+		while (t.peek().isAddOp()) {
+			String addOperator = t.next().toString();
+			switch (addOperator) {
+			case "+":
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD, parseFactor(t));
+			case "-":
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.SUBTRACT, parseFactor(t));
+			}
+		}
+		if (returnExpression == null) {
+			return expression;
+		}
+		return returnExpression;
 	}
 
 	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
-		// TODO
-		throw new UnsupportedOperationException();
+		Expr returnExpression = null;
+		Expr expression = null;
+		if (!t.peek().isAddOp() && t.peek().getType().category() != TokenCategory.RELOP) {
+			if (t.peek().isNum()) {
+				expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
+			}
+			if (t.peek().isMemSugar()) {
+				String testString = t.next().toString();
+				switch (testString) {
+				case "MEMSIZE":
+					expression = new UnaryExpr(new UnaryExpr(0), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "DEFENSE":
+					expression = new UnaryExpr(new UnaryExpr(1), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "OFFENSE":
+					expression = new UnaryExpr(new UnaryExpr(2), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "SIZE":
+					expression = new UnaryExpr(new UnaryExpr(3), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "ENERGY":
+					expression = new UnaryExpr(new UnaryExpr(4), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "PASS":
+					expression = new UnaryExpr(new UnaryExpr(5), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "TAG":
+					expression = new UnaryExpr(new UnaryExpr(6), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				case "POSTURE":
+					expression = new UnaryExpr(new UnaryExpr(7), UnaryExpr.ExprType.MEMORYVAL);
+					break;
+				default:
+					System.out.println("Please enter a valid cipher type.");
+					System.exit(0);
+				}
+			}
+			if (t.peek().isSensor()) {
+				String testString = t.next().toString();
+				switch (testString) {
+				case "nearby":
+					consume(t, TokenType.LBRACKET);
+					expression = new Sensor(Sensor.SensorType.NEARBY, parseExpression(t));
+					consume(t, TokenType.RBRACKET);
+					break;
+				case "ahead":
+					consume(t, TokenType.LBRACKET);
+					expression = new Sensor(Sensor.SensorType.AHEAD, parseExpression(t));
+					consume(t, TokenType.RBRACKET);
+					break;
+				case "random":
+					consume(t, TokenType.LBRACKET);
+					expression = new Sensor(Sensor.SensorType.RANDOM, parseExpression(t));
+					consume(t, TokenType.RBRACKET);
+					break;
+				case "smell":
+					expression = new Sensor();
+					break;
+				}
+			}
+			while (t.peek().isMulOp()) {
+				String mulOperator = t.next().toString();
+				switch (mulOperator) {
+				case "*":
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MULTIPLY, parseFactor(t));
+					return returnExpression;
+				case "/":
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.DIVIDE, parseFactor(t));
+					return returnExpression;
+				case "mod":
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MOD, parseFactor(t));
+					return returnExpression;
+				}
+			} 
+		}
+		return expression;
 	}
 
 	// TODO
