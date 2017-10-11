@@ -57,7 +57,7 @@ class ParserImpl implements Parser {
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
 			RuleList.add(parseRule(t));
-			break;
+			break; //TODO remove when completed
 		}
 		return new ProgramImpl(RuleList);
 	}
