@@ -34,7 +34,9 @@ class ParserImpl implements Parser {
 			System.out.println("The program inputted does not have the proper syntax.");
 			System.exit(0);
 		}
+
 		return this.programAST;
+
 	}
 
 	/**
@@ -65,12 +67,30 @@ class ParserImpl implements Parser {
 
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
 		Expr expression = parseExpression(t);
-		Condition returnCondition;
+		System.out.println(expression.prettyPrint(new StringBuilder()));
+		Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
 			String relationOperator = t.next().toString();
-			switch(relationOperator) {
-				case "<":
-					
+			switch (relationOperator) {
+			case "<":
+				parseExpression(t);
+				condition = new Relation(expression, Relation.RelOp.LESS, parseExpression(t));
+				break;
+			case "<=":
+				condition = new Relation(expression, Relation.RelOp.LESSOREQ, parseExpression(t));
+				break;
+			case "=":
+				condition = new Relation(expression, Relation.RelOp.EQUAL, parseExpression(t));
+				break;
+			case ">":
+				condition = new Relation(expression, Relation.RelOp.GREATER, parseExpression(t));
+				break;
+			case ">=":
+				condition = new Relation(expression, Relation.RelOp.GREATEROREQ, parseExpression(t));
+				break;
+			case "!=":
+				condition = new Relation(expression, Relation.RelOp.NOTEQUAL, parseExpression(t));
+				break;
 			}
 		}
 		return new BinaryCondition(null, null, null);
@@ -78,7 +98,6 @@ class ParserImpl implements Parser {
 
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		Expr expression = parseTerm(t);
-		Expr returnExpression;
 		return expression;
 	}
 
@@ -89,10 +108,12 @@ class ParserImpl implements Parser {
 			String addOperator = t.next().toString();
 			switch (addOperator) {
 			case "+":
-				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD, parseFactor(t));
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD, parseExpression(t));
 				return returnExpression;
 			case "-":
-				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.SUBTRACT, parseFactor(t));
+				consume(t, TokenType.MINUS);
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD,
+						new UnaryExpr(parseExpression(t), UnaryExpr.ExprType.NEGATION));
 				return returnExpression;
 			}
 		}
@@ -100,7 +121,6 @@ class ParserImpl implements Parser {
 	}
 
 	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
-		
 		Expr returnExpression = null;
 		Expr expression = null;
 		if (!t.peek().isAddOp() && t.peek().getType().category() != TokenCategory.RELOP) {
@@ -166,17 +186,22 @@ class ParserImpl implements Parser {
 				String mulOperator = t.next().toString();
 				switch (mulOperator) {
 				case "*":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MULTIPLY, parseFactor(t));
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MULTIPLY, parseExpression(t));
 					return returnExpression;
 				case "/":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.DIVIDE, parseFactor(t));
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.DIVIDE, parseExpression(t));
 					return returnExpression;
 				case "mod":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MOD, parseFactor(t));
+					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MOD, parseExpression(t));
 					return returnExpression;
 				}
-			} 
+			}
 		}
+		/*
+		 * if (t.peek().toString().equals("-")) { System.out.println("yes"); consume(t,
+		 * TokenType.MINUS); expression = new UnaryExpr(parseFactor(t),
+		 * UnaryExpr.ExprType.NEGATION); }
+		 */
 		return expression;
 	}
 
