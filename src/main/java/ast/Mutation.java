@@ -1,6 +1,6 @@
 package ast;
 
-/** A mutation to the AST */
+/** A mutation to the AST. */
 public interface Mutation
 {
 	/**

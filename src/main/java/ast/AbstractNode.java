@@ -1,17 +1,11 @@
 package ast;
 
+/** A class that stores implementations of some of the shared methods of all the node subclasses. */
 public abstract class AbstractNode implements Node
-{
-	/** The number of nodes rooted at a node, not including itself. */
-	protected int size;
-	
+{	
 	@Override
-	public int size()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public abstract int size();
+	
 	@Override
 	public Node nodeAt(int index)
 	{

@@ -3,6 +3,7 @@ package parse;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigInteger;
+import java.util.LinkedList;
 
 import ast.BinaryCondition;
 import ast.BinaryExpr;
@@ -53,11 +54,12 @@ class ParserImpl implements Parser {
 		/*
 		 * if (!t.peek().toString().equals("-->")) { parseFactor(t); } }
 		 */
+		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
-			parseRule(t);
+			RuleList.add(parseRule(t));
 			break;
 		}
-		return new ProgramImpl();
+		return new ProgramImpl(RuleList);
 	}
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {

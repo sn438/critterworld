@@ -10,7 +10,7 @@ public class BinaryExpr extends AbstractNode implements Expr
 	/** The right child of this node. */
 	private Expr right;
 	
-	/** Creates a BinaryExpr node, an AST representation of left op right. */
+	/** Creates a BinaryExpr with the given operands and mathematical operator, representing left op right. */
 	public BinaryExpr(Expr l, MathOp op, Expr r)
 	{
 		this.left = l;
@@ -21,28 +21,26 @@ public class BinaryExpr extends AbstractNode implements Expr
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		sb.append(left.toString());
 		switch(operator)
 		{
 			case ADD:
-				sb.append(" + ");
+				sb.append(left.toString() + " + " + right.toString());
 				break;
 			case SUBTRACT:
-				sb.append(" - ");
+				sb.append(left.toString() + " - " + right.toString());
 				break;
 			case MULTIPLY:
-				sb.append(" * ");
+				sb.append(left.toString() + " * " + right.toString());
 				break;
 			case DIVIDE:
-				sb.append(" / ");
+				sb.append(left.toString() + " / " + right.toString());
 				break;
 			case MOD:
-				sb.append(" % ");
+				sb.append(left.toString() + " % " + right.toString());
 				break;
 			default:
 				break;
 		}
-		sb.append(right.toString());
 		return sb;
 	}
 	

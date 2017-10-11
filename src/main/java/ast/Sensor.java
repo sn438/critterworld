@@ -7,13 +7,14 @@ public class Sensor extends AbstractNode implements Expr
 	private SensorType type;
 	private Expr index;
 	
-	/** Creates a new Sensor node with the specified type and index. */
+	/** Creates a new Sensor node with the specified type and index. Not compatible with SensorType SMELL. */
 	public Sensor(SensorType s, Expr e)
 	{
 		type = s;
 		index = e;
 	}
 	
+	/** Creates a new Sensor node of type SMELL. */
 	public Sensor()
 	{
 		type = SensorType.SMELL;

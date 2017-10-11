@@ -1,5 +1,6 @@
 package ast;
 
+/** An AST representation of a critter update in memory. */
 public class Update extends AbstractNode implements CommandComponent
 {
 	/** The index in memory to update. */

@@ -10,12 +10,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	/** The right child of this node. */
 	private Condition right;
 	
-	/**
-	 * Creates an AST representation of l op r.
-	 * @param l
-	 * @param o
-	 * @param r
-	 */
+	/** Creates a BinaryCondition with the specified operands and boolean operator, representing l op r. */
 	public BinaryCondition(Condition l, Operator o, Condition r)
 	{
 		this.left = l;

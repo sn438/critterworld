@@ -5,16 +5,25 @@ public class UnaryExpr extends AbstractNode implements Expr
 {
 	/** The type of this unary expression. */
 	private ExprType type;
+	/** The subexpression that this unary expression is based off of. May be null. */
 	private Expr exp;
 	private int value;
 	
-	
+	/** 
+	 * Creates a unary expression based on the given expression and ExprType.
+	 * @param e - The subexpression that this unary expression is based off of
+	 * @param t - The type of this unary expression. May not be CONSTANT.
+	 */
 	public UnaryExpr(Expr e, ExprType t)
 	{
 		this.exp = e;
 		this.type = t;
 	}
-
+	
+	/** 
+	 * Creates a unary expression of type CONSTANT. 
+	 * @param val - the constant integer value of this unary expression.
+	 */
 	public UnaryExpr(int val)
 	{
 		this.value = val;
