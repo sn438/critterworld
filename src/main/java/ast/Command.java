@@ -12,6 +12,7 @@ public class Command extends AbstractNode
 	 *  an update or an action. */
 	private CommandComponent last;
 	
+	/** Creates a new command with the given list of updates and one final CommandComponent. */
 	public Command(LinkedList<Update> list, CommandComponent cc)
 	{
 		UpdateList = list;

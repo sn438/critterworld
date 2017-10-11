@@ -12,7 +12,7 @@ public class Relation extends AbstractNode implements Condition
 	
 	private Condition cond;
 	
-	/** */
+	/** Creates a relational comparison between two numerical expressions, representing l o r.*/
 	public Relation(Expr l, RelOp o, Expr r)
 	{
 		this.left = l;
@@ -21,6 +21,7 @@ public class Relation extends AbstractNode implements Condition
 		this.cond = null;
 	}
 	
+	/** Creates a Relation based on a condition. */
 	public Relation(Condition c)
 	{
 		this.left = null;

@@ -8,6 +8,12 @@ public class ProgramImpl extends AbstractNode implements Program
 	/** RulesList will contain all the rules detailed in the program. */
 	private List<Rule> RulesList;
 
+	/** Creates a new Program node with the given list of rules. */
+	public ProgramImpl(List<Rule> rl)
+	{
+		RulesList = rl;
+	}
+	
 	@Override
 	public int size()
 	{

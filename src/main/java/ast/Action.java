@@ -1,5 +1,6 @@
 package ast;
 
+/** An AST representation of a critter action. */
 public class Action extends AbstractNode implements CommandComponent
 {
 
@@ -7,14 +8,14 @@ public class Action extends AbstractNode implements CommandComponent
 	private ActType act;
 	private Expr val;
 	
-	/** Creates an Action node that doesn't involve an Expr node. */
+	/** Creates an Action node that doesn't involve an Expr node. Not compatible with ActTypes TAG and SERVE. */
 	public Action(ActType a)
 	{
 		act = a;
 		val = null;
 	}
 	
-	/** Creates an Action node that is linked with an Expr node. */
+	/** Creates an Action node that is linked with an Expr node. Compatible ActTypes: TAG and SERVE. */
 	public Action(ActType a, Expr e)
 	{
 		act = a;
