@@ -100,11 +100,6 @@ class ParserImpl implements Parser {
 
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		Expr expression = parseTerm(t);
-		return expression;
-	}
-
-	public static Expr parseTerm(Tokenizer t) throws SyntaxError {
-		Expr expression = parseFactor(t);
 		Expr returnExpression = null;
 		while (t.peek().isAddOp()) {
 			String addOperator = t.next().toString();
@@ -114,8 +109,27 @@ class ParserImpl implements Parser {
 				return returnExpression;
 			case "-":
 				consume(t, TokenType.MINUS);
-				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD,
-						new UnaryExpr(parseExpression(t), UnaryExpr.ExprType.NEGATION));
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.SUBTRACT, parseExpression(t));
+				return returnExpression;
+			}
+		}
+		return expression;
+	}
+
+	public static Expr parseTerm(Tokenizer t) throws SyntaxError {
+		Expr expression = parseFactor(t);
+		Expr returnExpression = null;
+		while (t.peek().isMulOp()) {
+			String mulOperator = t.next().toString();
+			switch (mulOperator) {
+			case "*":
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MULTIPLY, parseExpression(t));
+				return returnExpression;
+			case "/":
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.DIVIDE, parseExpression(t));
+				return returnExpression;
+			case "mod":
+				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MOD, parseExpression(t));
 				return returnExpression;
 			}
 		}
@@ -184,20 +198,7 @@ class ParserImpl implements Parser {
 					break;
 				}
 			}
-			while (t.peek().isMulOp()) {
-				String mulOperator = t.next().toString();
-				switch (mulOperator) {
-				case "*":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MULTIPLY, parseExpression(t));
-					return returnExpression;
-				case "/":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.DIVIDE, parseExpression(t));
-					return returnExpression;
-				case "mod":
-					returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.MOD, parseExpression(t));
-					return returnExpression;
-				}
-			}
+		
 		}
 		/*
 		 * if (t.peek().toString().equals("-")) { System.out.println("yes"); consume(t,
