@@ -47,7 +47,7 @@ class ParserImpl implements Parser {
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
 			RuleList.add(parseRule(t));
-			break; //TODO remove when completed
+			break; // TODO remove when completed
 		}
 		return new ProgramImpl(RuleList);
 	}
@@ -129,72 +129,71 @@ class ParserImpl implements Parser {
 	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
 		Expr returnExpression = null;
 		Expr expression = null;
-		if (!t.peek().isAddOp() && t.peek().getType().category() != TokenCategory.RELOP) {
-			if (t.peek().isNum()) {
-				expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
-			}
-			if (t.peek().isMemSugar()) {
-				String testString = t.next().toString();
-				switch (testString) {
-				case "MEMSIZE":
-					expression = new UnaryExpr(new UnaryExpr(0), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "DEFENSE":
-					expression = new UnaryExpr(new UnaryExpr(1), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "OFFENSE":
-					expression = new UnaryExpr(new UnaryExpr(2), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "SIZE":
-					expression = new UnaryExpr(new UnaryExpr(3), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "ENERGY":
-					expression = new UnaryExpr(new UnaryExpr(4), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "PASS":
-					expression = new UnaryExpr(new UnaryExpr(5), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "TAG":
-					expression = new UnaryExpr(new UnaryExpr(6), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				case "POSTURE":
-					expression = new UnaryExpr(new UnaryExpr(7), UnaryExpr.ExprType.MEMORYVAL);
-					break;
-				default:
-					System.out.println("Please enter a valid cipher type.");
-					System.exit(0);
-				}
-			}
-			if (t.peek().isSensor()) {
-				String testString = t.next().toString();
-				switch (testString) {
-				case "nearby":
-					consume(t, TokenType.LBRACKET);
-					expression = new Sensor(Sensor.SensorType.NEARBY, parseExpression(t));
-					consume(t, TokenType.RBRACKET);
-					break;
-				case "ahead":
-					consume(t, TokenType.LBRACKET);
-					expression = new Sensor(Sensor.SensorType.AHEAD, parseExpression(t));
-					consume(t, TokenType.RBRACKET);
-					break;
-				case "random":
-					consume(t, TokenType.LBRACKET);
-					expression = new Sensor(Sensor.SensorType.RANDOM, parseExpression(t));
-					consume(t, TokenType.RBRACKET);
-					break;
-				case "smell":
-					expression = new Sensor();
-					break;
-				}
-			}
-		
+		if (t.peek().isNum()) {
+			expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
 		}
-		/*
-		 * if (t.peek().toString().equals("-")) { System.out.println("yes"); consume(t,
-		 * TokenType.MINUS); expression = new UnaryExpr(parseFactor(t),
-		 * UnaryExpr.ExprType.NEGATION); }
-		 */
+		if (t.peek().isMemSugar()) {
+			String testString = t.next().toString();
+			switch (testString) {
+			case "MEMSIZE":
+				expression = new UnaryExpr(new UnaryExpr(0), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "DEFENSE":
+				expression = new UnaryExpr(new UnaryExpr(1), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "OFFENSE":
+				expression = new UnaryExpr(new UnaryExpr(2), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "SIZE":
+				expression = new UnaryExpr(new UnaryExpr(3), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "ENERGY":
+				expression = new UnaryExpr(new UnaryExpr(4), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "PASS":
+				expression = new UnaryExpr(new UnaryExpr(5), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "TAG":
+				expression = new UnaryExpr(new UnaryExpr(6), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			case "POSTURE":
+				expression = new UnaryExpr(new UnaryExpr(7), UnaryExpr.ExprType.MEMORYVAL);
+				break;
+			default:
+				System.out.println("Please enter a valid cipher type.");
+				System.exit(0);
+			}
+		}
+		if (t.peek().isSensor()) {
+			String testString = t.next().toString();
+			switch (testString) {
+			case "nearby":
+				consume(t, TokenType.LBRACKET);
+				expression = new Sensor(Sensor.SensorType.NEARBY, parseExpression(t));
+				consume(t, TokenType.RBRACKET);
+				break;
+			case "ahead":
+				consume(t, TokenType.LBRACKET);
+				expression = new Sensor(Sensor.SensorType.AHEAD, parseExpression(t));
+				consume(t, TokenType.RBRACKET);
+				break;
+			case "random":
+				consume(t, TokenType.LBRACKET);
+				expression = new Sensor(Sensor.SensorType.RANDOM, parseExpression(t));
+				consume(t, TokenType.RBRACKET);
+				break;
+			case "smell":
+				expression = new Sensor();
+				break;
+			}
+		}
+		
+		if (t.peek().toString().equals("-")) {
+			System.out.println("yes");
+			consume(t, TokenType.MINUS);
+			expression = new UnaryExpr(parseFactor(t), UnaryExpr.ExprType.NEGATION);
+		}
+
 		return expression;
 	}
 
