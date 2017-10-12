@@ -1,7 +1,7 @@
 package ast;
 
 /** A representation of a binary Boolean condition: 'and' or 'or' */
-public class BinaryCondition extends AbstractNode implements Condition
+public class BinaryCondition extends BinaryNode implements Condition
 {
 	/** The left child of this node. */
 	private Condition left;

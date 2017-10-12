@@ -31,4 +31,10 @@ public class Update extends AbstractNode implements CommandComponent
 	{
 		return 1 + index.size() + value.size();
 	}
+	@Override
+	public Node nodeAt(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

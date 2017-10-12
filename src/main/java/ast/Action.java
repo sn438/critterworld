@@ -80,4 +80,11 @@ public class Action extends AbstractNode implements CommandComponent
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
+
+	@Override
+	public Node nodeAt(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

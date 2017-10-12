@@ -46,7 +46,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 				sb.append("(" + exp.toString() + ")");
 				break;
 			case NEGATION:
-				sb.append("-(" + exp.toString() + ")");
+				sb.append("-" + exp.toString());
 				break;
 			case SENSORVAL:
 				//if this UnaryExpr has the type of SENSORVAL, then the class type of exp should be Sensor
@@ -73,5 +73,15 @@ public class UnaryExpr extends AbstractNode implements Expr
 	public enum ExprType
 	{
 		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;
+	}
+
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1)
+			throw new IndexOutOfBoundsException();
+		return exp.nodeAt(index - 1);
 	}
 }

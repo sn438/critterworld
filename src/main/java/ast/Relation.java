@@ -77,4 +77,10 @@ public class Relation extends AbstractNode implements Condition
 	{
 		LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOTEQUAL, ISCOND;
 	}
+	@Override
+	public Node nodeAt(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

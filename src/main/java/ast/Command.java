@@ -35,4 +35,10 @@ public class Command extends AbstractNode
 		result += last.size();
 		return result;
 	}
+	@Override
+	public Node nodeAt(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

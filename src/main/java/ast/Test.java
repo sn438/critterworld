@@ -18,7 +18,7 @@ public class Test
 		Relation r = new Relation(e4, RelOp.EQUAL, e5);
 		
 		System.out.println(r.toString());
-		System.out.println(r.size());*/
+		System.out.println(r.size());
 		
 		UnaryExpr e = new UnaryExpr(new UnaryExpr(7), ExprType.MEMORYVAL);
 		Relation r1 = new Relation(e, RelOp.NOTEQUAL, new UnaryExpr(17));
@@ -27,6 +27,9 @@ public class Test
 		Command c = new Command(ll, u);
 		Rule r = new Rule(r1, c);
 		
-		System.out.println(r.toString());
+		System.out.println(r.toString());*/
+		
+		Sensor s = new Sensor();
+		System.out.println(s.nodeAt(-1).toString());
 	}
 }

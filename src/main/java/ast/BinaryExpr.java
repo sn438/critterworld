@@ -1,7 +1,7 @@
 package ast;
 
 /** A representation of a binary numerical expression that evaluates to an integer. */
-public class BinaryExpr extends AbstractNode implements Expr
+public class BinaryExpr extends BinaryNode implements Expr
 {
 	/** The left child of this node. */
 	private Expr left;
