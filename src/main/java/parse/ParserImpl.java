@@ -197,13 +197,13 @@ class ParserImpl implements Parser {
 				break;
 			}
 		}
-		
+		/*	
 		if (t.peek().toString().equals("-")) {
-			System.out.println("yes");
 			consume(t, TokenType.MINUS);
+			System.out.println(t.peek());
 			expression = new UnaryExpr(parseFactor(t), UnaryExpr.ExprType.NEGATION);
 		}
-
+*/
 		return expression;
 	}
 
