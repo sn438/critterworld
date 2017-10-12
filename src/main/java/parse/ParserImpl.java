@@ -5,17 +5,7 @@ import java.io.Reader;
 import java.math.BigInteger;
 import java.util.LinkedList;
 
-import ast.BinaryCondition;
-import ast.BinaryExpr;
-import ast.Command;
-import ast.Condition;
-import ast.Expr;
-import ast.Program;
-import ast.ProgramImpl;
-import ast.Relation;
-import ast.Rule;
-import ast.Sensor;
-import ast.UnaryExpr;
+import ast.*;
 import exceptions.SyntaxError;
 
 class ParserImpl implements Parser {
@@ -141,6 +131,7 @@ class ParserImpl implements Parser {
 		Expr expression = null;
 		if (t.peek().isNum()) {
 			expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
+			return expression;
 		}
 		if (t.peek().isMemSugar()) {
 			String testString = t.next().toString();

@@ -55,8 +55,6 @@ public class Relation extends AbstractNode implements Condition
 				break;
 			case ISCOND:
 				sb.append("{" + cond.toString() + "}");
-			default:
-				break;
 		}
 		return sb;
 	}

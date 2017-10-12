@@ -38,8 +38,6 @@ public class Sensor extends AbstractNode implements Expr
 			case SMELL:
 				sb.append("smell");
 				break;
-			default:
-				break;
 		}
 		return sb;
 	}
