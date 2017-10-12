@@ -131,6 +131,7 @@ class ParserImpl implements Parser {
 		Expr expression = null;
 		if (t.peek().isNum()) {
 			expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
+			System.out.println(t.peek().toString());
 			return expression;
 		}
 		if (t.peek().isMemSugar()) {
@@ -188,13 +189,13 @@ class ParserImpl implements Parser {
 				break;
 			}
 		}
-		/*	
+		
 		if (t.peek().toString().equals("-")) {
 			consume(t, TokenType.MINUS);
 			System.out.println(t.peek());
 			expression = new UnaryExpr(parseFactor(t), UnaryExpr.ExprType.NEGATION);
 		}
-*/
+
 		return expression;
 	}
 
