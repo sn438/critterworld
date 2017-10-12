@@ -131,7 +131,6 @@ class ParserImpl implements Parser {
 		Expr expression = null;
 		if (t.peek().isNum()) {
 			expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
-			System.out.println(t.peek().toString());
 			return expression;
 		}
 		if (t.peek().isMemSugar()) {
