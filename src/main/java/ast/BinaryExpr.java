@@ -1,7 +1,7 @@
 package ast;
 
 /** A representation of a binary numerical expression that evaluates to an integer. */
-public class BinaryExpr extends BinaryNode implements Expr
+public class BinaryExpr extends AbstractNode implements Expr
 {
 	/** The left child of this node. */
 	private Expr left;
@@ -46,6 +46,19 @@ public class BinaryExpr extends BinaryNode implements Expr
 	public int size()
 	{
 		return 1 + left.size() + right.size();
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(index < left.size())
+			return left.nodeAt(index);
+		else
+			return right.nodeAt(index - left.size());
 	}
 	
 	@Override

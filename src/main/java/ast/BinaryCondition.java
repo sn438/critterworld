@@ -1,7 +1,7 @@
 package ast;
 
 /** A representation of a binary Boolean condition: 'and' or 'or' */
-public class BinaryCondition extends BinaryNode implements Condition
+public class BinaryCondition extends AbstractNode implements Condition
 {
 	/** The left child of this node. */
 	private Condition left;
@@ -28,8 +28,14 @@ public class BinaryCondition extends BinaryNode implements Condition
 	@Override
 	public Node nodeAt(int index)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(index < left.size())
+			return left.nodeAt(index);
+		else
+			return right.nodeAt(index - left.size());
 	}
 
 	@Override

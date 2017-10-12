@@ -38,7 +38,10 @@ public class Command extends AbstractNode
 	@Override
 	public Node nodeAt(int index)
 	{
-		// TODO Auto-generated method stub
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
 		return null;
 	}
 }

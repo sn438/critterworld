@@ -24,8 +24,14 @@ public class Rule extends AbstractNode
 	@Override
 	public Node nodeAt(int index)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(index < cond.size())
+			return cond.nodeAt(index);
+		else
+			return comm.nodeAt(index - cond.size());
 	}
 
 	@Override

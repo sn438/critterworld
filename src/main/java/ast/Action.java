@@ -75,16 +75,21 @@ public class Action extends AbstractNode implements CommandComponent
 		return 1;
 	}
 	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		return val.nodeAt(index - 1);
+	}
+	
 	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
 
-	@Override
-	public Node nodeAt(int index)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
