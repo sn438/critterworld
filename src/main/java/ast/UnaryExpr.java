@@ -52,8 +52,6 @@ public class UnaryExpr extends AbstractNode implements Expr
 				//if this UnaryExpr has the type of SENSORVAL, then the class type of exp should be Sensor
 				sb.append(exp.toString());
 				break;
-			default:
-				break;
 		}
 		return sb;
 	}

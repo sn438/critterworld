@@ -63,8 +63,6 @@ public class Action extends AbstractNode implements CommandComponent
 			case SERVE: 
 				sb.append("serve[" + val.toString() + "]");
 				break;
-			default:
-				break;
 		}
 		return sb;
 	}
