@@ -56,37 +56,48 @@ class ParserImpl implements Parser {
 		Condition condition = parseCondition(t);
 		return new Rule(condition, new Command(null, null));
 	}
-
+	
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
+		Condition condition = parseConjunction(t);
+		return condition;
+	}
+	
+	public static Condition parseConjunction(Tokenizer t) throws SyntaxError {
+		Condition condition = parseRelation(t);
+		
+		System.out.println(condition.prettyPrint(new StringBuilder()));
+		return condition;
+	}
+	public static Condition parseRelation(Tokenizer t) throws SyntaxError {
 		Expr expression = parseExpression(t);
-		System.out.println(expression.prettyPrint(new StringBuilder()));
 		Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
 			String relationOperator = t.next().toString();
 			switch (relationOperator) {
 			case "<":
-				parseExpression(t);
 				condition = new Relation(expression, Relation.RelOp.LESS, parseExpression(t));
-				break;
+				return condition;
 			case "<=":
 				condition = new Relation(expression, Relation.RelOp.LESSOREQ, parseExpression(t));
-				break;
+				return condition;
 			case "=":
 				condition = new Relation(expression, Relation.RelOp.EQUAL, parseExpression(t));
-				break;
+				return condition;
 			case ">":
 				condition = new Relation(expression, Relation.RelOp.GREATER, parseExpression(t));
-				break;
+				return condition;
 			case ">=":
 				condition = new Relation(expression, Relation.RelOp.GREATEROREQ, parseExpression(t));
-				break;
+				return condition;
 			case "!=":
 				condition = new Relation(expression, Relation.RelOp.NOTEQUAL, parseExpression(t));
-				break;
+				return condition;
 			}
 		}
 		return new BinaryCondition(null, null, null);
+
 	}
+	
 
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		Expr expression = parseTerm(t);
@@ -187,14 +198,18 @@ class ParserImpl implements Parser {
 				expression = new Sensor();
 				break;
 			}
-		}
-		/*	
+		}	
 		if (t.peek().toString().equals("-")) {
 			consume(t, TokenType.MINUS);
-			System.out.println(t.peek());
 			expression = new UnaryExpr(parseFactor(t), UnaryExpr.ExprType.NEGATION);
 		}
-*/
+		if (t.peek().toString().equals("(")) {
+			consume(t, TokenType.LPAREN);
+			expression = parseExpression(t);
+			consume(t, TokenType.RPAREN);
+			expression = new UnaryExpr(expression, UnaryExpr.ExprType.EXPRESSION);
+			return expression;
+		}
 		return expression;
 	}
 
