@@ -1,7 +1,7 @@
 package ast;
 
 /** A mutation to the AST. */
-public interface Mutation
+public interface Mutation extends Visitor
 {
 	/**
 	 * Compares the type of this mutation to {@code m}

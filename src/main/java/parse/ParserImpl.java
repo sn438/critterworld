@@ -54,7 +54,36 @@ class ParserImpl implements Parser {
 
 	public static Rule parseRule(Tokenizer t) throws SyntaxError {
 		Condition condition = parseCondition(t);
-		return new Rule(condition, new Command(null, null));
+		consume(t, TokenType.ARR);
+		Command command = parseCommand(t);
+		consume(t, TokenType.SEMICOLON);
+		return new Rule(condition, command);
+	}
+	
+	public static Command parseCommand(Tokenizer t) throws SyntaxError {
+		LinkedList<Update> UpdateList = new LinkedList<Update>();
+		while(true) {
+			if(t.peek().getType() == TokenType.SEMICOLON) {
+				if(UpdateList.size() == 0)
+					throw new SyntaxError();
+				else {
+					Update last = UpdateList.removeLast();
+					return new Command(UpdateList, last);
+				}
+			}
+			else if(t.peek().isAction()) {
+				return new Command(UpdateList, parseAction(t));
+			}
+			UpdateList.add(parseUpdate(t));
+		}
+	}
+	
+	public static Update parseUpdate(Tokenizer t) throws SyntaxError {
+		
+	}
+	
+	public static Action parseAction(Tokenizer t) throws SyntaxError {
+		
 	}
 	
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
@@ -210,7 +239,7 @@ class ParserImpl implements Parser {
 			expression = new UnaryExpr(expression, UnaryExpr.ExprType.EXPRESSION);
 			return expression;
 		}
-		return expression;
+		throw new SyntaxError();
 		
 	}
 
