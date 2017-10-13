@@ -7,11 +7,7 @@ public abstract class AbstractNode implements Node
 	public abstract int size();
 	
 	@Override
-	public Node nodeAt(int index)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract Node nodeAt(int index);
 
 	@Override
 	public abstract StringBuilder prettyPrint(StringBuilder sb);

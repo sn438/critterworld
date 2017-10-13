@@ -70,6 +70,10 @@ class ParserImpl implements Parser {
 	}
 	public static Condition parseRelation(Tokenizer t) throws SyntaxError {
 		Expr expression = parseExpression(t);
+<<<<<<< HEAD
+=======
+		System.out.println(expression.toString());
+>>>>>>> 8cf521393c289017de01457c5e0ded53f4e22941
 		Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
 			String relationOperator = t.next().toString();
@@ -145,7 +149,8 @@ class ParserImpl implements Parser {
 			return expression;
 		}
 		if (t.peek().isMemSugar()) {
-			String testString = t.next().toString();
+			String testString = t.peek().toString();
+			consume(t, t.peek().getType());
 			switch (testString) {
 			case "MEMSIZE":
 				expression = new UnaryExpr(new UnaryExpr(0), UnaryExpr.ExprType.MEMORYVAL);
@@ -171,13 +176,11 @@ class ParserImpl implements Parser {
 			case "POSTURE":
 				expression = new UnaryExpr(new UnaryExpr(7), UnaryExpr.ExprType.MEMORYVAL);
 				break;
-			default:
-				System.out.println("Please enter a valid cipher type.");
-				System.exit(0);
 			}
 		}
 		if (t.peek().isSensor()) {
-			String testString = t.next().toString();
+			String testString = t.peek().toString();
+			consume(t, t.peek().getType());
 			switch (testString) {
 			case "nearby":
 				consume(t, TokenType.LBRACKET);
@@ -198,11 +201,17 @@ class ParserImpl implements Parser {
 				expression = new Sensor();
 				break;
 			}
+<<<<<<< HEAD
 		}	
+=======
+		}
+		
+>>>>>>> 8cf521393c289017de01457c5e0ded53f4e22941
 		if (t.peek().toString().equals("-")) {
 			consume(t, TokenType.MINUS);
 			expression = new UnaryExpr(parseFactor(t), UnaryExpr.ExprType.NEGATION);
 		}
+<<<<<<< HEAD
 		if (t.peek().toString().equals("(")) {
 			consume(t, TokenType.LPAREN);
 			expression = parseExpression(t);
@@ -210,6 +219,9 @@ class ParserImpl implements Parser {
 			expression = new UnaryExpr(expression, UnaryExpr.ExprType.EXPRESSION);
 			return expression;
 		}
+=======
+
+>>>>>>> 8cf521393c289017de01457c5e0ded53f4e22941
 		return expression;
 	}
 
@@ -226,5 +238,7 @@ class ParserImpl implements Parser {
 		if (t.peek().toString().equals(tt.toString())) {
 			t.next();
 		}
+		else
+			throw new SyntaxError();
 	}
 }

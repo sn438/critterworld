@@ -35,4 +35,22 @@ public class Command extends AbstractNode
 		result += last.size();
 		return result;
 	}
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		for(Update u : UpdateList)
+		{
+			if(index >= u.size())
+			{
+				index -= u.size();
+				break;
+			}
+			return u.nodeAt(index);
+		}
+		return last.nodeAt(index);
+	}
 }

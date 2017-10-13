@@ -26,8 +26,20 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public Node nodeAt(int index)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		for(Rule r : RulesList)
+		{
+			if(index >= r.size())
+			{
+				index -= r.size();
+				break;
+			}
+			return r.nodeAt(index);
+		}
+		throw new IndexOutOfBoundsException();
 	}
 
 	@Override

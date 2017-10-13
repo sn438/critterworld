@@ -4,7 +4,7 @@ package ast;
 public class Update extends AbstractNode implements CommandComponent
 {
 	/** The index in memory to update. */
-	private Expr index;
+	private Expr memIndex;
 	/** The value that mem[index.evaluateNode()] will be changed to. */
 	private Expr value;
 	
@@ -16,19 +16,31 @@ public class Update extends AbstractNode implements CommandComponent
 	 */
 	public Update(Expr i, Expr val)
 	{
-		index = i;
+		memIndex = i;
 		value = val;
 	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		sb.append("mem[" + index.toString() + "] := " + value.toString());
+		sb.append("mem[" + memIndex.toString() + "] := " + value.toString());
 		return sb;
 	}
 	
 	@Override
 	public int size()
 	{
-		return 1 + index.size() + value.size();
+		return 1 + memIndex.size() + value.size();
+	}
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(index < memIndex.size())
+			return memIndex.nodeAt(index);
+		else
+			return value.nodeAt(index - memIndex.size());
 	}
 }

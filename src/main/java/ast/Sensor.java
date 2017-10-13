@@ -5,20 +5,20 @@ public class Sensor extends AbstractNode implements Expr
 {
 	/** The type of this Sensor node. */
 	private SensorType type;
-	private Expr index;
+	private Expr sensorIndex;
 	
 	/** Creates a new Sensor node with the specified type and index. Not compatible with SensorType SMELL. */
 	public Sensor(SensorType s, Expr e)
 	{
 		type = s;
-		index = e;
+		sensorIndex = e;
 	}
 	
 	/** Creates a new Sensor node of type SMELL. */
 	public Sensor()
 	{
 		type = SensorType.SMELL;
-		index = null;
+		sensorIndex = null;
 	}
 
 	@Override
@@ -27,13 +27,13 @@ public class Sensor extends AbstractNode implements Expr
 		switch(type)
 		{
 			case NEARBY:
-				sb.append("nearby[" + index.toString() + "]");
+				sb.append("nearby[" + sensorIndex.toString() + "]");
 				break;
 			case AHEAD:
-				sb.append("ahead[" + index.toString() + "]");
+				sb.append("ahead[" + sensorIndex.toString() + "]");
 				break;
 			case RANDOM:
-				sb.append("random[" + index.toString() + "]");
+				sb.append("random[" + sensorIndex.toString() + "]");
 				break;
 			case SMELL:
 				sb.append("smell");
@@ -47,7 +47,7 @@ public class Sensor extends AbstractNode implements Expr
 	{
 		if(type == SensorType.SMELL)
 			return 1;
-		return 1 + index.size();
+		return 1 + sensorIndex.size();
 	}
 	
 	@Override
@@ -60,5 +60,15 @@ public class Sensor extends AbstractNode implements Expr
 	public enum SensorType
 	{
 		NEARBY, AHEAD, RANDOM, SMELL;
+	}
+
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		return sensorIndex.nodeAt(index - 1);
 	}
 }
