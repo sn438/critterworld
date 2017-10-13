@@ -110,7 +110,7 @@ class ParserImpl implements Parser {
 				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.ADD, parseExpression(t));
 				return returnExpression;
 			case "-":
-				consume(t, TokenType.MINUS);
+				//consume(t, TokenType.MINUS);
 				returnExpression = new BinaryExpr(expression, BinaryExpr.MathOp.SUBTRACT, parseExpression(t));
 				return returnExpression;
 			}
