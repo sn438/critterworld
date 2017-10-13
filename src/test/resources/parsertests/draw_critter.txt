@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 (ahead[1] / 10 mod 100) != 17 and ahead[1] > 0 --> attack;
 4* ahead[4*8 -3-2]  * 16 * 6 * 9 / 6 * 8 * 9 < -1 and ENERGY < 500 * SIZE --> eat;
-=======
 4* -3 * ahead[3 +- 2-4*8] * 16 * -6 * -9 / -6 * -8 * 9 < -1 and ENERGY < 500 * SIZE --> eat;
->>>>>>> 8cf521393c289017de01457c5e0ded53f4e22941
 4* -3 * ahead[3 +- 2-4*8] * 16 * 6 * 9 / 6 * 8 * 9 < -1 and ENERGY < 500 * SIZE --> eat;
 POSTURE != 17 --> POSTURE := 17;
 nearby[3] = 0 and ENERGY > 2500 --> bud;
