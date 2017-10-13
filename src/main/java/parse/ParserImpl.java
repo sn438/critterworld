@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.LinkedList;
 
 import ast.*;
+import ast.Action.ActType;
 import exceptions.SyntaxError;
 
 class ParserImpl implements Parser {
@@ -79,11 +80,62 @@ class ParserImpl implements Parser {
 	}
 	
 	public static Update parseUpdate(Tokenizer t) throws SyntaxError {
-		
+		consume(t, TokenType.MEM);
+		consume(t, TokenType.LBRACKET);
+		Expr index = parseExpression(t);
+		consume(t, TokenType.RBRACKET);
+		consume(t, TokenType.ASSIGN);
+		Expr val = parseExpression(t);
+		return new Update(index, val);
 	}
 	
 	public static Action parseAction(Tokenizer t) throws SyntaxError {
+		Action result = null;
+		String type = t.peek().toString();
+		consume(t, t.peek().getType());
+		switch(type) {
+			case "wait":
+				result = new Action(ActType.WAIT);
+				break;
+			case "forward":
+				result = new Action(ActType.FORWARD);
+				break;
+			case "backward":
+				result = new Action(ActType.BACKWARD);
+				break;
+			case "left":
+				result = new Action(ActType.LEFT);
+				break;
+			case "right":
+				result = new Action(ActType.RIGHT);
+				break;
+			case "attack":
+				result = new Action(ActType.ATTACK);
+				break;
+			case "grow":
+				result = new Action(ActType.GROW);
+				break;
+			case "bud":
+				result = new Action(ActType.BUD);
+				break;
+			case "mate":
+				result = new Action(ActType.MATE);
+				break;
+			case "tag":
+				consume(t, TokenType.LBRACKET);
+				result = new Action(ActType.TAG, parseExpression(t));
+				consume(t, TokenType.RBRACKET);
+				break;
+			case "serve":
+				consume(t, TokenType.LBRACKET);
+				result = new Action(ActType.SERVE, parseExpression(t));
+				consume(t, TokenType.RBRACKET);
+				break;
+		}
 		
+		if(result == null)
+			throw new SyntaxError();
+		return result;
 	}
 	
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
