@@ -59,13 +59,12 @@ class ParserImpl implements Parser {
 
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
 		Expr expression = parseExpression(t);
-		System.out.println(expression.prettyPrint(new StringBuilder()));
+		System.out.println(expression.toString());
 		Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
 			String relationOperator = t.next().toString();
 			switch (relationOperator) {
 			case "<":
-				parseExpression(t);
 				condition = new Relation(expression, Relation.RelOp.LESS, parseExpression(t));
 				break;
 			case "<=":
@@ -134,7 +133,8 @@ class ParserImpl implements Parser {
 			return expression;
 		}
 		if (t.peek().isMemSugar()) {
-			String testString = t.next().toString();
+			String testString = t.peek().toString();
+			consume(t, t.peek().getType());
 			switch (testString) {
 			case "MEMSIZE":
 				expression = new UnaryExpr(new UnaryExpr(0), UnaryExpr.ExprType.MEMORYVAL);
@@ -160,13 +160,11 @@ class ParserImpl implements Parser {
 			case "POSTURE":
 				expression = new UnaryExpr(new UnaryExpr(7), UnaryExpr.ExprType.MEMORYVAL);
 				break;
-			default:
-				System.out.println("Please enter a valid cipher type.");
-				System.exit(0);
 			}
 		}
 		if (t.peek().isSensor()) {
-			String testString = t.next().toString();
+			String testString = t.peek().toString();
+			consume(t, t.peek().getType());
 			switch (testString) {
 			case "nearby":
 				consume(t, TokenType.LBRACKET);
@@ -211,5 +209,7 @@ class ParserImpl implements Parser {
 		if (t.peek().toString().equals(tt.toString())) {
 			t.next();
 		}
+		else
+			throw new SyntaxError();
 	}
 }

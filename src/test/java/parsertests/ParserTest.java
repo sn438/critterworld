@@ -22,7 +22,7 @@ public class ParserTest
     @Test
     public void testProgramIsNotNull()
     {
-        InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
+        InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
