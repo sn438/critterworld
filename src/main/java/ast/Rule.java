@@ -37,7 +37,7 @@ public class Rule extends AbstractNode
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		sb.append(cond.toString() + " --> " + comm.toString() + ";\n");
+		sb.append(cond.toString() + " --> " + comm.toString() + ";\n\n");
 		return sb;
 	}
 }

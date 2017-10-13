@@ -27,6 +27,7 @@ public class ParserTest
         Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
+        System.out.println(prog.toString());
         assertNotNull("A valid critter program should not be null.", prog);
     }
 

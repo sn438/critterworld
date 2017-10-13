@@ -42,7 +42,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		sb.append(left.toString());
-		sb.append(op == Operator.OR ? "or" : "and");
+		sb.append(op == Operator.OR ? " or " : " and ");
 		sb.append(right.toString());
 		return sb;
 	}

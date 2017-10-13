@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 import ast.*;
 import ast.Action.ActType;
+import ast.BinaryCondition.Operator;
+import ast.UnaryExpr.ExprType;
 import exceptions.SyntaxError;
 
 class ParserImpl implements Parser {
@@ -48,7 +50,7 @@ class ParserImpl implements Parser {
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
 			RuleList.add(parseRule(t));
-			break; // TODO remove when completed
+			//break; // TODO remove when completed
 		}
 		return new ProgramImpl(RuleList);
 	}
@@ -58,6 +60,7 @@ class ParserImpl implements Parser {
 		consume(t, TokenType.ARR);
 		Command command = parseCommand(t);
 		consume(t, TokenType.SEMICOLON);
+		//System.out.println((new Rule(condition, command)).toString()); //TODO remove when done tesing
 		return new Rule(condition, command);
 	}
 	
@@ -109,6 +112,9 @@ class ParserImpl implements Parser {
 			case "right":
 				result = new Action(ActType.RIGHT);
 				break;
+			case "eat":
+				result = new Action(ActType.EAT);
+				break;
 			case "attack":
 				result = new Action(ActType.ATTACK);
 				break;
@@ -139,48 +145,58 @@ class ParserImpl implements Parser {
 	}
 	
 	public static Condition parseCondition(Tokenizer t) throws SyntaxError {
-		Condition condition = parseConjunction(t);
-		return condition;
+		Condition conj = parseConjunction(t);
+		while (t.peek().getType() == TokenType.OR) {
+			consume(t, TokenType.OR);
+			//System.out.println((new BinaryCondition(conj, Operator.OR, parseConjunction(t)).toString())); //TODO remove when done
+			return new BinaryCondition(conj, Operator.OR, parseConjunction(t));
+		}
+		return conj;
 	}
 	
 	public static Condition parseConjunction(Tokenizer t) throws SyntaxError {
-		Condition condition = parseRelation(t);
-		
-		System.out.println(condition.prettyPrint(new StringBuilder()));
-		return condition;
+		Relation rel = parseRelation(t);
+		while (t.peek().getType() == TokenType.AND) {
+			consume(t, TokenType.AND);
+			return new BinaryCondition(rel, Operator.AND, parseRelation(t));
+		}
+		//System.out.println(condition.toString());
+		return rel;
 	}
-	public static Condition parseRelation(Tokenizer t) throws SyntaxError {
+	public static Relation parseRelation(Tokenizer t) throws SyntaxError {
+		Relation cond = null;
+		
+		if(t.peek().getType() == TokenType.LBRACE) {
+			consume(t, TokenType.LBRACE);
+			cond = new Relation(parseCondition(t));
+			consume(t, TokenType.RBRACE);
+			return cond;
+		}
+		
 		Expr expression = parseExpression(t);
-		System.out.println(expression.toString());
-		Condition condition;
+		//System.out.println(expression.toString());
+		//Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
-			String relationOperator = t.next().toString();
+			String relationOperator = t.peek().toString();
+			consume(t, t.peek().getType());
 			switch (relationOperator) {
 			case "<":
-				condition = new Relation(expression, Relation.RelOp.LESS, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.LESS, parseExpression(t));
 			case "<=":
-				condition = new Relation(expression, Relation.RelOp.LESSOREQ, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.LESSOREQ, parseExpression(t));
 			case "=":
-				condition = new Relation(expression, Relation.RelOp.EQUAL, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.EQUAL, parseExpression(t));
 			case ">":
-				condition = new Relation(expression, Relation.RelOp.GREATER, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.GREATER, parseExpression(t));
 			case ">=":
-				condition = new Relation(expression, Relation.RelOp.GREATEROREQ, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.GREATEROREQ, parseExpression(t));
 			case "!=":
-				condition = new Relation(expression, Relation.RelOp.NOTEQUAL, parseExpression(t));
-				return condition;
+				return new Relation(expression, Relation.RelOp.NOTEQUAL, parseExpression(t));
 			}
 		}
-		return new BinaryCondition(null, null, null);
-
+		throw new SyntaxError();
 	}
 	
-
 	public static Expr parseExpression(Tokenizer t) throws SyntaxError {
 		Expr expression = parseTerm(t);
 		Expr returnExpression = null;
@@ -220,10 +236,16 @@ class ParserImpl implements Parser {
 	}
 
 	public static Expr parseFactor(Tokenizer t) throws SyntaxError {
-		Expr returnExpression = null;
 		Expr expression = null;
 		if (t.peek().isNum()) {
 			expression = new UnaryExpr(Integer.parseInt(t.next().toString()));
+			return expression;
+		}
+		if(t.peek().getType() == TokenType.MEM) {
+			consume(t, TokenType.MEM);
+			consume(t, TokenType.LBRACKET);
+			expression = new UnaryExpr(parseExpression(t), ExprType.MEMORYVAL);
+			consume(t, TokenType.RBRACKET);
 			return expression;
 		}
 		if (t.peek().isMemSugar()) {
@@ -291,8 +313,9 @@ class ParserImpl implements Parser {
 			expression = new UnaryExpr(expression, UnaryExpr.ExprType.EXPRESSION);
 			return expression;
 		}
-		throw new SyntaxError();
-		
+		if(expression == null)
+			throw new SyntaxError();
+		return expression;
 	}
 
 	// TODO
