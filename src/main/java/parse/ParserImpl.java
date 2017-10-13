@@ -12,10 +12,7 @@ import ast.UnaryExpr.ExprType;
 import exceptions.SyntaxError;
 
 class ParserImpl implements Parser {
-	/**
-	 * tokens is the Tokenizer that contains all the tokens from which the AST is
-	 * built.
-	 */
+	/** tokens is the Tokenizer that contains all the tokens from which the AST is built. */
 	private Tokenizer tokens;
 	private Program programAST;
 
@@ -39,8 +36,7 @@ class ParserImpl implements Parser {
 	 * "parseX" have the same spec except that they parse syntactic form X.
 	 * 
 	 * @return the created AST
-	 * @throws SyntaxError
-	 *             if there the input tokens have invalid syntax
+	 * @throws SyntaxError if there the input tokens have invalid syntax
 	 */
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
 
@@ -323,9 +319,7 @@ class ParserImpl implements Parser {
 
 	/**
 	 * Consumes a token of the expected type.
-	 * 
-	 * @throws SyntaxError
-	 *             if the wrong kind of token is encountered.
+	 * @throws SyntaxError if the wrong kind of token is encountered.
 	 */
 	public static void consume(Tokenizer t, TokenType tt) throws SyntaxError {
 		if (t.peek().toString().equals(tt.toString())) {

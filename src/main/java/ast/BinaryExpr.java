@@ -36,7 +36,7 @@ public class BinaryExpr extends AbstractNode implements Expr
 				sb.append(left.toString() + " / " + right.toString());
 				break;
 			case MOD:
-				sb.append(left.toString() + " % " + right.toString());
+				sb.append(left.toString() + " mod " + right.toString());
 				break;
 		}
 		return sb;
