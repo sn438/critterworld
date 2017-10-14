@@ -19,14 +19,6 @@ public class Command extends AbstractNode
 		last = cc;
 	}
 	@Override
-	public StringBuilder prettyPrint(StringBuilder sb)
-	{
-		for(Update u : UpdateList)
-			sb.append(u.toString() + "\n");
-		sb.append(last.toString());
-		return sb;
-	}
-	@Override
 	public int size()
 	{
 		int result = 1;
@@ -49,8 +41,26 @@ public class Command extends AbstractNode
 				index -= u.size();
 				break;
 			}
-			return u.nodeAt(index);
+			return u.nodeAt(index - 1);
 		}
-		return last.nodeAt(index);
+		return last.nodeAt(index - 1);
+	}
+	
+	@Override
+	public Command clone()
+	{
+		LinkedList<Update> tempUL = new LinkedList<Update>();
+		for(Update u : UpdateList)
+			tempUL.add(u.clone());
+		CommandComponent tempLast = last.clone();
+		return new Command(tempUL, tempLast);
+	}
+	@Override
+	public StringBuilder prettyPrint(StringBuilder sb)
+	{
+		for(Update u : UpdateList)
+			sb.append(u.toString() + "\n");
+		sb.append(last.toString());
+		return sb;
 	}
 }

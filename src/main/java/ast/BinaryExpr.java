@@ -19,6 +19,33 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
+	public int size()
+	{
+		return 1 + left.size() + right.size();
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(index <= left.size())
+			return left.nodeAt(index - 1);
+		else
+			return right.nodeAt(index - left.size() - 1);
+	}
+	
+	@Override
+	public BinaryExpr clone()
+	{
+		Expr tempLeft = left.clone();
+		Expr tempRight = right.clone();
+		return new BinaryExpr(tempLeft, operator, tempRight);
+	}
+	
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(operator)
@@ -41,26 +68,6 @@ public class BinaryExpr extends AbstractNode implements Expr
 		}
 		return sb;
 	}
-	
-	@Override
-	public int size()
-	{
-		return 1 + left.size() + right.size();
-	}
-	
-	@Override
-	public Node nodeAt(int index)
-	{
-		if(index == 0)
-			return this;
-		if(index > size() - 1 || index < 0)
-			throw new IndexOutOfBoundsException();
-		if(index < left.size())
-			return left.nodeAt(index);
-		else
-			return right.nodeAt(index - left.size());
-	}
-	
 	@Override
 	public int evaluate()
 	{

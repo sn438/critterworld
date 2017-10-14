@@ -22,6 +22,32 @@ public class Sensor extends AbstractNode implements Expr
 	}
 
 	@Override
+	public int size()
+	{
+		if(type == SensorType.SMELL)
+			return 1;
+		return 1 + sensorIndex.size();
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		return sensorIndex.nodeAt(index - 1);
+	}
+	
+	@Override
+	public Sensor clone()
+	{
+		if(type == SensorType.SMELL)
+			return new Sensor();
+		return new Sensor(type, sensorIndex.clone());
+	}
+	
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(type)
@@ -43,14 +69,6 @@ public class Sensor extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public int size()
-	{
-		if(type == SensorType.SMELL)
-			return 1;
-		return 1 + sensorIndex.size();
-	}
-	
-	@Override
 	public int evaluate()
 	{
 		throw new UnsupportedOperationException();
@@ -60,15 +78,5 @@ public class Sensor extends AbstractNode implements Expr
 	public enum SensorType
 	{
 		NEARBY, AHEAD, RANDOM, SMELL;
-	}
-
-	@Override
-	public Node nodeAt(int index)
-	{
-		if(index == 0)
-			return this;
-		if(index > size() - 1 || index < 0)
-			throw new IndexOutOfBoundsException();
-		return sensorIndex.nodeAt(index - 1);
 	}
 }

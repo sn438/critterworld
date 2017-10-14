@@ -13,6 +13,9 @@ public abstract class AbstractNode implements Node
 	public abstract StringBuilder prettyPrint(StringBuilder sb);
 	
 	@Override
+	public abstract Node clone();
+	
+	@Override
 	public String toString()
 	{
 		return prettyPrint(new StringBuilder()).toString();

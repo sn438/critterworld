@@ -23,6 +23,34 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
+	public int size()
+	{
+		if(act == ActType.TAG || act == ActType.SERVE)
+			return 1 + val.size();
+		return 1;
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		return val.nodeAt(index - 1);
+	}
+	
+	@Override
+	public Action clone()
+	{
+		if(act == ActType.TAG || act == ActType.SERVE)
+		{
+			Expr tempVal = val.clone();
+			return new Action(act, tempVal);
+		}
+		return new Action(act);
+	}
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(act)
@@ -67,29 +95,9 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
-	@Override
-	public int size()
-	{
-		if(act == ActType.TAG || act == ActType.SERVE)
-			return 1 + val.size();
-		return 1;
-	}
-	
-	@Override
-	public Node nodeAt(int index)
-	{
-		if(index == 0)
-			return this;
-		if(index > size() - 1 || index < 0)
-			throw new IndexOutOfBoundsException();
-		return val.nodeAt(index - 1);
-	}
-	
 	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
-
-	
 }

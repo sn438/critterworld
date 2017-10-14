@@ -32,6 +32,31 @@ public class UnaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
+	public int size()
+	{
+		if(type == ExprType.CONSTANT)
+			return 1;
+		return 1 + exp.size();
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1)
+			throw new IndexOutOfBoundsException();
+		return exp.nodeAt(index - 1);
+	}
+	@Override
+	public UnaryExpr clone()
+	{
+		if(type == ExprType.CONSTANT)
+			return new UnaryExpr(value);
+		return new UnaryExpr(exp.clone(), type);
+	}
+	
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(type)
@@ -57,13 +82,6 @@ public class UnaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public int size()
-	{
-		if(type == ExprType.CONSTANT)
-			return 1;
-		return 1 + exp.size();
-	}
-	@Override
 	public int evaluate()
 	{
 		throw new UnsupportedOperationException();
@@ -73,15 +91,5 @@ public class UnaryExpr extends AbstractNode implements Expr
 	public enum ExprType
 	{
 		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;
-	}
-
-	@Override
-	public Node nodeAt(int index)
-	{
-		if(index == 0)
-			return this;
-		if(index > size() - 1)
-			throw new IndexOutOfBoundsException();
-		return exp.nodeAt(index - 1);
 	}
 }

@@ -109,8 +109,8 @@ public enum TokenType
      */
 	public static TokenType getTypeFromString(String rep)
 	{
-		assert stringToTypeMap.containsKey(rep) : "'" + rep
-												+ "' is not the string representation of any TokenType";
+		//assert stringToTypeMap.containsKey(rep) : "'" + rep
+												//+ "' is not the string representation of any TokenType";
 		return stringToTypeMap.get(rep);
 	}
 
