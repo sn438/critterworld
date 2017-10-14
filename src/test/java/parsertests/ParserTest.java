@@ -34,7 +34,7 @@ public class ParserTest
     @Test
     public void testEmptyProgram()
     {
-        InputStream in = ParserTest.class.getResourceAsStream("failure-test-1.txt");
+        InputStream in = ParserTest.class.getResourceAsStream("example-rules-failure1.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
