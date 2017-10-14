@@ -42,7 +42,7 @@ public class ParserTest
         System.out.println(prog.toString());
         assertNotNull("A valid critter program should not be null.", prog);
     }
-    
+    /*
     @Test
     public void testCompletelyIncorrectProgram()
     {
@@ -55,5 +55,5 @@ public class ParserTest
         assertNotNull("A valid critter program should not be null.", prog);
     }
     // TODO continue adding tests maybe
-
+*/
 }

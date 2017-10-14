@@ -175,10 +175,11 @@ public class Tokenizer implements Iterator<Token> {
 			break;
 		case '/':
 			if (consume('/')) {
-				System.out.println(br.readLine());
-				}
-			
-			setNextTokenAndReset(TokenType.DIV);
+				br.readLine();
+				resetStringBuilder();
+			} else {
+				setNextTokenAndReset(TokenType.DIV);
+			}
 			break;
 		case '<':
 			lexLAngle();

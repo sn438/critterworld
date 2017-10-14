@@ -1,5 +1,5 @@
-ahead[1] = 0 --> forward; 
-
+ahead[1] = 0 --> forward;  // ytyt
+// dfjkgkjfdg kjdf 
 mem[5]=1 --> mem[6] := mem[4]
              mem[5] := 2;
 
