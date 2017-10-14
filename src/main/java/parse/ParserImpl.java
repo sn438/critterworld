@@ -39,14 +39,9 @@ class ParserImpl implements Parser {
 	 * @throws SyntaxError if there the input tokens have invalid syntax
 	 */
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
-
-		/*
-		 * if (!t.peek().toString().equals("-->")) { parseFactor(t); } }
-		 */
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
 			RuleList.add(parseRule(t));
-			//break; // TODO remove when completed
 		}
 		return new ProgramImpl(RuleList);
 	}

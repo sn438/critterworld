@@ -32,6 +32,7 @@ public enum TokenType
 	MINUS(TokenCategory.ADDOP, "-"),
 	MUL(TokenCategory.MULOP, "*"),
 	DIV(TokenCategory.MULOP, "/"),
+	COMMENT(TokenCategory.OTHER, "//"),
 	MOD(TokenCategory.MULOP, "mod"),
 	ASSIGN(TokenCategory.OTHER, ":="),
 	NEARBY(TokenCategory.SENSOR, "nearby"),

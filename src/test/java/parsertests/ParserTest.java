@@ -31,6 +31,29 @@ public class ParserTest
         assertNotNull("A valid critter program should not be null.", prog);
     }
 
+    @Test
+    public void testEmptyProgram()
+    {
+        InputStream in = ParserTest.class.getResourceAsStream("failure-test-1.txt");
+        Reader r = new BufferedReader(new InputStreamReader(in));
+        Tokenizer t = new Tokenizer(r);
+        Parser p = ParserFactory.getParser();
+        Program prog = p.parse(r);
+        System.out.println(prog.toString());
+        assertNotNull("A valid critter program should not be null.", prog);
+    }
+    
+    @Test
+    public void testCompletelyIncorrectProgram()
+    {
+        InputStream in = ParserTest.class.getResourceAsStream("failure-test-2.txt");
+        Reader r = new BufferedReader(new InputStreamReader(in));
+        Tokenizer t = new Tokenizer(r);
+        Parser p = ParserFactory.getParser();
+        Program prog = p.parse(r);
+        System.out.println(prog.toString());
+        assertNotNull("A valid critter program should not be null.", prog);
+    }
     // TODO continue adding tests maybe
 
 }
