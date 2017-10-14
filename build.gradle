@@ -29,7 +29,7 @@ test {
 }
 
 // Set the name of your main class here
-mainClassName = "main.ParseAndMutateApp"
+mainClassName = "console.Console"
 
 jar {
     manifest {
