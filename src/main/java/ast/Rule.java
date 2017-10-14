@@ -28,10 +28,10 @@ public class Rule extends AbstractNode
 			return this;
 		if(index > size() - 1 || index < 0)
 			throw new IndexOutOfBoundsException();
-		if(index < cond.size())
-			return cond.nodeAt(index);
+		if(index <= cond.size())
+			return cond.nodeAt(index - 1);
 		else
-			return comm.nodeAt(index - cond.size());
+			return comm.nodeAt(index - cond.size() - 1);
 	}
 
 	@Override
@@ -39,5 +39,13 @@ public class Rule extends AbstractNode
 	{
 		sb.append(cond.toString() + " --> " + comm.toString() + ";\n\n");
 		return sb;
+	}
+	
+	@Override
+	public Rule clone()
+	{
+		Condition tempCond = cond.clone();
+		Command tempComm = comm.clone();
+		return new Rule(tempCond, tempComm);
 	}
 }

@@ -19,13 +19,14 @@ public class Update extends AbstractNode implements CommandComponent
 		memIndex = i;
 		value = val;
 	}
-	@Override
-	public StringBuilder prettyPrint(StringBuilder sb)
-	{
-		sb.append("mem[" + memIndex.toString() + "] := " + value.toString());
-		return sb;
-	}
 	
+	@Override
+	public Update clone()
+	{
+		Expr tempIndex = memIndex.clone();
+		Expr tempValue = value.clone();
+		return new Update(tempIndex, tempValue);
+	}
 	@Override
 	public int size()
 	{
@@ -38,9 +39,15 @@ public class Update extends AbstractNode implements CommandComponent
 			return this;
 		if(index > size() - 1 || index < 0)
 			throw new IndexOutOfBoundsException();
-		if(index < memIndex.size())
-			return memIndex.nodeAt(index);
+		if(index <= memIndex.size())
+			return memIndex.nodeAt(index - 1);
 		else
-			return value.nodeAt(index - memIndex.size());
+			return value.nodeAt(index - memIndex.size() - 1);
+	}
+	@Override
+	public StringBuilder prettyPrint(StringBuilder sb)
+	{
+		sb.append("mem[" + memIndex.toString() + "] := " + value.toString());
+		return sb;
 	}
 }

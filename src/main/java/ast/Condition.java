@@ -5,4 +5,7 @@ public interface Condition extends Node
 {
 	/** Returns the boolean value of this condition. */
 	public boolean evaluate(); // to be done in A5
+	
+	/** Returns a deep copy of this condition. */
+	public Condition clone();
 }

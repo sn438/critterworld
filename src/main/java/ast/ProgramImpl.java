@@ -1,15 +1,15 @@
 package ast;
 
-import java.util.List;
+import java.util.LinkedList;
 
 /** A data structure representing a critter program. */
 public class ProgramImpl extends AbstractNode implements Program
 {
 	/** RulesList will contain all the rules detailed in the program. */
-	private List<Rule> RulesList;
+	private LinkedList<Rule> RulesList;
 
 	/** Creates a new Program node with the given list of rules. */
-	public ProgramImpl(List<Rule> rl)
+	public ProgramImpl(LinkedList<Rule> rl)
 	{
 		RulesList = rl;
 	}
@@ -37,11 +37,20 @@ public class ProgramImpl extends AbstractNode implements Program
 				index -= r.size();
 				break;
 			}
-			return r.nodeAt(index);
+			return r.nodeAt(index - 1);
 		}
 		throw new IndexOutOfBoundsException();
 	}
 
+	@Override
+	public ProgramImpl clone()
+	{
+		LinkedList<Rule> tempRL = new LinkedList<Rule>();
+		for(Rule r : RulesList)
+			tempRL.add(r.clone());
+		return new ProgramImpl(tempRL);
+	}
+	
 	@Override
 	public Program mutate()
 	{

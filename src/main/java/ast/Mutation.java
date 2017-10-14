@@ -9,4 +9,6 @@ public interface Mutation extends Visitor
 	 * @return Whether this mutation is the same type as {@code m}
 	 */
 	boolean equals(Mutation m);
+	
+	
 }

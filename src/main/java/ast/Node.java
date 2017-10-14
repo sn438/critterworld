@@ -24,6 +24,9 @@ public interface Node
 	 */
 	Node nodeAt(int index);
 
+	/** Returns a deep copy of this node. */
+	Node clone();
+	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.
 	 * <p>

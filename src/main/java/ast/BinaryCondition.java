@@ -18,7 +18,6 @@ public class BinaryCondition extends AbstractNode implements Condition
 		this.right = r;
 	}
 	
-	
 	@Override
 	public int size()
 	{
@@ -32,10 +31,18 @@ public class BinaryCondition extends AbstractNode implements Condition
 			return this;
 		if(index > size() - 1 || index < 0)
 			throw new IndexOutOfBoundsException();
-		if(index < left.size())
-			return left.nodeAt(index);
+		if(index <= left.size())
+			return left.nodeAt(index - 1);
 		else
-			return right.nodeAt(index - left.size());
+			return right.nodeAt(index - left.size() - 1);
+	}
+	
+	@Override
+	public BinaryCondition clone()
+	{
+		Condition tempLeft = left.clone();
+		Condition tempRight = right.clone();
+		return new BinaryCondition(tempLeft, op, tempRight);
 	}
 
 	@Override

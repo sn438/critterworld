@@ -29,6 +29,42 @@ public class Relation extends AbstractNode implements Condition
 		this.right = null;
 		this.cond = c;
 	}
+	
+	@Override
+	public int size()
+	{
+		if(op == RelOp.ISCOND)
+			return 1 + cond.size();
+		return 1 + left.size() + right.size();
+	}
+	
+	@Override
+	public Node nodeAt(int index)
+	{
+		if(index == 0)
+			return this;
+		if(index > size() - 1 || index < 0)
+			throw new IndexOutOfBoundsException();
+		if(op == RelOp.ISCOND)
+			return cond.nodeAt(index - 1);
+		else
+		{
+			if(index <= left.size())
+				return left.nodeAt(index - 1);
+			else
+				return right.nodeAt(index - left.size() - 1);
+		}
+	}
+	
+	@Override
+	public Relation clone()
+	{
+		if(op == RelOp.ISCOND)
+			return new Relation(cond.clone());
+		Expr tempLeft = left.clone();
+		Expr tempRight = right.clone();
+		return new Relation(tempLeft, op, tempRight);
+	}
 
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
@@ -58,33 +94,6 @@ public class Relation extends AbstractNode implements Condition
 		}
 		return sb;
 	}
-	
-	@Override
-	public int size()
-	{
-		if(op == RelOp.ISCOND)
-			return 1 + cond.size();
-		return 1 + left.size() + right.size();
-	}
-	
-	@Override
-	public Node nodeAt(int index)
-	{
-		if(index == 0)
-			return this;
-		if(index > size() - 1 || index < 0)
-			throw new IndexOutOfBoundsException();
-		if(op == RelOp.ISCOND)
-			return cond.nodeAt(index - 1);
-		else
-		{
-			if(index < left.size())
-				return left.nodeAt(index);
-			else
-				return right.nodeAt(index - left.size());
-		}
-	}
-	
 	@Override
 	public boolean evaluate()
 	{
@@ -95,5 +104,4 @@ public class Relation extends AbstractNode implements Condition
 	{
 		LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOTEQUAL, ISCOND;
 	}
-	
 }
