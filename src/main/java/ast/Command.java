@@ -62,10 +62,41 @@ public class Command extends AbstractNode
 		CommandComponent tempLast = last.clone();
 		return new Command(tempUL, tempLast);
 	}
+	
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		for(int i = 0; i < UpdateList.size(); i++)
+		{
+			if(child == UpdateList.get(i))
+			{
+				UpdateList.set(i, (Update) replacement);
+				UpdateList.get(i).setParent(this);
+				return true;
+			}
+		}
+		if(child == last)
+		{
+			last = (CommandComponent) replacement;
+			last.setParent(this);
+			return true;
+		}
+		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
+		return false;
 	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)

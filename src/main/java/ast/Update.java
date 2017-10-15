@@ -48,9 +48,35 @@ public class Update extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
+	}
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		if(child == this.memIndex)
+		{
+			this.memIndex = (Expr) replacement;
+			memIndex.setParent(this);
+			return true;
+		}
+		else if(child == this.value)
+		{
+			this.value = (Expr) replacement;
+			value.setParent(this);
+			return true;
+		}
+		System.out.println("You messed up RCW in Update."); //TODO remove when done testing
+		return false;
 	}
 	@Override
 	public int size()

@@ -52,9 +52,27 @@ public class Action extends AbstractNode implements CommandComponent
 		return new Action(act);
 	}
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		if(act == ActType.TAG || act == ActType.SERVE)
+			return false;
+		val = (Expr) replacement;
+		val.setParent(this);
+		return true;
 	}
 	
 	@Override

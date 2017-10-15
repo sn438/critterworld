@@ -93,11 +93,51 @@ public class Relation extends AbstractNode implements Condition
 	}
 	
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
 	}
-
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		if(op == RelOp.ISCOND)
+		{
+			if(child == this.cond)
+			{
+				cond = (Condition) replacement;
+				cond.setParent(this);
+				return true;
+			}
+			else
+			{
+				System.out.println("You messed up RCW in Relation."); //TODO remove when done testing
+				return false;
+			}
+		}
+		
+		if(child == this.left)
+		{
+			this.left = (Expr) replacement;
+			left.setParent(this);
+			return true;
+		}
+		else if(child == this.right)
+		{
+			this.right = (Expr) replacement;
+			right.setParent(this);
+			return true;
+		}
+		System.out.println("You messed up RCW in Relation."); //TODO remove when done testing
+		return false;
+	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{	

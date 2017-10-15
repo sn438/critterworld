@@ -66,9 +66,36 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 	
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		if(child == this.left)
+		{
+			this.left = (Condition) replacement;
+			left.setParent(this);
+			return true;
+		}
+		else if(child == this.right)
+		{
+			this.right = (Condition) replacement;
+			right.setParent(this);
+			return true;
+		}
+		System.out.println("You messed up RCW in BinaryCondition."); //TODO remove when done testing
+		return false;
 	}
 
 	@Override

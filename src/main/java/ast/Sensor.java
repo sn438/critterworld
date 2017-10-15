@@ -49,9 +49,27 @@ public class Sensor extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public void acceptMutation(Mutation m)
+	public boolean acceptMutation(Mutation m)
 	{
-		m.mutate(this);
+		try
+		{
+			boolean result = m.mutate(this);
+			return result;
+		}
+		catch(UnsupportedOperationException u)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean replaceChildWith(Node child, Node replacement)
+	{
+		if(type == SensorType.SMELL)
+			return false;
+		sensorIndex = (Expr) replacement;
+		sensorIndex.setParent(this);
+		return true;
 	}
 	
 	@Override

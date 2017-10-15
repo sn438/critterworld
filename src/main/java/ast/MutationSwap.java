@@ -11,7 +11,11 @@ public class MutationSwap implements Mutation
 	}
 
 	@Override
-	public void mutate(ProgramImpl p)
+	public boolean mutate(Node n)
+	{
+		return false;
+	}
+	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();
 		int secondIndex = (int) Math.random() * p.getRulesList().size();
@@ -21,18 +25,18 @@ public class MutationSwap implements Mutation
 		temp = p.getRulesList().remove(secondIndex + 1);
 		p.getRulesList().add(firstIndex, temp);
 		p.getRulesList().remove(firstIndex + 1);
+		return true;
 	}
 
-	@Override
-	public void mutate(BinaryCondition c)
+	public boolean mutate(BinaryCondition c)
 	{
 		Condition temp = c.getLeft();
 		c.setLeft(c.getRight());
 		c.setRight(temp);
+		return true;
 	}
 
-	@Override
-	public void mutate(Command comm)
+	public boolean mutate(Command comm)
 	{
 		int firstIndex = (int) Math.random() * comm.getUpdateList().size();
 		int secondIndex = (int) Math.random() * comm.getUpdateList().size();
@@ -42,51 +46,48 @@ public class MutationSwap implements Mutation
 		temp = comm.getUpdateList().remove(secondIndex + 1);
 		comm.getUpdateList().add(firstIndex, temp);
 		comm.getUpdateList().remove(firstIndex + 1);
+		return true;
 	}
 
-	@Override
-	public void mutate(Update u)
+	public boolean mutate(Update u)
 	{
 		Expr temp = u.getMemIndex();
 		u.setMemIndex(u.getValue());
 		u.setValue(temp);
+		return true;
 	}
 
-	@Override
-	public void mutate(Relation r)
+	public boolean mutate(Relation r)
 	{
 		if(r.isCond())
 			throw new UnsupportedOperationException();
 		Expr temp = r.getLeft();
 		r.setLeft(r.getRight());
 		r.setRight(temp);
+		return true;
 	}
 
-	@Override
-	public void mutate(BinaryExpr be)
+	public boolean mutate(BinaryExpr be)
 	{
 		Expr temp = be.getLeft();
 		be.setLeft(be.getRight());
 		be.setRight(temp);
+		return true;
 	}
 
-	@Override
-	public void mutate(Rule r)
+	public boolean mutate(Rule r)
 	{
 		throw new UnsupportedOperationException();
 	}
-	@Override
-	public void mutate(Action a)
+	public boolean mutate(Action a)
 	{
 		throw new UnsupportedOperationException();
 	}
-	@Override
-	public void mutate(UnaryExpr ue)
+	public boolean mutate(UnaryExpr ue)
 	{
 		throw new UnsupportedOperationException();
 	}
-	@Override
-	public void mutate(Sensor s)
+	public boolean mutate(Sensor s)
 	{
 		throw new UnsupportedOperationException();
 	}

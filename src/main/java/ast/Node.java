@@ -35,9 +35,18 @@ public interface Node
 	/**
 	 * Accepts a mutation to this node.
 	 * @param m the type of mutation that this node will accept
-	 * @return the 
+	 * @return whether or not this node can accept Mutation {@code m}
 	 */
-	void acceptMutation(Mutation m);
+	boolean acceptMutation(Mutation m);
+	
+	/**
+	 * Replaces one child of this node with another node.<br>
+	 * Precondition: {@code child} is a child of {@code this}, and {@code replacement} must be a valid child of {@code this}
+	 * @param child the child of this node to be replaced
+	 * @param replacement the node that will replace {@code child}
+	 * @return whether or not this node has children to be replaced
+	 */
+	boolean replaceChildWith(Node child, Node replacement);
 	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.
@@ -85,5 +94,6 @@ public interface Node
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;
 	}
 	
+	/** Returns the type of this node. */
 	public NodeType getType();
 }

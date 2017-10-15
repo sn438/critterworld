@@ -2,81 +2,76 @@ package ast;
 
 public class MutationRemove implements Mutation
 {
-	@Override
 	public boolean equals(Mutation m)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}	
+	
+	public boolean mutate(Node n)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public void mutate(ProgramImpl p)
+	public boolean mutate(Rule r)
+	{
+		Node parent = r.getParent();
+		return false;
+	}
+	
+	public boolean mutate(BinaryCondition c)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(Rule r)
+	
+	public boolean mutate(Command comm)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(BinaryCondition c)
+	
+	public boolean mutate(Update u)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
-	@Override
-	public void mutate(Command comm)
+	
+	public boolean mutate(Action a)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(Update u)
+	
+	public boolean mutate(Relation r)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
-	@Override
-	public void mutate(Action a)
+	public boolean mutate(BinaryExpr be)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(Relation r)
+	
+	public boolean mutate(UnaryExpr ue)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(BinaryExpr be)
+	
+	public boolean mutate(Sensor s)
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
-
-	@Override
-	public void mutate(UnaryExpr ue)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mutate(Sensor s)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
 }

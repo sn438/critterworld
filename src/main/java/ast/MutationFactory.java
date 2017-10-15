@@ -11,8 +11,7 @@ public class MutationFactory
 
 	public static Mutation getSwap()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationSwap();
 	}
 
 	public static Mutation getReplace()
