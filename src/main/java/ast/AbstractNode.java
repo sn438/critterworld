@@ -9,7 +9,6 @@ public abstract class AbstractNode implements Node
 	{
 		return parent;
 	}
-	
 	public void setParent(Node par)
 	{
 		parent = par;

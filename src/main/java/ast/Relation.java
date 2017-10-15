@@ -136,4 +136,9 @@ public class Relation extends AbstractNode implements Condition
 	{
 		LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOTEQUAL, ISCOND;
 	}
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.RELATION;
+	}
 }

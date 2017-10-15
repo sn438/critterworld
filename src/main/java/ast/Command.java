@@ -75,4 +75,9 @@ public class Command extends AbstractNode
 		sb.append(last.toString());
 		return sb;
 	}
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.COMMAND;
+	}
 }

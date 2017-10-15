@@ -35,6 +35,7 @@ public interface Node
 	/**
 	 * Accepts a mutation to this node.
 	 * @param m the type of mutation that this node will accept
+	 * @return the 
 	 */
 	void acceptMutation(Mutation m);
 	
@@ -83,4 +84,6 @@ public interface Node
 	{
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;
 	}
+	
+	public NodeType getType();
 }
