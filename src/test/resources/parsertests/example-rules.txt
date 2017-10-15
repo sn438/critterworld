@@ -1,10 +1,10 @@
-ahead[1] = 0 --> forward;  // ytyt
-// dfjkgkjfdg kjdf 
+ahead[1] = 0 --> forward;  // test comment one
+// test comment two 
 mem[5]=1 --> mem[6] := mem[4]
              mem[5] := 2;
 
 mem[6] mod 1000 < 6 --> mem[5]:=1
-                        eat;
+                        eat; // test comment three
 
 mem[mem[3] + 10] mod 6 <= 3 --> right;
 
@@ -17,10 +17,12 @@ ahead[1] = 0 --> forward;
 ahead[1] != 0-1 --> attack;
 
 ahead[1] > 0 --> tag[1];
-
+// test comment four
 mem[4] > mem[3] * 100 and
 mem[3] < (10 + mem[7])
-    --> grow; // djfgfdjhg djfg
+    --> grow; // test comment 6
 
 mem[4] > 1000 --> mem[7] := mem[7] + mem[5]  
                   bud; 
+                  
+// test comment 7
