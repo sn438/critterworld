@@ -30,7 +30,7 @@ public class Test
 		System.out.println(r.toString());
 		System.out.println(r.size());*/
 		
-		UnaryExpr e = new UnaryExpr(new UnaryExpr(7), ExprType.MEMORYVAL);
+		/*UnaryExpr e = new UnaryExpr(new UnaryExpr(7), ExprType.MEMORYVAL);
 		BinaryExpr e5 = new BinaryExpr(new UnaryExpr(6), MathOp.ADD, new UnaryExpr(67));
 		UnaryExpr e1 = new UnaryExpr(2);
 		UnaryExpr e2 = new UnaryExpr(12);
@@ -50,17 +50,23 @@ public class Test
 		Rule rule = new Rule(con, c);
 		
 		System.out.println(rule.toString() + "\n" + rule.size() + "\n" + rule.nodeAt(13));
-		System.out.println("" + rule.size() + "\n" + con.size() + "\n" + c.size());
+		System.out.println("" + rule.size() + "\n" + con.size() + "\n" + c.size());*/
 		
 		/*Sensor s = new Sensor();
 		System.out.println(s.nodeAt(0).toString());*/
 		
-		/*InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+		InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
-        System.out.println(prog.toString());*/
+        System.out.println(prog.toString());
+        
+        Program pclone = (Program) prog.clone();
+        System.out.println(pclone.toString());
+        pclone = null;
+        System.out.println(prog.toString());
+        
 		
 		/*Update u = new Update(new UnaryExpr(7), new UnaryExpr(17));
 		System.out.println(u.size() + "\n" + u.nodeAt(0) + "\nmem[" + u.nodeAt(1) + "] := " + u.nodeAt(2));
@@ -68,5 +74,7 @@ public class Test
 		System.out.println(e1.size() + "\n" + e1.nodeAt(1));
 		BinaryExpr e5 = new BinaryExpr(new UnaryExpr(6), MathOp.ADD, new UnaryExpr(67));
 		System.out.println(e5.size() + "\n" + e5.nodeAt(0));*/
+		
+		
 	}
 }

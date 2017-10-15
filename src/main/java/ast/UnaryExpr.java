@@ -18,6 +18,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 	{
 		this.exp = e;
 		this.type = t;
+		exp.setParent(this);
 	}
 	
 	/** 
@@ -54,6 +55,12 @@ public class UnaryExpr extends AbstractNode implements Expr
 		if(type == ExprType.CONSTANT)
 			return new UnaryExpr(value);
 		return new UnaryExpr(exp.clone(), type);
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 	
 	@Override

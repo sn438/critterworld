@@ -12,8 +12,15 @@ public class ProgramImpl extends AbstractNode implements Program
 	public ProgramImpl(LinkedList<Rule> rl)
 	{
 		RulesList = rl;
+		for(Rule r : RulesList)
+			r.setParent(this);
 	}
 	
+	public LinkedList<Rule> getRulesList()
+	{
+		return RulesList;
+	}
+
 	@Override
 	public int size()
 	{
@@ -49,6 +56,12 @@ public class ProgramImpl extends AbstractNode implements Program
 		for(Rule r : RulesList)
 			tempRL.add(r.clone());
 		return new ProgramImpl(tempRL);
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 	
 	@Override

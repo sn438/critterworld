@@ -20,6 +20,7 @@ public class Action extends AbstractNode implements CommandComponent
 	{
 		act = a;
 		val = e;
+		val.setParent(this);
 	}
 	
 	@Override
@@ -50,6 +51,12 @@ public class Action extends AbstractNode implements CommandComponent
 		}
 		return new Action(act);
 	}
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
+	}
+	
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{

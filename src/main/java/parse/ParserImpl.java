@@ -1,8 +1,6 @@
 package parse;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.math.BigInteger;
 import java.util.LinkedList;
 
 import ast.*;

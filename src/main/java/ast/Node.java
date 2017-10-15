@@ -3,7 +3,12 @@ package ast;
 /** A node in the abstract syntax tree of a program. */
 public interface Node
 {
-
+	/** Returns a parent pointer for this node. */
+	Node getParent();
+	
+	/** Sets the parent for this node. */
+	void setParent(Node par);
+	
 	/**
 	 * The number of nodes in the AST rooted at this node, including this node
 	 * @return The size of the AST rooted at this node
@@ -26,6 +31,12 @@ public interface Node
 
 	/** Returns a deep copy of this node. */
 	Node clone();
+	
+	/**
+	 * Accepts a mutation to this node.
+	 * @param m the type of mutation that this node will accept
+	 */
+	void acceptMutation(Mutation m);
 	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.
@@ -54,7 +65,27 @@ public interface Node
 	@Override
 	String toString();
 	
+<<<<<<< HEAD
 	public enum Nodes{
 		
+=======
+	/**EMMA ROSE DHIMITRI
+	This is where we control the children
+	Fernando forgot to eat today
+	Our run today was good, although I died
+	10000000000000000000000 Hamburgers killed my computer
+	Laborer is not an effective item to add to your resume
+	THAT WAS SUCH A CLOSE KIP
+	Let us get food
+	I am hungry
+	IM SUCH AN AMAZING FUCKING CODER
+	JUSTIN BIEBER
+	Hi John, Bye John, Hi John again
+	I miss having an effective laptop 
+	LOUIES*/
+	public enum NodeType
+	{
+		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;
+>>>>>>> d2ffb8dbde25f019f2e6121692a2c1093fbf7594
 	}
 }

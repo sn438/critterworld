@@ -12,6 +12,7 @@ public class Sensor extends AbstractNode implements Expr
 	{
 		type = s;
 		sensorIndex = e;
+		sensorIndex.setParent(this);
 	}
 	
 	/** Creates a new Sensor node of type SMELL. */
@@ -45,6 +46,12 @@ public class Sensor extends AbstractNode implements Expr
 		if(type == SensorType.SMELL)
 			return new Sensor();
 		return new Sensor(type, sensorIndex.clone());
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 	
 	@Override

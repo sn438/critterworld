@@ -1,7 +1,7 @@
 package ast;
 
 /** A mutation to the AST. */
-public interface Mutation extends Visitor
+public interface Mutation
 {
 	/**
 	 * Compares the type of this mutation to {@code m}
@@ -10,5 +10,23 @@ public interface Mutation extends Visitor
 	 */
 	boolean equals(Mutation m);
 	
+	void mutate(ProgramImpl p);
 	
+	void mutate(Rule r);
+	
+	void mutate(BinaryCondition c);
+	
+	void mutate(Command comm);
+	
+	void mutate(Update u);
+	
+	void mutate(Action a);
+	
+	void mutate(Relation r);
+	
+	void mutate(BinaryExpr be);
+	
+	void mutate(UnaryExpr ue);
+	
+	void mutate(Sensor s);
 }

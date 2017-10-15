@@ -13,6 +13,8 @@ public class Rule extends AbstractNode
 	{
 		cond = c1;
 		comm = c2;
+		cond.setParent(this);
+		comm.setParent(this);
 	}
 	
 	@Override
@@ -33,13 +35,6 @@ public class Rule extends AbstractNode
 		else
 			return comm.nodeAt(index - cond.size() - 1);
 	}
-
-	@Override
-	public StringBuilder prettyPrint(StringBuilder sb)
-	{
-		sb.append(cond.toString() + " --> " + comm.toString() + ";\n\n");
-		return sb;
-	}
 	
 	@Override
 	public Rule clone()
@@ -47,5 +42,18 @@ public class Rule extends AbstractNode
 		Condition tempCond = cond.clone();
 		Command tempComm = comm.clone();
 		return new Rule(tempCond, tempComm);
+	}
+
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
+	}
+
+	@Override
+	public StringBuilder prettyPrint(StringBuilder sb)
+	{
+		sb.append(cond.toString() + " --> " + comm.toString() + ";\n\n");
+		return sb;
 	}
 }
