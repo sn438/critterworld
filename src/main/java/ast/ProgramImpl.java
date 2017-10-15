@@ -85,4 +85,10 @@ public class ProgramImpl extends AbstractNode implements Program
 			sb.append(r.toString());
 		return sb;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.PROGRAM;
+	}
 }

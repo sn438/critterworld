@@ -91,4 +91,10 @@ public class BinaryCondition extends AbstractNode implements Condition
 	{
 		OR, AND;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.BINARYCONDITION;
+	}
 }

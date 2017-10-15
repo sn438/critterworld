@@ -99,4 +99,10 @@ public class UnaryExpr extends AbstractNode implements Expr
 	{
 		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.UNARYEXPR;
+	}
 }

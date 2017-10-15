@@ -86,4 +86,10 @@ public class Sensor extends AbstractNode implements Expr
 	{
 		NEARBY, AHEAD, RANDOM, SMELL;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.SENSOR;
+	}
 }

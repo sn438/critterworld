@@ -104,4 +104,10 @@ public class BinaryExpr extends AbstractNode implements Expr
 	{
 		ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.BINARYEXPR;
+	}
 }

@@ -107,4 +107,10 @@ public class Action extends AbstractNode implements CommandComponent
 	{
 		WAIT, FORWARD, BACKWARD, LEFT, RIGHT, EAT, ATTACK, GROW, BUD, MATE, TAG, SERVE;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.ACTION;
+	}
 }

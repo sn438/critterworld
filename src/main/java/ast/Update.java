@@ -18,6 +18,8 @@ public class Update extends AbstractNode implements CommandComponent
 	{
 		memIndex = i;
 		value = val;
+		memIndex.setParent(this);
+		value.setParent(this);
 	}
 	
 	public Expr getMemIndex()
@@ -72,5 +74,11 @@ public class Update extends AbstractNode implements CommandComponent
 	{
 		sb.append("mem[" + memIndex.toString() + "] := " + value.toString());
 		return sb;
+	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.UPDATE;
 	}
 }

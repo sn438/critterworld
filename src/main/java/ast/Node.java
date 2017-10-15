@@ -36,9 +36,14 @@ public interface Node {
 
 	/**
 	 * Accepts a mutation to this node.
+<<<<<<< HEAD
 	 * 
 	 * @param m
 	 *            the type of mutation that this node will accept
+=======
+	 * @param m the type of mutation that this node will accept
+	 * @return the 
+>>>>>>> 08798b19810497041a9105b84cbdfcdc1a92851e
 	 */
 	void acceptMutation(Mutation m);
 
@@ -69,8 +74,30 @@ public interface Node {
 	 */
 	@Override
 	String toString();
+<<<<<<< HEAD
 
 	public enum NodeType {
+=======
+	
+	/**EMMA ROSE DHIMITRI
+	This is where we control the children
+	Fernando forgot to eat today
+	Our run today was good, although I died
+	10000000000000000000000 Hamburgers killed my computer
+	Laborer is not an effective item to add to your resume
+	THAT WAS SUCH A CLOSE KIP
+	Let us get food
+	I am hungry
+	IM SUCH AN AMAZING FUCKING CODER
+	JUSTIN BIEBER
+	Hi John, Bye John, Hi John again
+	I miss having an effective laptop 
+	LOUIES*/
+	public enum NodeType
+	{
+>>>>>>> 08798b19810497041a9105b84cbdfcdc1a92851e
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;
 	}
+	
+	public NodeType getType();
 }

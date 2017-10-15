@@ -56,4 +56,10 @@ public class Rule extends AbstractNode
 		sb.append(cond.toString() + " --> " + comm.toString() + ";\n\n");
 		return sb;
 	}
+
+	@Override
+	public NodeType getType()
+	{
+		return NodeType.RULE;
+	}
 }
