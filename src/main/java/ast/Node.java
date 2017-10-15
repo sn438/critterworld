@@ -66,10 +66,6 @@ public interface Node
 	@Override
 	String toString();
 	
-<<<<<<< HEAD
-	public enum Nodes{
-		
-=======
 	/**EMMA ROSE DHIMITRI
 	This is where we control the children
 	Fernando forgot to eat today
@@ -87,7 +83,6 @@ public interface Node
 	public enum NodeType
 	{
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;
->>>>>>> d2ffb8dbde25f019f2e6121692a2c1093fbf7594
 	}
 	
 	public NodeType getType();
