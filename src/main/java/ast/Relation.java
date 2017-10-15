@@ -19,8 +19,22 @@ public class Relation extends AbstractNode implements Condition
 		this.op = o;
 		this.right = r;
 		this.cond = null;
+		
+		left.setParent(this);
+		right.setParent(this);
 	}
 	
+	/** Creates a Relation based on a condition. */
+	public Relation(Condition c)
+	{
+		this.left = null;
+		this.op = RelOp.ISCOND;
+		this.right = null;
+		this.cond = c;
+		
+		cond.setParent(this);
+	}
+
 	public Expr getLeft()
 	{
 		return left;
@@ -40,15 +54,6 @@ public class Relation extends AbstractNode implements Condition
 	public boolean isCond()
 	{
 		return op == RelOp.ISCOND;
-	}
-	
-	/** Creates a Relation based on a condition. */
-	public Relation(Condition c)
-	{
-		this.left = null;
-		this.op = RelOp.ISCOND;
-		this.right = null;
-		this.cond = c;
 	}
 	
 	@Override
@@ -85,6 +90,12 @@ public class Relation extends AbstractNode implements Condition
 		Expr tempLeft = left.clone();
 		Expr tempRight = right.clone();
 		return new Relation(tempLeft, op, tempRight);
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 
 	@Override

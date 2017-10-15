@@ -44,6 +44,12 @@ public class Update extends AbstractNode implements CommandComponent
 		Expr tempValue = value.clone();
 		return new Update(tempIndex, tempValue);
 	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
+	}
 	@Override
 	public int size()
 	{

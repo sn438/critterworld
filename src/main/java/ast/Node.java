@@ -3,7 +3,12 @@ package ast;
 /** A node in the abstract syntax tree of a program. */
 public interface Node
 {
-
+	/** Returns a parent pointer for this node. */
+	Node getParent();
+	
+	/** Sets the parent for this node. */
+	void setParent(Node par);
+	
 	/**
 	 * The number of nodes in the AST rooted at this node, including this node
 	 * @return The size of the AST rooted at this node
@@ -26,6 +31,12 @@ public interface Node
 
 	/** Returns a deep copy of this node. */
 	Node clone();
+	
+	/**
+	 * Accepts a mutation to this node.
+	 * @param m the type of mutation that this node will accept
+	 */
+	void acceptMutation(Mutation m);
 	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.

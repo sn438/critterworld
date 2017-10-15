@@ -17,6 +17,9 @@ public class Command extends AbstractNode
 	{
 		UpdateList = list;
 		last = cc;
+		for(Update u : UpdateList)
+			u.setParent(this);
+		last.setParent(this);
 	}
 	public LinkedList<Update> getUpdateList()
 	{
@@ -58,6 +61,11 @@ public class Command extends AbstractNode
 			tempUL.add(u.clone());
 		CommandComponent tempLast = last.clone();
 		return new Command(tempUL, tempLast);
+	}
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)

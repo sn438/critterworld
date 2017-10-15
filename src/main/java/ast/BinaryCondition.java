@@ -16,6 +16,9 @@ public class BinaryCondition extends AbstractNode implements Condition
 		this.left = l;
 		this.op = o;
 		this.right = r;
+		
+		left.setParent(this);
+		right.setParent(this);
 	}
 	
 	public Condition getLeft()
@@ -60,6 +63,12 @@ public class BinaryCondition extends AbstractNode implements Condition
 		Condition tempLeft = left.clone();
 		Condition tempRight = right.clone();
 		return new BinaryCondition(tempLeft, op, tempRight);
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 
 	@Override

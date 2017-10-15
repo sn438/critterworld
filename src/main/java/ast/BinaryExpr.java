@@ -16,6 +16,9 @@ public class BinaryExpr extends AbstractNode implements Expr
 		this.left = l;
 		this.operator = op;
 		this.right = r;
+		
+		left.setParent(this);
+		right.setParent(this);
 	}
 	
 	public Expr getLeft()
@@ -59,6 +62,12 @@ public class BinaryExpr extends AbstractNode implements Expr
 		Expr tempLeft = left.clone();
 		Expr tempRight = right.clone();
 		return new BinaryExpr(tempLeft, operator, tempRight);
+	}
+	
+	@Override
+	public void acceptMutation(Mutation m)
+	{
+		m.mutate(this);
 	}
 	
 	@Override
