@@ -53,4 +53,8 @@ public interface Node
 	 */
 	@Override
 	String toString();
+	
+	public enum Nodes{
+		
+	}
 }

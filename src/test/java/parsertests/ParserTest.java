@@ -17,14 +17,12 @@ import parse.Tokenizer;
 /** This class contains tests for the Critter parser. */
 public class ParserTest
 {
-
     /** Checks that a valid critter program is not {@code null} when parsed. */
     @Test
     public void testProgramIsNotNull()
     {
         InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
-        Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         System.out.println(prog.toString());
@@ -36,24 +34,12 @@ public class ParserTest
     {
         InputStream in = ParserTest.class.getResourceAsStream("failure-test-1.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
-        Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         System.out.println(prog.toString());
         assertNotNull("A valid critter program should not be null.", prog);
     }
-    /*
-    @Test
-    public void testCompletelyIncorrectProgram()
-    {
-        InputStream in = ParserTest.class.getResourceAsStream("failure-test-2.txt");
-        Reader r = new BufferedReader(new InputStreamReader(in));
-        Tokenizer t = new Tokenizer(r);
-        Parser p = ParserFactory.getParser();
-        Program prog = p.parse(r);
-        System.out.println(prog.toString());
-        assertNotNull("A valid critter program should not be null.", prog);
-    }
+    
     // TODO continue adding tests maybe
-*/
+
 }
