@@ -14,6 +14,11 @@ public class ProgramImpl extends AbstractNode implements Program
 		RulesList = rl;
 	}
 	
+	public LinkedList<Rule> getRulesList()
+	{
+		return RulesList;
+	}
+
 	@Override
 	public int size()
 	{

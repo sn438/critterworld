@@ -21,6 +21,27 @@ public class Relation extends AbstractNode implements Condition
 		this.cond = null;
 	}
 	
+	public Expr getLeft()
+	{
+		return left;
+	}
+	public void setLeft(Expr newLeft)
+	{
+		left = newLeft;
+	}
+	public Expr getRight()
+	{
+		return right;
+	}
+	public void setRight(Expr newRight)
+	{
+		right = newRight;
+	}
+	public boolean isCond()
+	{
+		return op == RelOp.ISCOND;
+	}
+	
 	/** Creates a Relation based on a condition. */
 	public Relation(Condition c)
 	{

@@ -20,6 +20,23 @@ public class Update extends AbstractNode implements CommandComponent
 		value = val;
 	}
 	
+	public Expr getMemIndex()
+	{
+		return memIndex;
+	}
+	public void setMemIndex(Expr newIndex)
+	{
+		this.memIndex = newIndex;
+	}
+	public Expr getValue()
+	{
+		return value;
+	}
+	public void setValue(Expr newVal)
+	{
+		this.value = newVal;
+	}
+
 	@Override
 	public Update clone()
 	{

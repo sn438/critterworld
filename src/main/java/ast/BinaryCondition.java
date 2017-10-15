@@ -18,6 +18,23 @@ public class BinaryCondition extends AbstractNode implements Condition
 		this.right = r;
 	}
 	
+	public Condition getLeft()
+	{
+		return left;
+	}
+	public void setLeft(Condition newLeft)
+	{
+		left = newLeft;
+	}
+	public Condition getRight()
+	{
+		return right;
+	}
+	public void setRight(Condition newRight)
+	{
+		right = newRight;
+	}
+	
 	@Override
 	public int size()
 	{

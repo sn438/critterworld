@@ -18,11 +18,15 @@ public class Command extends AbstractNode
 		UpdateList = list;
 		last = cc;
 	}
+	public LinkedList<Update> getUpdateList()
+	{
+		return UpdateList;
+	}
 	@Override
 	public int size()
 	{
 		int result = 1;
-		for(Update u : UpdateList)
+		for(Update u : getUpdateList())
 			result += u.size();
 		result += last.size();
 		return result;
@@ -34,7 +38,7 @@ public class Command extends AbstractNode
 			return this;
 		if(index > size() - 1 || index < 0)
 			throw new IndexOutOfBoundsException();
-		for(Update u : UpdateList)
+		for(Update u : getUpdateList())
 		{
 			if(index >= u.size())
 			{
@@ -50,7 +54,7 @@ public class Command extends AbstractNode
 	public Command clone()
 	{
 		LinkedList<Update> tempUL = new LinkedList<Update>();
-		for(Update u : UpdateList)
+		for(Update u : getUpdateList())
 			tempUL.add(u.clone());
 		CommandComponent tempLast = last.clone();
 		return new Command(tempUL, tempLast);
@@ -58,7 +62,7 @@ public class Command extends AbstractNode
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
-		for(Update u : UpdateList)
+		for(Update u : getUpdateList())
 			sb.append(u.toString() + "\n");
 		sb.append(last.toString());
 		return sb;

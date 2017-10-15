@@ -18,6 +18,22 @@ public class BinaryExpr extends AbstractNode implements Expr
 		this.right = r;
 	}
 	
+	public Expr getLeft()
+	{
+		return left;
+	}
+	public void setLeft(Expr newLeft)
+	{
+		left = newLeft;
+	}
+	public Expr getRight()
+	{
+		return right;
+	}
+	public void setRight(Expr newRight)
+	{
+		right = newRight;
+	}
 	@Override
 	public int size()
 	{
