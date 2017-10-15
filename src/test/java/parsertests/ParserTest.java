@@ -18,6 +18,7 @@ import parse.Tokenizer;
 public class ParserTest
 {
     /** Checks that a valid critter program is not {@code null} when parsed. */
+	
     @Test
     public void testProgramIsNotNull()
     {

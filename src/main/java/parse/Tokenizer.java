@@ -177,6 +177,7 @@ public class Tokenizer implements Iterator<Token> {
 			if (consume('/')) {
 				br.readLine();
 				resetStringBuilder();
+				setBuilderToFirstMeaningfulChar();
 			} else {
 				setNextTokenAndReset(TokenType.DIV);
 			}
