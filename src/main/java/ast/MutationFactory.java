@@ -5,8 +5,7 @@ public class MutationFactory
 {
 	public static Mutation getRemove()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationRemove();
 	}
 
 	public static Mutation getSwap()
@@ -16,25 +15,21 @@ public class MutationFactory
 
 	public static Mutation getReplace()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationReplace();
 	}
 
 	public static Mutation getTransform()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationTransform();
 	}
 
 	public static Mutation getInsert()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationInsert();
 	}
 
 	public static Mutation getDuplicate()
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return new MutationDuplicate();
 	}
 }

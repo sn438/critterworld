@@ -22,7 +22,6 @@ public class MutationRemove implements Mutation
 
 	public boolean mutate(Rule r)
 	{
-		Node parent = r.getParent();
 		return false;
 	}
 	
@@ -44,7 +43,6 @@ public class MutationRemove implements Mutation
 		return false;
 	}
 
-	
 	public boolean mutate(Action a)
 	{
 		// TODO Auto-generated method stub

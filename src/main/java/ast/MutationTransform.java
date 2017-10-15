@@ -22,7 +22,6 @@ public class MutationTransform implements Mutation
 
 	public boolean mutate(Rule r)
 	{
-		Node parent = r.getParent();
 		return false;
 	}
 	
@@ -44,7 +43,6 @@ public class MutationTransform implements Mutation
 		return false;
 	}
 
-	
 	public boolean mutate(Action a)
 	{
 		// TODO Auto-generated method stub
