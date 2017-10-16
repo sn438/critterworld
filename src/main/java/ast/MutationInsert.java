@@ -11,7 +11,7 @@ public class MutationInsert implements Mutation
 	
 	public boolean mutate(ProgramImpl p)
 	{
-		// TODO Auto-generated method stub
+		System.out.println(parentNode(p));
 		return false;
 	}
 
@@ -58,7 +58,7 @@ public class MutationInsert implements Mutation
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		// TODO Auto-generated method stub
+		System.out.println(parentNode(ue));
 		return false;
 	}
 	
@@ -66,5 +66,16 @@ public class MutationInsert implements Mutation
 	{
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public ProgramImpl parentNode(Node child) {
+		Node parent = child.getParent();
+		if (parent != null) {
+		while (parent != null) {
+			child = parent;
+			parent = parent.getParent();
+		}
+		}
+		return (ProgramImpl) child;
 	}
 }
