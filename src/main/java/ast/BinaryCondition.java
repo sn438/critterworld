@@ -97,6 +97,16 @@ public class BinaryCondition extends AbstractNode implements Condition
 		System.out.println("You messed up RCW in BinaryCondition."); //TODO remove when done testing
 		return false;
 	}
+	
+	@Override
+	public Node searchChildrenForType(Node model)
+	{
+		if(left.getType() == model.getType())
+			return left;
+		else if(right.getType() == model.getType())
+			return right;
+		return null;
+	}
 
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)

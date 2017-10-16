@@ -1,7 +1,6 @@
 package ast;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
+import java.util.LinkedList;
 import ast.BinaryExpr.MathOp;
 
 public class TestMutations
@@ -24,5 +23,20 @@ public class TestMutations
 		System.out.println(be.getClass().getSimpleName());*/
 		
 		System.out.println(e.getParent().toString());
+		
+		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
+		Update u2 = new Update(new UnaryExpr(2), new UnaryExpr(2));
+		Update u3 = new Update(new UnaryExpr(3), new UnaryExpr(3));
+		Update u4 = new Update(new UnaryExpr(4), new UnaryExpr(4));
+		Update u5 = new Update(new UnaryExpr(5), new UnaryExpr(5));
+		Update u6 = new Update(new UnaryExpr(6), new UnaryExpr(6));
+		LinkedList<Update> ll = new LinkedList<Update>();
+		
+		ll.add(u); ll.add(u2); ll.add(u3); ll.add(u4); ll.add(u5);
+		Command c = new Command(ll, u6);
+		System.out.println(c.toString() + "\n");
+		c.acceptMutation(new MutationSwap());
+		System.out.println(c.toString());
+		
 	}
 }

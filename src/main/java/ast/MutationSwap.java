@@ -75,20 +75,21 @@ public class MutationSwap implements Mutation
 		return true;
 	}
 
+	//Unsupported methods, which defaultly return false
 	public boolean mutate(Rule r)
 	{
-		throw new UnsupportedOperationException();
+		return false;
 	}
 	public boolean mutate(Action a)
 	{
-		throw new UnsupportedOperationException();
+		return false;
 	}
 	public boolean mutate(UnaryExpr ue)
 	{
-		throw new UnsupportedOperationException();
+		return false;
 	}
 	public boolean mutate(Sensor s)
 	{
-		throw new UnsupportedOperationException();
+		return false;
 	}
 }

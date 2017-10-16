@@ -98,6 +98,17 @@ public class Command extends AbstractNode
 		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
 	}
+	
+	@Override
+	public Node searchChildrenForType(Node model)
+	{
+		for(Update u : UpdateList)
+			if(u.getType() == model.getType())
+				return u;
+		if(last.getType() == model.getType())
+			return last;
+		return null;
+	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{

@@ -76,6 +76,14 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
+	public Node searchChildrenForType(Node model)
+	{
+		if(model.getType() == val.getType())
+			return val;
+		return null;
+	}
+	
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(act)

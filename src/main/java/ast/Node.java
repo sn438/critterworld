@@ -48,6 +48,8 @@ public interface Node
 	 */
 	boolean replaceChildWith(Node child, Node replacement);
 	
+	Node searchChildrenForType(Node model);
+	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.
 	 * <p>
@@ -75,20 +77,6 @@ public interface Node
 	@Override
 	String toString();
 	
-	/**EMMA ROSE DHIMITRI
-	This is where we control the children
-	Fernando forgot to eat today
-	Our run today was good, although I died
-	10000000000000000000000 Hamburgers killed my computer
-	Laborer is not an effective item to add to your resume
-	THAT WAS SUCH A CLOSE KIP
-	Let us get food
-	I am hungry
-	IM SUCH AN AMAZING FUCKING CODER
-	JUSTIN BIEBER
-	Hi John, Bye John, Hi John again
-	I miss having an effective laptop 
-	LOUIES*/
 	public enum NodeType
 	{
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;

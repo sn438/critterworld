@@ -10,7 +10,6 @@ public class MutationRemove implements Mutation
 	
 	public boolean mutate(Node n)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

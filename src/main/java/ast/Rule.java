@@ -76,6 +76,13 @@ public class Rule extends AbstractNode
 		System.out.println("You messed up RCW in Rule."); //TODO remove when done testing
 		return false;
 	}
+	
+	@Override
+	public Node searchChildrenForType(Node model)
+	{
+		//Since no child of Rule
+		return null;
+	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{

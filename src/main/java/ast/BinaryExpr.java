@@ -98,6 +98,16 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
+	public Node searchChildrenForType(Node model)
+	{
+		if(left.getType() == model.getType())
+			return left;
+		else if(right.getType() == model.getType())
+			return right;
+		return null;
+	}
+	
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(operator)
