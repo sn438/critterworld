@@ -30,14 +30,13 @@ public class TestMutateInsert {
 	public void simpleTest() {
 		System.out.println(prog.size());
 		int i = 0;
-		/*
+		
 		while (i < prog.size()) {
 			System.out.println(i + "\n");
 			System.out.println(prog.nodeAt(i));
 			i++;
 		}
-		*/
-		System.out.println(prog.nodeAt(7));
+		
 	}
 	
 }
