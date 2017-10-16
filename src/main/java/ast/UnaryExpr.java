@@ -135,4 +135,10 @@ public class UnaryExpr extends AbstractNode implements Expr
 	{
 		return NodeType.UNARYEXPR;
 	}
+	
+	public void setValue(int value) {
+		this.exp = null;
+		this.value = value;
+		this.type = ExprType.CONSTANT;
+	}
 }

@@ -149,4 +149,8 @@ public class BinaryExpr extends AbstractNode implements Expr
 	{
 		return NodeType.BINARYEXPR;
 	}
+	
+	public void setOperator(MathOp op) {
+		this.operator = op;
+	}
 }

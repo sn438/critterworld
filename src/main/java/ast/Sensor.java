@@ -1,5 +1,7 @@
 package ast;
 
+import java.util.Random;
+
 import ast.Node.NodeType;
 import ast.UnaryExpr.ExprType;
 
@@ -120,5 +122,18 @@ public class Sensor extends AbstractNode implements Expr
 	public NodeType getType()
 	{
 		return NodeType.SENSOR;
+	}
+	
+	public void setSensorType(SensorType st) {
+		Random r = new Random();
+		if (this.type.equals(SensorType.SMELL)) {
+			if (!st.equals(SensorType.SMELL)) {
+				this.sensorIndex = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
+			}
+		}
+		if (st.equals(SensorType.SMELL)) {
+			this.sensorIndex = null;
+		}
+		this.type = st;
 	}
 }

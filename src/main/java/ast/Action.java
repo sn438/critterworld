@@ -1,5 +1,7 @@
 package ast;
 
+import java.util.Random;
+
 import ast.Action.ActType;
 
 /** An AST representation of a critter action. */
@@ -129,6 +131,12 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	public void setActType(ActType at) {
+		Random r = new Random();
+		if (!(this.act.equals(ActType.TAG) || this.act.equals(ActType.SERVE))){
+			if ((at.equals(ActType.TAG) || at.equals(ActType.SERVE))) {
+				this.val = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
+			}
+		}
 		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE))){
 			this.val = null;
 		}

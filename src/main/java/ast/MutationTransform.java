@@ -4,7 +4,9 @@ import java.util.Random;
 
 import ast.Action.ActType;
 import ast.BinaryCondition.Operator;
+import ast.BinaryExpr.MathOp;
 import ast.Relation.RelOp;
+import ast.Sensor.SensorType;
 
 public class MutationTransform implements Mutation
 {
@@ -130,19 +132,55 @@ public class MutationTransform implements Mutation
 
 	public boolean mutate(BinaryExpr be)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		MathOp op = null;
+		int index = (int) (Math.random() * 5);
+		switch(index) {
+		case 0:
+			op = BinaryExpr.MathOp.ADD;
+			break;
+		case 1:
+			op = BinaryExpr.MathOp.DIVIDE;
+			break;
+		case 2:
+			op = BinaryExpr.MathOp.MOD;
+			break;
+		case 3: 
+			op = BinaryExpr.MathOp.MULTIPLY;
+			break;
+		case 4:
+			op = BinaryExpr.MathOp.SUBTRACT;
+			break;
+		}
+		be.setOperator(op);
+		return true;
 	}
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Random r = new Random();
+		ue.setValue(java.lang.Integer.MAX_VALUE/r.nextInt());
+		return true;
 	}
 	
 	public boolean mutate(Sensor s)
 	{
-		// TODO Auto-generated method stub
+		SensorType st = null;
+		int index = (int) (Math.random() * 4);
+		switch(index) {
+		case 0:
+			st = Sensor.SensorType.AHEAD;
+			break;
+		case 1:
+			st = Sensor.SensorType.NEARBY;
+			break;
+		case 2:
+			st = Sensor.SensorType.RANDOM;
+			break;
+		case 3:
+			st = Sensor.SensorType.SMELL;
+			break;
+		}
+		s.setSensorType(st);
 		return false;
 	}
 }
