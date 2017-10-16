@@ -63,7 +63,7 @@ public class Sensor extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(type == SensorType.SMELL)
 			return false;

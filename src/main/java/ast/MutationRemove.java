@@ -8,11 +8,6 @@ public class MutationRemove implements Mutation
 		return false;
 	}	
 	
-	public boolean mutate(Node n)
-	{
-		return false;
-	}
-	
 	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub
@@ -26,8 +21,8 @@ public class MutationRemove implements Mutation
 	
 	public boolean mutate(BinaryCondition c)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node parent = c.getParent();
+		
 	}
 	
 	public boolean mutate(Command comm)

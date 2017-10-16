@@ -78,7 +78,7 @@ public class Command extends AbstractNode
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		for(int i = 0; i < UpdateList.size(); i++)
 		{

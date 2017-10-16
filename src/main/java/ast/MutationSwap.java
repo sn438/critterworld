@@ -10,11 +10,6 @@ public class MutationSwap implements Mutation
 		return false;
 	}
 
-	@Override
-	public boolean mutate(Node n)
-	{
-		return false;
-	}
 	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();

@@ -8,20 +8,11 @@ public class MutationDuplicate implements Mutation
 		return false;
 	}
 	
-	
-	public boolean mutate(Node n)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
 	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 	
 	public boolean mutate(Rule r)
 	{

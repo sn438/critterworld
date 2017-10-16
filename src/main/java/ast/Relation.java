@@ -106,7 +106,7 @@ public class Relation extends AbstractNode implements Condition
 		}
 	}
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(op == RelOp.ISCOND)
 		{

@@ -80,7 +80,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(child == this.left)
 		{

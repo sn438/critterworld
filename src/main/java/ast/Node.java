@@ -46,7 +46,7 @@ public interface Node
 	 * @param replacement the node that will replace {@code child}
 	 * @return whether or not this node has children to be replaced
 	 */
-	boolean replaceChildWith(Node child, Node replacement);
+	boolean replaceChild(Node child, Node replacement);
 	
 	Node searchChildrenForType(Node model);
 	

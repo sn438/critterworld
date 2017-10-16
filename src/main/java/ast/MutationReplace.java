@@ -8,12 +8,6 @@ public class MutationReplace implements Mutation
 		return false;
 	}	
 	
-	public boolean mutate(Node n)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub
