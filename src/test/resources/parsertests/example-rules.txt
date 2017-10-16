@@ -1,26 +1,33 @@
 ahead[1] = 0 --> forward;  
-
-mem[5]=1 --> mem[6] := mem[4]
+// test comment one
+// test comment two
+// test comment three
+mem[5]=1 --> mem[6] := mem[4] // test comment four
              mem[5] := 2;
 
-mem[6] mod 1000 < 6 --> mem[5]:=1
+mem[6] mod 1000 < 6 --> mem[5]:=1 // test comment five
                         eat; 
 mem[mem[3] + 10] mod 6 <= 3 --> right;
 
 mem[8] mod 6 >= 3 --> left;
 
-ahead[1] = 0 --> forward;
+ahead[1] = 0 --> forward; // test comment six
 
-{ahead[1] != 1 and
- ahead[1] != 2} and
+{ahead[1] != 1 and // test comment seven
+// test comment eight
+ahead[1] != 2} and // test comment nine
+// test comment ten
+// test comment eleven
+// test comment twelve
 ahead[1] != 0-1 --> attack;
-
+// test comment twelve
 ahead[1] > 0 --> tag[1];
-
+// test comment thirteen
 mem[4] > mem[3] * 100 and
 mem[3] < (10 + mem[7])
     --> grow; 
+    // test comment fourteen; ? ] ]} 
 mem[4] > 1000 --> mem[7] := mem[7] + mem[5]  
                   bud; 
                  
-//dsflk
+//test comment fifteen; {} [] //
