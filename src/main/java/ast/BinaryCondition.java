@@ -28,6 +28,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	public void setLeft(Condition newLeft)
 	{
 		left = newLeft;
+		left.setParent(this);
 	}
 	public Condition getRight()
 	{
@@ -36,6 +37,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	public void setRight(Condition newRight)
 	{
 		right = newRight;
+		right.setParent(this);
 	}
 	
 	@Override

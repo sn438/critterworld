@@ -1,11 +1,19 @@
 package ast;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.LinkedList;
 
 import ast.BinaryCondition.Operator;
 import ast.BinaryExpr.MathOp;
 import ast.Relation.RelOp;
 import ast.UnaryExpr.ExprType;
+import parse.Parser;
+import parse.ParserFactory;
+import parse.Tokenizer;
+import parsertests.ParserTest;
 
 public class TestMutations
 {
@@ -34,7 +42,7 @@ public class TestMutations
 		
 		//System.out.println(e.getParent().toString());
 		
-		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
+		/*Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
 		Update u2 = new Update(new UnaryExpr(2), new UnaryExpr(2));
 		Update u3 = new Update(new UnaryExpr(3), new UnaryExpr(3));
 		Update u4 = new Update(new UnaryExpr(4), new UnaryExpr(4));
@@ -60,7 +68,17 @@ public class TestMutations
 		//System.out.println(c.toString());
 		
 		c.acceptMutation(new MutationDuplicate());
-		System.out.println(c.toString());
+		System.out.println(c.toString());*/
+		
+		InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+        Reader r = new BufferedReader(new InputStreamReader(in));
+        Tokenizer t = new Tokenizer(r);
+        Parser p = ParserFactory.getParser();
+        Program prog = p.parse(r);
+        
+        //System.out.println(prog.nodeAt(87));
+        
+        System.out.println(prog.mutate(87, new MutationReplace()).toString());
 		
 	}
 }

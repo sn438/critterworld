@@ -1,5 +1,7 @@
 package ast;
 
+import ast.Node.NodeType;
+
 public class MutationReplace implements Mutation
 {
 	public boolean equals(Mutation m)
@@ -7,61 +9,247 @@ public class MutationReplace implements Mutation
 		// TODO Auto-generated method stub
 		return false;
 	}	
-	
-	public boolean mutate(ProgramImpl p)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	public boolean mutate(Rule r)
 	{
-		return false;
+		Node root = r.getParent();
+		Rule copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == r.getType())
+			{
+				copy = (Rule) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = r.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(BinaryCondition c)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = c.getParent();
+		Condition copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == c.getType() || root.nodeAt(index).getType() == NodeType.RELATION)
+			{
+				copy = (Condition) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = c.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(Command comm)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = comm.getParent();
+		Command copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == comm.getType())
+			{
+				copy = (Command) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = comm.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(Update u)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = u.getParent();
+		Update copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == u.getType())
+			{
+				copy = (Update) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = u.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(Action a)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = a.getParent();
+		Action copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			System.out.println(index + " " + rand + " " + i);
+			if(root.nodeAt(index).getType() == a.getType())
+			{
+				copy = (Action) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = a.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(Relation r)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = r.getParent();
+		Condition copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == r.getType() || root.nodeAt(index).getType() == NodeType.BINARYCONDITION)
+			{
+				copy = (Condition) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = r.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 
 	public boolean mutate(BinaryExpr be)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = be.getParent();
+		Expr copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == be.getType() || root.nodeAt(index).getType() == NodeType.UNARYEXPR 
+															|| root.nodeAt(index).getType() == NodeType.SENSOR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = be.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node root = ue.getParent();
+		Expr copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == ue.getType() || root.nodeAt(index).getType() == NodeType.BINARYEXPR 
+															|| root.nodeAt(index).getType() == NodeType.SENSOR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = ue.getParent();
+		parent.replaceChild(root, copy);
+		return true;
 	}
 	
 	public boolean mutate(Sensor s)
+	{
+		Node root = s.getParent();
+		Expr copy = null;
+		
+		while(root.getParent() != null)
+			root = root.getParent();
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == s.getType() || root.nodeAt(index).getType() == NodeType.UNARYEXPR 
+															|| root.nodeAt(index).getType() == NodeType.BINARYEXPR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		Node parent = s.getParent();
+		parent.replaceChild(root, copy);
+		return true;
+	}
+	
+	//Unsupported method, which returns false by default
+	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub
 		return false;

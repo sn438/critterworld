@@ -34,7 +34,7 @@ public class MutationDuplicate implements Mutation
 		Node root = comm.getParent();
 		Update copy = null;
 		while(root.getParent() != null)
-			root = comm.getParent();
+			root = root.getParent();
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -46,7 +46,6 @@ public class MutationDuplicate implements Mutation
 				copy = (Update) (root.nodeAt(index)).clone();
 				break;
 			}
-				
 		}
 		if(copy == null)
 			return false;

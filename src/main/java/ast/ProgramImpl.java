@@ -40,11 +40,9 @@ public class ProgramImpl extends AbstractNode implements Program
 		for(Rule r : RulesList)
 		{
 			if(index >= r.size())
-			{
 				index -= r.size();
-				break;
-			}
-			return r.nodeAt(index - 1);
+			else
+				return r.nodeAt(index - 1);
 		}
 		throw new IndexOutOfBoundsException();
 	}
@@ -107,7 +105,9 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public Program mutate(int index, Mutation m)
 	{
-		// TODO Auto-generated method stub
+		ProgramImpl copy = this.clone();
+		if(copy.nodeAt(index).acceptMutation(m))
+			return copy;
 		return null;
 	}
 

@@ -44,11 +44,9 @@ public class Command extends AbstractNode
 		for(Update u : getUpdateList())
 		{
 			if(index >= u.size())
-			{
 				index -= u.size();
-				break;
-			}
-			return u.nodeAt(index - 1);
+			else
+				return u.nodeAt(index - 1);
 		}
 		return last.nodeAt(index - 1);
 	}
