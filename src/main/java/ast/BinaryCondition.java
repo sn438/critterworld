@@ -80,7 +80,7 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(child == this.left)
 		{
@@ -99,11 +99,11 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		if(left.getType() == model.getType())
+		if(left.getType() == NodeType.BINARYCONDITION || left.getType() == NodeType.RELATION)
 			return left;
-		else if(right.getType() == model.getType())
+		else if(right.getType() == NodeType.BINARYCONDITION || right.getType() == NodeType.RELATION)
 			return right;
 		return null;
 	}

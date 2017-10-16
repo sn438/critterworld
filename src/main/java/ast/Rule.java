@@ -59,7 +59,7 @@ public class Rule extends AbstractNode
 	}
 
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(child == this.cond)
 		{
@@ -78,9 +78,9 @@ public class Rule extends AbstractNode
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		//Since no child of Rule
+		//Since no child of a rule node will be of type Rule, this method is not supported by this class.
 		return null;
 	}
 	@Override

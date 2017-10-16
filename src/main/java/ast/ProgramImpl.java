@@ -73,19 +73,24 @@ public class ProgramImpl extends AbstractNode implements Program
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		for(int i = 0; i < RulesList.size(); i++)
 		{
 			if(child == RulesList.get(i))
 			{
-				RulesList.set(i, (Rule) replacement);
-				RulesList.get(i).setParent(this);
+				RulesList.remove(i);
 				return true;
 			}
 		}
 		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
+	}
+	
+	@Override
+	public Node searchChildrenForSimilarType()
+	{
+		return null;
 	}
 	
 	@Override
@@ -114,11 +119,5 @@ public class ProgramImpl extends AbstractNode implements Program
 	public NodeType getType()
 	{
 		return NodeType.PROGRAM;
-	}
-
-	@Override
-	public Node searchChildrenForType(Node model) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

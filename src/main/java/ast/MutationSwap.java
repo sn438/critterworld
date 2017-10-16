@@ -9,8 +9,6 @@ public class MutationSwap implements Mutation
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();

@@ -46,9 +46,13 @@ public interface Node
 	 * @param replacement the node that will replace {@code child}
 	 * @return whether or not this node has children to be replaced
 	 */
-	boolean replaceChildWith(Node child, Node replacement);
+	boolean replaceChild(Node child, Node replacement);
 	
-	Node searchChildrenForType(Node model);
+	/**
+	 * Searches and returns a direct child of this node that is of a similar type.
+	 * @return the child of a similar type, {@code null} if none found or this node has no children
+	 */
+	Node searchChildrenForSimilarType();
 	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.

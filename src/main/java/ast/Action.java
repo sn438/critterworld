@@ -68,7 +68,7 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
-	public boolean replaceChildWith(Node child, Node replacement)
+	public boolean replaceChild(Node child, Node replacement)
 	{
 		if(act == ActType.TAG || act == ActType.SERVE)
 			return false;
@@ -78,10 +78,8 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		if(model.getType() == val.getType())
-			return val;
 		return null;
 	}
 	
