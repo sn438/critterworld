@@ -134,4 +134,8 @@ public class BinaryCondition extends AbstractNode implements Condition
 	{
 		return NodeType.BINARYCONDITION;
 	}
+	
+	public void setOperator(Operator op) {
+		this.op = op;
+	}
 }

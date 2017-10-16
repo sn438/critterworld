@@ -1,5 +1,7 @@
 package ast;
 
+import ast.Action.ActType;
+
 /** An AST representation of a critter action. */
 public class Action extends AbstractNode implements CommandComponent
 {
@@ -128,6 +130,12 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
+	public void setActType(ActType at) {
+		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE))){
+			this.val = null;
+		}
+		this.act = at;
+	}
 	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{

@@ -187,4 +187,25 @@ public class Relation extends AbstractNode implements Condition
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void setRelOp(RelOp ro) {
+		Condition c = null;
+		if (this.op.equals(RelOp.ISCOND)) {
+			System.out.println("hello");
+			return;
+		}
+		if (ro.equals(RelOp.ISCOND)) {
+			if (this.cond == null) {
+				c = new Relation(this.left, this.op, this.right);
+				this.cond = c;
+				this.op = RelOp.ISCOND;
+			}
+			else if (this.cond != null) {
+				this.op = RelOp.ISCOND;
+			}
+		}
+		else {
+			this.op = ro;
+		}
+	}
 }
