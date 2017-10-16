@@ -10,5 +10,23 @@ public interface Mutation
 	 */
 	boolean equals(Mutation m);
 	
-	boolean mutate(Node n);
+	boolean mutate(ProgramImpl n);
+	
+	boolean mutate(Rule r);
+	
+	boolean mutate(BinaryCondition c);
+	
+	boolean mutate(Command c);
+	
+	boolean mutate(Update u);
+	
+	boolean mutate(Action a);
+	
+	boolean mutate(Relation r);
+	
+	boolean mutate(BinaryExpr be);
+	
+	boolean mutate(UnaryExpr ue);
+	
+	boolean mutate(Sensor s);
 }
