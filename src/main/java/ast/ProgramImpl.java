@@ -76,13 +76,17 @@ public class ProgramImpl extends AbstractNode implements Program
 	public boolean replaceChild(Node child, Node replacement)
 	{
 		for(int i = 0; i < RulesList.size(); i++)
-		{
 			if(child == RulesList.get(i))
 			{
-				RulesList.remove(i);
+				if(replacement == null)
+					RulesList.remove(i);
+				else
+				{
+					RulesList.set(i, (Rule) replacement);
+					RulesList.get(i).setParent(this);
+				}
 				return true;
 			}
-		}
 		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
 	}

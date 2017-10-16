@@ -81,18 +81,30 @@ public class Command extends AbstractNode
 	public boolean replaceChild(Node child, Node replacement)
 	{
 		for(int i = 0; i < UpdateList.size(); i++)
-		{
 			if(child == UpdateList.get(i))
 			{
-				UpdateList.remove(i);
+				if(replacement == null)
+					UpdateList.remove(i);
+				else
+				{
+					UpdateList.set(i, (Update) replacement);
+					UpdateList.get(i).setParent(this);
+				}
 				return true;
 			}
-		}
 		if(child == last)
 		{
-			last = UpdateList.removeLast();
-			last.setParent(this);
-			return true;
+			if(replacement == null)
+			{
+				last = UpdateList.removeLast();
+				last.setParent(this);
+				return true;
+			}
+			else
+			{
+				last = (CommandComponent) replacement;
+				last.setParent(this);
+			}
 		}
 		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
