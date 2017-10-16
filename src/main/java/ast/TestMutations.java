@@ -7,10 +7,14 @@ public class TestMutations
 {
 	public static void main(String[] args)
 	{
+		/*
 		UnaryExpr e = new UnaryExpr(5);
 		
 		BinaryExpr be = new BinaryExpr(e, MathOp.DIVIDE, new UnaryExpr(7));
-		/*System.out.println(be.toString());
+		System.out.println(be.toString());
+		be.acceptMutation(new MutationSwap());
+		System.out.println(be.toString());
+		System.out.println(be.toString());
 		be.acceptMutation(new MutationSwap());
 		System.out.println(be.toString());
 		
@@ -22,7 +26,9 @@ public class TestMutations
 		System.out.println(u.getClass().getSimpleName());
 		System.out.println(be.getClass().getSimpleName());*/
 		
-		System.out.println(e.getParent().toString());
+		
+		
+		//System.out.println(e.getParent().toString());
 		
 		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
 		Update u2 = new Update(new UnaryExpr(2), new UnaryExpr(2));

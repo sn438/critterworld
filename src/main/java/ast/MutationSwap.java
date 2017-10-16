@@ -10,11 +10,7 @@ public class MutationSwap implements Mutation
 		return false;
 	}
 
-	@Override
-	public boolean mutate(Node n)
-	{
-		return false;
-	}
+	
 	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();
@@ -38,9 +34,8 @@ public class MutationSwap implements Mutation
 
 	public boolean mutate(Command comm)
 	{
-		int firstIndex = (int) Math.random() * comm.getUpdateList().size();
-		int secondIndex = (int) Math.random() * comm.getUpdateList().size();
-		
+		int firstIndex = (int) (Math.random() * comm.getUpdateList().size());
+		int secondIndex = (int) (Math.random() * comm.getUpdateList().size());
 		Update temp = comm.getUpdateList().get(firstIndex);
 		comm.getUpdateList().add(secondIndex, temp);
 		temp = comm.getUpdateList().remove(secondIndex + 1);

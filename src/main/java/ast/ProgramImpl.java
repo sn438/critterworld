@@ -115,4 +115,10 @@ public class ProgramImpl extends AbstractNode implements Program
 	{
 		return NodeType.PROGRAM;
 	}
+
+	@Override
+	public Node searchChildrenForType(Node model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
