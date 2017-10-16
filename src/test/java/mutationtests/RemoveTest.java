@@ -14,7 +14,7 @@ import ast.UnaryExpr.ExprType;
 public class RemoveTest
 {	
 	@Test
-	public void testUpdate()
+	public void testUpdate1()
 	{
 		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
 		Update u2 = new Update(new UnaryExpr(2), new UnaryExpr(2));
@@ -32,6 +32,35 @@ public class RemoveTest
 		assertTrue(c.toString().equals(u.toString() + "\n" + u3.toString() + "\n" + u4.toString() + "\n" + u5.toString() + "\n" + u6.toString()));
 	}
 	
+	@Test
+	public void testUpdate2()
+	{
+		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
+		Update u2 = new Update(new UnaryExpr(6), new UnaryExpr(6));
+		LinkedList<Update> ll = new LinkedList<Update>();
+		ll.add(u);
+		Command c = new Command(ll, u2);
+		
+		int previousSize = c.size();
+		u2.acceptMutation(new MutationRemove());
+		assertTrue(previousSize > c.size());
+		assertTrue(c.toString().equals(u.toString()));
+	}
+	
+	@Test
+	public void testUpdate3()
+	{
+		Update u = new Update(new UnaryExpr(1), new UnaryExpr(1));
+		Update u2 = new Update(new UnaryExpr(6), new UnaryExpr(6));
+		LinkedList<Update> ll = new LinkedList<Update>();
+		ll.add(u);
+		Command c = new Command(ll, u2);
+		
+		int previousSize = c.size();
+		u.acceptMutation(new MutationRemove());
+		assertTrue(previousSize > c.size());
+		assertTrue(c.toString().equals(u2.toString()));
+	}
 	@Test
 	public void testChildlessUnaryExpr()
 	{
