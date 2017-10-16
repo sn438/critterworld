@@ -76,9 +76,17 @@ public class TestMutations
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         
-        //System.out.println(prog.nodeAt(87));
-        
-        System.out.println(prog.mutate(87, new MutationReplace()).toString());
+        /*for(int i = 0; i < prog.size(); i++)
+			try
+			{
+				System.out.println("Index #" + i + ": " + prog.nodeAt(i));
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				System.out.println("NODEAT FAILED");
+			}
+        */
+        //System.out.println(prog.mutate(87, new MutationReplace()).toString());
 		
 	}
 }

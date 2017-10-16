@@ -32,7 +32,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = r.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(r, copy);
 		return true;
 	}
 	
@@ -58,7 +58,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = c.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(c, copy);
 		return true;
 	}
 	
@@ -84,7 +84,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = comm.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(comm, copy);
 		return true;
 	}
 	
@@ -110,7 +110,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = u.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(u, copy);
 		return true;
 	}
 	
@@ -127,7 +127,7 @@ public class MutationReplace implements Mutation
 		for(int i = 0; i < size; i++)
 		{
 			index = i + rand < size ? i + rand : i + rand - size;
-			System.out.println(index + " " + rand + " " + i);
+			System.out.println(index + " " + rand + " " + i); //TODO remove when done testing
 			if(root.nodeAt(index).getType() == a.getType())
 			{
 				copy = (Action) (root.nodeAt(index)).clone();
@@ -137,7 +137,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = a.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(a, copy);
 		return true;
 	}
 	
@@ -163,7 +163,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = r.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(r, copy);
 		return true;
 	}
 
@@ -190,7 +190,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = be.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(be, copy);
 		return true;
 	}
 	
@@ -217,7 +217,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = ue.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(ue, copy);
 		return true;
 	}
 	
@@ -244,7 +244,7 @@ public class MutationReplace implements Mutation
 		if(copy == null)
 			return false;
 		Node parent = s.getParent();
-		parent.replaceChild(root, copy);
+		parent.replaceChild(s, copy);
 		return true;
 	}
 	

@@ -39,7 +39,7 @@ public class ProgramImpl extends AbstractNode implements Program
 			throw new IndexOutOfBoundsException();
 		for(Rule r : RulesList)
 		{
-			if(index >= r.size())
+			if(index > r.size())
 				index -= r.size();
 			else
 				return r.nodeAt(index - 1);

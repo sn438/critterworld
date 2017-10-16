@@ -43,7 +43,7 @@ public class Command extends AbstractNode
 			throw new IndexOutOfBoundsException();
 		for(Update u : getUpdateList())
 		{
-			if(index >= u.size())
+			if(index > u.size())
 				index -= u.size();
 			else
 				return u.nodeAt(index - 1);
