@@ -78,6 +78,12 @@ public class Update extends AbstractNode implements CommandComponent
 		System.out.println("You messed up RCW in Update."); //TODO remove when done testing
 		return false;
 	}
+	
+	@Override
+	public Node searchChildrenForSimilarType()
+	{
+		return null;
+	}
 	@Override
 	public int size()
 	{
@@ -106,11 +112,5 @@ public class Update extends AbstractNode implements CommandComponent
 	public NodeType getType()
 	{
 		return NodeType.UPDATE;
-	}
-
-	@Override
-	public Node searchChildrenForType(Node model) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

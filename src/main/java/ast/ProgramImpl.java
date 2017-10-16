@@ -88,7 +88,7 @@ public class ProgramImpl extends AbstractNode implements Program
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
 		return null;
 	}
@@ -119,11 +119,5 @@ public class ProgramImpl extends AbstractNode implements Program
 	public NodeType getType()
 	{
 		return NodeType.PROGRAM;
-	}
-
-	@Override
-	public Node searchChildrenForType(Node model) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

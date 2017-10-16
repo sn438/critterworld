@@ -112,7 +112,7 @@ public class Sensor extends AbstractNode implements Expr
 	}
 
 	@Override
-	public Node searchChildrenForType(Node model) {
+	public Node searchChildrenForSimilarType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

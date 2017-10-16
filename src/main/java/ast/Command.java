@@ -84,14 +84,13 @@ public class Command extends AbstractNode
 		{
 			if(child == UpdateList.get(i))
 			{
-				UpdateList.set(i, (Update) replacement);
-				UpdateList.get(i).setParent(this);
+				UpdateList.remove(i);
 				return true;
 			}
 		}
 		if(child == last)
 		{
-			last = (CommandComponent) replacement;
+			last = UpdateList.removeLast();
 			last.setParent(this);
 			return true;
 		}
@@ -100,13 +99,8 @@ public class Command extends AbstractNode
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		for(Update u : UpdateList)
-			if(u.getType() == model.getType())
-				return u;
-		if(last.getType() == model.getType())
-			return last;
 		return null;
 	}
 	@Override

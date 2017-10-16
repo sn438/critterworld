@@ -1,5 +1,7 @@
 package ast;
 
+import ast.Node.NodeType;
+
 /** A representation of a binary numerical expression that evaluates to an integer. */
 public class BinaryExpr extends AbstractNode implements Expr
 {
@@ -98,11 +100,11 @@ public class BinaryExpr extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		if(left.getType() == model.getType())
+		if(left.getType() == NodeType.BINARYEXPR || left.getType() == NodeType.UNARYEXPR || left.getType() == NodeType.SENSOR)
 			return left;
-		else if(right.getType() == model.getType())
+		else if(right.getType() == NodeType.BINARYCONDITION || right.getType() == NodeType.RELATION || right.getType() == NodeType.SENSOR)
 			return right;
 		return null;
 	}

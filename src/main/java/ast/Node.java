@@ -48,7 +48,7 @@ public interface Node
 	 */
 	boolean replaceChild(Node child, Node replacement);
 	
-	Node searchChildrenForType(Node model);
+	Node searchChildrenForSimilarType();
 	
 	/**
 	 * Appends the program represented by this node prettily to the given StringBuilder.

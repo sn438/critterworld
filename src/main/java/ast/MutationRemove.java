@@ -6,41 +6,41 @@ public class MutationRemove implements Mutation
 	{
 		// TODO Auto-generated method stub
 		return false;
-	}	
-	
-	public boolean mutate(ProgramImpl p)
-	{
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public boolean mutate(Rule r)
 	{
-		return false;
+		Node parent = r.getParent();
+		parent.replaceChild(r, null);
+		return true;
 	}
 	
 	public boolean mutate(BinaryCondition c)
 	{
 		Node parent = c.getParent();
-		
-	}
-	
-	public boolean mutate(Command comm)
-	{
-		// TODO Auto-generated method stub
-		return false;
+		Node replacement = c.searchChildrenForSimilarType();
+		if(replacement == null)
+			return false;
+		parent.replaceChild(c, replacement);
+		return true;
 	}
 	
 	public boolean mutate(Update u)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Command parent = (Command) u.getParent();
+		if(parent.getUpdateList().size() == 0)
+			return false;
+		parent.replaceChild(u, null);
+		return true;
 	}
 
 	public boolean mutate(Action a)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Command parent = (Command) a.getParent();
+		if(parent.getUpdateList().size() == 0)
+			return false;
+		parent.replaceChild(a, null);
+		return true;
 	}
 	
 	public boolean mutate(Relation r)
@@ -62,6 +62,18 @@ public class MutationRemove implements Mutation
 	}
 	
 	public boolean mutate(Sensor s)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	//Unsupported methods
+	public boolean mutate(ProgramImpl p)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean mutate(Command comm)
 	{
 		// TODO Auto-generated method stub
 		return false;

@@ -76,10 +76,8 @@ public class Action extends AbstractNode implements CommandComponent
 	}
 	
 	@Override
-	public Node searchChildrenForType(Node model)
+	public Node searchChildrenForSimilarType()
 	{
-		if(model.getType() == val.getType())
-			return val;
 		return null;
 	}
 	
