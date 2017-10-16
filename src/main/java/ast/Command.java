@@ -102,6 +102,7 @@ public class Command extends AbstractNode
 			{
 				last = (CommandComponent) replacement;
 				last.setParent(this);
+				return true;
 			}
 		}
 		System.out.println("You messed up RCW in Command"); //TODO remove when done testing

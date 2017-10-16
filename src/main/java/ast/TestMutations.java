@@ -76,17 +76,26 @@ public class TestMutations
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         
-        /*for(int i = 0; i < prog.size(); i++)
-			try
+        for(int i = 0; i < prog.size(); i++)
+			//try
 			{
 				System.out.println("Index #" + i + ": " + prog.nodeAt(i));
 			}
-			catch (IndexOutOfBoundsException e)
+			//catch (IndexOutOfBoundsException e)
 			{
-				System.out.println("NODEAT FAILED");
+				//System.out.println("NODEAT FAILED");
 			}
-        */
-        //System.out.println(prog.mutate(87, new MutationReplace()).toString());
-		
+        
+        int n = (int) Math.random() * (prog.size() - 1);
+        /*for(int i = 0; i < prog.size(); i++)
+			try
+			{
+				System.out.println(prog.mutate(i, new MutationReplace()).toString());
+			}
+			catch (NullPointerException e)
+			{
+				System.out.println("Incompatible node type");
+			}
+		*/
 	}
 }
