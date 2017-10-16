@@ -1,5 +1,8 @@
 package ast;
 
+import ast.BinaryCondition.Operator;
+import ast.Node.NodeType;
+
 public class MutationInsert implements Mutation
 {
 	public boolean equals(Mutation m)
@@ -8,46 +11,89 @@ public class MutationInsert implements Mutation
 		return false;
 	}	
 	
-	
-	public boolean mutate(ProgramImpl p)
-	{
-		System.out.println(parentNode(p));
-		return false;
-	}
-
-	public boolean mutate(Rule r)
-	{
-		return false;
-	}
-	
 	public boolean mutate(BinaryCondition c)
 	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public boolean mutate(Command comm)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public boolean mutate(Update u)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public boolean mutate(Action a)
-	{
-		// TODO Auto-generated method stub
-		return false;
+		//finds the root of the AST
+		Node root = c.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+		
+		//The only possible parent of a condition node is another condition.
+		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
+		Condition copy = null;
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == c.getType() || root.nodeAt(index).getType() == NodeType.RELATION)
+			{
+				copy = (Condition) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		
+		//Generates a random binary operator for the condition node to be inserted
+		Operator op = null;
+		int n = (int) (Math.random() * 2);
+		switch(n)
+		{
+			case 0:
+				op = BinaryCondition.Operator.AND;
+				break;
+			case 1:
+				op = BinaryCondition.Operator.OR;
+				break;
+		}
+		BinaryCondition toInsert = new BinaryCondition(c, op, copy);
+		Node parent = c.getParent();
+		parent.replaceChild(c, toInsert);
+		return true;
 	}
 	
 	public boolean mutate(Relation r)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		//finds the root of the AST
+		Node root = r.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+			
+		//The only possible parent of a relation node is another condition.
+		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
+		Condition copy = null;
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == r.getType() || root.nodeAt(index).getType() == NodeType.BINARYCONDITION)
+			{
+				copy = (Condition) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+		
+		Operator op = null;
+		int n = (int) (Math.random() * 2);
+		switch(n)
+		{
+			case 0:
+				op = BinaryCondition.Operator.AND;
+				break;
+			case 1:
+				op = BinaryCondition.Operator.OR;
+				break;
+		}
+		BinaryCondition toInsert = new BinaryCondition(r, op, copy);
+		Node parent = r.getParent();
+		parent.replaceChild(r, toInsert);
+		return true;
 	}
 
 	public boolean mutate(BinaryExpr be)
@@ -77,5 +123,27 @@ public class MutationInsert implements Mutation
 		}
 		}
 		return (ProgramImpl) child;
+	}
+	
+	//Unsupported methods, which return false by default
+	public boolean mutate(ProgramImpl p)
+	{
+		return false;
+	}
+	public boolean mutate(Rule r)
+	{
+		return false;
+	}
+	public boolean mutate(Command comm)
+	{
+		return false;
+	}
+	public boolean mutate(Update u)
+	{
+		return false;
+	}
+	public boolean mutate(Action a)
+	{
+		return false;
 	}
 }

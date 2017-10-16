@@ -1,6 +1,5 @@
 ahead[1] = 0 --> forward;  
-//dsflk
-// sdlkfjdsf
+
 mem[5]=1 --> mem[6] := mem[4]
              mem[5] := 2;
 
@@ -9,19 +8,15 @@ mem[6] mod 1000 < 6 --> mem[5]:=1
 mem[mem[3] + 10] mod 6 <= 3 --> right;
 
 mem[8] mod 6 >= 3 --> left;
-//dsflk
-// sdlkfjdsf
+
 ahead[1] = 0 --> forward;
 
 {ahead[1] != 1 and
-//dsflk
-// sdlkfjdsf
  ahead[1] != 2} and
 ahead[1] != 0-1 --> attack;
 
 ahead[1] > 0 --> tag[1];
-//dsflk
-// sdlkfjdsf
+
 mem[4] > mem[3] * 100 and
 mem[3] < (10 + mem[7])
     --> grow; 

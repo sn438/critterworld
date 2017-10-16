@@ -16,18 +16,6 @@ public class MutationTransform implements Mutation
 		return false;
 	}	
 	
-	@Override
-	public boolean mutate(ProgramImpl p)
-	{
-		return false;
-	}
-	
-	@Override
-	public boolean mutate(Rule r)
-	{
-		return false;
-	}
-	
 	public boolean mutate(BinaryCondition c)
 	{
 		Operator op = null;
@@ -43,18 +31,6 @@ public class MutationTransform implements Mutation
 		c.setOperator(op);
 		return true;
 	}
-	
-	public boolean mutate(Command comm)
-	{
-		return false;
-	}
-	
-	public boolean mutate(Update u)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public boolean mutate(Action a)
 	{
 		ActType at = null;
@@ -98,7 +74,7 @@ public class MutationTransform implements Mutation
 			break;
 			}
 		a.setActType(at);
-		return false;
+		return true;
 	}
 	public boolean mutate(Relation r)
 	{
@@ -181,6 +157,26 @@ public class MutationTransform implements Mutation
 			break;
 		}
 		s.setSensorType(st);
+		return true;
+	}
+	
+	//Unsupported methods, which return false by default
+	@Override
+	public boolean mutate(ProgramImpl p)
+	{
+		return false;
+	}
+	@Override
+	public boolean mutate(Rule r)
+	{
+		return false;
+	}
+	public boolean mutate(Command comm)
+	{
+		return false;
+	}
+	public boolean mutate(Update u)
+	{
 		return false;
 	}
 }
