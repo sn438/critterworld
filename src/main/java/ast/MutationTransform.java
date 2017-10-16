@@ -10,12 +10,13 @@ import ast.Sensor.SensorType;
 
 public class MutationTransform implements Mutation
 {
+	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationTransform);
 	}	
 	
+	@Override
 	public boolean mutate(BinaryCondition c)
 	{
 		Operator op = null;
@@ -31,6 +32,8 @@ public class MutationTransform implements Mutation
 		c.setOperator(op);
 		return true;
 	}
+	
+	@Override
 	public boolean mutate(Action a)
 	{
 		ActType at = null;
@@ -76,6 +79,8 @@ public class MutationTransform implements Mutation
 		a.setActType(at);
 		return true;
 	}
+	
+	@Override
 	public boolean mutate(Relation r)
 	{
 		RelOp rel = null;
@@ -106,6 +111,7 @@ public class MutationTransform implements Mutation
 		return true;
 	}
 
+	@Override
 	public boolean mutate(BinaryExpr be)
 	{
 		MathOp op = null;
@@ -131,6 +137,7 @@ public class MutationTransform implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
 		Random r = new Random();
@@ -138,6 +145,7 @@ public class MutationTransform implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Sensor s)
 	{
 		SensorType st = null;
@@ -171,10 +179,12 @@ public class MutationTransform implements Mutation
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Command comm)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Update u)
 	{
 		return false;

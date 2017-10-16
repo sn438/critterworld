@@ -4,12 +4,13 @@ import ast.Node.NodeType;
 
 public class MutationReplace implements Mutation
 {
+	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationReplace);
 	}	
 
+	@Override
 	public boolean mutate(Rule r)
 	{
 		Node root = r.getParent();
@@ -36,6 +37,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(BinaryCondition c)
 	{
 		Node root = c.getParent();
@@ -62,6 +64,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Command comm)
 	{
 		Node root = comm.getParent();
@@ -88,6 +91,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Update u)
 	{
 		Node root = u.getParent();
@@ -114,6 +118,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Action a)
 	{
 		Node root = a.getParent();
@@ -141,6 +146,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Relation r)
 	{
 		Node root = r.getParent();
@@ -167,6 +173,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 
+	@Override
 	public boolean mutate(BinaryExpr be)
 	{
 		Node root = be.getParent();
@@ -194,6 +201,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
 		Node root = ue.getParent();
@@ -221,6 +229,7 @@ public class MutationReplace implements Mutation
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Sensor s)
 	{
 		Node root = s.getParent();
@@ -249,6 +258,7 @@ public class MutationReplace implements Mutation
 	}
 	
 	//Unsupported method, which returns false by default
+	@Override
 	public boolean mutate(ProgramImpl p)
 	{
 		// TODO Auto-generated method stub

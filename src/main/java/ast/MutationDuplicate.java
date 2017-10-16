@@ -2,12 +2,13 @@ package ast;
 
 public class MutationDuplicate implements Mutation
 {
+	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationDuplicate);
 	}
 	
+	@Override
 	public boolean mutate(ProgramImpl p)
 	{
 		Rule copy = null;
@@ -29,6 +30,8 @@ public class MutationDuplicate implements Mutation
 		p.getRulesList().add(copy);
 		return true;
 	}
+	
+	@Override
 	public boolean mutate(Command comm)
 	{
 		Node root = comm.getParent();
@@ -54,34 +57,42 @@ public class MutationDuplicate implements Mutation
 	}
 	
 	//Unsupported methods, which return false by default
+	@Override
 	public boolean mutate(Rule r)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(BinaryCondition c)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Update u)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Action a)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Relation r)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(BinaryExpr be)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Sensor s)
 	{
 		return false;

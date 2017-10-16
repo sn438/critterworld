@@ -5,12 +5,13 @@ import ast.Node.NodeType;
 
 public class MutationInsert implements Mutation
 {
+	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationInsert);
 	}	
 	
+	@Override
 	public boolean mutate(BinaryCondition c)
 	{
 		//finds the root of the AST
@@ -126,22 +127,27 @@ public class MutationInsert implements Mutation
 	}
 	
 	//Unsupported methods, which return false by default
+	@Override
 	public boolean mutate(ProgramImpl p)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Rule r)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Command comm)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Update u)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Action a)
 	{
 		return false;

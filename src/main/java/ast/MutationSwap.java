@@ -2,13 +2,13 @@ package ast;
 
 public class MutationSwap implements Mutation
 {
-
 	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationSwap);
 	}
+	
+	@Override
 	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();
@@ -21,7 +21,8 @@ public class MutationSwap implements Mutation
 		p.getRulesList().remove(firstIndex + 1);
 		return true;
 	}
-
+	
+	@Override
 	public boolean mutate(BinaryCondition c)
 	{
 		Condition temp = c.getLeft();
@@ -30,6 +31,7 @@ public class MutationSwap implements Mutation
 		return true;
 	}
 
+	@Override
 	public boolean mutate(Command comm)
 	{
 		int firstIndex = (int) (Math.random() * comm.getUpdateList().size());
@@ -41,7 +43,8 @@ public class MutationSwap implements Mutation
 		comm.getUpdateList().remove(firstIndex + 1);
 		return true;
 	}
-
+	
+	@Override
 	public boolean mutate(Update u)
 	{
 		Expr temp = u.getMemIndex();
@@ -50,6 +53,7 @@ public class MutationSwap implements Mutation
 		return true;
 	}
 
+	@Override
 	public boolean mutate(Relation r)
 	{
 		if(r.isCond())
@@ -60,6 +64,7 @@ public class MutationSwap implements Mutation
 		return true;
 	}
 
+	@Override
 	public boolean mutate(BinaryExpr be)
 	{
 		Expr temp = be.getLeft();
@@ -69,18 +74,22 @@ public class MutationSwap implements Mutation
 	}
 
 	//Unsupported methods, which defaultly return false
+	@Override
 	public boolean mutate(Rule r)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Action a)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
 		return false;
 	}
+	@Override
 	public boolean mutate(Sensor s)
 	{
 		return false;

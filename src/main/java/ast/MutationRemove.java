@@ -2,10 +2,10 @@ package ast;
 
 public class MutationRemove implements Mutation
 {
+	@Override
 	public boolean equals(Mutation m)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return (m instanceof MutationRemove);
 	}
 
 	public boolean mutate(Rule r)
