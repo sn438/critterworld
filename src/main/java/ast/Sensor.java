@@ -1,5 +1,8 @@
 package ast;
 
+import ast.Node.NodeType;
+import ast.UnaryExpr.ExprType;
+
 /** An AST representation of a Sensor node. */
 public class Sensor extends AbstractNode implements Expr
 {
@@ -73,6 +76,14 @@ public class Sensor extends AbstractNode implements Expr
 	}
 	
 	@Override
+	public Node searchChildrenForSimilarType()
+	{
+		if(type != SensorType.SMELL && (sensorIndex.getType() == NodeType.BINARYEXPR || sensorIndex.getType() == NodeType.UNARYEXPR
+				  																   || sensorIndex.getType() == NodeType.SENSOR))
+			return sensorIndex;
+		return null;
+	}
+	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		switch(type)
@@ -109,11 +120,5 @@ public class Sensor extends AbstractNode implements Expr
 	public NodeType getType()
 	{
 		return NodeType.SENSOR;
-	}
-
-	@Override
-	public Node searchChildrenForSimilarType() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

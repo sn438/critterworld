@@ -45,37 +45,51 @@ public class MutationRemove implements Mutation
 	
 	public boolean mutate(Relation r)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node parent = r.getParent();
+		Node replacement = r.searchChildrenForSimilarType();
+		if(replacement == null)
+			return false;
+		parent.replaceChild(r, replacement);
+		return true;
 	}
 
 	public boolean mutate(BinaryExpr be)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node parent = be.getParent();
+		Node replacement = be.searchChildrenForSimilarType();
+		if(replacement == null)
+			return false;
+		parent.replaceChild(be, replacement);
+		return true;
 	}
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node parent = ue.getParent();
+		Node replacement = ue.searchChildrenForSimilarType();
+		if(replacement == null)
+			return false;
+		parent.replaceChild(ue, replacement);
+		return true;
 	}
 	
 	public boolean mutate(Sensor s)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Node parent = s.getParent();
+		Node replacement = s.searchChildrenForSimilarType();
+		if(replacement == null)
+			return false;
+		parent.replaceChild(s, replacement);
+		return true;
 	}
 	
 	//Unsupported methods
 	public boolean mutate(ProgramImpl p)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 	public boolean mutate(Command comm)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

@@ -48,6 +48,10 @@ public interface Node
 	 */
 	boolean replaceChild(Node child, Node replacement);
 	
+	/**
+	 * Searches and returns a direct child of this node that is of a similar type.
+	 * @return the child of a similar type, {@code null} if none found or this node has no children
+	 */
 	Node searchChildrenForSimilarType();
 	
 	/**

@@ -42,6 +42,9 @@ public class TestMutations
 		Command c = new Command(ll, u6);
 		System.out.println(c.toString() + "\n");
 		c.acceptMutation(new MutationSwap());
+		System.out.println(c.toString() + "\n");
+		
+		u6.acceptMutation(new MutationRemove());
 		System.out.println(c.toString());
 		
 	}

@@ -1,5 +1,7 @@
 package ast;
 
+import ast.Node.NodeType;
+
 /** A representation of a unary numerical expression that evaluates to an integer. */
 public class UnaryExpr extends AbstractNode implements Expr
 {
@@ -81,6 +83,16 @@ public class UnaryExpr extends AbstractNode implements Expr
 		return false;
 	}
 	
+
+	@Override
+	public Node searchChildrenForSimilarType()
+	{
+		if(type != ExprType.CONSTANT && (exp.getType() == NodeType.BINARYEXPR || exp.getType() == NodeType.UNARYEXPR
+																			  || exp.getType() == NodeType.SENSOR))
+			return exp;
+		return null;
+	}
+	
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
@@ -122,11 +134,5 @@ public class UnaryExpr extends AbstractNode implements Expr
 	public NodeType getType()
 	{
 		return NodeType.UNARYEXPR;
-	}
-
-	@Override
-	public Node searchChildrenForSimilarType() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
