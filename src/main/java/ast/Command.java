@@ -112,6 +112,7 @@ public class Command extends AbstractNode
 	@Override
 	public Node searchChildrenForSimilarType()
 	{
+		//Since no child of a command node will be another command node, this method is not supported.
 		return null;
 	}
 	@Override

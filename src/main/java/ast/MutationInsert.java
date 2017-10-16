@@ -1,6 +1,7 @@
 package ast;
 
 import ast.BinaryCondition.Operator;
+import ast.BinaryExpr.MathOp;
 import ast.Node.NodeType;
 
 public class MutationInsert implements Mutation
@@ -49,8 +50,8 @@ public class MutationInsert implements Mutation
 				op = BinaryCondition.Operator.OR;
 				break;
 		}
-		BinaryCondition toInsert = new BinaryCondition(c, op, copy);
 		Node parent = c.getParent();
+		BinaryCondition toInsert = new BinaryCondition(c, op, copy);
 		parent.replaceChild(c, toInsert);
 		return true;
 	}
@@ -91,39 +92,163 @@ public class MutationInsert implements Mutation
 				op = BinaryCondition.Operator.OR;
 				break;
 		}
-		BinaryCondition toInsert = new BinaryCondition(r, op, copy);
 		Node parent = r.getParent();
+		BinaryCondition toInsert = new BinaryCondition(r, op, copy);
 		parent.replaceChild(r, toInsert);
 		return true;
 	}
 
 	public boolean mutate(BinaryExpr be)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		//finds the root of the AST
+		Node root = be.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+
+		//Finds another compatible expression node
+		Expr copy = null;
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == be.getType() || root.nodeAt(index).getType() == NodeType.UNARYEXPR
+															|| root.nodeAt(index).getType() == NodeType.SENSOR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+				
+		MathOp op = null;
+		int n = (int) (Math.random() * 5);
+		switch(n) 
+		{
+			case 0:
+				op = BinaryExpr.MathOp.ADD;
+				break;
+			case 1:
+				op = BinaryExpr.MathOp.DIVIDE;
+				break;
+			case 2:
+				op = BinaryExpr.MathOp.MOD;
+				break;
+			case 3: 
+				op = BinaryExpr.MathOp.MULTIPLY;
+				break;
+			case 4:
+				op = BinaryExpr.MathOp.SUBTRACT;
+				break;
+		}
+		Node parent = be.getParent();
+		BinaryExpr toInsert = new BinaryExpr(be, op, copy);
+		parent.replaceChild(be, toInsert);
+		return true;
 	}
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		System.out.println(parentNode(ue));
-		return false;
+		//finds the root of the AST
+		Node root = ue.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+
+		//Finds another compatible expression node
+		Expr copy = null;
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == ue.getType() || root.nodeAt(index).getType() == NodeType.BINARYEXPR
+															|| root.nodeAt(index).getType() == NodeType.SENSOR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
+		}
+		if(copy == null)
+			return false;
+				
+		MathOp op = null;
+		int n = (int) (Math.random() * 5);
+		switch(n) 
+		{
+			case 0:
+				op = BinaryExpr.MathOp.ADD;
+				break;
+			case 1:
+				op = BinaryExpr.MathOp.DIVIDE;
+				break;
+			case 2:
+				op = BinaryExpr.MathOp.MOD;
+				break;
+			case 3: 
+				op = BinaryExpr.MathOp.MULTIPLY;
+				break;
+			case 4:
+				op = BinaryExpr.MathOp.SUBTRACT;
+				break;
+		}
+		Node parent = ue.getParent();
+		BinaryExpr toInsert = new BinaryExpr(ue, op, copy);
+		parent.replaceChild(ue, toInsert);
+		return true;
 	}
 	
 	public boolean mutate(Sensor s)
 	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public ProgramImpl parentNode(Node child) {
-		Node parent = child.getParent();
-		if (parent != null) {
-		while (parent != null) {
-			child = parent;
-			parent = parent.getParent();
+		//finds the root of the AST
+		Node root = s.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+			
+		//Finds another compatible expression node
+		Expr copy = null;
+		int size = root.size();
+		int rand = (int) (Math.random() * size);
+		int index;
+		for(int i = 0; i < size; i++)
+		{
+			index = i + rand < size ? i + rand : i + rand - size;
+			if(root.nodeAt(index).getType() == s.getType() || root.nodeAt(index).getType() == NodeType.UNARYEXPR
+															|| root.nodeAt(index).getType() == NodeType.BINARYEXPR)
+			{
+				copy = (Expr) (root.nodeAt(index)).clone();
+				break;
+			}
 		}
+		if(copy == null)
+			return false;
+				
+		MathOp op = null;
+		int n = (int) (Math.random() * 5);
+		switch(n) 
+		{
+			case 0:
+				op = BinaryExpr.MathOp.ADD;
+				break;
+			case 1:
+				op = BinaryExpr.MathOp.DIVIDE;
+				break;
+			case 2:
+				op = BinaryExpr.MathOp.MOD;
+				break;
+			case 3: 
+				op = BinaryExpr.MathOp.MULTIPLY;
+				break;
+			case 4:
+				op = BinaryExpr.MathOp.SUBTRACT;
+				break;
 		}
-		return (ProgramImpl) child;
+		Node parent = s.getParent();
+		BinaryExpr toInsert = new BinaryExpr(s, op, copy);
+		parent.replaceChild(s, toInsert);
+		return true;
 	}
 	
 	//Unsupported methods, which return false by default

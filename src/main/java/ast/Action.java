@@ -82,6 +82,7 @@ public class Action extends AbstractNode implements CommandComponent
 	@Override
 	public Node searchChildrenForSimilarType()
 	{
+		//Since no child of an action node will be another action node, this method is unsupported.
 		return null;
 	}
 	

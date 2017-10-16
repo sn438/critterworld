@@ -82,6 +82,7 @@ public class Update extends AbstractNode implements CommandComponent
 	@Override
 	public Node searchChildrenForSimilarType()
 	{
+		//Since no child of an update node will be of type update, this method is unsupported.
 		return null;
 	}
 	@Override

@@ -30,6 +30,7 @@ public class BinaryExpr extends AbstractNode implements Expr
 	public void setLeft(Expr newLeft)
 	{
 		left = newLeft;
+		left.setParent(this);
 	}
 	public Expr getRight()
 	{
@@ -38,6 +39,7 @@ public class BinaryExpr extends AbstractNode implements Expr
 	public void setRight(Expr newRight)
 	{
 		right = newRight;
+		right.setParent(this);
 	}
 	@Override
 	public int size()

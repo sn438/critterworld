@@ -90,7 +90,7 @@ public class TestMutations
         //for(int i = 0; i < prog.size(); i++)
 			try
 			{
-				System.out.println(prog.mutate(n, new MutationTransform()).toString());
+				System.out.println(prog.mutate(n, new MutationInsert()).toString());
 			}
 			catch (NullPointerException e)
 			{

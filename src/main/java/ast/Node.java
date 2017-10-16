@@ -50,6 +50,7 @@ public interface Node
 	
 	/**
 	 * Searches and returns a direct child of this node that is of a similar type.
+	 * Not supported for nodes of type Program, Rule, Command, Update, or Action.
 	 * @return the child of a similar type, {@code null} if none found or this node has no children
 	 */
 	Node searchChildrenForSimilarType();
@@ -81,6 +82,7 @@ public interface Node
 	@Override
 	String toString();
 	
+	/** An enumeration of all the node types. */
 	public enum NodeType
 	{
 		PROGRAM, RULE, BINARYCONDITION, COMMAND, UPDATE, ACTION, RELATION, BINARYEXPR, UNARYEXPR, SENSOR;

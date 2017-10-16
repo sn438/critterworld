@@ -92,6 +92,7 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public Node searchChildrenForSimilarType()
 	{
+		//Since no child of a Program node will be another Program node, this method is unsupported.
 		return null;
 	}
 	
