@@ -107,4 +107,10 @@ public class Update extends AbstractNode implements CommandComponent
 	{
 		return NodeType.UPDATE;
 	}
+
+	@Override
+	public Node searchChildrenForType(Node model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

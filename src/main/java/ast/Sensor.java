@@ -110,4 +110,10 @@ public class Sensor extends AbstractNode implements Expr
 	{
 		return NodeType.SENSOR;
 	}
+
+	@Override
+	public Node searchChildrenForType(Node model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -181,4 +181,10 @@ public class Relation extends AbstractNode implements Condition
 	{
 		return NodeType.RELATION;
 	}
+
+	@Override
+	public Node searchChildrenForType(Node model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

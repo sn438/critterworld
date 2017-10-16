@@ -10,6 +10,10 @@ public class MutationSwap implements Mutation
 		return false;
 	}
 
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 69ab4d9e8387ae53be31316f33f36c6a86777cad
 	public boolean mutate(ProgramImpl p)
 	{
 		int firstIndex = (int) Math.random() * p.getRulesList().size();
@@ -33,9 +37,8 @@ public class MutationSwap implements Mutation
 
 	public boolean mutate(Command comm)
 	{
-		int firstIndex = (int) Math.random() * comm.getUpdateList().size();
-		int secondIndex = (int) Math.random() * comm.getUpdateList().size();
-		
+		int firstIndex = (int) (Math.random() * comm.getUpdateList().size());
+		int secondIndex = (int) (Math.random() * comm.getUpdateList().size());
 		Update temp = comm.getUpdateList().get(firstIndex);
 		comm.getUpdateList().add(secondIndex, temp);
 		temp = comm.getUpdateList().remove(secondIndex + 1);
