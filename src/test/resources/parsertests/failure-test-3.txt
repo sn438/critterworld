@@ -1,4 +1,4 @@
-ahead[1] = 0 --> forward left;  // error was introdced here
+ahead[1] = 0 --> forward; // error was introduced here  
 mem[5]=1 --> mem[6] := mem[4] 
              mem[5] := 2;
 

@@ -8,6 +8,7 @@ import java.io.Reader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ast.Condition;
 import ast.MutationInsert;
 import ast.Node;
 import ast.Program;
@@ -27,15 +28,13 @@ public class TestMutateInsert {
 	}
 
 	@Test
-	public void simpleTest() {
-		System.out.println(prog.size());
-		int i = 0;
-		
-		while (i < prog.size()) {
-			System.out.println(i + "\n");
-			System.out.println(prog.nodeAt(i));
-			i++;
-		}
+	public void testMutateCondition() {
+		System.out.println("testMutateCondition");
+		Condition a = (Condition) prog.nodeAt(62);
+		System.out.println("Program before being mutated: " + prog + "\n");
+		System.out.println("Node that is being mutated: " + a + "\n");
+		a.acceptMutation(new MutationInsert());
+		System.out.println("Program after being mutated: " + prog + "\n");
 		
 	}
 	

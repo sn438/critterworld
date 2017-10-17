@@ -1,3 +1,4 @@
+// test comment zero
 ahead[1] = 0 --> forward;  
 // test comment one
 // test comment two
@@ -31,3 +32,4 @@ mem[4] > 1000 --> mem[7] := mem[7] + mem[5]
                   bud; 
                  
 //test comment fifteen; {} [] //
+
