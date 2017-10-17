@@ -10,6 +10,13 @@ public abstract class AbstractMutation implements Mutation
 	{
 		printMutationDetail = p;
 	}
+	public Node findRoot(Node n)
+	{
+		Node root = n.getParent();
+		while(root.getParent() != null)
+			root = root.getParent();
+		return root;
+	}
 	@Override
 	public abstract boolean equals(Mutation m);
 

@@ -18,11 +18,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Rule r)
 	{
-		Node root = r.getParent();
+		Node root = findRoot(r);
 		Rule copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -45,11 +43,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(BinaryCondition c)
 	{
-		Node root = c.getParent();
+		Node root = findRoot(c);
 		Condition copy = null;
 		
-		while(root.getParent() != null)
-			root = root.getParent();
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -72,11 +68,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Command comm)
 	{
-		Node root = comm.getParent();
+		Node root = findRoot(comm);
 		Command copy = null;
 		
-		while(root.getParent() != null)
-			root = root.getParent();
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -99,11 +93,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Update u)
 	{
-		Node root = u.getParent();
+		Node root = findRoot(u);
 		Update copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -126,11 +118,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Action a)
 	{
-		Node root = a.getParent();
+		Node root = findRoot(a);
 		Action copy = null;
 		
-		while(root.getParent() != null)
-			root = root.getParent();
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -154,11 +144,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Relation r)
 	{
-		Node root = r.getParent();
+		Node root = findRoot(r);
 		Condition copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -181,11 +169,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(BinaryExpr be)
 	{
-		Node root = be.getParent();
+		Node root = findRoot(be);
 		Expr copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -209,11 +195,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
-		Node root = ue.getParent();
+		Node root = findRoot(ue);
 		Expr copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;
@@ -237,11 +221,9 @@ public class MutationReplace extends AbstractMutation
 	@Override
 	public boolean mutate(Sensor s)
 	{
-		Node root = s.getParent();
+		Node root = findRoot(s);
 		Expr copy = null;
-		
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;

@@ -20,10 +20,7 @@ public class MutationInsert extends AbstractMutation
 	@Override
 	public boolean mutate(BinaryCondition c)
 	{
-		//finds the root of the AST
-		Node root = c.getParent();
-		while(root.getParent() != null)
-			root = root.getParent();
+		Node root = findRoot(c);
 		
 		//The only possible parent of a condition node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
@@ -65,10 +62,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(Relation r)
 	{
-		//finds the root of the AST
-		Node root = r.getParent();
-		while(root.getParent() != null)
-			root = root.getParent();
+		Node root = findRoot(r);
 			
 		//The only possible parent of a relation node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
@@ -107,10 +101,7 @@ public class MutationInsert extends AbstractMutation
 
 	public boolean mutate(BinaryExpr be)
 	{
-		//finds the root of the AST
-		Node root = be.getParent();
-		while(root.getParent() != null)
-			root = root.getParent();
+		Node root = findRoot(be);
 
 		//Finds another compatible expression node
 		Expr copy = null;
@@ -158,10 +149,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(UnaryExpr ue)
 	{
-		//finds the root of the AST
-		Node root = ue.getParent();
-		while(root.getParent() != null)
-			root = root.getParent();
+		Node root = findRoot(ue);
 
 		//Finds another compatible expression node
 		Expr copy = null;
@@ -209,10 +197,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(Sensor s)
 	{
-		//finds the root of the AST
-		Node root = s.getParent();
-		while(root.getParent() != null)
-			root = root.getParent();
+		Node root = findRoot(s);
 			
 		//Finds another compatible expression node
 		Expr copy = null;

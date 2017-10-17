@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 ahead[0] < -1 and ENERGY < 500 * SIZE --> eat;
-=======
->>>>>>> 2aa663d222343983b171ec0e4fc96e99f8212812
 POSTURE != 17 --> POSTURE := 17;
 nearby[3] = 0 and ENERGY > 2500 --> bud;
 {ENERGY > SIZE * 400 and SIZE < 7} --> grow;
