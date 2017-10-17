@@ -50,7 +50,7 @@ public interface Node
 	
 	/**
 	 * Searches and returns a direct child of this node that is of a similar type.
-	 * Not supported for nodes of type Program, Rule, Command, Update, or Action.
+	 * Not supported for nodes of type Program, Rule, Command, Update, Action, or Relation.
 	 * @return the child of a similar type, {@code null} if none found or this node has no children
 	 */
 	Node searchChildrenForSimilarType();

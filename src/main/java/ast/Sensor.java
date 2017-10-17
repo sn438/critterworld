@@ -23,6 +23,20 @@ public class Sensor extends AbstractNode implements Expr
 		type = SensorType.SMELL;
 		sensorIndex = null;
 	}
+	
+	/** Sets the SensorType of this sensor node. */
+	public void setSensorType(SensorType st)
+	{
+		Random r = new Random();
+		if (this.type.equals(SensorType.SMELL))
+		{
+			if (!st.equals(SensorType.SMELL))
+				this.sensorIndex = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
+		}
+		if (st.equals(SensorType.SMELL))
+			this.sensorIndex = null;
+		this.type = st;
+	}
 
 	@Override
 	public int size()
@@ -112,18 +126,5 @@ public class Sensor extends AbstractNode implements Expr
 	public NodeType getType()
 	{
 		return NodeType.SENSOR;
-	}
-	
-	public void setSensorType(SensorType st)
-	{
-		Random r = new Random();
-		if (this.type.equals(SensorType.SMELL))
-		{
-			if (!st.equals(SensorType.SMELL))
-				this.sensorIndex = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
-		}
-		if (st.equals(SensorType.SMELL))
-			this.sensorIndex = null;
-		this.type = st;
 	}
 }

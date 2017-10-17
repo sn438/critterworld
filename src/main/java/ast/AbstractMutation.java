@@ -10,6 +10,12 @@ public abstract class AbstractMutation implements Mutation
 	{
 		printMutationDetail = p;
 	}
+	
+	/**
+	 * Finds the root node of a given node in an AST.
+	 * @param n the node to find the root of
+	 * @return the root of the node
+	 */
 	public Node findRoot(Node n)
 	{
 		Node root = n.getParent();
