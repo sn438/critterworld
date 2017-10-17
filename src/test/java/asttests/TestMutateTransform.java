@@ -24,7 +24,7 @@ public class TestMutateTransform {
 		Relation b = new Relation(new UnaryExpr(7), Relation.RelOp.GREATER, new UnaryExpr(5));
 		Condition c = new BinaryCondition(a, BinaryCondition.Operator.AND, b);
 		System.out.println(c.toString() + "\n");
-		c.acceptMutation(new MutationTransform());
+		c.acceptMutation(new MutationTransform(true));
 		System.out.println(c.toString() + "\n");
 	}
 	
@@ -34,7 +34,7 @@ public class TestMutateTransform {
 		BinaryExpr a = new BinaryExpr(new UnaryExpr(5), BinaryExpr.MathOp.ADD, new UnaryExpr(7));
 		Action b = new Action(Action.ActType.SERVE, a);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -44,7 +44,7 @@ public class TestMutateTransform {
 		BinaryExpr a = new BinaryExpr(new UnaryExpr(5), BinaryExpr.MathOp.ADD, new UnaryExpr(7));
 		Action b = new Action(Action.ActType.TAG, a);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -53,7 +53,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateActionThree");
 		Action b = new Action(Action.ActType.ATTACK);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -63,7 +63,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateRelationOne");
 		Relation a = new Relation(new UnaryExpr(5), Relation.RelOp.GREATER, new UnaryExpr(7));
 		System.out.println(a.toString() + "\n");
-		a.acceptMutation(new MutationTransform());
+		a.acceptMutation(new MutationTransform(true));
 		System.out.println(a.toString() + "\n");
 	}
 	
@@ -76,7 +76,7 @@ public class TestMutateTransform {
 		Condition c = new BinaryCondition(a, BinaryCondition.Operator.AND, b);
 		Relation d = new Relation(c);
 		System.out.println(d.toString() + "\n");
-		d.acceptMutation(new MutationTransform());
+		d.acceptMutation(new MutationTransform(true));
 		System.out.println(d.toString() + "\n");
 	}
 	
@@ -85,7 +85,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateBinaryExpr");
 		BinaryExpr a = new BinaryExpr(new UnaryExpr(5), BinaryExpr.MathOp.ADD, new UnaryExpr(7));
 		System.out.println(a.toString() + "\n");
-		a.acceptMutation(new MutationTransform());
+		a.acceptMutation(new MutationTransform(true));
 		System.out.println(a.toString() + "\n");
 	}
 	
@@ -94,7 +94,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateUnaryExprOne");
 		UnaryExpr a = new UnaryExpr(5);
 		System.out.println(a.toString() + "\n");
-		a.acceptMutation(new MutationTransform());
+		a.acceptMutation(new MutationTransform(true));
 		System.out.println(a.toString() + "\n");
 	}
 	
@@ -104,7 +104,7 @@ public class TestMutateTransform {
 		BinaryExpr a = new BinaryExpr(new UnaryExpr(5), BinaryExpr.MathOp.ADD, new UnaryExpr(7));
 		UnaryExpr b = new UnaryExpr(a, UnaryExpr.ExprType.EXPRESSION);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -114,7 +114,7 @@ public class TestMutateTransform {
 		BinaryExpr a = new BinaryExpr(new UnaryExpr(5), BinaryExpr.MathOp.ADD, new UnaryExpr(7));
 		UnaryExpr b = new UnaryExpr(a, UnaryExpr.ExprType.MEMORYVAL);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -123,7 +123,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateUnaryExprFour");
 		UnaryExpr b = new UnaryExpr(new UnaryExpr(5), UnaryExpr.ExprType.NEGATION);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -132,7 +132,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateUnaryExprFive");
 		UnaryExpr b = new UnaryExpr(new UnaryExpr(5), UnaryExpr.ExprType.SENSORVAL);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 	
@@ -141,7 +141,7 @@ public class TestMutateTransform {
 		System.out.println("testMutateSensorOne");
 		Sensor a = new Sensor();
 		System.out.println(a.toString() + "\n");
-		a.acceptMutation(new MutationTransform());
+		a.acceptMutation(new MutationTransform(true));
 		System.out.println(a.toString() + "\n");
 	}
 	
@@ -152,7 +152,7 @@ public class TestMutateTransform {
 		UnaryExpr a = new UnaryExpr(5);
 		Sensor b = new Sensor(Sensor.SensorType.AHEAD, a);
 		System.out.println(b.toString() + "\n");
-		b.acceptMutation(new MutationTransform());
+		b.acceptMutation(new MutationTransform(true));
 		System.out.println(b.toString() + "\n");
 	}
 }

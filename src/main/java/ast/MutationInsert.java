@@ -4,8 +4,13 @@ import ast.BinaryCondition.Operator;
 import ast.BinaryExpr.MathOp;
 import ast.Node.NodeType;
 
-public class MutationInsert implements Mutation
+public class MutationInsert extends AbstractMutation
 {
+	public MutationInsert(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{
@@ -53,6 +58,8 @@ public class MutationInsert implements Mutation
 		Node parent = c.getParent();
 		BinaryCondition toInsert = new BinaryCondition(c, op, copy);
 		parent.replaceChild(c, toInsert);
+		if(printMutationDetail)
+			System.out.println("Replaced the binary condition node\n");
 		return true;
 	}
 	

@@ -1,7 +1,12 @@
 package ast;
 
-public class MutationSwap implements Mutation
+public class MutationSwap extends AbstractMutation
 {
+	public MutationSwap(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{

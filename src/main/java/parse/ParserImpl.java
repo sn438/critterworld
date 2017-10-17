@@ -72,13 +72,50 @@ class ParserImpl implements Parser {
 	}
 	
 	public static Update parseUpdate(Tokenizer t) throws SyntaxError {
-		consume(t, TokenType.MEM);
-		consume(t, TokenType.LBRACKET);
-		Expr index = parseExpression(t);
-		consume(t, TokenType.RBRACKET);
-		consume(t, TokenType.ASSIGN);
-		Expr val = parseExpression(t);
-		return new Update(index, val);
+		if(t.peek().getType() == TokenType.MEM) {
+			consume(t, TokenType.MEM);
+			consume(t, TokenType.LBRACKET);
+			Expr index = parseExpression(t);
+			consume(t, TokenType.RBRACKET);
+			consume(t, TokenType.ASSIGN);
+			Expr val = parseExpression(t);
+			return new Update(index, val);
+		}
+		if(t.peek().isMemSugar()) {
+			String testString = t.peek().toString();
+			consume(t, t.peek().getType());
+			int index = 0;
+			switch (testString) {
+			case "MEMSIZE":
+				index = 0;
+				break;
+			case "DEFENSE":
+				index = 1;
+				break;
+			case "OFFENSE":
+				index = 2;
+				break;
+			case "SIZE":
+				index = 3;
+				break;
+			case "ENERGY":
+				index = 4;
+				break;
+			case "PASS":
+				index = 5;
+				break;
+			case "TAG":
+				index = 6;
+				break;
+			case "POSTURE":
+				index = 7;
+				break;
+			}
+			consume(t, TokenType.ASSIGN);
+			Expr val = parseExpression(t);
+			return new Update(new UnaryExpr(index), val);
+		}
+		throw new SyntaxError();
 	}
 	
 	public static Action parseAction(Tokenizer t) throws SyntaxError {

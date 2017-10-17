@@ -1,9 +1,13 @@
 package main;
 
+import java.io.*;
+import ast.*;
+import parse.*;
+
 public class ParseAndMutateApp
 {
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		int n = 0;
 		String file;
@@ -12,11 +16,26 @@ public class ParseAndMutateApp
 			if (args.length == 1)
 			{
 				file = args[0];
+				InputStream in = new FileInputStream(file);
+		        Reader r = new BufferedReader(new InputStreamReader(in));
+		        Parser p = ParserFactory.getParser();
+		        Program critter = p.parse(r);
+		        System.out.println(critter.toString());
+		        
 			}
 			else if (args.length == 3 && args[0].equals("--mutate"))
 			{
 				n = parsePositive(args[1]);
 				file = args[2];
+				InputStream in = new FileInputStream(file);
+		        Reader r = new BufferedReader(new InputStreamReader(in));
+		        Parser p = ParserFactory.getParser();
+		        Program critter = p.parse(r);
+		        
+		        for(int i = 0; i < n; i++)
+		        	critter = critter.mutate();
+		        
+		        System.out.println(critter.toString());
 			}
 			else
 			{
@@ -26,7 +45,7 @@ public class ParseAndMutateApp
 		}
 		catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e)
 		{
-			System.out.println("Usage:\n" + "  <input_file>\n" + " --mutate <n> <input_file");
+			System.out.println("Usage:\n" + "  <input_file>\n" + "  --mutate <n> <input_file");
 		}
 	}
 

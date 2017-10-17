@@ -1,7 +1,12 @@
 package ast;
 
-public class MutationDuplicate implements Mutation
-{
+public class MutationDuplicate extends AbstractMutation
+{	
+	public MutationDuplicate(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{
@@ -28,6 +33,8 @@ public class MutationDuplicate implements Mutation
 		if(copy == null)
 			return false;
 		p.getRulesList().add(copy);
+		if(printMutationDetail)
+			System.out.println("Duplicated the Rule node\n" + copy.toString() + "\n");
 		return true;
 	}
 	
@@ -52,6 +59,8 @@ public class MutationDuplicate implements Mutation
 		}
 		if(copy == null)
 			return false;
+		if(printMutationDetail)
+			System.out.println("Duplicated the Update node\n" + copy.toString() + "\n");
 		comm.getUpdateList().add(copy);
 		return true;
 	}

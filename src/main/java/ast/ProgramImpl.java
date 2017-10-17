@@ -85,7 +85,7 @@ public class ProgramImpl extends AbstractNode implements Program
 				}
 				return true;
 			}
-		System.out.println("You messed up RCW in Command"); //TODO remove when done testing
+		//System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
 	}
 	
@@ -99,8 +99,36 @@ public class ProgramImpl extends AbstractNode implements Program
 	@Override
 	public Program mutate()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		int randIndex = (int) (Math.random() * this.size());
+		Mutation m = null;
+		Program valid = null;
+		while(valid == null)
+		{
+			int rand = (int) (Math.random() * 6);
+			switch(rand)
+			{
+				case 0:
+					m = MutationFactory.getRemove(true);
+					break;
+				case 1:
+					m = MutationFactory.getSwap(true);
+					break;
+				case 2:
+					m = MutationFactory.getReplace(true);
+					break;
+				case 3:
+					m = MutationFactory.getTransform(true);
+					break;
+				case 4:
+					m = MutationFactory.getInsert(true);
+					break;
+				case 5:
+					m = MutationFactory.getDuplicate(true);
+					break;
+			}
+			valid = mutate(randIndex, m);
+		}
+		return valid;
 	}
 
 	@Override

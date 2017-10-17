@@ -76,6 +76,8 @@ public class TestMutations
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         
+        System.out.println(prog.mutate());
+        
         //for(int i = 0; i < prog.size(); i++)
 			//try
 			{
@@ -86,16 +88,16 @@ public class TestMutations
 				//System.out.println("NODEAT FAILED");
 			}
         
-        int n = (int) (Math.random() * (prog.size() - 1));
+        //int n = (int) (Math.random() * (prog.size() - 1));
         //for(int i = 0; i < prog.size(); i++)
-			try
-			{
-				System.out.println(prog.mutate(n, new MutationInsert()).toString());
-			}
-			catch (NullPointerException e)
-			{
-				System.out.println("Incompatible node type");
-			}
+			//try
+			//{
+				//System.out.println(prog.mutate(n, new MutationInsert()).toString());
+			//}
+			//catch (NullPointerException e)
+			//{
+				//System.out.println("Incompatible node type");
+			//}
 		
 	}
 }

@@ -27,12 +27,27 @@ public class ParserTest
     @Test
     public void testProgramIsNotNull()
     {
-        InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+        InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
+<<<<<<< HEAD
         System.out.println(prog.toString() + "\n");
+=======
+        System.out.println(prog.toString());
         assertNotNull("A valid critter program should not be null.", prog);
     }
+
+    /*@Test
+    public void testEmptyProgram()
+    {
+        InputStream in = ParserTest.class.getResourceAsStream("failure-test-1.txt");
+        Reader r = new BufferedReader(new InputStreamReader(in));
+        Parser p = ParserFactory.getParser();
+        Program prog = p.parse(r);
+        System.out.println(prog.toString());
+>>>>>>> 2aa663d222343983b171ec0e4fc96e99f8212812
+        assertNotNull("A valid critter program should not be null.", prog);
+    }*/
     
 }
