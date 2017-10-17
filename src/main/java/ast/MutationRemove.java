@@ -15,41 +15,27 @@ public class MutationRemove extends AbstractMutation
 
 	public boolean mutate(Rule r)
 	{
-		if (printMutationDetail) {
-			System.out.println("Node that is being mutated: " + r + "\n");
-			System.out.println("Parent of the node: " + r.getParent());
-			}
 		Node parent = r.getParent();
 		parent.replaceChild(r, null);
-		if (printMutationDetail) {
-			System.out.println("After mutating: " + parent);
-		}
+		if(printMutationDetail)
+			System.out.println("Removed the Rule node\n" + r + "\n");
 		return true;
 	}
 	
 	public boolean mutate(BinaryCondition c)
 	{
-		if (printMutationDetail) {
-			System.out.println("Node that is being mutated: " + c + "\n");
-			System.out.println("Parent of the node: " + c.getParent());
-			}
 		Node parent = c.getParent();
 		Node replacement = c.searchChildrenForSimilarType();
 		if(replacement == null)
 			return false;
 		parent.replaceChild(c, replacement);
-		if (printMutationDetail) {
-			System.out.println("After mutating: " + parent);
-		}
+		if(printMutationDetail)
+			System.out.println("Removed the BincaryCondition node\n" + c + "\n");
 		return true;
 	}
 	
 	public boolean mutate(Update u)
 	{
-		if (printMutationDetail) {
-			System.out.println("Node that is being mutated: " + u + "\n");
-			System.out.println("Parent of the node: " + u.getParent());
-			}
 		Command parent = (Command) u.getParent();
 		if(parent.getUpdateList().size() == 0)
 			return false;
@@ -57,6 +43,8 @@ public class MutationRemove extends AbstractMutation
 		if (printMutationDetail) {
 			System.out.println("After mutating: " + parent);
 		}
+		if(printMutationDetail)
+			System.out.println("Removed the Update node\n" + u + "\n");
 		return true;
 	}
 
@@ -66,6 +54,8 @@ public class MutationRemove extends AbstractMutation
 		if(parent.getUpdateList().size() == 0)
 			return false;
 		parent.replaceChild(a, null);
+		if(printMutationDetail)
+			System.out.println("Removed the Action node\n" + a + "\n");
 		return true;
 	}
 	
@@ -76,6 +66,8 @@ public class MutationRemove extends AbstractMutation
 		if(replacement == null)
 			return false;
 		parent.replaceChild(r, replacement);
+		if(printMutationDetail)
+			System.out.println("Removed the Relation node\n" + r + "\n");
 		return true;
 	}
 
@@ -86,6 +78,8 @@ public class MutationRemove extends AbstractMutation
 		if(replacement == null)
 			return false;
 		parent.replaceChild(be, replacement);
+		if(printMutationDetail)
+			System.out.println("Removed the BinaryExpr node\n" + be + "\n");
 		return true;
 	}
 	
@@ -96,8 +90,9 @@ public class MutationRemove extends AbstractMutation
 		if(replacement == null)
 			return false;
 		parent.replaceChild(ue, replacement);
-		return true;
-	}
+		if(printMutationDetail)
+			System.out.println("Removed the UnaryExpr node\n" + ue + "\n");
+		return true;}
 	
 	public boolean mutate(Sensor s)
 	{
@@ -106,6 +101,8 @@ public class MutationRemove extends AbstractMutation
 		if(replacement == null)
 			return false;
 		parent.replaceChild(s, replacement);
+		if(printMutationDetail)
+			System.out.println("Removed the Sensor node\n" + s + "\n");
 		return true;
 	}
 	
