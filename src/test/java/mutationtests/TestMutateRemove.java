@@ -1,4 +1,4 @@
-package asttests;
+package mutationtests;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,6 +17,12 @@ import parse.Parser;
 import parse.ParserFactory;
 import parsertests.ParserTest;
 
+/**
+ * 
+ * This test class essentially tests the Remove Mutation by applying the Random Mutation to random nodes 
+ * in the program. If the mutation cannot be handled then an error statement is printed and the test ends gracefully.
+ *
+ */
 public class TestMutateRemove {
 	Program prog;
 
@@ -27,21 +33,7 @@ public class TestMutateRemove {
 		Parser p = ParserFactory.getParser();
 		prog = p.parse(r);
 	}
-	/*
-	 * @Test public void testMutateRule() {
-	 * System.out.println("testMutateCondition"); Rule a = (Rule) prog.nodeAt(97);
-	 * a.acceptMutation(new MutationRemove(true)); }
-	 * 
-	 * @Test public void testMutateBinaryCondition() {
-	 * System.out.println("testBinaryCondition"); BinaryCondition a =
-	 * (BinaryCondition) prog.nodeAt(106); a.acceptMutation(new
-	 * MutationRemove(true)); }
-	 * 
-	 * @Test public void testMutateUpdate() { System.out.println("testUpdate");
-	 * Update a = (Update) prog.nodeAt(130); a.acceptMutation(new
-	 * MutationRemove(true)); }
-	 */
-
+	
 	@Test
 	public void testMutate() {
 		int n = 0;

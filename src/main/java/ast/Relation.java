@@ -57,6 +57,7 @@ public class Relation extends AbstractNode implements Condition
 	{
 		return op == RelOp.ISCOND;
 	}
+	
 	public void setRelOp(RelOp ro)
 	{
 		if (this.op.equals(RelOp.ISCOND))

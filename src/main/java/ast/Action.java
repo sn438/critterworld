@@ -124,6 +124,11 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
+	/**
+	 * setActType sets the ActType for the Action. 
+	 * @param at is the ActType that the Action is being set to. If at is not of the same type as the original 
+	 * ActType, then the value is modified if necessary.
+	 */
 	public void setActType(ActType at)
 	{
 		Random r = new Random();

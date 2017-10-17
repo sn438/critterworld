@@ -20,20 +20,38 @@ public class BinaryCondition extends AbstractNode implements Condition
 		left.setParent(this);
 		right.setParent(this);
 	}
-	
+	/**
+	 * getLeft returns the left node for the BinaryCondition.
+	 * @return left node.
+	 */
 	public Condition getLeft()
 	{
 		return left;
 	}
+	
+	/**
+	 * setLeft sets the left node for the Binary Condition.
+	 * @param newLeft is the new left node of the Binary Condition.
+	 */
 	public void setLeft(Condition newLeft)
 	{
 		left = newLeft;
 		left.setParent(this);
 	}
+	
+	/**
+	 * getRight returns the right node for the BinaryCondition.
+	 * @return right node.
+	 */
 	public Condition getRight()
 	{
 		return right;
 	}
+	
+	/**
+	 * setRight sets the left node for the Binary Condition.
+	 * @param newRight is the new left node of the Binary Condition.
+	 */
 	public void setRight(Condition newRight)
 	{
 		right = newRight;
@@ -128,7 +146,10 @@ public class BinaryCondition extends AbstractNode implements Condition
 	{
 		return NodeType.BINARYCONDITION;
 	}
-	
+	/**
+	 * setOperator sets the operator to op.
+	 * @param op is the parameter that operator is being set to. 
+	 */
 	public void setOperator(Operator op) {
 		this.op = op;
 	}

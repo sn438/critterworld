@@ -1,4 +1,4 @@
-package mutationtests;
+package asttests;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,11 @@ import ast.BinaryExpr.MathOp;
 import ast.Relation.RelOp;
 import ast.UnaryExpr.ExprType;
 
+/**
+ * 
+ * RemoveTest tests the remove function for the different Node types.
+ *
+ */
 public class RemoveTest
 {	
 	@Test

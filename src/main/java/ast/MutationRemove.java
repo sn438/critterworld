@@ -40,9 +40,6 @@ public class MutationRemove extends AbstractMutation
 		if(parent.getUpdateList().size() == 0)
 			return false;
 		parent.replaceChild(u, null);
-		if (printMutationDetail) {
-			System.out.println("After mutating: " + parent);
-		}
 		if(printMutationDetail)
 			System.out.println("Removed the Update node\n" + u + "\n");
 		return true;

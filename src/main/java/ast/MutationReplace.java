@@ -37,6 +37,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = r.getParent();
 		parent.replaceChild(r, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Rule node\n" + r + "\n");
 		return true;
 	}
 	
@@ -62,6 +64,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = c.getParent();
 		parent.replaceChild(c, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Condition node\n" + c + "\n");
 		return true;
 	}
 	
@@ -87,6 +91,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = comm.getParent();
 		parent.replaceChild(comm, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Command node\n" + comm + "\n");
 		return true;
 	}
 	
@@ -112,6 +118,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = u.getParent();
 		parent.replaceChild(u, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Update node\n" + u + "\n");
 		return true;
 	}
 	
@@ -138,6 +146,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = a.getParent();
 		parent.replaceChild(a, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Action node\n" + a + "\n");
 		return true;
 	}
 	
@@ -163,6 +173,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = r.getParent();
 		parent.replaceChild(r, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Relation node\n" + r + "\n");
 		return true;
 	}
 
@@ -189,6 +201,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = be.getParent();
 		parent.replaceChild(be, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Binary Expression node\n" + be + "\n");
 		return true;
 	}
 	
@@ -215,6 +229,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = ue.getParent();
 		parent.replaceChild(ue, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Unary Expression node\n" + ue + "\n");
 		return true;
 	}
 	
@@ -241,6 +257,8 @@ public class MutationReplace extends AbstractMutation
 			return false;
 		Node parent = s.getParent();
 		parent.replaceChild(s, copy);
+		if(printMutationDetail)
+			System.out.println("Replaced the Sensor node\n" + s + "\n");
 		return true;
 	}
 	

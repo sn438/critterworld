@@ -35,6 +35,8 @@ public class MutationTransform extends AbstractMutation
 			break;
 		}
 		c.setOperator(op);
+		if(printMutationDetail)
+			System.out.println("Transformed the Condition node\n" + c + "\n");
 		return true;
 	}
 	
@@ -82,6 +84,8 @@ public class MutationTransform extends AbstractMutation
 			break;
 			}
 		a.setActType(at);
+		if(printMutationDetail)
+			System.out.println("Transformed the Action node\n" + a + "\n");
 		return true;
 	}
 	
@@ -113,6 +117,8 @@ public class MutationTransform extends AbstractMutation
 			rel = Relation.RelOp.NOTEQUAL;
 		}
 		r.setRelOp(rel);
+		if(printMutationDetail)
+			System.out.println("Transformed the Relation node\n" + rel + "\n");
 		return true;
 	}
 
@@ -139,6 +145,8 @@ public class MutationTransform extends AbstractMutation
 			break;
 		}
 		be.setOperator(op);
+		if(printMutationDetail)
+			System.out.println("Transformed the Binary Expression node\n" + be + "\n");
 		return true;
 	}
 	
@@ -147,6 +155,8 @@ public class MutationTransform extends AbstractMutation
 	{
 		Random r = new Random();
 		ue.setValue(java.lang.Integer.MAX_VALUE/r.nextInt());
+		if(printMutationDetail)
+			System.out.println("Transformed the Unary Expression node\n" + ue + "\n");
 		return true;
 	}
 	
@@ -170,6 +180,8 @@ public class MutationTransform extends AbstractMutation
 			break;
 		}
 		s.setSensorType(st);
+		if(printMutationDetail)
+			System.out.println("Transformed the Sensor node\n" + s + "\n");
 		return true;
 	}
 	
