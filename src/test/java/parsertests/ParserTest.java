@@ -31,9 +31,7 @@ public class ParserTest
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
-<<<<<<< HEAD
         System.out.println(prog.toString() + "\n");
-=======
         System.out.println(prog.toString());
         assertNotNull("A valid critter program should not be null.", prog);
     }

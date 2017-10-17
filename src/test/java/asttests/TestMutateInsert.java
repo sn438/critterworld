@@ -33,7 +33,7 @@ public class TestMutateInsert {
 		Condition a = (Condition) prog.nodeAt(62);
 		System.out.println("Program before being mutated: " + prog + "\n");
 		System.out.println("Node that is being mutated: " + a + "\n");
-		a.acceptMutation(new MutationInsert());
+		a.acceptMutation(new MutationInsert(true));
 		System.out.println("Program after being mutated: " + prog + "\n");
 		
 	}
