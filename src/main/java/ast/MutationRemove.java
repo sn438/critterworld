@@ -15,27 +15,48 @@ public class MutationRemove extends AbstractMutation
 
 	public boolean mutate(Rule r)
 	{
+		if (printMutationDetail) {
+			System.out.println("Node that is being mutated: " + r + "\n");
+			System.out.println("Parent of the node: " + r.getParent());
+			}
 		Node parent = r.getParent();
 		parent.replaceChild(r, null);
+		if (printMutationDetail) {
+			System.out.println("After mutating: " + parent);
+		}
 		return true;
 	}
 	
 	public boolean mutate(BinaryCondition c)
 	{
+		if (printMutationDetail) {
+			System.out.println("Node that is being mutated: " + c + "\n");
+			System.out.println("Parent of the node: " + c.getParent());
+			}
 		Node parent = c.getParent();
 		Node replacement = c.searchChildrenForSimilarType();
 		if(replacement == null)
 			return false;
 		parent.replaceChild(c, replacement);
+		if (printMutationDetail) {
+			System.out.println("After mutating: " + parent);
+		}
 		return true;
 	}
 	
 	public boolean mutate(Update u)
 	{
+		if (printMutationDetail) {
+			System.out.println("Node that is being mutated: " + u + "\n");
+			System.out.println("Parent of the node: " + u.getParent());
+			}
 		Command parent = (Command) u.getParent();
 		if(parent.getUpdateList().size() == 0)
 			return false;
 		parent.replaceChild(u, null);
+		if (printMutationDetail) {
+			System.out.println("After mutating: " + parent);
+		}
 		return true;
 	}
 
