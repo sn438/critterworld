@@ -44,7 +44,6 @@ public class ParserTest
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);
         System.out.println(prog.toString());
->>>>>>> 2aa663d222343983b171ec0e4fc96e99f8212812
         assertNotNull("A valid critter program should not be null.", prog);
     }*/
     

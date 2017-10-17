@@ -1,7 +1,5 @@
 package ast;
 
-import ast.Node.NodeType;
-
 /** A representation of a unary numerical expression that evaluates to an integer. */
 public class UnaryExpr extends AbstractNode implements Expr
 {
@@ -62,15 +60,8 @@ public class UnaryExpr extends AbstractNode implements Expr
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override

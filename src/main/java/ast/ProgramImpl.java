@@ -58,16 +58,9 @@ public class ProgramImpl extends AbstractNode implements Program
 	
 	@Override
 	public boolean acceptMutation(Mutation m)
-	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+	{	
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override
@@ -85,7 +78,6 @@ public class ProgramImpl extends AbstractNode implements Program
 				}
 				return true;
 			}
-		//System.out.println("You messed up RCW in Command"); //TODO remove when done testing
 		return false;
 	}
 	

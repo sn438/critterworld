@@ -2,9 +2,6 @@ package ast;
 
 import java.util.Random;
 
-import ast.Node.NodeType;
-import ast.UnaryExpr.ExprType;
-
 /** An AST representation of a Sensor node. */
 public class Sensor extends AbstractNode implements Expr
 {
@@ -56,15 +53,8 @@ public class Sensor extends AbstractNode implements Expr
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override
@@ -81,7 +71,7 @@ public class Sensor extends AbstractNode implements Expr
 	public Node searchChildrenForSimilarType()
 	{
 		if(type != SensorType.SMELL && (sensorIndex.getType() == NodeType.BINARYEXPR || sensorIndex.getType() == NodeType.UNARYEXPR
-				  																   || sensorIndex.getType() == NodeType.SENSOR))
+				  																     || sensorIndex.getType() == NodeType.SENSOR))
 			return sensorIndex;
 		return null;
 	}
@@ -124,16 +114,16 @@ public class Sensor extends AbstractNode implements Expr
 		return NodeType.SENSOR;
 	}
 	
-	public void setSensorType(SensorType st) {
+	public void setSensorType(SensorType st)
+	{
 		Random r = new Random();
-		if (this.type.equals(SensorType.SMELL)) {
-			if (!st.equals(SensorType.SMELL)) {
+		if (this.type.equals(SensorType.SMELL))
+		{
+			if (!st.equals(SensorType.SMELL))
 				this.sensorIndex = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
-			}
 		}
-		if (st.equals(SensorType.SMELL)) {
+		if (st.equals(SensorType.SMELL))
 			this.sensorIndex = null;
-		}
 		this.type = st;
 	}
 }
