@@ -27,7 +27,7 @@ public class RemoveTest
 		Command c = new Command(ll, u6);
 		
 		int previousSize = c.size();
-		u2.acceptMutation(new MutationRemove());
+		u2.acceptMutation(new MutationRemove(true));
 		assertTrue(previousSize > c.size());
 		assertTrue(c.toString().equals(u.toString() + "\n" + u3.toString() + "\n" + u4.toString() + "\n" + u5.toString() + "\n" + u6.toString()));
 	}
@@ -42,7 +42,7 @@ public class RemoveTest
 		Command c = new Command(ll, u2);
 		
 		int previousSize = c.size();
-		u2.acceptMutation(new MutationRemove());
+		u2.acceptMutation(new MutationRemove(true));
 		assertTrue(previousSize > c.size());
 		assertTrue(c.toString().equals(u.toString()));
 	}
@@ -57,7 +57,7 @@ public class RemoveTest
 		Command c = new Command(ll, u2);
 		
 		int previousSize = c.size();
-		u.acceptMutation(new MutationRemove());
+		u.acceptMutation(new MutationRemove(true));
 		assertTrue(previousSize > c.size());
 		assertTrue(c.toString().equals(u2.toString()));
 	}
@@ -67,7 +67,7 @@ public class RemoveTest
 		UnaryExpr ue = new UnaryExpr(3);
 		BinaryExpr be = new BinaryExpr(ue, MathOp.ADD, new UnaryExpr(2));
 		String before = be.toString();
-		ue.acceptMutation(new MutationRemove());
+		ue.acceptMutation(new MutationRemove(true));
 		assertTrue(before.equals(be.toString()));
 	}
 	
@@ -79,7 +79,7 @@ public class RemoveTest
 		
 		int previousSize = be.size();
 		String before = be.toString();
-		ue.acceptMutation(new MutationRemove());
+		ue.acceptMutation(new MutationRemove(true));
 		assertTrue(previousSize > be.size());
 		assertTrue("3 + 2".equals(be.toString()));
 	}
@@ -106,7 +106,7 @@ public class RemoveTest
 		Command c = new Command(ll, u);
 		Rule rule = new Rule(con, c);
 		
-		con.acceptMutation(new MutationRemove());
+		con.acceptMutation(new MutationRemove(true));
 		Rule predictedMutatedRule = new Rule(r1, c);
 		assertTrue(predictedMutatedRule.toString().equals(rule.toString()));
 	}

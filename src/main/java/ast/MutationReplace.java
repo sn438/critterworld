@@ -2,8 +2,13 @@ package ast;
 
 import ast.Node.NodeType;
 
-public class MutationReplace implements Mutation
+public class MutationReplace extends AbstractMutation
 {
+	public MutationReplace(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{

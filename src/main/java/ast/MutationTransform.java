@@ -8,8 +8,13 @@ import ast.BinaryExpr.MathOp;
 import ast.Relation.RelOp;
 import ast.Sensor.SensorType;
 
-public class MutationTransform implements Mutation
+public class MutationTransform extends AbstractMutation
 {
+	public MutationTransform(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{

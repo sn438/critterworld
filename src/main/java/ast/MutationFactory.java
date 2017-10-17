@@ -3,33 +3,33 @@ package ast;
 /** A factory that produces the public static Mutation objects corresponding to each mutation. */
 public class MutationFactory
 {
-	public static Mutation getRemove()
+	public static Mutation getRemove(boolean b)
 	{
-		return new MutationRemove();
+		return new MutationRemove(b);
 	}
 
-	public static Mutation getSwap()
+	public static Mutation getSwap(boolean b)
 	{
-		return new MutationSwap();
+		return new MutationSwap(b);
 	}
 
-	public static Mutation getReplace()
+	public static Mutation getReplace(boolean b)
 	{
-		return new MutationReplace();
+		return new MutationReplace(b);
 	}
 
-	public static Mutation getTransform()
+	public static Mutation getTransform(boolean b)
 	{
-		return new MutationTransform();
+		return new MutationTransform(b);
 	}
 
-	public static Mutation getInsert()
+	public static Mutation getInsert(boolean b)
 	{
-		return new MutationInsert();
+		return new MutationInsert(b);
 	}
 
-	public static Mutation getDuplicate()
+	public static Mutation getDuplicate(boolean b)
 	{
-		return new MutationDuplicate();
+		return new MutationDuplicate(b);
 	}
 }

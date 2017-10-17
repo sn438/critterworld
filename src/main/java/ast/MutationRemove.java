@@ -1,7 +1,12 @@
 package ast;
 
-public class MutationRemove implements Mutation
+public class MutationRemove extends AbstractMutation
 {
+	public MutationRemove(boolean p)
+	{
+		super(p);
+	}
+	
 	@Override
 	public boolean equals(Mutation m)
 	{

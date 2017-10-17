@@ -1,4 +1,5 @@
-ahead[1] = 0 --> forward;  
+POSTURE != 17 --> POSTURE := 17;
+ahead[1] = 0 --> forward;
 // test comment one
 // test comment two
 // test comment three
