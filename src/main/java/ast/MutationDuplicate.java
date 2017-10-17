@@ -41,10 +41,9 @@ public class MutationDuplicate extends AbstractMutation
 	@Override
 	public boolean mutate(Command comm)
 	{
-		Node root = comm.getParent();
+		Node root = findRoot(comm);
 		Update copy = null;
-		while(root.getParent() != null)
-			root = root.getParent();
+
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
 		int index;

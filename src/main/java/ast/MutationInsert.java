@@ -20,6 +20,7 @@ public class MutationInsert extends AbstractMutation
 	@Override
 	public boolean mutate(BinaryCondition c)
 	{
+<<<<<<< HEAD
 		//finds the root of the AST
 		Node root = c.getParent();
 		while(root.getParent() != null)
@@ -28,6 +29,10 @@ public class MutationInsert extends AbstractMutation
 		System.out.println("Node that is being mutated: " + c + "\n");
 		System.out.println("Program before being mutated: " + root + "\n");
 		}
+=======
+		Node root = findRoot(c);
+		
+>>>>>>> be7a6a2b421e718c7e3eea8350bd0acbb7531348
 		//The only possible parent of a condition node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
 		Condition copy = null;
@@ -68,6 +73,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(Relation r)
 	{
+<<<<<<< HEAD
 		//finds the root of the AST
 		Node root = r.getParent();
 		while(root.getParent() != null)
@@ -76,6 +82,10 @@ public class MutationInsert extends AbstractMutation
 			System.out.println("Node that is being mutated: " + r + "\n");
 			System.out.println("Program before being mutated: " + root + "\n");
 		}	
+=======
+		Node root = findRoot(r);
+			
+>>>>>>> be7a6a2b421e718c7e3eea8350bd0acbb7531348
 		//The only possible parent of a relation node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
 		Condition copy = null;
@@ -116,6 +126,7 @@ public class MutationInsert extends AbstractMutation
 
 	public boolean mutate(BinaryExpr be)
 	{
+<<<<<<< HEAD
 		//finds the root of the AST
 		Node root = be.getParent();
 		while(root.getParent() != null)
@@ -124,6 +135,10 @@ public class MutationInsert extends AbstractMutation
 			System.out.println("Node that is being mutated: " + be + "\n");
 			System.out.println("Program before being mutated: " + root + "\n");
 		}	
+=======
+		Node root = findRoot(be);
+
+>>>>>>> be7a6a2b421e718c7e3eea8350bd0acbb7531348
 		//Finds another compatible expression node
 		Expr copy = null;
 		int size = root.size();
@@ -173,6 +188,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(UnaryExpr ue)
 	{
+<<<<<<< HEAD
 		//finds the root of the AST
 		Node root = ue.getParent();
 		while(root.getParent() != null)
@@ -182,6 +198,10 @@ public class MutationInsert extends AbstractMutation
 			System.out.println("Parent of the Node: " + ue.getParent() + "\n");
 			System.out.println("Program before being mutated: " + root + "\n");
 		}
+=======
+		Node root = findRoot(ue);
+
+>>>>>>> be7a6a2b421e718c7e3eea8350bd0acbb7531348
 		//Finds another compatible expression node
 		Expr copy = null;
 		int size = root.size();
@@ -231,6 +251,7 @@ public class MutationInsert extends AbstractMutation
 	
 	public boolean mutate(Sensor s)
 	{
+<<<<<<< HEAD
 		//finds the root of the AST
 		Node root = s.getParent();
 		while(root.getParent() != null)
@@ -240,6 +261,10 @@ public class MutationInsert extends AbstractMutation
 			System.out.println("Parent of the Node: " + s.getParent() + "\n");
 			System.out.println("Program before being mutated: " + root + "\n");
 		}
+=======
+		Node root = findRoot(s);
+			
+>>>>>>> be7a6a2b421e718c7e3eea8350bd0acbb7531348
 		//Finds another compatible expression node
 		Expr copy = null;
 		int size = root.size();
