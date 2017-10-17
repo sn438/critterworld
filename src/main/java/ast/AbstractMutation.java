@@ -2,8 +2,10 @@ package ast;
 
 public abstract class AbstractMutation implements Mutation
 {
+	/** A flag for whether or not this mutation will print out details about what nodes were mutated. */
 	protected boolean printMutationDetail;
 	
+	/** Creates a new AbstractMutation class with the given print flag. */
 	public AbstractMutation(boolean p)
 	{
 		printMutationDetail = p;

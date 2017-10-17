@@ -47,6 +47,10 @@ public class ParseAndMutateApp
 		{
 			System.out.println("Usage:\n" + "  <input_file>\n" + "  --mutate <n> <input_file");
 		}
+		catch (FileNotFoundException f)
+		{
+			System.out.println("File not found.");
+		}
 	}
 
 	/**

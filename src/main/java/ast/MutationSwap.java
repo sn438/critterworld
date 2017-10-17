@@ -16,6 +16,8 @@ public class MutationSwap extends AbstractMutation
 	@Override
 	public boolean mutate(ProgramImpl p)
 	{
+		if(p.getRulesList().size() == 0)
+			return false;
 		int firstIndex = (int) Math.random() * p.getRulesList().size();
 		int secondIndex = (int) Math.random() * p.getRulesList().size();
 		
@@ -39,6 +41,9 @@ public class MutationSwap extends AbstractMutation
 	@Override
 	public boolean mutate(Command comm)
 	{
+		if(comm.getUpdateList().size() == 0)
+			return false;
+		
 		int firstIndex = (int) (Math.random() * comm.getUpdateList().size());
 		int secondIndex = (int) (Math.random() * comm.getUpdateList().size());
 		Update temp = comm.getUpdateList().get(firstIndex);
