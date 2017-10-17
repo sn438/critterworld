@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 // test comment zero
 ahead[1] = 0 --> forward;  
-=======
 POSTURE != 17 --> POSTURE := 17;
 ahead[1] = 0 --> forward;
->>>>>>> 2aa663d222343983b171ec0e4fc96e99f8212812
 // test comment one
 // test comment two
 // test comment three
