@@ -67,7 +67,7 @@ public class MutationSwap extends AbstractMutation
 	public boolean mutate(Relation r)
 	{
 		if(r.isCond())
-			throw new UnsupportedOperationException();
+			return false;
 		Expr temp = r.getLeft();
 		r.setLeft(r.getRight());
 		r.setRight(temp);

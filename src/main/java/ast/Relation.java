@@ -42,6 +42,7 @@ public class Relation extends AbstractNode implements Condition
 	public void setLeft(Expr newLeft)
 	{
 		left = newLeft;
+		left.setParent(this);
 	}
 	public Expr getRight()
 	{
@@ -50,10 +51,29 @@ public class Relation extends AbstractNode implements Condition
 	public void setRight(Expr newRight)
 	{
 		right = newRight;
+		right.setParent(this);
 	}
 	public boolean isCond()
 	{
 		return op == RelOp.ISCOND;
+	}
+	public void setRelOp(RelOp ro)
+	{
+		if (this.op.equals(RelOp.ISCOND))
+			return;
+		if (ro.equals(RelOp.ISCOND))
+		{
+			if (this.cond == null)
+			{
+				Condition c = new Relation(this.left, this.op, this.right);
+				this.cond = c;
+				this.op = RelOp.ISCOND;
+			}
+			else if (this.cond != null)
+				this.op = RelOp.ISCOND;
+		}
+		else
+			this.op = ro;
 	}
 	
 	@Override
@@ -95,15 +115,8 @@ public class Relation extends AbstractNode implements Condition
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	@Override
 	public boolean replaceChild(Node child, Node replacement)
@@ -117,10 +130,7 @@ public class Relation extends AbstractNode implements Condition
 				return true;
 			}
 			else
-			{
-				System.out.println("You messed up RCW in Relation."); //TODO remove when done testing
 				return false;
-			}
 		}
 		
 		if(child == this.left)
@@ -135,8 +145,13 @@ public class Relation extends AbstractNode implements Condition
 			right.setParent(this);
 			return true;
 		}
-		System.out.println("You messed up RCW in Relation."); //TODO remove when done testing
 		return false;
+	}
+	@Override
+	public Node searchChildrenForSimilarType()
+	{
+		// Since no child of a relation node will be of type relation, this method is unsupported.
+		return null;
 	}
 	@Override
 	public StringBuilder prettyPrint(StringBuilder sb)
@@ -180,30 +195,5 @@ public class Relation extends AbstractNode implements Condition
 	public NodeType getType()
 	{
 		return NodeType.RELATION;
-	}
-
-	@Override
-	public Node searchChildrenForSimilarType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void setRelOp(RelOp ro) {
-		if (this.op.equals(RelOp.ISCOND)) {
-			return;
-		}
-		if (ro.equals(RelOp.ISCOND)) {
-			if (this.cond == null) {
-				Condition c = new Relation(this.left, this.op, this.right);
-				this.cond = c;
-				this.op = RelOp.ISCOND;
-			}
-			else if (this.cond != null) {
-				this.op = RelOp.ISCOND;
-			}
-		}
-		else {
-			this.op = ro;
-		}
 	}
 }

@@ -1,7 +1,5 @@
 package ast;
 
-import ast.Node.NodeType;
-
 /** A representation of a binary numerical expression that evaluates to an integer. */
 public class BinaryExpr extends AbstractNode implements Expr
 {
@@ -41,6 +39,11 @@ public class BinaryExpr extends AbstractNode implements Expr
 		right = newRight;
 		right.setParent(this);
 	}
+	public void setOperator(MathOp op)
+	{
+		this.operator = op;
+	}
+	
 	@Override
 	public int size()
 	{
@@ -71,15 +74,8 @@ public class BinaryExpr extends AbstractNode implements Expr
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override
@@ -150,9 +146,5 @@ public class BinaryExpr extends AbstractNode implements Expr
 	public NodeType getType()
 	{
 		return NodeType.BINARYEXPR;
-	}
-	
-	public void setOperator(MathOp op) {
-		this.operator = op;
 	}
 }

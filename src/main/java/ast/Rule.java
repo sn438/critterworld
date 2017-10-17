@@ -47,15 +47,8 @@ public class Rule extends AbstractNode
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 
 	@Override
@@ -73,7 +66,6 @@ public class Rule extends AbstractNode
 			comm.setParent(this);
 			return true;
 		}
-		System.out.println("You messed up RCW in Rule."); //TODO remove when done testing
 		return false;
 	}
 	

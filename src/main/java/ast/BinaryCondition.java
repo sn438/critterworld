@@ -70,15 +70,8 @@ public class BinaryCondition extends AbstractNode implements Condition
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override
@@ -96,7 +89,6 @@ public class BinaryCondition extends AbstractNode implements Condition
 			right.setParent(this);
 			return true;
 		}
-		System.out.println("You messed up RCW in BinaryCondition."); //TODO remove when done testing
 		return false;
 	}
 	

@@ -58,15 +58,8 @@ public class Action extends AbstractNode implements CommandComponent
 	@Override
 	public boolean acceptMutation(Mutation m)
 	{
-		try
-		{
-			boolean result = m.mutate(this);
-			return result;
-		}
-		catch(UnsupportedOperationException u)
-		{
-			return false;
-		}
+		boolean result = m.mutate(this);
+		return result;
 	}
 	
 	@Override
@@ -131,16 +124,16 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
-	public void setActType(ActType at) {
+	public void setActType(ActType at)
+	{
 		Random r = new Random();
-		if (!(this.act.equals(ActType.TAG) || this.act.equals(ActType.SERVE))){
-			if ((at.equals(ActType.TAG) || at.equals(ActType.SERVE))) {
+		if (!(this.act.equals(ActType.TAG) || this.act.equals(ActType.SERVE)))
+		{
+			if ((at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
 				this.val = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
-			}
 		}
-		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE))){
+		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
 			this.val = null;
-		}
 		this.act = at;
 	}
 	/** An enumeration of all the possible action types. */
