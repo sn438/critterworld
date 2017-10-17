@@ -20,14 +20,8 @@ public class MutationInsert extends AbstractMutation
 	@Override
 	public boolean mutate(BinaryCondition c)
 	{
-		//finds the root of the AST
 		Node root = findRoot(c);
-		while(root.getParent() != null)
-			root = root.getParent();
-		if (printMutationDetail) {
-		System.out.println("Node that is being mutated: " + c + "\n");
-		System.out.println("Program before being mutated: " + root + "\n");
-		}
+
 		//The only possible parent of a condition node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
 		Condition copy = null;
@@ -62,20 +56,16 @@ public class MutationInsert extends AbstractMutation
 		BinaryCondition toInsert = new BinaryCondition(c, op, copy);
 		parent.replaceChild(c, toInsert);
 		if(printMutationDetail)
-			System.out.println("Replaced the binary condition node\n");
+			System.out.println("Inserted the binary condition node " + copy.toString());
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Relation r)
 	{
 		//finds the root of the AST
 		Node root = findRoot(r);
-		while(root.getParent() != null)
-			root = root.getParent();
-		if (printMutationDetail == true) {
-			System.out.println("Node that is being mutated: " + r + "\n");
-			System.out.println("Program before being mutated: " + root + "\n");
-		}			
+				
 		//The only possible parent of a relation node is another condition.
 		//BinaryCondition nodes require two children, so we search the rest of the tree for another condition node
 		Condition copy = null;
@@ -108,22 +98,16 @@ public class MutationInsert extends AbstractMutation
 		Node parent = r.getParent();
 		BinaryCondition toInsert = new BinaryCondition(r, op, copy);
 		parent.replaceChild(r, toInsert);
-		if (printMutationDetail == true) {
-		System.out.println("Program after being mutated: " + root + "\n");
-		}
+		if (printMutationDetail == true)
+			System.out.println("Inserted the binary condition node " + copy.toString() + "with parent " + parent.toString());
 		return true;
 	}
 
+	@Override
 	public boolean mutate(BinaryExpr be)
 	{
 		//finds the root of the AST
 		Node root = findRoot(be);
-		while(root.getParent() != null)
-			root = root.getParent();
-		if (printMutationDetail == true) {
-			System.out.println("Node that is being mutated: " + be + "\n");
-			System.out.println("Program before being mutated: " + root + "\n");
-		}	
 		
 		//Finds another compatible expression node
 		Expr copy = null;
@@ -166,23 +150,17 @@ public class MutationInsert extends AbstractMutation
 		Node parent = be.getParent();
 		BinaryExpr toInsert = new BinaryExpr(be, op, copy);
 		parent.replaceChild(be, toInsert);
-		if (printMutationDetail == true) {
-			System.out.println("Program after being mutated: " + root + "\n");
-			}
+		if (printMutationDetail == true)
+			System.out.println("Inserted the binary condition node " + copy.toString() + "with parent " + parent.toString());
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(UnaryExpr ue)
 	{
 		//finds the root of the AST
 		Node root = findRoot(ue);
-		while(root.getParent() != null)
-			root = root.getParent();
-		if (printMutationDetail == true) {
-			System.out.println("Node that is being mutated: " + ue + "\n");
-			System.out.println("Parent of the Node: " + ue.getParent() + "\n");
-			System.out.println("Program before being mutated: " + root + "\n");
-		}
+		
 		//Finds another compatible expression node
 		Expr copy = null;
 		int size = root.size();
@@ -225,23 +203,18 @@ public class MutationInsert extends AbstractMutation
 		BinaryExpr toInsert = new BinaryExpr(ue, op, copy);
 		parent.replaceChild(ue, toInsert);
 		if (printMutationDetail == true) {
-			System.out.println("Program after being mutated: " + root + "\n");
+			System.out.println("Inserted the expr condition node " + copy.toString() + "with parent " + parent.toString());
 			}
 		return true;
 	}
 	
+	@Override
 	public boolean mutate(Sensor s)
 	{
 		//finds the root of the AST
 		Node root = findRoot(s);
-		while(root.getParent() != null)
-			root = root.getParent();
-		if (printMutationDetail == true) {
-			System.out.println("Node that is being mutated: " + s + "\n");
-			System.out.println("Parent of the Node: " + s.getParent() + "\n");
-			System.out.println("Program before being mutated: " + root + "\n");
-		}
-//Finds another compatible expression node
+
+		//Finds another compatible expression node
 		Expr copy = null;
 		int size = root.size();
 		int rand = (int) (Math.random() * size);
@@ -283,7 +256,7 @@ public class MutationInsert extends AbstractMutation
 		BinaryExpr toInsert = new BinaryExpr(s, op, copy);
 		parent.replaceChild(s, toInsert);
 		if (printMutationDetail == true) {
-			System.out.println("Program after being mutated: " + root + "\n");
+			System.out.println("Inserted the binary expression node " + copy.toString() + "with parent " + parent.toString());
 			}
 		return true;
 	}

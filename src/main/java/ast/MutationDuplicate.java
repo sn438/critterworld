@@ -34,7 +34,7 @@ public class MutationDuplicate extends AbstractMutation
 			return false;
 		p.getRulesList().add(copy);
 		if(printMutationDetail)
-			System.out.println("Duplicated the Rule node\n" + copy.toString() + "\n");
+			System.out.println("Duplicated the Rule node" + copy.toString());
 		return true;
 	}
 	
@@ -59,7 +59,7 @@ public class MutationDuplicate extends AbstractMutation
 		if(copy == null)
 			return false;
 		if(printMutationDetail)
-			System.out.println("Duplicated the Update node\n" + copy.toString() + "\n");
+			System.out.println("Duplicated the Update node" + copy.toString());
 		comm.getUpdateList().add(copy);
 		return true;
 	}
