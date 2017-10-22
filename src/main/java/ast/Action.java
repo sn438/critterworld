@@ -2,8 +2,6 @@ package ast;
 
 import java.util.Random;
 
-import ast.Action.ActType;
-
 /** An AST representation of a critter action. */
 public class Action extends AbstractNode implements CommandComponent
 {
