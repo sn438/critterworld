@@ -1,5 +1,7 @@
 package ast;
 
+import interpret.Interpreter;
+
 /** A representation of a binary numerical expression that evaluates to an integer. */
 public class BinaryExpr extends AbstractNode implements Expr
 {
@@ -20,25 +22,34 @@ public class BinaryExpr extends AbstractNode implements Expr
 		left.setParent(this);
 		right.setParent(this);
 	}
-	
+	/** Returns the left child of this binary expression. */
 	public Expr getLeft()
 	{
 		return left;
 	}
+	/** Sets the value of {@code left} to {@code newLeft}. */
 	public void setLeft(Expr newLeft)
 	{
 		left = newLeft;
 		left.setParent(this);
 	}
+	/** Returns the right child of this binary expression. */
 	public Expr getRight()
 	{
 		return right;
 	}
+	/** Sets the value of {@code right} to {@code newRight}. */
 	public void setRight(Expr newRight)
 	{
 		right = newRight;
 		right.setParent(this);
 	}
+	/** Returns the operator type of this binary expression. */
+	public MathOp getOperator()
+	{
+		return operator;
+	}
+	/** Sets the value of {@code operator} to {@code op}. */
 	public void setOperator(MathOp op)
 	{
 		this.operator = op;
@@ -131,9 +142,9 @@ public class BinaryExpr extends AbstractNode implements Expr
 		return sb;
 	}
 	@Override
-	public int evaluate()
+	public int acceptEvaluation(Interpreter i)
 	{
-		throw new UnsupportedOperationException();
+		return i.eval(this);
 	}
 
 	/** Enumerates all the accepted binary mathematical operations. */

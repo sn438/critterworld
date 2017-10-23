@@ -34,7 +34,7 @@ public class MutationTransform extends AbstractMutation
 			op = BinaryCondition.Operator.OR;
 			break;
 		}
-		c.setOperator(op);
+		c.setOp(op);
 		if(printMutationDetail)
 			System.out.println("Transformed the Condition node\n" + c + "\n");
 		return true;

@@ -1,12 +1,14 @@
 package ast;
 
 import java.util.Random;
+import interpret.Interpreter;
 
 /** An AST representation of a Sensor node. */
 public class Sensor extends AbstractNode implements Expr
 {
 	/** The type of this Sensor node. */
 	private SensorType type;
+	/** The sensor index of this node. Not compatible with SensorType SMELL. */
 	private Expr sensorIndex;
 	
 	/** Creates a new Sensor node with the specified type and index. Not compatible with SensorType SMELL. */
@@ -22,6 +24,21 @@ public class Sensor extends AbstractNode implements Expr
 	{
 		type = SensorType.SMELL;
 		sensorIndex = null;
+	}
+	
+	/** Returns the type of this sensor. */
+	public SensorType getSensorType()
+	{
+		return type;
+	}
+	
+	/** 
+	 * Returns the sensor index of this sensor, if there is one.
+	 * Precondition: this sensor is not of type SMELL.
+	 */
+	public Expr getSensorIndex()
+	{
+		return sensorIndex;
 	}
 	
 	/** Sets the SensorType of this sensor node. */
@@ -111,9 +128,9 @@ public class Sensor extends AbstractNode implements Expr
 	}
 	
 	@Override
-	public int evaluate()
+	public int acceptEvaluation(Interpreter i)
 	{
-		throw new UnsupportedOperationException();
+		return i.eval(this);
 	}
 	
 	/** An enumeration of all the possible Sensor types. */

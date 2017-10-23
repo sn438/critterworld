@@ -1,5 +1,7 @@
 package ast;
 
+import interpret.Interpreter;
+
 /** A representation of a unary numerical expression that evaluates to an integer. */
 public class UnaryExpr extends AbstractNode implements Expr
 {
@@ -7,6 +9,7 @@ public class UnaryExpr extends AbstractNode implements Expr
 	private ExprType type;
 	/** The subexpression that this unary expression is based off of. May be null. */
 	private Expr exp;
+	/** The integer value contained in this unary expression, if it has one. Only applies to expressions of type CONSTANT. */
 	private int value;
 	
 	/** 
@@ -32,6 +35,32 @@ public class UnaryExpr extends AbstractNode implements Expr
 		this.type = ExprType.CONSTANT;
 	}
 	
+	/** Returns the type of this unary expression. */
+	public ExprType getExprType()
+	{
+		return type;
+	}
+	
+	/**
+	 * Returns the integer value contained in this unary expression.
+	 * Precondition: the type of this expression must be CONSTANT.
+	 */
+	public int getValue()
+	{
+		return value;
+	}
+	/** Sets the value of {@code value} to {@code val}. */
+	public void setValue(int val)
+	{
+		this.exp = null;
+		this.value = val;
+		this.type = ExprType.CONSTANT;
+	}
+	
+	public Expr getExp()
+	{
+		return exp;
+	}
 	@Override
 	public int size()
 	{
@@ -101,35 +130,25 @@ public class UnaryExpr extends AbstractNode implements Expr
 			case NEGATION:
 				sb.append("-" + exp.toString());
 				break;
-			case SENSORVAL:
-				//if this UnaryExpr has the type of SENSORVAL, then the class type of exp should be Sensor
-				sb.append(exp.toString());
-				break;
 		}
 		return sb;
 	}
 	
 	@Override
-	public int evaluate()
+	public int acceptEvaluation(Interpreter i)
 	{
-		throw new UnsupportedOperationException();
+		return i.eval(this);
 	}
 	
 	/** An enumeration of all the possible unary expression types. */
 	public enum ExprType
 	{
-		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION, SENSORVAL;
+		CONSTANT, MEMORYVAL, EXPRESSION, NEGATION;
 	}
 
 	@Override
 	public NodeType getType()
 	{
 		return NodeType.UNARYEXPR;
-	}
-	
-	public void setValue(int value) {
-		this.exp = null;
-		this.value = value;
-		this.type = ExprType.CONSTANT;
 	}
 }

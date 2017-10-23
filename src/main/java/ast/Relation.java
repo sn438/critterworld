@@ -1,5 +1,7 @@
 package ast;
 
+import interpret.Interpreter;
+
 /** A representation of a relational comparison between two numerical expressions. */
 public class Relation extends AbstractNode implements Condition
 {
@@ -9,10 +11,10 @@ public class Relation extends AbstractNode implements Condition
 	private RelOp op;
 	/** The right child of this node. */
 	private Expr right;
-	
+	/** The condition contained in this relation, if there is one. */
 	private Condition cond;
 	
-	/** Creates a relational comparison between two numerical expressions, representing l o r.*/
+	/** Creates a relational comparison between two numerical expressions, representing l op r.*/
 	public Relation(Expr l, RelOp o, Expr r)
 	{
 		this.left = l;
@@ -35,32 +37,62 @@ public class Relation extends AbstractNode implements Condition
 		cond.setParent(this);
 	}
 
+	/** 
+	 * Returns the left child of this relation. 
+	 * Precondition: {@code this.op != ISCOND}
+	 */
 	public Expr getLeft()
 	{
 		return left;
 	}
+	
+	/** Sets the value of {@code left} to {@code newLeft}. */
 	public void setLeft(Expr newLeft)
 	{
 		left = newLeft;
 		left.setParent(this);
 	}
+	
+	/** 
+	 * Returns the right child of this relation. 
+	 * Precondition: {@code this.op != ISCOND}
+	 */
 	public Expr getRight()
 	{
 		return right;
 	}
+	
+	/** Sets the value of {@code right} to {@code newRight}. */
 	public void setRight(Expr newRight)
 	{
 		right = newRight;
 		right.setParent(this);
 	}
+	
+	/** Returns a boolean based on whether or not this relation node contains a condition. */
 	public boolean isCond()
 	{
 		return op == RelOp.ISCOND;
 	}
 	
+	/**
+	 * Returns the condition this relation contains.
+	 * Precondition: {@code this.op == ISCOND}
+	 */
+	public Condition getCond()
+	{
+		return cond;
+	}
+	
+	/** Returns the type of this Relation. */
+	public RelOp getRelOp()
+	{
+		return op;
+	}
+	/** Sets the value of {@code op} to {@code ro}, if {@code op} is not equal to ISCOND. */
 	public void setRelOp(RelOp ro)
 	{
-		if (this.op.equals(RelOp.ISCOND))
+		if (isCond())
 			return;
 		if (ro.equals(RelOp.ISCOND))
 		{
@@ -80,7 +112,7 @@ public class Relation extends AbstractNode implements Condition
 	@Override
 	public int size()
 	{
-		if(op == RelOp.ISCOND)
+		if(isCond())
 			return 1 + cond.size();
 		return 1 + left.size() + right.size();
 	}
@@ -92,7 +124,7 @@ public class Relation extends AbstractNode implements Condition
 			return this;
 		if(index > size() - 1 || index < 0)
 			throw new IndexOutOfBoundsException();
-		if(op == RelOp.ISCOND)
+		if(isCond())
 			return cond.nodeAt(index - 1);
 		else
 		{
@@ -106,7 +138,7 @@ public class Relation extends AbstractNode implements Condition
 	@Override
 	public Relation clone()
 	{
-		if(op == RelOp.ISCOND)
+		if(isCond())
 			return new Relation(cond.clone());
 		Expr tempLeft = left.clone();
 		Expr tempRight = right.clone();
@@ -122,7 +154,7 @@ public class Relation extends AbstractNode implements Condition
 	@Override
 	public boolean replaceChild(Node child, Node replacement)
 	{
-		if(op == RelOp.ISCOND)
+		if(isCond())
 		{
 			if(child == this.cond)
 			{
@@ -183,9 +215,9 @@ public class Relation extends AbstractNode implements Condition
 		return sb;
 	}
 	@Override
-	public boolean evaluate()
+	public boolean acceptEvaluation(Interpreter i)
 	{
-		throw new UnsupportedOperationException();
+		return i.eval(this);
 	}
 	/** An enumeration of all the accepted mathematical relational operators. */
 	public enum RelOp

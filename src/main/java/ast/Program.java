@@ -1,8 +1,13 @@
 package ast;
 
+import java.util.LinkedList;
+
 /** An abstraction of a critter program. */
 public interface Program extends Node
 {
+	/** Returns the list of rules contained in this program node. */
+	public LinkedList<Rule> getRulesList();
+	
 	/**
 	 * Mutates this program with a single mutation
 	 * @return The root of the mutated AST

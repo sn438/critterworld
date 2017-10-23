@@ -1,5 +1,7 @@
 package ast;
 
+import interpret.Interpreter;
+
 /** A representation of a binary Boolean condition: 'and' or 'or' */
 public class BinaryCondition extends AbstractNode implements Condition
 {
@@ -20,44 +22,43 @@ public class BinaryCondition extends AbstractNode implements Condition
 		left.setParent(this);
 		right.setParent(this);
 	}
-	/**
-	 * getLeft returns the left node for the BinaryCondition.
-	 * @return left node.
-	 */
+	/** Returns the left child of this binary condition. */
 	public Condition getLeft()
 	{
 		return left;
 	}
 	
-	/**
-	 * setLeft sets the left node for the Binary Condition.
-	 * @param newLeft is the new left node of the Binary Condition.
-	 */
+	/** Sets the value of {@code left} to {@code newleft}. */
 	public void setLeft(Condition newLeft)
 	{
 		left = newLeft;
 		left.setParent(this);
 	}
 	
-	/**
-	 * getRight returns the right node for the BinaryCondition.
-	 * @return right node.
-	 */
+	/** Returns the right child of this binary condition. */
 	public Condition getRight()
 	{
 		return right;
 	}
 	
-	/**
-	 * setRight sets the left node for the Binary Condition.
-	 * @param newRight is the new left node of the Binary Condition.
-	 */
+	/** Sets the value of {@code right} to {@code newRight}. */
 	public void setRight(Condition newRight)
 	{
 		right = newRight;
 		right.setParent(this);
 	}
 	
+	/** Returns the operator type of this binary condition. */
+	public Operator getOp()
+	{
+		return op;
+	}
+	
+	/** Sets the value of {@code op} to {@code o}. */
+	public void setOp(Operator o)
+	{
+		this.op = o;
+	}
 	@Override
 	public int size()
 	{
@@ -130,9 +131,9 @@ public class BinaryCondition extends AbstractNode implements Condition
 	}
 
 	@Override
-	public boolean evaluate()
+	public boolean acceptEvaluation(Interpreter i)
 	{
-		throw new UnsupportedOperationException();
+		return i.eval(this);
 	}
 
 	/** An enumeration of all possible binary condition operators. */
@@ -145,12 +146,5 @@ public class BinaryCondition extends AbstractNode implements Condition
 	public NodeType getType()
 	{
 		return NodeType.BINARYCONDITION;
-	}
-	/**
-	 * setOperator sets the operator to op.
-	 * @param op is the parameter that operator is being set to. 
-	 */
-	public void setOperator(Operator op) {
-		this.op = op;
 	}
 }

@@ -16,6 +16,7 @@ public class ProgramImpl extends AbstractNode implements Program
 			r.setParent(this);
 	}
 	
+	@Override
 	public LinkedList<Rule> getRulesList()
 	{
 		return RulesList;
@@ -100,22 +101,22 @@ public class ProgramImpl extends AbstractNode implements Program
 			switch(rand)
 			{
 				case 0:
-					m = MutationFactory.getRemove(true);
+					m = MutationFactory.getRemove(false);
 					break;
 				case 1:
-					m = MutationFactory.getSwap(true);
+					m = MutationFactory.getSwap(false);
 					break;
 				case 2:
-					m = MutationFactory.getReplace(true);
+					m = MutationFactory.getReplace(false);
 					break;
 				case 3:
-					m = MutationFactory.getTransform(true);
+					m = MutationFactory.getTransform(false);
 					break;
 				case 4:
-					m = MutationFactory.getInsert(true);
+					m = MutationFactory.getInsert(false);
 					break;
 				case 5:
-					m = MutationFactory.getDuplicate(true);
+					m = MutationFactory.getDuplicate(false);
 					break;
 			}
 			valid = mutate(randIndex, m);
