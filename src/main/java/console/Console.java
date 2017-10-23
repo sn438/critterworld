@@ -26,7 +26,6 @@ public class Console
 
 	/**
 	 * Starts new simulation with world specified in filename.
-	 *
 	 * @param filename
 	 */
 	public void loadWorld(String filename)
@@ -48,7 +47,6 @@ public class Console
 
 	/**
 	 * Advances the world by n time steps.
-	 *
 	 * @param n
 	 */
 	public void advanceTime(int n)

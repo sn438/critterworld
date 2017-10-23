@@ -17,6 +17,18 @@ public class Rule extends AbstractNode
 		comm.setParent(this);
 	}
 	
+	/** Returns the condition of this rule. */
+	public Condition getCond()
+	{
+		return cond;
+	}
+	
+	/** Returns the command of this rule. */
+	public Command getComm()
+	{
+		return comm;
+	}
+	
 	@Override
 	public int size()
 	{

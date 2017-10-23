@@ -22,18 +22,25 @@ public class Update extends AbstractNode implements CommandComponent
 		value.setParent(this);
 	}
 	
+	/** Returns the memory index of this update. */
 	public Expr getMemIndex()
 	{
 		return memIndex;
 	}
+	
+	/** Sets the value of {@code memIndex} to {@code newIndex}. */
 	public void setMemIndex(Expr newIndex)
 	{
 		this.memIndex = newIndex;
 	}
+	
+	/** Returns the new value to be set for this update. */
 	public Expr getValue()
 	{
 		return value;
 	}
+	
+	/** Sets the value of {@code value} to {@code newVal}. */
 	public void setValue(Expr newVal)
 	{
 		this.value = newVal;

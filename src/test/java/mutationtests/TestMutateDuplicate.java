@@ -16,10 +16,8 @@ import parse.ParserFactory;
 import parsertests.ParserTest;
 
 /**
- * 
  * This test class essentially tests the Duplicate Mutation by applying the Duplicate Mutation to random nodes 
  * in the program. If the mutation cannot be handled then an error statement is printed and the test ends gracefully.
- *
  */
 public class TestMutateDuplicate {
 

@@ -1,6 +1,8 @@
 package interpret;
 
 import ast.*;
+import ast.Action.ActType;
+import ast.Node.NodeType;
 import simulation.Critter;
 import simulation.SimpleWorld;
 
@@ -10,7 +12,7 @@ public class InterpreterImpl implements Interpreter
 {
 	/** The critter whose AST this Interpreter interprets. */
 	private Critter c;
-	
+	/** The world in which the critter inhabits. */
 	private SimpleWorld world;
 	
 	/** Creates a new InterpreterImpl. */
@@ -25,7 +27,42 @@ public class InterpreterImpl implements Interpreter
 	{
 		// TODO Auto-generated method stub
 		LinkedList<Rule> rl = p.getRulesList();
-		return null;
+		Action a = null;
+		int rulesCompleted = 0;
+		boolean actionInterpreted = false;
+		while (!actionInterpreted && rulesCompleted <= 999) //TODO work on constants.txt
+		{
+			for (Rule r : rl)
+			{
+				boolean ruleCondition = r.getCond().acceptEvaluation(this);
+				if(ruleCondition)
+				{
+					Command ruleCommand = r.getComm();
+					for(Update u : ruleCommand.getUpdateList())
+						applyUpdate(u);
+					if(ruleCommand.getLast().getType() == NodeType.ACTION)
+					{
+						a = (Action) ruleCommand.getLast();
+						actionInterpreted = true;
+					}
+					else
+						applyUpdate((Update) ruleCommand.getLast());
+					rulesCompleted++;
+					break;
+				}
+			}
+		}
+		if(a == null)
+			return new ActionOutcome(new Action(ActType.WAIT));
+		return new ActionOutcome(a);
+	}
+	
+	/** Applies the effects of a single update to a critter. */
+	private void applyUpdate(Update u)
+	{
+		int index = u.getMemIndex().acceptEvaluation(this);
+		int val = u.getValue().acceptEvaluation(this);
+		c.setMemory(val, index);
 	}
 
 	@Override

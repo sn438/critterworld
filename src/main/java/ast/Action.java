@@ -25,6 +25,26 @@ public class Action extends AbstractNode implements CommandComponent
 		val.setParent(this);
 	}
 	
+	/** Returns the type of action contained in this node. */
+	public ActType getActType()
+	{
+		return act;
+	}
+	
+	/** Sets the value of {@code act} to {@code at}, modifying {@code val} as necessary. */
+	public void setActType(ActType at)
+	{
+		Random r = new Random();
+		if (!(this.act.equals(ActType.TAG) || this.act.equals(ActType.SERVE)))
+		{
+			if ((at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
+				this.val = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
+		}
+		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
+			this.val = null;
+		this.act = at;
+	}
+	
 	@Override
 	public int size()
 	{
@@ -122,23 +142,6 @@ public class Action extends AbstractNode implements CommandComponent
 		return sb;
 	}
 	
-	/**
-	 * setActType sets the ActType for the Action. 
-	 * @param at is the ActType that the Action is being set to. If at is not of the same type as the original 
-	 * ActType, then the value is modified if necessary.
-	 */
-	public void setActType(ActType at)
-	{
-		Random r = new Random();
-		if (!(this.act.equals(ActType.TAG) || this.act.equals(ActType.SERVE)))
-		{
-			if ((at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
-				this.val = new UnaryExpr(java.lang.Integer.MAX_VALUE/r.nextInt());
-		}
-		if (!(at.equals(ActType.TAG) || at.equals(ActType.SERVE)))
-			this.val = null;
-		this.act = at;
-	}
 	/** An enumeration of all the possible action types. */
 	public enum ActType
 	{

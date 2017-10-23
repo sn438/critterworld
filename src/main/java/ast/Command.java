@@ -21,10 +21,19 @@ public class Command extends AbstractNode
 			u.setParent(this);
 		last.setParent(this);
 	}
+	
+	/** Returns the list of updates in this command. */
 	public LinkedList<Update> getUpdateList()
 	{
 		return UpdateList;
 	}
+	
+	/** Returns the last component of this command. */
+	public CommandComponent getLast()
+	{
+		return last;
+	}
+	
 	@Override
 	public int size()
 	{
