@@ -21,7 +21,8 @@ public class Hex
 	@Override
 	public String toString()
 	{
-		//TODO implement
-		return null;
+		if(content == null)
+			return "-";
+		return content.toString();
 	}
 }

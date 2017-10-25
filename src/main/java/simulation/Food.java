@@ -11,4 +11,9 @@ public class Food implements WorldObject
 	{
 		amount = amt;
 	}
+	
+	public String toString()
+	{
+		return "F";
+	}
 }

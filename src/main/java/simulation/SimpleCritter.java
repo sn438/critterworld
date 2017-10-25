@@ -1,7 +1,12 @@
 package simulation;
 
+import ast.Program;
+
 public interface SimpleCritter extends WorldObject
 {
+	/** Returns the ruleset of this critter. */
+	public Program getProgram();
+	
 	/** 
 	 * Returns the value of {@code memory[index]}.
 	 * @param index
@@ -20,4 +25,10 @@ public interface SimpleCritter extends WorldObject
 	
 	/** Increments the pass number of this critter (memory index 5) by one, if it is less than 999. */
 	public void incrementPass();
+	
+	/**
+	 * Turns this critter in the direction specified.
+	 * @param counterclockwise
+	 */
+	public void turn(boolean counterclockwise);
 }

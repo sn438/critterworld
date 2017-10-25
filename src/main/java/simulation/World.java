@@ -35,6 +35,13 @@ public class World implements SimpleWorld
 	}
 	
 	@Override
+	public int getMaxRules()
+	{
+		//TODO implement
+		return 0;
+	}
+	
+	@Override
 	public void loadCritters(String name, int[] mem, Program p, int n)
 	{
 		// TODO Auto-generated method stub
@@ -48,16 +55,29 @@ public class World implements SimpleWorld
 	}
 	
 	@Override
-	public int searchNearby(Critter c, int index)
+	public int searchNearby(SimpleCritter c, int index)
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int searchAhead(Critter c, int index)
+	public int searchAhead(SimpleCritter c, int index)
 	{
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public boolean moveCritter(SimpleCritter c, boolean forward)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public void printGrid()
+	{
+		
 	}
 }

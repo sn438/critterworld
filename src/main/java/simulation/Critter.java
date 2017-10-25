@@ -16,6 +16,8 @@ public class Critter implements SimpleCritter
 	/** The name of this critter, used for identification purposes. */
 	private String name;
 	
+	private Outcome lastActionCompleted;
+	
 	/**
 	 * 
 	 * @param p
@@ -75,6 +77,12 @@ public class Critter implements SimpleCritter
 		return memLength;
 	}
 	
+	@Override
+	public Program getProgram()
+	{
+		return prog;
+	}
+	
 	/** Returns the orientation of this critter. */
 	public Direction getOrientation()
 	{
@@ -110,6 +118,12 @@ public class Critter implements SimpleCritter
 			memory[5]++;
 	}
 	
+	@Override
+	public void turn(boolean counterclockwise)
+	{
+		
+	}
+	
 	/*
 	/** Applies the effects of an update outcome to this critter.
 	public boolean acceptOutcome(UpdateOutcome uo)
@@ -119,8 +133,44 @@ public class Critter implements SimpleCritter
 	}
 	*/
 	
+	@Override
+	public String toString()
+	{
+		return "" + orientation.getValue();
+	}
+	
+	/** An enumeration of all the possible directions a critter can be facing. */
 	public enum Direction
 	{
-		NORTH, SOUTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST;
+		NORTH, NORTHWEST, SOUTHWEST, SOUTH, SOUTHEAST, NORTHEAST;
+		
+		public int getValue()
+		{
+			int result = 0;
+			switch(this)
+			{
+				case NORTH:
+					result = 0;
+					break;
+				case NORTHWEST:
+					result = 1;
+					break;
+				case SOUTHWEST:
+					result = 2;
+					break;
+				case SOUTH:
+					result = 3;
+					break;
+				case SOUTHEAST:
+					result = 4;
+					break;
+				case NORTHEAST:
+					result = 5;
+					break;
+			}
+			return result;
+		}
+		
+		
 	}
 }

@@ -1,22 +1,62 @@
 package interpret;
 
-import simulation.Critter;
+import simulation.SimpleCritter;
+import simulation.SimpleWorld;
 import ast.Action;
+import ast.Action.ActType;
 
 public class ActionOutcome implements Outcome
 {
-	private Action act;
+	private ActType act;
 	
-	public ActionOutcome(Action a)
+	public ActionOutcome(ActType a)
 	{
 		act = a;
 	}
-	@Override
-	public boolean applyOutcome(Critter c)
+	
+	public ActionOutcome(ActType a, int val)
 	{
-		switch(act.getActType())
+		
+	}
+	
+	@Override
+	public void applyOutcome(SimpleCritter c, SimpleWorld w)
+	{
+		switch(act)
 		{
-			case
+			case FORWARD:
+				w.moveCritter(c, true);
+				break;
+			case BACKWARD:
+				w.moveCritter(c, false);
+				break;
+			case LEFT:
+				c.turn(true);
+				break;
+			case RIGHT:
+				c.turn(false);
+				break;
+			case EAT:
+				sb.append("eat");
+				break;
+			case ATTACK:
+				sb.append("attack");
+				break;
+			case GROW:
+				sb.append("grow");
+				break;
+			case BUD:
+				sb.append("bud");
+				break;
+			case MATE:
+				sb.append("mate");
+				break;
+			case TAG:
+				sb.append("tag[" + val.toString() + "]");
+				break;
+			case SERVE: 
+				sb.append("serve[" + val.toString() + "]");
+				break;
 		}
 	}
 }

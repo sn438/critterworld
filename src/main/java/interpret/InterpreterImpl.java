@@ -3,7 +3,7 @@ package interpret;
 import ast.*;
 import ast.Action.ActType;
 import ast.Node.NodeType;
-import simulation.Critter;
+import simulation.SimpleCritter;
 import simulation.SimpleWorld;
 
 import java.util.LinkedList;
@@ -11,15 +11,22 @@ import java.util.LinkedList;
 public class InterpreterImpl implements Interpreter
 {
 	/** The critter whose AST this Interpreter interprets. */
-	private Critter c;
+	private SimpleCritter c;
 	/** The world in which the critter inhabits. */
 	private SimpleWorld world;
 	
 	/** Creates a new InterpreterImpl. */
-	public InterpreterImpl(Critter cr, SimpleWorld sw)
+	public InterpreterImpl(SimpleCritter cr, SimpleWorld sw)
 	{
 		c = cr;
 		world = sw;
+	}
+	
+	/** Executes the results of one critter turn. */
+	public void simulateCritterTurn()
+	{
+		Outcome o = interpret(c.getProgram());
+		o.applyOutcome(c, world);
 	}
 	
 	@Override
@@ -29,7 +36,7 @@ public class InterpreterImpl implements Interpreter
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
 		boolean actionInterpreted = false;
-		while (!actionInterpreted && c.readMemory(5) < 999) //TODO work on constants.txt
+		while (!actionInterpreted && c.readMemory(5) < world.getMaxRules()) //TODO work on constants.txt
 		{
 			for (Rule r : rl)
 			{
@@ -52,8 +59,8 @@ public class InterpreterImpl implements Interpreter
 			}
 		}
 		if(a == null)
-			return new ActionOutcome(new Action(ActType.WAIT));
-		return new ActionOutcome(a);
+			return new ActionOutcome(ActType.WAIT);
+		return new ActionOutcome(a.getActType());
 	}
 	
 	/** Applies the effects of a single update to a critter. */
