@@ -17,7 +17,7 @@ import ast.MutationInsert;
 import ast.BinaryExpr.*;
 import parse.Parser;
 import parse.ParserFactory;
-import parsertests.ParserTest;
+import parsertests.ASTParserTest;
 import ast.MutationSwap;
 import ast.Program;
 import ast.UnaryExpr;
@@ -34,7 +34,7 @@ public class TestMutateSwap {
 	Program prog;
 	@Before
 	public void setup() {
-		InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+		InputStream in = ASTParserTest.class.getResourceAsStream("example-rules.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
         prog = p.parse(r);

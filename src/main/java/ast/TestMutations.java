@@ -13,7 +13,7 @@ import ast.UnaryExpr.ExprType;
 import parse.Parser;
 import parse.ParserFactory;
 import parse.Tokenizer;
-import parsertests.ParserTest;
+import parsertests.ASTParserTest;
 
 public class TestMutations
 {
@@ -70,7 +70,7 @@ public class TestMutations
 		c.acceptMutation(new MutationDuplicate());
 		System.out.println(c.toString());*/
 		
-		InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+		InputStream in = ASTParserTest.class.getResourceAsStream("example-rules.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Tokenizer t = new Tokenizer(r);
         Parser p = ParserFactory.getParser();

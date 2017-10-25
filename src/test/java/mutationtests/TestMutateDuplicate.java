@@ -13,7 +13,7 @@ import ast.MutationReplace;
 import ast.Program;
 import parse.Parser;
 import parse.ParserFactory;
-import parsertests.ParserTest;
+import parsertests.ASTParserTest;
 
 /**
  * This test class essentially tests the Duplicate Mutation by applying the Duplicate Mutation to random nodes 
@@ -25,7 +25,7 @@ public class TestMutateDuplicate {
 
 	@Before
 	public void setup() {
-		InputStream in = ParserTest.class.getResourceAsStream("example-rules.txt");
+		InputStream in = ASTParserTest.class.getResourceAsStream("example-rules.txt");
 		Reader r = new BufferedReader(new InputStreamReader(in));
 		Parser p = ParserFactory.getParser();
 		prog = p.parse(r);

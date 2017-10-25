@@ -15,19 +15,19 @@ import parse.ParserFactory;
 import parse.Tokenizer;
 
 /** This class contains tests for the Critter parser. */
-public class ParserTest
+public class ASTParserTest
 {
     /** Checks that a valid critter program is not {@code null} when parsed. 
      * Different test cases were run using this same method by changing the filename for the input stream
      * This methodology was implemented because the program terminates elsewhere in the program, so the 
      * remainder of the tests cannot be performed. A key of the filename and the type of error it tests is included
      * in the overview.
-     * */
+     */
 	
     @Test
     public void testProgramIsNotNull()
     {
-        InputStream in = ParserTest.class.getResourceAsStream("draw_critter.txt");
+        InputStream in = ASTParserTest.class.getResourceAsStream("draw_critter.txt");
         Reader r = new BufferedReader(new InputStreamReader(in));
         Parser p = ParserFactory.getParser();
         Program prog = p.parse(r);

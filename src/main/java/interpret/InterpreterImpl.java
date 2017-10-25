@@ -28,9 +28,8 @@ public class InterpreterImpl implements Interpreter
 		// TODO Auto-generated method stub
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
-		int rulesCompleted = 0;
 		boolean actionInterpreted = false;
-		while (!actionInterpreted && rulesCompleted <= 999) //TODO work on constants.txt
+		while (!actionInterpreted && c.readMemory(5) < 999) //TODO work on constants.txt
 		{
 			for (Rule r : rl)
 			{
@@ -47,7 +46,7 @@ public class InterpreterImpl implements Interpreter
 					}
 					else
 						applyUpdate((Update) ruleCommand.getLast());
-					rulesCompleted++;
+					c.incrementPass();
 					break;
 				}
 			}

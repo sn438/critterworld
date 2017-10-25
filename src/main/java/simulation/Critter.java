@@ -3,7 +3,7 @@ package simulation;
 import interpret.*;
 import ast.Program;
 
-public class Critter implements WorldObject
+public class Critter implements SimpleCritter
 {
 	/** The set of rules for this critter. */
 	private Program prog;
@@ -11,17 +11,62 @@ public class Critter implements WorldObject
 	private int[] memory;
 	/** The length of this critter's memory. Must be at least 8. */
 	private int memLength;
+	/** The direction this critter is facing. */
+	private Direction orientation;
+	/** The name of this critter, used for identification purposes. */
+	private String name;
 	
 	/**
 	 * 
 	 * @param p
 	 * @param mem
+	 * @param dir
+	 * @param s
 	 */
-	public Critter(Program p, int[] mem)
+	public Critter(Program p, int[] mem, Direction dir, String s)
 	{
 		this.prog = p;
 		this.memory = mem;
 		this.memLength = mem[0];
+		this.orientation = dir;
+		this.name = s;
+	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @param mem
+	 * @param s
+	 */
+	public Critter(Program p, int[] mem, String s)
+	{
+		this.prog = p;
+		this.memory = mem;
+		this.memLength = mem[0];
+		this.name = s;
+		
+		int rand = (int) (Math.random() * 6);
+		switch(rand)
+		{
+			case 0:
+				orientation = Direction.NORTH;
+				break;
+			case 1:
+				orientation = Direction.SOUTH;
+				break;
+			case 2:
+				orientation = Direction.NORTHEAST;
+				break;
+			case 3:
+				orientation = Direction.NORTHWEST;
+				break;
+			case 4:
+				orientation = Direction.SOUTHEAST;
+				break;
+			case 5:
+				orientation = Direction.SOUTHWEST;
+				break;
+		}
 	}
 	
 	/** Returns the memory size of this critter. */
@@ -30,25 +75,21 @@ public class Critter implements WorldObject
 		return memLength;
 	}
 	
-	/** 
-	 * Returns the value of {@code memory[index]}.
-	 * @param index
-	 * @return the value of this critter's memory at the specified index, or -1 if the index lies out-of-bounds
-	 */
+	/** Returns the orientation of this critter. */
+	public Direction getOrientation()
+	{
+		return orientation;
+	}
+	
+	@Override
 	public int readMemory(int index)
 	{
 		if(index < 0 || index >= memLength)
-			return -1;
+			return Integer.MIN_VALUE;
 		return memory[index];
 	}
 	
-	/**
-	 * Sets the memory at index to val. Does nothing if {@code index} is an out-of-bounds or unassignable index
-	 * or if {@code val} is not within the restrictions of that array index.
-	 * @param val
-	 * @param index
-	 * @return Whether or not the memory array was actually altered
-	 */
+	@Override
 	public boolean setMemory(int val, int index)
 	{
 		//this method does nothing if it tries to alter an index of less than 7, or if the index is out of memory's bounds
@@ -62,6 +103,13 @@ public class Critter implements WorldObject
 		return true;
 	}
 	
+	@Override
+	public void incrementPass()
+	{
+		if(memory[5] < 999)
+			memory[5]++;
+	}
+	
 	/*
 	/** Applies the effects of an update outcome to this critter.
 	public boolean acceptOutcome(UpdateOutcome uo)
@@ -71,11 +119,8 @@ public class Critter implements WorldObject
 	}
 	*/
 	
-	public class WorldObserver
+	public enum Direction
 	{
-		void update()
-		{
-			
-		}
+		NORTH, SOUTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST;
 	}
 }
