@@ -18,6 +18,11 @@ public class Hex
 		content = null;
 	}
 	
+	public boolean isEmpty()
+	{
+		return content == null;
+	}
+	
 	@Override
 	public String toString()
 	{

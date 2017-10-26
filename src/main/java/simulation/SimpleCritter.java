@@ -31,4 +31,7 @@ public interface SimpleCritter extends WorldObject
 	 * @param counterclockwise
 	 */
 	public void turn(boolean counterclockwise);
+	
+	
+	public void updateEnergy(int amount);
 }

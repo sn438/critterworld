@@ -1,6 +1,9 @@
 package simulation;
 
 import interpret.*;
+
+import java.util.Arrays;
+
 import ast.Program;
 
 public class Critter implements SimpleCritter
@@ -19,7 +22,7 @@ public class Critter implements SimpleCritter
 	private Outcome lastActionCompleted;
 	
 	/**
-	 * 
+	 * Creates a new Critter with a specified ruleset, memory, orientation, and name.
 	 * @param p
 	 * @param mem
 	 * @param dir
@@ -35,7 +38,7 @@ public class Critter implements SimpleCritter
 	}
 	
 	/**
-	 * 
+	 * Creates a new Critter with a specified ruleset, memory, name, and a random orientation.
 	 * @param p
 	 * @param mem
 	 * @param s
@@ -134,15 +137,19 @@ public class Critter implements SimpleCritter
 	*/
 	
 	@Override
-	public String toString()
+	public String toString() //TODO fix when done testing
 	{
-		return "" + orientation.getValue();
+		String result = name + Arrays.toString(memory) + "\n" + prog.toString();
+		return result;
+		//return "" + orientation.getValue();
 	}
 	
 	/** An enumeration of all the possible directions a critter can be facing. */
 	public enum Direction
 	{
 		NORTH, NORTHWEST, SOUTHWEST, SOUTH, SOUTHEAST, NORTHEAST;
+		
+		
 		
 		public int getValue()
 		{
@@ -170,7 +177,6 @@ public class Critter implements SimpleCritter
 			}
 			return result;
 		}
-		
-		
+			
 	}
 }
