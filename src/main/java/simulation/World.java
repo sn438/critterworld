@@ -3,58 +3,170 @@ package simulation;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import ast.Program;
-import console.FileParser;
 import parse.Parser;
 import parse.ParserFactory;
 
 /** A class to simulate the world state. */
 public class World implements SimpleWorld
 {
+	/** The name of this world. */
+	private String worldname;
 	/** Contains the hex grid of the world. */
 	private Hex[][] grid;
 	/** Maps each critter to a location in the world */
-	private HashMap<Critter, Hex> critterLocations;
+	private HashMap<SimpleCritter, Hex> critterMap;
 	/** Stores all the critters present in the world, in the order in which they were created. */
-	private LinkedList<Critter> critterList;
+	private LinkedList<SimpleCritter> critterList;
 	/** The number of columns in the world grid. */
 	private int columns;
 	/** The number of rows in the world grid. */
 	private int rows;
-	
+	/** The number of hexes that lie on the world grid. */
+	private int numValidHexes;
+	/** A compilation of all the constants needed for world creation. */
 	private HashMap<String, Double> CONSTANTS;
 	
 	/** Loads a world based on a world description file. */
 	public World(String filename) throws FileNotFoundException, IllegalArgumentException
 	{
-		parseConstants();
+		setConstants();
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
 		
+		//parses the world name, and if no valid one is parsed, supplies a default one
+		String name = FileParser.parseAttributeFromLine(bf, "name ");
+		if(name.equals(""))
+			name = "Arrakis";
 		
-	}
-	
-	/** Generates a default size world containing nothing but randomly placed rocks. */
-	public World() throws FileNotFoundException, IllegalArgumentException
-	{
-		parseConstants();
-		
-		columns = CONSTANTS.get("COLUMNS").intValue();
-		rows = CONSTANTS.get("ROWS").intValue();
+		//parses world dimensions, and supplies default ones if no valid dimensions are parsed
+		try
+		{
+			String worldDimensions = FileParser.parseAttributeFromLine(bf, "size ");
+			int spaceIndex = worldDimensions.indexOf(" ");
+			boolean validDimensions = false;
+			if(spaceIndex > -1 && worldDimensions.length() > spaceIndex + 1)
+			{
+				columns = Integer.parseInt(worldDimensions.substring(0, spaceIndex));
+				rows = Integer.parseInt(worldDimensions.substring(spaceIndex + 1));
+				
+				if((columns > 0 && rows > 0 && 2 * rows - columns > 0))
+					validDimensions = true;
+			}
+			if(!validDimensions)
+			{
+				columns = CONSTANTS.get("COLUMNS").intValue();
+				rows = CONSTANTS.get("ROWS").intValue();
+			}
+		}
+		catch (Exception e)
+		{
+			columns = CONSTANTS.get("COLUMNS").intValue();
+			rows = CONSTANTS.get("ROWS").intValue();
+		}
+		numValidHexes = 0;
 		
 		grid = new Hex[columns][rows];
 		for(int i = 0; i < grid.length; i++)
 			for(int j = 0; j < grid[0].length; j++)
-				grid[i][j] = new Hex(i, j);
+				if(isValidHex(i, j))
+				{
+					grid[i][j] = new Hex(i, j);
+					numValidHexes++;
+				}
+		
+		try
+		{
+			String line = bf.readLine();
+			while(line != null)
+			{
+				String[] info = line.split(" ");
+				switch(info[0])
+				{
+					case "rock":
+						addNonCritterObject(new Rock(), Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+						break;
+					case "food":
+						Food f = new Food(Integer.parseInt(info[3]));
+						addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+						break;
+					case "critter":
+						loadCritters(info[1], 1, Integer.parseInt(info[2]), Integer.parseInt(info[3]), Integer.parseInt(info[4]));
+						break;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			return;
+		}
+	}
+	
+	/** Generates a default size world containing nothing but randomly placed rocks. */
+	public World() throws IllegalArgumentException
+	{
+		worldname = "Arrakis";
+		setConstants();
+		
+		columns = CONSTANTS.get("COLUMNS").intValue();
+		rows = CONSTANTS.get("ROWS").intValue();
+		numValidHexes = 0;
+		
+		grid = new Hex[columns][rows];
+		for(int i = 0; i < grid.length; i++)
+			for(int j = 0; j < grid[0].length; j++)
+			{
+				if(isValidHex(i, j))
+				{
+					grid[i][j] = new Hex(i, j);
+					numValidHexes++;
+				}
+			}
+		
+		//randomly fills about 1/12 of the hexes in the world with rocks
+		int c = (int) (Math.random() * columns);
+		int r = (int) (Math.random() * rows);
+		int n = 0;
+		while(n < numValidHexes / 12)
+		{
+			c = (int) (Math.random() * columns);
+			r = (int) (Math.random() * rows);
+			if(isValidHex(c, r))
+			{
+				grid[c][r].addContent(new Rock());
+				n++;
+			}
+		}
 	}
 
 	/** Parses the constants file in the project directory and stores the constants in the CONSTANTS field. */
-	private void parseConstants() throws FileNotFoundException, IllegalArgumentException
+	private void setConstants() throws IllegalArgumentException
 	{
-		BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/constants.txt"));
-		CONSTANTS = FileParser.parseConstants(bf);
+		/*InputStream in = World.class.getResourceAsStream("src/main/resources/constants.txt");
+		if(in == null)
+		{
+			System.err.println("The constants.txt file could not be found in src/main/resources.");
+			System.exit(0);
+		}
+		
+		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
+		CONSTANTS = FileParser.parseConstants(bf);*/
+		
+		try
+		{
+			BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/constants.txt"));
+			CONSTANTS = FileParser.parseConstants(bf);
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("The constants.txt file could not be found in src/main/resources.");
+			System.exit(0);
+		}
 	}
 	
 	/** Checks if a coordinate pair is within the bounds of this world grid. */
@@ -70,48 +182,39 @@ public class World implements SimpleWorld
 	@Override
 	public int getMinMemory()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return CONSTANTS.get("MIN_MEMORY").intValue();
 	}
 	
 	@Override
 	public int getMaxRules()
 	{
-		//TODO implement
-		return 0;
-	}
-	
-	public void loadCritter(Program prog, int[] mem, String name, int c, int r)
-	{
-		if(!isValidHex(c, r))
-			return;
-		//TODO implement
+		return CONSTANTS.get("MAX_RULES_PER_TURN").intValue();
 	}
 	
 	@Override
-	public void loadCritters(String filename, int n)
+	public void loadCritters(String filename, int n, int c, int r, int direction)
 	{
 		// TODO Auto-generated method stub
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(filename));
-			String[] parsed = FileParser.parseAttributes(br);
-			String name = parsed[0].equals("") ? "Untitled" : parsed[0];
-			int[] critMem = FileParser.makeCritterMemory(parsed, minMemory);
-			
-			Parser p = ParserFactory.getParser();
-			Program prog = p.parse(br);
+			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 			
 			for(int i = 0; i < n; i++)
 			{
-				int c = (int) (Math.random() * columns);
-				int r = (int) (Math.random() * rows);
-				while(!isValidHex(c, r))
+				if(!(c == -1 && r == -1))
 				{
 					c = (int) (Math.random() * columns);
 					r = (int) (Math.random() * rows);
+					while(!isValidHex(c, r))
+					{
+						c = (int) (Math.random() * columns);
+						r = (int) (Math.random() * rows);
+					}
 				}
-				loadCritter(prog, critMem, name, c, r);
+				
+				if(isValidHex(c, r))
+					loadCritter(sc, c, r);
 			}
 		}
 		catch (FileNotFoundException e)
@@ -119,6 +222,22 @@ public class World implements SimpleWorld
 			System.err.println("Critter file not found.");
 			return;
 		}
+	}
+	
+	public void loadCritter(SimpleCritter sc, int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return;
+		grid[c][r].addContent(sc);
+		critterList.add(sc);
+		critterMap.put(sc, grid[c][r]);
+	}
+	
+	private void addNonCritterObject(WorldObject wo, int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return;
+		grid[c][r].addContent(wo);
 	}
 	
 	/** Advances the world state by a single time step. */
@@ -151,6 +270,18 @@ public class World implements SimpleWorld
 	@Override
 	public void printGrid()
 	{
-		
+		String result = "";
+		for(int i = 0; i < columns; i++)
+		{
+			for(int j = 0; j < rows; j++)
+			{
+				if(grid[i][j] == null)
+					result += "null ";
+				else
+					result += grid[i][j].toString() + " ";
+			}
+			result += "\n";
+		}
+		System.out.println(result);
 	}
 }

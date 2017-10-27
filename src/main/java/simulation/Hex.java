@@ -18,6 +18,12 @@ public class Hex
 		content = null;
 	}
 	
+	public void addContent(WorldObject wo)
+	{
+		if(isEmpty())
+			content = wo;
+	}
+	/** Returns {@code true} if and only if {@code content == null}. */
 	public boolean isEmpty()
 	{
 		return content == null;

@@ -25,7 +25,14 @@ public class Console
 	/** Starts new random world simulation. */
 	public void newWorld()
 	{
-		world = new World();
+		try
+		{
+			world = new World();
+		}
+		catch (IllegalArgumentException i)
+		{
+			System.err.println("The constants.txt file could not be read. Please check if it is formatted properly.");
+		}
 	}
 
 	/**
@@ -34,7 +41,18 @@ public class Console
 	 */
 	public void loadWorld(String filename)
 	{
-		
+		try
+		{
+			world = new World(filename);
+		}
+		catch (FileNotFoundException f)
+		{
+			System.err.println("File not found.");
+		}
+		catch (IllegalArgumentException i)
+		{
+			System.err.println("The constants.txt file could not be read. Please check if it is formatted properly.");
+		}
 	}
 
 	/**
@@ -56,7 +74,7 @@ public class Console
 			return;
 		}
 		
-		world.loadCritters(filename, n);
+		world.loadCritters(filename, n, -1, -1, -1);
 		/*try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(filename));

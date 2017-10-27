@@ -5,10 +5,10 @@ import java.io.*;
 import org.junit.Test;
 
 import ast.Program;
-import console.FileParser;
 import parse.Parser;
 import parse.ParserFactory;
 import simulation.Critter;
+import simulation.FileParser;
 
 public class FileParserTest
 {

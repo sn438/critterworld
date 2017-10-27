@@ -28,13 +28,34 @@ public class Critter implements SimpleCritter
 	 * @param dir
 	 * @param s
 	 */
-	public Critter(Program p, int[] mem, Direction dir, String s)
+	public Critter(Program p, int[] mem, String s, int dir)
 	{
 		this.prog = p;
 		this.memory = mem;
 		this.memLength = mem[0];
-		this.orientation = dir;
 		this.name = s;
+		
+		switch(dir)
+		{
+			case 0:
+				orientation = Direction.NORTH;
+				break;
+			case 1:
+				orientation = Direction.SOUTH;
+				break;
+			case 2:
+				orientation = Direction.NORTHEAST;
+				break;
+			case 3:
+				orientation = Direction.NORTHWEST;
+				break;
+			case 4:
+				orientation = Direction.SOUTHEAST;
+				break;
+			case 5:
+				orientation = Direction.SOUTHWEST;
+				break;
+		}
 	}
 	
 	/**
@@ -178,5 +199,12 @@ public class Critter implements SimpleCritter
 			return result;
 		}
 			
+	}
+
+	@Override
+	public void updateEnergy(int amount)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

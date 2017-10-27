@@ -1,17 +1,35 @@
-package console;
+package simulation;
 
 import java.io.*;
 import java.util.HashMap;
 
+import ast.Program;
+import parse.Parser;
+import parse.ParserFactory;
+
 /** This class supplies several static methods that may be useful for parsing files needed for world creation and modification. */
 public class FileParser
 {
+	public static SimpleCritter parseCritter(BufferedReader br, int minMemory, int direction)
+	{
+		String[] parsed = parseAttributes(br);
+		String name = parsed[0].equals("") ? "Untitled #" : parsed[0];
+		int[] critMem = FileParser.makeCritterMemory(parsed, minMemory);
+		
+		Parser p = ParserFactory.getParser();
+		Program prog = p.parse(br);
+		
+		if(!(direction < 0 && direction > 5))
+			return new Critter(prog, critMem, name);
+		return new Critter(prog, critMem, name, direction);
+	}
+	
 	/**
 	 * Parses the attributes for a critter from a file into a String array.
 	 * @param filename
 	 * @return a String array containing the memory attributes needed to create the critter.
 	 */
-	public static String[] parseAttributes(BufferedReader br)
+	private static String[] parseAttributes(BufferedReader br)
 	{
 		String name = parseAttributeFromLine(br, "species: ");
 		String memsize = parseAttributeFromLine(br, "memsize: ");
@@ -25,13 +43,13 @@ public class FileParser
 	}
 	
 	/**
-	 * Given a BufferedReader, parses one attribute line from a critter file and returns a string containing only the attribute by
+	 * Given a BufferedReader, parses one attribute line from a file and returns a string containing only the attribute by
 	 * trimming out a specified substring {@code substringToCut}. If {@code substringToCut} is not present in the line or the end
 	 * of the file is reached, returns an empty string.
 	 * 
 	 * @param b the BufferedReader to read lines from
 	 * @param substringToCut the substring to trim
-	 * @return A string containing only the critter attribute given on the line
+	 * @return A string containing only the attribute given on the line
 	 */
 	public static String parseAttributeFromLine(BufferedReader b, String substringToCut)
 	{
@@ -56,7 +74,7 @@ public class FileParser
 	 * @param strs an array of strings created by the method {@code FileParser.parseAttributes(filename)}
 	 * @return an int array, ready to be used as critter memory. Returns a default set of memory if {@code strs} is not compatible.
 	 */
-	public static int[] makeCritterMemory(String[] strs, int minMemory)
+	private static int[] makeCritterMemory(String[] strs, int minMemory)
 	{
 		//if the strs array is less than 7, then we revert to a default set of memory
 		if(strs.length <= 7)
@@ -101,6 +119,9 @@ public class FileParser
 			posture = 0;
 		critterAttributes[7] = posture;
 		
+		for(int i = 8; i < memsize; i++)
+			critterAttributes[i] = 0;
+		
 		return critterAttributes;
 	}
 	/**
@@ -128,7 +149,7 @@ public class FileParser
 	 * @return a HashMap containing the names of constants mapped to their values.
 	 * @throws IllegalArgumentException if the file is not valid.
 	 */
-	public static HashMap<String, Double> parseConstants(BufferedReader b)
+	public static HashMap<String, Double> parseConstants(BufferedReader b) throws IllegalArgumentException
 	{
 		HashMap<String, Double> result = new HashMap<String, Double>();
 		String line;
@@ -172,5 +193,29 @@ public class FileParser
 		return line;
 	}
 	
-	
+	/** 
+	 * Returns a set of coordinates in the form of an int array from a string.
+	 * @param source
+	 * @return the coordinates parsed, or {@code null} if the {@code source} is not valid
+	 */
+	public static int[] parseCoordinate(String source)
+	{
+		int[] result = new int[2];
+		int spaceIndex = source.indexOf(" ");
+		try
+		{
+			if(spaceIndex > -1 && source.length() > spaceIndex + 1)
+			{
+				result[0] = Integer.parseInt(source.substring(0, spaceIndex));
+				result[1] = Integer.parseInt(source.substring(spaceIndex + 1));
+			}
+			else
+				return null;
+		}
+		catch (NumberFormatException n)
+		{
+			return null;
+		}
+		return result;
+	}
 }
