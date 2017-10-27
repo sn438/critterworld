@@ -32,7 +32,6 @@ public class InterpreterImpl implements Interpreter
 	@Override
 	public Outcome interpret(Program p)
 	{
-		// TODO Auto-generated method stub
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
 		boolean actionInterpreted = false;

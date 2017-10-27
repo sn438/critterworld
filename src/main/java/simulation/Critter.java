@@ -1,9 +1,6 @@
 package simulation;
 
 import interpret.*;
-
-import java.util.Arrays;
-
 import ast.Program;
 
 public class Critter implements SimpleCritter

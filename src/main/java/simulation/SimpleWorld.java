@@ -1,7 +1,5 @@
 package simulation;
 
-import ast.Program;
-
 /** An interface containing the basic functions of the world. */
 public interface SimpleWorld
 {
@@ -11,15 +9,19 @@ public interface SimpleWorld
 	/** Returns the maximum number of rules that may be executed per turn for this world. */
 	int getMaxRules();
 	
+	/** Returns the number of living critters currently in the simulation. */
+	int numRemainingCritters();
+	
+	/** Returns the amount of time passed since this world's genesis. */
+	public int getTimePassed();
 	/**
 	 * Loads critters of following a set pattern into this world.
 	 * @param filename the file containing the critter information
 	 * @param n the number of critters to load
-	 * @param c the column index of the critter
-	 * @param r the row index of the critter
-	 * @param direction the orientation of the critter
+	 * @param direction the orientation of the critter. If this value is less than 0, a critter orientation
+	 * 					will be chosen at random.
 	 */
-	public void loadCritters(String filename, int n, int c, int r, int direction);
+	public void loadCritters(String filename, int n, int direction);
 	
 	int searchNearby(SimpleCritter c, int index);
 	
@@ -27,5 +29,8 @@ public interface SimpleWorld
 	
 	boolean moveCritter(SimpleCritter c, boolean forward);
 	
-	void printGrid();
+	/** Advances the world state by a single time step. */
+	void advanceOneTimeStep();
+	
+	StringBuilder printGrid();
 }

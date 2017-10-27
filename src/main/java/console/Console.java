@@ -2,10 +2,8 @@ package console;
 
 import java.io.*;
 import java.util.Scanner;
-import simulation.*;
-import parse.*;
-import ast.Program;
-import exceptions.SyntaxError;
+import simulation.SimpleWorld;
+import simulation.World;
 
 /** The console user interface for Assignment 5. */
 public class Console
@@ -47,11 +45,13 @@ public class Console
 		}
 		catch (FileNotFoundException f)
 		{
-			System.err.println("File not found.");
+			System.err.println("World file not found. Loading defaultly generated world...");
+			world = new World();
 		}
 		catch (IllegalArgumentException i)
 		{
 			System.err.println("The constants.txt file could not be read. Please check if it is formatted properly.");
+			System.exit(0);
 		}
 	}
 
@@ -74,24 +74,7 @@ public class Console
 			return;
 		}
 		
-		world.loadCritters(filename, n, -1, -1, -1);
-		/*try
-		{
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			String[] parsed = FileParser.parseAttributes(br);
-			String name = parsed[0].equals("") ? "Untitled" : parsed[0];
-			int[] critAttr = makeCritterAttributes(parsed);
-			
-			Parser p = ParserFactory.getParser();
-			Program prog = p.parse(br);
-			
-			world.loadCritters(name, critAttr, prog, n);
-		}
-		catch (FileNotFoundException e)
-		{
-			System.err.println("Critter file not found.");
-			return;
-		}*/
+		world.loadCritters(filename, n, -1);
 	}
 
 	/**
@@ -107,6 +90,8 @@ public class Console
 			printHelp();
 			return;
 		}
+		for(int i = 0; i < n; i++)
+			world.advanceOneTimeStep();
 	}
 
 	/** Prints current time step, number of critters, and world map of the simulation. */
@@ -119,16 +104,16 @@ public class Console
 			printHelp();
 			return;
 		}
-		worldInfo(0, 0);
+		
+		out.println(world.printGrid().toString());
+		worldInfo(world.getTimePassed(), world.numRemainingCritters());
 	}
 
 	/**
 	 * Prints description of the contents of hex (c,r).
 	 *
-	 * @param c
-	 *            column of hex
-	 * @param r
-	 *            row of hex
+	 * @param c column of hex
+	 * @param r row of hex
 	 */
 	public void hexInfo(int c, int r)
 	{

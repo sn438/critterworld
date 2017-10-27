@@ -1,6 +1,7 @@
 package interpret;
 
 import ast.*;
+
 /**
  * An example interface for interpreting a critter program. This is just a starting
  * point and may be changed as much as you like.

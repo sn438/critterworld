@@ -28,6 +28,8 @@ public class World implements SimpleWorld
 	private int numValidHexes;
 	/** A compilation of all the constants needed for world creation. */
 	private HashMap<String, Double> CONSTANTS;
+	/** The number of time steps passed since this world's genesis. */
+	private int timePassed;
 	
 	/** Loads a world based on a world description file. */
 	public World(String filename) throws FileNotFoundException, IllegalArgumentException
@@ -35,13 +37,14 @@ public class World implements SimpleWorld
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		critterList = new LinkedList<SimpleCritter>();
+		timePassed = 0;
 		
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
 		
 		//parses the world name, and if no valid one is parsed, supplies a default one
-		String name = FileParser.parseAttributeFromLine(bf, "name ");
-		if(name.equals(""))
-			name = "Arrakis";
+		worldname = FileParser.parseAttributeFromLine(bf, "name ");
+		if(worldname.equals(""))
+			worldname = "Arrakis";
 		
 		//parses world dimensions, and supplies default ones if no valid dimensions are parsed
 		try
@@ -89,7 +92,9 @@ public class World implements SimpleWorld
 						addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
 						break;
 					case "critter":
-						loadCritters(info[1], 1, Integer.parseInt(info[2]), Integer.parseInt(info[3]), Integer.parseInt(info[4]));
+						BufferedReader critterreader = new BufferedReader(new FileReader(info[1]));
+						SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(), Integer.parseInt(info[4]));
+						loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
 						break;
 				}
 				line = bf.readLine();
@@ -106,6 +111,9 @@ public class World implements SimpleWorld
 	{
 		worldname = "Arrakis";
 		setConstants();
+		critterMap = new HashMap<SimpleCritter, Hex>();
+		critterList = new LinkedList<SimpleCritter>();
+		timePassed = 0;
 		
 		columns = CONSTANTS.get("COLUMNS").intValue();
 		rows = CONSTANTS.get("ROWS").intValue();
@@ -186,9 +194,8 @@ public class World implements SimpleWorld
 	}
 	
 	@Override
-	public void loadCritters(String filename, int n, int c, int r, int direction)
+	public void loadCritters(String filename, int n, int direction)
 	{
-		// TODO Auto-generated method stub
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -196,19 +203,17 @@ public class World implements SimpleWorld
 			
 			for(int i = 0; i < n; i++)
 			{
-				if(c == -1 || r == -1)
+				
+				int randc = (int) (Math.random() * columns);
+				int randr = (int) (Math.random() * rows);
+				while(!isValidHex(randc, randr))
 				{
-					c = (int) (Math.random() * columns);
-					r = (int) (Math.random() * rows);
-					while(!isValidHex(c, r))
-					{
-						c = (int) (Math.random() * columns);
-						r = (int) (Math.random() * rows);
-					}
+					randc = (int) (Math.random() * columns);
+					randr = (int) (Math.random() * rows);
 				}
 				
-				if(isValidHex(c, r))
-					loadCritter(sc, c, r);
+				if(isValidHex(randc, randr))
+					loadOneCritter(sc, randc, randr);
 			}
 		}
 		catch (FileNotFoundException e)
@@ -225,7 +230,7 @@ public class World implements SimpleWorld
 	 * @param c the column index of the hex where the critter will be added
 	 * @param r the row index of the hex where the critter will be added
 	 */
-	private void loadCritter(SimpleCritter sc, int c, int r)
+	private void loadOneCritter(SimpleCritter sc, int c, int r)
 	{
 		if(!isValidHex(c, r))
 			return;
@@ -254,8 +259,8 @@ public class World implements SimpleWorld
 		grid[c][r].addContent(wo);
 	}
 	
-	/** Advances the world state by a single time step. */
-	public void advanceTimeStep()
+	@Override
+	public void advanceOneTimeStep()
 	{
 		for(SimpleCritter sc : critterList)
 		{
@@ -286,20 +291,32 @@ public class World implements SimpleWorld
 	}
 	
 	@Override
-	public void printGrid()
+	public int numRemainingCritters()
 	{
-		String result = "World name: " + worldname;
+		return critterList.size();
+	}
+	
+	@Override
+	public int getTimePassed()
+	{
+		return timePassed;
+	}
+	
+	@Override
+	public StringBuilder printGrid()
+	{
+		StringBuilder result = new StringBuilder("World name: " + worldname + "\n");
 		for(int i = 0; i < columns; i++)
 		{
 			for(int j = 0; j < rows; j++)
 			{
 				if(grid[i][j] == null)
-					result += "% ";
+					result.append("% ");
 				else
-					result += grid[i][j].toString() + " ";
+					result.append(grid[i][j].toString() + " ");
 			}
-			result += "\n";
+			result.append("\n");
 		}
-		System.out.println(result);
+		return result;
 	}
 }

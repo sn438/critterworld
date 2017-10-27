@@ -34,7 +34,10 @@ public class Hex
 	}
 	
 	/** Removes the content on this hex. */
-	public void removeContent(WorldObject)
+	public void removeContent()
+	{
+		content = null;
+	}
 	
 	/** Returns {@code true} if and only if {@code content == null}. */
 	public boolean isEmpty()
