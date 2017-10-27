@@ -41,19 +41,19 @@ public class Critter implements SimpleCritter
 				orientation = Direction.NORTH;
 				break;
 			case 1:
-				orientation = Direction.SOUTH;
+				orientation = Direction.NORTHWEST;
 				break;
 			case 2:
-				orientation = Direction.NORTHEAST;
+				orientation = Direction.SOUTHWEST;
 				break;
 			case 3:
-				orientation = Direction.NORTHWEST;
+				orientation = Direction.SOUTH;
 				break;
 			case 4:
 				orientation = Direction.SOUTHEAST;
 				break;
 			case 5:
-				orientation = Direction.SOUTHWEST;
+				orientation = Direction.NORTHEAST;
 				break;
 		}
 	}
@@ -160,9 +160,9 @@ public class Critter implements SimpleCritter
 	@Override
 	public String toString() //TODO fix when done testing
 	{
-		String result = name + Arrays.toString(memory) + "\n" + prog.toString();
-		return result;
-		//return "" + orientation.getValue();
+		//String result = name + Arrays.toString(memory) + "\n" + prog.toString();
+		//return result;
+		return "" + orientation.getValue();
 	}
 	
 	/** An enumeration of all the possible directions a critter can be facing. */

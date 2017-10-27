@@ -18,11 +18,24 @@ public class Hex
 		content = null;
 	}
 	
-	public void addContent(WorldObject wo)
+	/**
+	 * Adds a world object to this hex, if it is empty.
+	 * @param wo the object to add
+	 * @return whether or not {@code wo} was able to be added to this hex.
+	 */
+	public boolean addContent(WorldObject wo)
 	{
 		if(isEmpty())
+		{
 			content = wo;
+			return true;
+		}
+		return false;
 	}
+	
+	/** Removes the content on this hex. */
+	public void removeContent(WorldObject)
+	
 	/** Returns {@code true} if and only if {@code content == null}. */
 	public boolean isEmpty()
 	{

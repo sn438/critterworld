@@ -19,7 +19,7 @@ public class FileParser
 		Parser p = ParserFactory.getParser();
 		Program prog = p.parse(br);
 		
-		if(!(direction < 0 && direction > 5))
+		if((direction < 0 || direction > 5))
 			return new Critter(prog, critMem, name);
 		return new Critter(prog, critMem, name, direction);
 	}
@@ -142,7 +142,7 @@ public class FileParser
 	}
 	
 	/**
-	 * Parses constants from a file and returns them in the form of a HashMap. Assumes that the file adherer to the format
+	 * Parses constants from a file and returns them in the form of a HashMap. Assumes that the file adheres to the format
 	 * specified by the <a href="http://www.cs.cornell.edu/courses/cs2112/2017fa/project/constants.txt">constants file given
 	 * to us</a>.
 	 * @param b a BufferedReader containing the file to be read.
@@ -152,69 +152,20 @@ public class FileParser
 	public static HashMap<String, Double> parseConstants(BufferedReader b) throws IllegalArgumentException
 	{
 		HashMap<String, Double> result = new HashMap<String, Double>();
-		String line;
-		
 		try
 		{
-			for(int i = 0; i < 19; i++)
+			String line = b.readLine();
+			while(line != null)
 			{
-				line = clearCommentFromLine(b);
-				int spaceIndex = line.indexOf(" ");
-				String constantName = line.substring(0, spaceIndex);
-				Double constantValue = Double.parseDouble(line.substring(spaceIndex + 1));
-				result.put(constantName, constantValue);
+				String[] constant = line.split(" ");
+				result.put(constant[0], Double.parseDouble(constant[1]));
+				line = b.readLine();
 			}
 		}
+		//If the constants file has any irregularities,
 		catch (Exception e)
 		{
 			throw new IllegalArgumentException();
-		}
-		return result;
-	}
-	
-	/**
-	 * Given a BufferedReader, reads one line and trims out any comments denoted by {}.
-	 * 
-	 * @param b the BufferedReader of a file to read lines from
-	 * @return A string with any comments trimmed out
-	 * @throws IOException if the file is not valid
-	 */
-	private static String clearCommentFromLine(BufferedReader b) throws IOException
-	{
-		String line = b.readLine();
-		if(line.indexOf("{") >= 0)
-		{
-			String beforeComment = line.substring(0, line.indexOf("{"));
-			String afterComment = "";
-			if(line.lastIndexOf("}") >= 0)
-				afterComment = line.substring(line.lastIndexOf("}") + 1);
-			line = beforeComment + afterComment;
-		}
-		return line;
-	}
-	
-	/** 
-	 * Returns a set of coordinates in the form of an int array from a string.
-	 * @param source
-	 * @return the coordinates parsed, or {@code null} if the {@code source} is not valid
-	 */
-	public static int[] parseCoordinate(String source)
-	{
-		int[] result = new int[2];
-		int spaceIndex = source.indexOf(" ");
-		try
-		{
-			if(spaceIndex > -1 && source.length() > spaceIndex + 1)
-			{
-				result[0] = Integer.parseInt(source.substring(0, spaceIndex));
-				result[1] = Integer.parseInt(source.substring(spaceIndex + 1));
-			}
-			else
-				return null;
-		}
-		catch (NumberFormatException n)
-		{
-			return null;
 		}
 		return result;
 	}

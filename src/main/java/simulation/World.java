@@ -3,15 +3,11 @@ package simulation;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import ast.Program;
-import parse.Parser;
-import parse.ParserFactory;
+import interpret.Interpreter;
+import interpret.InterpreterImpl;
 
 /** A class to simulate the world state. */
 public class World implements SimpleWorld
@@ -37,6 +33,9 @@ public class World implements SimpleWorld
 	public World(String filename) throws FileNotFoundException, IllegalArgumentException
 	{
 		setConstants();
+		critterMap = new HashMap<SimpleCritter, Hex>();
+		critterList = new LinkedList<SimpleCritter>();
+		
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
 		
 		//parses the world name, and if no valid one is parsed, supplies a default one
@@ -48,17 +47,11 @@ public class World implements SimpleWorld
 		try
 		{
 			String worldDimensions = FileParser.parseAttributeFromLine(bf, "size ");
-			int spaceIndex = worldDimensions.indexOf(" ");
-			boolean validDimensions = false;
-			if(spaceIndex > -1 && worldDimensions.length() > spaceIndex + 1)
-			{
-				columns = Integer.parseInt(worldDimensions.substring(0, spaceIndex));
-				rows = Integer.parseInt(worldDimensions.substring(spaceIndex + 1));
+			String[] dim = worldDimensions.split(" ");
+			columns = Integer.parseInt(dim[0]);
+			rows = Integer.parseInt(dim[1]);
 				
-				if((columns > 0 && rows > 0 && 2 * rows - columns > 0))
-					validDimensions = true;
-			}
-			if(!validDimensions)
+			if(!(columns > 0 && rows > 0 && 2 * rows - columns > 0))
 			{
 				columns = CONSTANTS.get("COLUMNS").intValue();
 				rows = CONSTANTS.get("ROWS").intValue();
@@ -99,6 +92,7 @@ public class World implements SimpleWorld
 						loadCritters(info[1], 1, Integer.parseInt(info[2]), Integer.parseInt(info[3]), Integer.parseInt(info[4]));
 						break;
 				}
+				line = bf.readLine();
 			}
 		}
 		catch (Exception e)
@@ -202,7 +196,7 @@ public class World implements SimpleWorld
 			
 			for(int i = 0; i < n; i++)
 			{
-				if(!(c == -1 && r == -1))
+				if(c == -1 || r == -1)
 				{
 					c = (int) (Math.random() * columns);
 					r = (int) (Math.random() * rows);
@@ -224,17 +218,37 @@ public class World implements SimpleWorld
 		}
 	}
 	
-	public void loadCritter(SimpleCritter sc, int c, int r)
+	/**
+	 * Loads a single critter into the world at the specified coordinates, if possible. Does nothing if the hex is not within
+	 * the world boundaries or if there is something already present at the hex.
+	 * @param sc the Critter to add
+	 * @param c the column index of the hex where the critter will be added
+	 * @param r the row index of the hex where the critter will be added
+	 */
+	private void loadCritter(SimpleCritter sc, int c, int r)
 	{
 		if(!isValidHex(c, r))
 			return;
-		grid[c][r].addContent(sc);
-		critterList.add(sc);
-		critterMap.put(sc, grid[c][r]);
+		boolean added = grid[c][r].addContent(sc);
+		if(added)
+		{
+			critterList.add(sc);
+			critterMap.put(sc, grid[c][r]);	
+		}
 	}
 	
+	/**
+	 * Loads a single non-critter world object into the world at the specified coordinates, if possible. Does nothing if
+	 * the hex is not within the world boundaries or if there is something already present at the hex. This method cannot
+	 * be used to add critters into the world. Use the method {@code loadCritter(SimpleCritter sc, int c, int r)} instead.
+	 * @param sc the object to add
+	 * @param c the column index of the hex where the object will be added
+	 * @param r the row index of the hex where the object will be added
+	 */
 	private void addNonCritterObject(WorldObject wo, int c, int r)
 	{
+		if(wo instanceof Critter)
+			return;
 		if(!isValidHex(c, r))
 			return;
 		grid[c][r].addContent(wo);
@@ -243,7 +257,11 @@ public class World implements SimpleWorld
 	/** Advances the world state by a single time step. */
 	public void advanceTimeStep()
 	{
-		
+		for(SimpleCritter sc : critterList)
+		{
+			Interpreter i = new InterpreterImpl(sc, this);
+			i.simulateCritterTurn();
+		}
 	}
 	
 	@Override
@@ -270,13 +288,13 @@ public class World implements SimpleWorld
 	@Override
 	public void printGrid()
 	{
-		String result = "";
+		String result = "World name: " + worldname;
 		for(int i = 0; i < columns; i++)
 		{
 			for(int j = 0; j < rows; j++)
 			{
 				if(grid[i][j] == null)
-					result += "null ";
+					result += "% ";
 				else
 					result += grid[i][j].toString() + " ";
 			}

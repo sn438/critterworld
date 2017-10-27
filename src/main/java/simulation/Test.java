@@ -1,10 +1,12 @@
 package simulation;
 
+import java.io.FileNotFoundException;
+
 public class Test
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException, IllegalArgumentException
 	{
-		SimpleWorld sw = new World();
+		SimpleWorld sw = new World("world.txt");
 		sw.printGrid();
 	}
 }

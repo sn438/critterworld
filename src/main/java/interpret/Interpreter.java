@@ -7,7 +7,10 @@ import ast.*;
  */
 public interface Interpreter
 {
-    /**
+	/** Executes the results of one critter turn. */
+	public void simulateCritterTurn();
+	
+	/**
      * Execute program {@code p} until either the maximum number of rules per turn is reached or some rule
      * whose command contains an action is executed.
      * @param p
