@@ -54,4 +54,8 @@ public interface SimpleCritter extends WorldObject
 	public void toggleMatingPheromones(boolean b);
 	
 	public int complexity(int ruleCost, int abilityCost);
+
+	void mutate();
+
+	int numberMutations();
 }

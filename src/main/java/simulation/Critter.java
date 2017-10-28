@@ -1,5 +1,10 @@
 package simulation;
 
+import java.util.Random;
+
+import ast.Mutation;
+import ast.MutationDuplicate;
+import ast.MutationFactory;
 import ast.Program;
 
 public class Critter implements SimpleCritter
@@ -281,5 +286,78 @@ public class Critter implements SimpleCritter
 	@Override
 	public int[] getMemory() {
 		return this.memory;
+	}
+	
+	@Override
+	public int numberMutations() {
+		double randomNumber = Math.random();
+		int returnValue = 0;
+		if (randomNumber < 0.25) {
+			returnValue++;
+		}
+		if (randomNumber < Math.pow(0.25, 2)) {
+			returnValue++;
+		}
+		if (randomNumber < Math.pow(0.25, 3)) {
+			returnValue++;
+		}
+		return returnValue;
+	}
+	
+	@Override
+	public void mutate() {
+	    int randomNum = (int) (Math.random() * (6));
+	    int n = (int) (Math.random() * (this.prog.size()));
+	    Mutation mutator = null;
+	    switch(randomNum) {
+	    	case 0:
+	    		mutator = MutationFactory.getDuplicate(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    	case 1:
+	    		mutator = MutationFactory.getInsert(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    	case 2:
+	    		mutator = MutationFactory.getRemove(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    	case 3:
+	    		mutator = MutationFactory.getReplace(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    	case 4:
+	    		mutator = MutationFactory.getSwap(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    	case 5:
+	    		mutator = MutationFactory.getTransform(true);
+				try {
+					prog.mutate(n, mutator).toString();
+				} catch (NullPointerException e) {
+					 mutate();
+				}
+	    		break;
+	    }
 	}
 }

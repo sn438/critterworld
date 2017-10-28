@@ -404,6 +404,10 @@ public class World extends AbstractWorld
 		String name = sc.getName() + " Jr.";
 		Program prog = sc.getProgram();
 		SimpleCritter baby = new Critter(prog, memory, name, 0); 
+		int numberMutations = baby.numberMutations();
+		for(int i = 0; i < numberMutations; i++) {
+			baby.mutate();
+		}
 		this.loadOneCritter(baby, newc, newr);
 	}
 	
@@ -427,6 +431,7 @@ public class World extends AbstractWorld
 		Hex location = critterMap.get(tagger);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
+		
 	}
 	
 	@Override
