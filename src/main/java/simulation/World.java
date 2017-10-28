@@ -305,7 +305,7 @@ public class World extends AbstractWorld
 		if(!isValidHex(c, r))
 			return;
 		
-		Hex directlyInFront = new Hex(newc, newr);
+		Hex directlyInFront = grid[newc][newr];
 		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof Food)
 		{
 			Food nourishment = (Food) directlyInFront.getContent();
@@ -354,7 +354,7 @@ public class World extends AbstractWorld
 		if(!isValidHex(c, r))
 			return;
 		
-		Hex directlyInFront = new Hex(newc, newr);
+		Hex directlyInFront = grid[newc][newr];
 		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
 		{
 			//Calculates the damage dealt to the target critter
