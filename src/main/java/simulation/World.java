@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import ast.Program;
+
 /** A class to simulate the world state. */
 public class World extends AbstractWorld
 {
@@ -386,6 +388,23 @@ public class World extends AbstractWorld
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
+		int newc = c + sc.changeInPosition(false)[0];
+		int newr = r + sc.changeInPosition(false)[1];
+		if(!isValidHex(c, r))
+			return;
+		sc.updateEnergy(-9 * sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue()), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		int[] memory = sc.getMemory();
+		memory[3] = 1;
+		memory[4] = 250;
+		memory[6] = 0;
+		memory[7] = 0;
+		for (int i = 8; i < memory.length; i++) {
+			memory[i] = 0;
+		}
+		String name = sc.getName() + " Jr.";
+		Program prog = sc.getProgram();
+		SimpleCritter baby = new Critter(prog, memory, name, 0); 
+		this.loadOneCritter(baby, newc, newr);
 	}
 	
 	@Override
@@ -446,5 +465,10 @@ public class World extends AbstractWorld
 			result.append("\n");
 		}
 		return result;
+	}
+	
+	@Override
+	public void advanceOneTimeStep() {
+		
 	}
 }

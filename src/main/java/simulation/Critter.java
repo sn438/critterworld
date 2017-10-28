@@ -277,4 +277,9 @@ public class Critter implements SimpleCritter
 			}
 		}
 	}
+
+	@Override
+	public int[] getMemory() {
+		return this.memory;
+	}
 }
