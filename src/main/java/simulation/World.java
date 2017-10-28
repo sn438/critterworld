@@ -6,11 +6,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import interpret.Interpreter;
-import interpret.InterpreterImpl;
-
 /** A class to simulate the world state. */
-public class World implements SimpleWorld
+public class World extends AbstractWorld
 {
 	/** The name of this world. */
 	private String worldname;
@@ -18,22 +15,17 @@ public class World implements SimpleWorld
 	private Hex[][] grid;
 	/** Maps each critter to a location in the world */
 	private HashMap<SimpleCritter, Hex> critterMap;
-	/** Stores all the critters present in the world, in the order in which they were created. */
-	private LinkedList<SimpleCritter> critterList;
 	/** The number of columns in the world grid. */
 	private int columns;
 	/** The number of rows in the world grid. */
 	private int rows;
 	/** The number of hexes that lie on the world grid. */
 	private int numValidHexes;
-	/** A compilation of all the constants needed for world creation. */
-	private HashMap<String, Double> CONSTANTS;
-	/** The number of time steps passed since this world's genesis. */
-	private int timePassed;
 	
 	/** Loads a world based on a world description file. */
 	public World(String filename) throws FileNotFoundException, IllegalArgumentException
 	{
+		super();
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		critterList = new LinkedList<SimpleCritter>();
@@ -109,6 +101,7 @@ public class World implements SimpleWorld
 	/** Generates a default size world containing nothing but randomly placed rocks. */
 	public World() throws IllegalArgumentException
 	{
+		super();
 		worldname = "Arrakis";
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
@@ -130,11 +123,11 @@ public class World implements SimpleWorld
 				}
 			}
 		
-		//randomly fills about 1/12 of the hexes in the world with rocks
+		//randomly fills about 1/20 of the hexes in the world with rocks
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
-		while(n < numValidHexes / 12)
+		while(n < numValidHexes / 20)
 		{
 			c = (int) (Math.random() * columns);
 			r = (int) (Math.random() * rows);
@@ -179,18 +172,6 @@ public class World implements SimpleWorld
 		if((2 * r - c) < 0 || (2 * r - c) >= (2 * rows - columns))
 			return false;
 		return true;
-	}
-	
-	@Override
-	public int getMinMemory()
-	{
-		return CONSTANTS.get("MIN_MEMORY").intValue();
-	}
-	
-	@Override
-	public int getMaxRules()
-	{
-		return CONSTANTS.get("MAX_RULES_PER_TURN").intValue();
 	}
 	
 	@Override
@@ -257,16 +238,6 @@ public class World implements SimpleWorld
 		if(!isValidHex(c, r))
 			return;
 		grid[c][r].addContent(wo);
-	}
-	
-	@Override
-	public void advanceOneTimeStep()
-	{
-		for(SimpleCritter sc : critterList)
-		{
-			Interpreter i = new InterpreterImpl(sc, this);
-			i.simulateCritterTurn();
-		}
 	}
 	
 	@Override
@@ -341,7 +312,7 @@ public class World implements SimpleWorld
 			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			directlyInFront.removeContent();
 		}
-		 if(sc.getEnergy() == 0)
+		if(sc.getEnergy() == 0)
 			 kill(sc);
 	}
 	
@@ -361,14 +332,70 @@ public class World implements SimpleWorld
 		sc.setMemory(currentSize + 1, 3);
 	}
 	
+	@Override
+	public void critterBattle(SimpleCritter attacker)
+	{
+		Hex location = critterMap.get(attacker);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
+		int cost = attacker.size() * CONSTANTS.get("ATTACK_COST").intValue();
+		attacker.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(attacker.getEnergy() < 0)
+		{
+			kill(attacker);
+			return;
+		}
+		
+		int newc = c + attacker.changeInPosition(true)[0];
+		int newr = r + attacker.changeInPosition(true)[1];
+		if(!isValidHex(c, r))
+			return;
+		
+		Hex directlyInFront = new Hex(newc, newr);
+		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
+		{
+			//Calculates the damage dealt to the target critter
+			SimpleCritter target = (SimpleCritter) (directlyInFront.getContent());
+			int baseDamage = CONSTANTS.get("BASE_DAMAGE").intValue();
+			int dmgMultiplier = CONSTANTS.get("DAMAGE_INC").intValue();
+			int dmgBeforeScaling = attacker.size() * attacker.readMemory(2) - target.size() * target.readMemory(1);
+			int damage = baseDamage * attacker.size() * logisticFunction(dmgMultiplier * dmgBeforeScaling);
+			
+			target.updateEnergy(-1 * damage, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+			if(target.getEnergy() <= 0)
+				kill(target);
+		}
+		
+		if(attacker.getEnergy() == 0)
+			kill(attacker);
+	}
+	
+	/** Performs the logistic function 1 / (1 + e^-x), floored to an integer value. */
+	private int logisticFunction(double x)
+	{
+		double exponent = -1 * x;
+		return (int) (1 / (1 + Math.exp(exponent)));
+	}
+	
+	@Override
 	public void critterBud(SimpleCritter sc)
 	{
 		//TODO implement
 	}
 	
+	@Override
 	public void critterMate(SimpleCritter sc)
 	{
 		//TODO implement
+	}
+	
+	/** Executes the mating process, as long as there is one empty hex around the two critters.*/
+	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2)
+	{
+		
 	}
 	
 	/** Kills a critter and removes it from any lists or mappings of critters. Rest in peace, buddy. */
@@ -381,18 +408,6 @@ public class World implements SimpleWorld
 		
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		location.addContent(remnant);
-	}
-	
-	@Override
-	public int numRemainingCritters()
-	{
-		return critterList.size();
-	}
-	
-	@Override
-	public int getTimePassed()
-	{
-		return timePassed;
 	}
 	
 	@Override

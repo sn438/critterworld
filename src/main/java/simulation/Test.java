@@ -6,8 +6,7 @@ public class Test
 {
 	public static void main(String[] args) throws FileNotFoundException, IllegalArgumentException
 	{
-		//SimpleWorld sw = new World("world.txt");
-		//sw.printGrid();
-		System.out.println(-1 % 6);
+		SimpleWorld sw = new World("world.txt");
+		System.out.println(sw.printGrid().toString());
 	}
 }

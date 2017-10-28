@@ -3,8 +3,8 @@ package interpret;
 import ast.*;
 import ast.Action.ActType;
 import ast.Node.NodeType;
+import simulation.AbstractWorld;
 import simulation.SimpleCritter;
-import simulation.SimpleWorld;
 
 import java.util.LinkedList;
 
@@ -13,13 +13,13 @@ public class InterpreterImpl implements Interpreter
 	/** The critter whose AST this Interpreter interprets. */
 	private SimpleCritter c;
 	/** The world in which the critter inhabits. */
-	private SimpleWorld world;
+	private AbstractWorld world;
 	
 	/** Creates a new InterpreterImpl. */
-	public InterpreterImpl(SimpleCritter cr, SimpleWorld sw)
+	public InterpreterImpl(SimpleCritter cr, AbstractWorld aw)
 	{
 		c = cr;
-		world = sw;
+		world = aw;
 	}
 	
 	/** Executes the results of one critter turn. */
@@ -88,10 +88,10 @@ public class InterpreterImpl implements Interpreter
 				world.critterEat(c);
 				break;
 			case ATTACK:
-				sb.append("attack");
+				world.critterBattle(c);
 				break;
 			case GROW:
-				sb.append("grow");
+				world.growCritter(c);
 				break;
 			case BUD:
 				sb.append("bud");

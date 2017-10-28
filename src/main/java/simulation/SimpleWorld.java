@@ -14,6 +14,7 @@ public interface SimpleWorld
 	
 	/** Returns the amount of time passed since this world's genesis. */
 	public int getTimePassed();
+	
 	/**
 	 * Loads critters of following a set pattern into this world.
 	 * @param filename the file containing the critter information
@@ -23,18 +24,9 @@ public interface SimpleWorld
 	 */
 	public void loadCritters(String filename, int n, int direction);
 	
-	int searchNearby(SimpleCritter sc, int index);
-	
-	int searchAhead(SimpleCritter sc, int index);
-	
-	boolean moveCritter(SimpleCritter sc, boolean forward);
-	
-	void critterEat(SimpleCritter sc);
-	
-	void growCritter(SimpleCritter sc);
-	
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();
 	
+	/** Returns a StringBuilder containing the printed version of the world grid. */
 	StringBuilder printGrid();
 }
