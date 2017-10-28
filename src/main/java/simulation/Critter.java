@@ -13,6 +13,8 @@ public class Critter implements SimpleCritter
 	private int memLength;
 	/** The direction this critter is facing. */
 	private Direction orientation;
+	/** Whether or not this critter wants to mate. */
+	private boolean readyToMingle;
 	/** The name of this critter, used for identification purposes. */
 	private String name;
 	
@@ -27,10 +29,11 @@ public class Critter implements SimpleCritter
 	 */
 	public Critter(Program p, int[] mem, String s, int dir)
 	{
-		this.prog = p;
-		this.memory = mem;
-		this.memLength = mem[0];
-		this.name = s;
+		prog = p;
+		memory = mem;
+		memLength = mem[0];
+		name = s;
+		readyToMingle = false;
 		
 		switch(dir)
 		{
@@ -63,10 +66,11 @@ public class Critter implements SimpleCritter
 	 */
 	public Critter(Program p, int[] mem, String s)
 	{
-		this.prog = p;
-		this.memory = mem;
-		this.memLength = mem[0];
-		this.name = s;
+		prog = p;
+		memory = mem;
+		memLength = mem[0];
+		name = s;
+		readyToMingle = false;
 		
 		int rand = (int) (Math.random() * 6);
 		switch(rand)
@@ -96,6 +100,12 @@ public class Critter implements SimpleCritter
 	public int getMemLength()
 	{
 		return memLength;
+	}
+	
+	@Override
+	public int size()
+	{
+		return memory[3];
 	}
 	
 	@Override
@@ -142,17 +152,8 @@ public class Critter implements SimpleCritter
 	@Override
 	public void turn(boolean counterclockwise)
 	{
-		
+		//if
 	}
-	
-	/*
-	/** Applies the effects of an update outcome to this critter.
-	public boolean acceptOutcome(UpdateOutcome uo)
-	{
-		boolean result = setMemory(uo.getValue(), uo.getMemIndex());
-		return result;
-	}
-	*/
 	
 	@Override
 	public String toString() //TODO fix when done testing
@@ -162,12 +163,82 @@ public class Critter implements SimpleCritter
 		return "" + orientation.getValue();
 	}
 	
+	@Override
+	public int getEnergy()
+	{
+		return memory[4];
+	}
+	
+	@Override
+	public boolean wantsToMate()
+	{
+		return readyToMingle;
+	}
+	
+	@Override
+	public void toggleMatingPheromones(boolean b)
+	{
+		readyToMingle = b;
+	}
+	
+	@Override
+	public int complexity(int ruleCost, int abilityCost)
+	{
+		return prog.getRulesList().size() * ruleCost + (memory[1] + memory[2]) * abilityCost;
+	}
+	
+	@Override
+	public void updateEnergy(int amount, int maxEnergyPerSize)
+	{
+		// TODO Auto-generated method stub
+		memory[4] += amount;
+		if(memory[4] > maxEnergyPerSize * size())
+			memory[4] = maxEnergyPerSize * size();
+	}
+
+	@Override
+	public int[] changeInPosition(boolean forward)
+	{
+		int[] result = new int[2];
+		switch(orientation)
+		{
+			case NORTH:
+				result[0] = 0;
+				result[1] = 1;
+				break;
+			case NORTHWEST:
+				result[0] = -1;
+				result[1] = 0;
+				break;
+			case SOUTHWEST:
+				result[0] = -1;
+				result[1] = -1;
+				break;
+			case SOUTH:
+				result[0] = 0;
+				result[1] = -1;
+				break;
+			case SOUTHEAST:
+				result[0] = 1;
+				result[1] = 0;
+				break;
+			case NORTHEAST:
+				result[0] = 1;
+				result[1] = 1;
+				break;
+		}
+		if(!forward)
+		{
+			result[0] *= -1;
+			result[1] *= -1;
+		}
+		return result;
+	}
+	
 	/** An enumeration of all the possible directions a critter can be facing. */
 	public enum Direction
 	{
 		NORTH, NORTHWEST, SOUTHWEST, SOUTH, SOUTHEAST, NORTHEAST;
-		
-		
 		
 		public int getValue()
 		{
@@ -194,14 +265,6 @@ public class Critter implements SimpleCritter
 					break;
 			}
 			return result;
-		}
-			
-	}
-
-	@Override
-	public void updateEnergy(int amount)
-	{
-		// TODO Auto-generated method stub
-		
+		}		
 	}
 }

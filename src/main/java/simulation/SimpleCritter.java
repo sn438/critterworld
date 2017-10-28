@@ -7,6 +7,8 @@ public interface SimpleCritter extends WorldObject
 	/** Returns the ruleset of this critter. */
 	public Program getProgram();
 	
+	public int size();
+	
 	/** 
 	 * Returns the value of {@code memory[index]}.
 	 * @param index
@@ -32,6 +34,15 @@ public interface SimpleCritter extends WorldObject
 	 */
 	public void turn(boolean counterclockwise);
 	
+	public int[] changeInPosition(boolean forward);
 	
-	public void updateEnergy(int amount);
+	public int getEnergy();
+	
+	public void updateEnergy(int amount, int maxEnergyPerSize);
+	
+	public boolean wantsToMate();
+	
+	public void toggleMatingPheromones(boolean b);
+	
+	public int complexity(int ruleCost, int abilityCost);
 }

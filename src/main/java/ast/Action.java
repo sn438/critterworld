@@ -45,6 +45,12 @@ public class Action extends AbstractNode implements CommandComponent
 		this.act = at;
 	}
 	
+	/** Returns the expression stored at this node, if there is one. */
+	public Expr getVal()
+	{
+		return val;
+	}
+	
 	@Override
 	public int size()
 	{

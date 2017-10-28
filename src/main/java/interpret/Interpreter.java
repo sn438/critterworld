@@ -15,11 +15,9 @@ public interface Interpreter
      * Execute program {@code p} until either the maximum number of rules per turn is reached or some rule
      * whose command contains an action is executed.
      * @param p
-     * @return a result containing the action to be performed;
-     * the action may be null if the maximum number of rules
-     * per turn was exceeded.
+     * @return the action to be performed
      */
-    Outcome interpret(Program p);
+    Action interpret(Program p);
 
     /**
      * Evaluate the given binary condition.

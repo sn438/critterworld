@@ -22,7 +22,8 @@ public class ActionOutcome implements Outcome
 	@Override
 	public void applyOutcome(SimpleCritter c, SimpleWorld w)
 	{
-		switch(act)
+		
+		/*switch(act)
 		{
 			case FORWARD:
 				w.moveCritter(c, true);
@@ -54,9 +55,9 @@ public class ActionOutcome implements Outcome
 			case TAG:
 				sb.append("tag[" + val.toString() + "]");
 				break;
-			case SERVE: 
+			case SERVE:
 				sb.append("serve[" + val.toString() + "]");
 				break;
-		}
+		}*/
 	}
 }

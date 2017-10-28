@@ -270,24 +270,117 @@ public class World implements SimpleWorld
 	}
 	
 	@Override
-	public int searchNearby(SimpleCritter c, int index)
+	public int searchNearby(SimpleCritter sc, int index)
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int searchAhead(SimpleCritter c, int index)
+	public int searchAhead(SimpleCritter sc, int index)
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public boolean moveCritter(SimpleCritter c, boolean forward)
+	public boolean moveCritter(SimpleCritter sc, boolean forward)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
+		int cost = CONSTANTS.get("MOVE_COST").intValue() * sc.size();
+		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return false;
+		}
+		
+		int[] changeInCoords = sc.changeInPosition(forward);
+		int newc = c + changeInCoords[0];
+		int newr = r + changeInCoords[1];
+		
+		if(!isValidHex(newc, newr) || !grid[newc][newr].isEmpty())
+			return false;
+		grid[c][r].removeContent();
+		critterMap.remove(sc);
+		critterMap.put(sc, grid[newc][newr]);
+		return true;
+	}
+	
+	@Override
+	public void critterEat(SimpleCritter sc)
+	{
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
+		int cost = sc.size();
+		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return;
+		}
+		
+		int newc = c + sc.changeInPosition(true)[0];
+		int newr = r + sc.changeInPosition(true)[1];
+		if(!isValidHex(c, r))
+			return;
+		
+		Hex directlyInFront = new Hex(newc, newr);
+		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof Food)
+		{
+			Food nourishment = (Food) directlyInFront.getContent();
+			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+			directlyInFront.removeContent();
+		}
+		 if(sc.getEnergy() == 0)
+			 kill(sc);
+	}
+	
+	public void growCritter(SimpleCritter sc)
+	{	
+		int cost = sc.size() * sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
+		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return;
+		}
+		
+		int currentSize = sc.readMemory(3);
+		sc.setMemory(currentSize + 1, 3);
+	}
+	
+	public void critterBud(SimpleCritter sc)
+	{
+		//TODO implement
+	}
+	
+	public void critterMate(SimpleCritter sc)
+	{
+		//TODO implement
+	}
+	
+	/** Kills a critter and removes it from any lists or mappings of critters. Rest in peace, buddy. */
+	private void kill(SimpleCritter sc)
+	{
+		Hex location = critterMap.get(sc);
+		location.removeContent();
+		critterMap.remove(sc);
+		critterList.remove(sc);
+		
+		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
+		location.addContent(remnant);
 	}
 	
 	@Override

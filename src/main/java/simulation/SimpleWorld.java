@@ -23,11 +23,15 @@ public interface SimpleWorld
 	 */
 	public void loadCritters(String filename, int n, int direction);
 	
-	int searchNearby(SimpleCritter c, int index);
+	int searchNearby(SimpleCritter sc, int index);
 	
-	int searchAhead(SimpleCritter c, int index);
+	int searchAhead(SimpleCritter sc, int index);
 	
-	boolean moveCritter(SimpleCritter c, boolean forward);
+	boolean moveCritter(SimpleCritter sc, boolean forward);
+	
+	void critterEat(SimpleCritter sc);
+	
+	void growCritter(SimpleCritter sc);
 	
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();

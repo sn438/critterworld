@@ -18,6 +18,18 @@ public class Hex
 		content = null;
 	}
 	
+	/** Returns the row index of this Hex. */
+	public int getRowIndex()
+	{
+		return rowIndex;
+	}
+	
+	/** Returns the column index of this Hex. */
+	public int getColumnIndex()
+	{
+		return colIndex;
+	}
+	
 	/**
 	 * Adds a world object to this hex, if it is empty.
 	 * @param wo the object to add
@@ -39,6 +51,10 @@ public class Hex
 		content = null;
 	}
 	
+	public WorldObject getContent()
+	{
+		return content;
+	}
 	/** Returns {@code true} if and only if {@code content == null}. */
 	public boolean isEmpty()
 	{

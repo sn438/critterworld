@@ -25,17 +25,17 @@ public class InterpreterImpl implements Interpreter
 	/** Executes the results of one critter turn. */
 	public void simulateCritterTurn()
 	{
-		Outcome o = interpret(c.getProgram());
-		o.applyOutcome(c, world);
+		Action a = interpret(c.getProgram());
+		executeAction(a);
 	}
 	
 	@Override
-	public Outcome interpret(Program p)
+	public Action interpret(Program p)
 	{
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
 		boolean actionInterpreted = false;
-		while (!actionInterpreted && c.readMemory(5) < world.getMaxRules()) //TODO work on constants.txt
+		while (!actionInterpreted && c.readMemory(5) < world.getMaxRules())
 		{
 			for (Rule r : rl)
 			{
@@ -57,11 +57,56 @@ public class InterpreterImpl implements Interpreter
 				}
 			}
 		}
+		c.setMemory(0, 5);
+		
 		if(a == null)
-			return new ActionOutcome(ActType.WAIT);
-		return new ActionOutcome(a.getActType());
+			return new Action(ActType.WAIT);
+		return a;
 	}
 	
+	private void executeAction(Action a)
+	{
+		int val = 0;
+		if(a.getVal() != null)
+			val = a.getVal().acceptEvaluation(this);
+		
+		switch(a.getActType())
+		{
+			case FORWARD:
+				world.moveCritter(c, true);
+				break;
+			case BACKWARD:
+				world.moveCritter(c, false);
+				break;
+			case LEFT:
+				c.turn(true);
+				break;
+			case RIGHT:
+				c.turn(false);
+				break;
+			case EAT:
+				world.critterEat(c);
+				break;
+			case ATTACK:
+				sb.append("attack");
+				break;
+			case GROW:
+				sb.append("grow");
+				break;
+			case BUD:
+				sb.append("bud");
+				break;
+			case MATE:
+				sb.append("mate");
+				break;
+			case TAG:
+				world.critterTag(c, val);
+				break;
+			case SERVE:
+				world.critterTag(c, val);
+				break;
+		}
+	}
 	/** Applies the effects of a single update to a critter. */
 	private void applyUpdate(Update u)
 	{
@@ -163,6 +208,8 @@ public class InterpreterImpl implements Interpreter
 				int index = e.getExp().acceptEvaluation(this);
 				//TODO add clause to check out of bounds
 				result = c.readMemory(index);
+				if(result == Integer.MIN_VALUE)
+					result = 0;
 				break;
 			case EXPRESSION:
 				result = e.getExp().acceptEvaluation(this);
