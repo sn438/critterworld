@@ -383,19 +383,39 @@ public class World extends AbstractWorld
 	@Override
 	public void critterBud(SimpleCritter sc)
 	{
-		//TODO implement
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
 	}
 	
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
-		//TODO implement
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
 	}
 	
 	/** Executes the mating process, as long as there is one empty hex around the two critters.*/
 	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2)
 	{
 		
+	}
+	
+	@Override
+	public void critterTag(SimpleCritter tagger, int index)
+	{
+		Hex location = critterMap.get(tagger);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+	}
+	
+	@Override
+	public void critterServe(SimpleCritter donator, int index)
+	{
+		Hex location = critterMap.get(donator);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
 	}
 	
 	/** Kills a critter and removes it from any lists or mappings of critters. Rest in peace, buddy. */

@@ -94,16 +94,16 @@ public class InterpreterImpl implements Interpreter
 				world.growCritter(c);
 				break;
 			case BUD:
-				sb.append("bud");
+				world.critterBud(c);
 				break;
 			case MATE:
-				sb.append("mate");
+				world.critterMate(c);
 				break;
 			case TAG:
 				world.critterTag(c, val);
 				break;
 			case SERVE:
-				world.critterTag(c, val);
+				world.critterServe(c, val);
 				break;
 		}
 	}

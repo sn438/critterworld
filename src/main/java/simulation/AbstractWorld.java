@@ -66,7 +66,7 @@ public abstract class AbstractWorld implements SimpleWorld
 
 	public abstract void growCritter(SimpleCritter sc);
 
-	public abstract void critterBattle(SimpleCritter initiator);
+	public abstract void critterBattle(SimpleCritter attacker);
 	
 	/** 
 	 * Executes the result of one critter attempting to bud. The newly created offspring will appear directly behind
@@ -80,4 +80,8 @@ public abstract class AbstractWorld implements SimpleWorld
 	 * @param sc
 	 */
 	public abstract void critterMate(SimpleCritter sc);
+	
+	public abstract void critterTag(SimpleCritter sc, int index);
+	
+	public abstract void critterServe(SimpleCritter sc, int index);
 }

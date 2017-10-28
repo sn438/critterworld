@@ -1,5 +1,6 @@
 package simulation;
 
+import ast.Action;
 import ast.Program;
 
 public interface SimpleCritter extends WorldObject
@@ -24,6 +25,12 @@ public interface SimpleCritter extends WorldObject
 	 * @return Whether or not the memory array was actually altered
 	 */
 	public boolean setMemory(int val, int index);
+	
+	public String getName();
+	
+	public String getLastAction();
+	
+	public void setLastAction(String s);
 	
 	/** Increments the pass number of this critter (memory index 5) by one, if it is less than 999. */
 	public void incrementPass();

@@ -1,6 +1,5 @@
 package simulation;
 
-import interpret.*;
 import ast.Program;
 
 public class Critter implements SimpleCritter
@@ -17,8 +16,8 @@ public class Critter implements SimpleCritter
 	private boolean readyToMingle;
 	/** The name of this critter, used for identification purposes. */
 	private String name;
-	
-	private Outcome lastActionCompleted;
+	/** A string containing information about the last action this critter completed. */
+	private String lastActionCompleted;
 	
 	/**
 	 * Creates a new Critter with a specified ruleset, memory, orientation, and name.
@@ -34,28 +33,9 @@ public class Critter implements SimpleCritter
 		memLength = mem[0];
 		name = s;
 		readyToMingle = false;
+		lastActionCompleted = null;
 		
-		switch(dir)
-		{
-			case 0:
-				orientation = Direction.NORTH;
-				break;
-			case 1:
-				orientation = Direction.NORTHWEST;
-				break;
-			case 2:
-				orientation = Direction.SOUTHWEST;
-				break;
-			case 3:
-				orientation = Direction.SOUTH;
-				break;
-			case 4:
-				orientation = Direction.SOUTHEAST;
-				break;
-			case 5:
-				orientation = Direction.NORTHEAST;
-				break;
-		}
+		orientation = Direction.constructDir(dir);
 	}
 	
 	/**
@@ -71,35 +51,10 @@ public class Critter implements SimpleCritter
 		memLength = mem[0];
 		name = s;
 		readyToMingle = false;
+		lastActionCompleted = null;
 		
 		int rand = (int) (Math.random() * 6);
-		switch(rand)
-		{
-			case 0:
-				orientation = Direction.NORTH;
-				break;
-			case 1:
-				orientation = Direction.SOUTH;
-				break;
-			case 2:
-				orientation = Direction.NORTHEAST;
-				break;
-			case 3:
-				orientation = Direction.NORTHWEST;
-				break;
-			case 4:
-				orientation = Direction.SOUTHEAST;
-				break;
-			case 5:
-				orientation = Direction.SOUTHWEST;
-				break;
-		}
-	}
-	
-	/** Returns the memory size of this critter. */
-	public int getMemLength()
-	{
-		return memLength;
+		orientation = Direction.constructDir(rand);
 	}
 	
 	@Override
@@ -118,6 +73,17 @@ public class Critter implements SimpleCritter
 	public Direction getOrientation()
 	{
 		return orientation;
+	}
+	
+	@Override
+	public String getLastAction()
+	{
+		return lastActionCompleted;
+	}
+	@Override
+	public void setLastAction(String s)
+	{
+		lastActionCompleted = s;
 	}
 	
 	@Override
@@ -143,6 +109,27 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
+	public String getName()
+	{
+		return name;
+	}
+	
+	@Override
+	public int getEnergy()
+	{
+		return memory[4];
+	}
+	
+	@Override
+	public void updateEnergy(int amount, int maxEnergyPerSize)
+	{
+		// TODO Auto-generated method stub
+		memory[4] += amount;
+		if(memory[4] > maxEnergyPerSize * size())
+			memory[4] = maxEnergyPerSize * size();
+	}
+	
+	@Override
 	public void incrementPass()
 	{
 		if(memory[5] < 999)
@@ -152,7 +139,15 @@ public class Critter implements SimpleCritter
 	@Override
 	public void turn(boolean counterclockwise)
 	{
-		//if
+		int curDir = orientation.getValue();
+		int change = counterclockwise ? 1 : -1;
+		
+		int newDir = curDir + change;
+		if(newDir > 5)
+			newDir -= 6;
+		else if(newDir < 0)
+			newDir += 6;
+		orientation = Direction.constructDir(newDir);
 	}
 	
 	@Override
@@ -161,12 +156,6 @@ public class Critter implements SimpleCritter
 		//String result = name + Arrays.toString(memory) + "\n" + prog.toString();
 		//return result;
 		return "" + orientation.getValue();
-	}
-	
-	@Override
-	public int getEnergy()
-	{
-		return memory[4];
 	}
 	
 	@Override
@@ -185,15 +174,6 @@ public class Critter implements SimpleCritter
 	public int complexity(int ruleCost, int abilityCost)
 	{
 		return prog.getRulesList().size() * ruleCost + (memory[1] + memory[2]) * abilityCost;
-	}
-	
-	@Override
-	public void updateEnergy(int amount, int maxEnergyPerSize)
-	{
-		// TODO Auto-generated method stub
-		memory[4] += amount;
-		if(memory[4] > maxEnergyPerSize * size())
-			memory[4] = maxEnergyPerSize * size();
 	}
 
 	@Override
@@ -240,6 +220,10 @@ public class Critter implements SimpleCritter
 	{
 		NORTH, NORTHWEST, SOUTHWEST, SOUTH, SOUTHEAST, NORTHEAST;
 		
+		/** 
+		 * Returns an integer value of this direction based on an arbitrary numbering system that sets NORTH to 0 and 
+		 * goes counterclockwise until it stops at NORTHEAST.
+		 */
 		public int getValue()
 		{
 			int result = 0;
@@ -265,6 +249,32 @@ public class Critter implements SimpleCritter
 					break;
 			}
 			return result;
-		}		
+		}
+		
+		/**
+		 * Returns a direction from an integer based on the aforementioned numbering system.
+		 * @param n
+		 * @return a direction that depends on the integer entered. If {@code n} is not in [0, 5], returns NORTH.
+		 */
+		public static Direction constructDir(int n)
+		{
+			switch(n)
+			{
+				case 0:
+					return NORTH;
+				case 1:
+					return NORTHWEST;
+				case 2:
+					return SOUTHWEST;
+				case 3:
+					return SOUTH;
+				case 4:
+					return SOUTHEAST;
+				case 5:
+					return NORTHEAST;
+				default:
+					return NORTH;
+			}
+		}
 	}
 }
