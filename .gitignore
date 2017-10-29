@@ -12,3 +12,4 @@ content
 *.pdf
 *.DS_Store
 
+src/main/java/interpret/ActionOutcome.java

@@ -29,7 +29,7 @@ public class FileParser
 	 * @param filename
 	 * @return a String array containing the memory attributes needed to create the critter.
 	 */
-	private static String[] parseAttributes(BufferedReader br)
+	public static String[] parseAttributes(BufferedReader br)
 	{
 		String name = parseAttributeFromLine(br, "species: ");
 		String memsize = parseAttributeFromLine(br, "memsize: ");
@@ -77,7 +77,7 @@ public class FileParser
 	private static int[] makeCritterMemory(String[] strs, int minMemory)
 	{
 		//if the strs array is less than 7, then we revert to a default set of memory
-		if(strs.length <= 7)
+		if(strs.length < 7)
 			return new int[] {minMemory, 3, 3, 1, 500, 0, 0, 0};
 		
 		int[] critterAttributes;

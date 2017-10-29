@@ -1,6 +1,10 @@
 package interpret;
 
-import ast.*;
+import ast.BinaryCondition;
+import ast.Relation;
+import ast.BinaryExpr;
+import ast.UnaryExpr;
+import ast.Sensor;
 
 /**
  * An example interface for interpreting a critter program. This is just a starting
@@ -10,45 +14,37 @@ public interface Interpreter
 {
 	/** Executes the results of one critter turn. */
 	public void simulateCritterTurn();
-	
-	/**
-     * Execute program {@code p} until either the maximum number of rules per turn is reached or some rule
-     * whose command contains an action is executed.
-     * @param p
-     * @return the action to be performed
-     */
-    Action interpret(Program p);
 
     /**
-     * Evaluate the given binary condition.
+     * Evaluates the given binary condition.
      * @param c
      * @return a boolean that results from evaluating c.
      */
     boolean eval(BinaryCondition c);
     
     /**
-     * Evaluate the given relation.
+     * Evaluates the given relation.
      * @param c
      * @return a boolean that results from evaluating c.
      */
     boolean eval(Relation c);
 
     /**
-     * Evaluate the given binary expression.
+     * Evaluates the given binary expression.
      * @param e
      * @return an integer that results from evaluating e.
      */
     int eval(BinaryExpr e);
     
     /**
-     * Evaluate the given unary expression.
+     * Evaluates the given unary expression.
      * @param e
      * @return an integer that results from evaluating e.
      */
     int eval(UnaryExpr e);
     
     /**
-     * Evaluate the given sensor.
+     * Evaluates the given sensor.
      * @param e
      * @return an integer that results from evaluating e.
      */

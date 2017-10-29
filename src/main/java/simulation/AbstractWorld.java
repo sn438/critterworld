@@ -40,12 +40,16 @@ public abstract class AbstractWorld implements SimpleWorld
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void advanceOneTimeStep()
 	{
-		for(SimpleCritter sc : critterList)
+		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
+		for(int i = 0; i < clone.size(); i++)
 		{
-			Interpreter i = new InterpreterImpl(sc, this);
-			i.simulateCritterTurn();
+			SimpleCritter sc = clone.get(i);
+			Interpreter im = new InterpreterImpl(sc, this);
+			im.simulateCritterTurn();
+			System.out.println("\n" + this.numRemainingCritters());
 		}
 	}
 
@@ -55,12 +59,19 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public abstract StringBuilder printGrid();
 	
-
-	public abstract int searchNearby(SimpleCritter sc, int index);
+	/**
+	 * Looks at the contents of a hex adjacent to a critter.
+	 * @param sc the critter who is observing its surroundings
+	 * @param dir the direction in which to look
+	 * @return an integer value based on the contents of the observed hex
+	 */
+	public abstract int searchNearby(SimpleCritter sc, int dir);
 
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
-	public abstract boolean moveCritter(SimpleCritter sc, boolean forward);
+	public abstract void moveCritter(SimpleCritter sc, boolean forward);
+	
+	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
 	public abstract void critterEat(SimpleCritter sc);
 
@@ -84,4 +95,6 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract void critterTag(SimpleCritter sc, int index);
 	
 	public abstract void critterServe(SimpleCritter sc, int index);
+	
+	public abstract void critterSoakEnergy(SimpleCritter sc);
 }
