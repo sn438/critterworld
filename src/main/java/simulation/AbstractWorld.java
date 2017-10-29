@@ -42,11 +42,13 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public void advanceOneTimeStep()
 	{
-		for(int i = 0; i < critterList.size(); i++)
+		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
+		for(int i = 0; i < clone.size(); i++)
 		{
-			SimpleCritter sc = critterList.get(i);
+			SimpleCritter sc = clone.get(i);
 			Interpreter im = new InterpreterImpl(sc, this);
 			im.simulateCritterTurn();
+			System.out.println("\n" + this.numRemainingCritters());
 		}
 	}
 

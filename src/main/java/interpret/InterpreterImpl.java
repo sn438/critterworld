@@ -26,6 +26,7 @@ public class InterpreterImpl implements Interpreter
 	public void simulateCritterTurn()
 	{
 		Action a = interpret(c.getProgram());
+		System.out.println(c.getEnergy());
 		executeAction(a);
 	}
 	
@@ -61,7 +62,7 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			return new Action(ActType.WAIT);
-		//System.out.println(a.toString()); //TODO remove when done testing
+		System.out.println(a.toString()); //TODO remove when done testing
 		return a;
 	}
 	

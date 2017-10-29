@@ -453,7 +453,7 @@ public class World extends AbstractWorld
 		int r = location.getRowIndex();
 		
 		int complexity = sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
-		sc.updateEnergy(-9 * complexity, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		sc.updateEnergy(-1 * CONSTANTS.get("BUD_COST").intValue() * complexity, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 		
 		//if the critter did not have enough energy to complete this action, kills the critter
 		if(sc.getEnergy() < 0)
@@ -629,6 +629,7 @@ public class World extends AbstractWorld
 		
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		location.addContent(remnant);
+		System.out.println("RIP");
 	}
 	
 	@Override

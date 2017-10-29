@@ -3,7 +3,7 @@ memsize: 9
 defense: 2
 offense: 3
 size: 1
-energy: 500
+energy: 400
 posture: 17
 POSTURE != 17 --> POSTURE := 17; // we are species 17!
 nearby[3] = 0 and ENERGY > 2500 --> bud;
