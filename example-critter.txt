@@ -2,8 +2,8 @@ species: example
 memsize: 9
 defense: 2
 offense: 3
-size: 100
-energy: 500000
+size: 1
+energy: 500
 posture: 17
 POSTURE != 17 --> POSTURE := 17; // we are species 17!
 nearby[3] = 0 and ENERGY > 2500 --> bud;

@@ -12,9 +12,6 @@ public interface SimpleCritter extends WorldObject
 	
 	public int getMemLength();
 	
-	/** Returns the orientation of this critter. */
-	public int getOrientation();
-	
 	/** 
 	 * Returns the value of {@code memory[index]}.
 	 * @param index
@@ -46,9 +43,9 @@ public interface SimpleCritter extends WorldObject
 	 * Turns this critter in the direction specified.
 	 * @param counterclockwise
 	 */
-	public void turn(boolean clockwise);
+	public void turn(boolean counterclockwise);
 	
-	public int[] changeInPosition(boolean forward, int dir);
+	public int[] changeInPosition(boolean forward);
 	
 	public int getEnergy();
 	
@@ -59,7 +56,6 @@ public interface SimpleCritter extends WorldObject
 	public void toggleMatingPheromones(boolean b);
 	
 	public int complexity(int ruleCost, int abilityCost);
-	
-	/** How this critter appears to other critters. */
-	public int getAppearance();
+
+	public Program mutate();
 }

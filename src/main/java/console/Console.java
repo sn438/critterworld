@@ -29,7 +29,7 @@ public class Console
 		}
 		catch (IllegalArgumentException i)
 		{
-			System.err.println("The constants.txt file could not be read. Please check if it exists or is formatted properly.");
+			System.err.println("The constants.txt file could not be read. Please check if it is formatted properly.");
 		}
 	}
 

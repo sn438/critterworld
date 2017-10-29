@@ -26,17 +26,11 @@ public class InterpreterImpl implements Interpreter
 	public void simulateCritterTurn()
 	{
 		Action a = interpret(c.getProgram());
-		System.out.println(c.getEnergy());
 		executeAction(a);
 	}
 	
-	/**
-     * Execute program {@code p} until either the maximum number of rules per turn is reached or some rule
-     * whose command contains an action is executed.
-     * @param p
-     * @return the action to be performed
-     */
-	private Action interpret(Program p)
+	@Override
+	public Action interpret(Program p)
 	{
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
@@ -67,7 +61,6 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			return new Action(ActType.WAIT);
-		System.out.println(a.toString()); //TODO remove when done testing
 		return a;
 	}
 	
@@ -86,10 +79,10 @@ public class InterpreterImpl implements Interpreter
 				world.moveCritter(c, false);
 				break;
 			case LEFT:
-				world.turnCritter(c, false);
+				c.turn(true);
 				break;
 			case RIGHT:
-				world.turnCritter(c, true);
+				c.turn(false);
 				break;
 			case EAT:
 				world.critterEat(c);
@@ -111,9 +104,6 @@ public class InterpreterImpl implements Interpreter
 				break;
 			case SERVE:
 				world.critterServe(c, val);
-				break;
-			case WAIT:
-				world.critterSoakEnergy(c);
 				break;
 		}
 	}
@@ -147,11 +137,6 @@ public class InterpreterImpl implements Interpreter
 	public boolean eval(Relation r)
 	{
 		boolean result = false;
-		if(r.getCond() != null)
-		{
-			result = r.getCond().acceptEvaluation(this);
-			return result;
-		}
 		int left = r.getLeft().acceptEvaluation(this);
 		int right = r.getRight().acceptEvaluation(this);
 		switch(r.getRelOp())
@@ -221,6 +206,7 @@ public class InterpreterImpl implements Interpreter
 				break;
 			case MEMORYVAL:
 				int index = e.getExp().acceptEvaluation(this);
+				//TODO add clause to check out of bounds
 				result = c.readMemory(index);
 				if(result == Integer.MIN_VALUE)
 					result = 0;
