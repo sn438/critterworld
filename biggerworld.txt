@@ -1,0 +1,42 @@
+name Slightly bigger world
+size 100 150
+rock 2 2
+rock 3 6
+rock 9 10
+
+// Some food
+food 4 4 500
+food 1 3 1000
+food 28 128 10000
+food 29 129 10000
+food 29 129 10000
+food 29 128 10000
+food 26 128 10000
+food 26 129 10000
+food 28 129 10000
+food 26 127 10000
+food 41 25 10000
+food 39 26 10000
+food 39 25 10000
+food 39 28 10000
+food 40 26 10000
+food 41 28 10000
+food 38 24 10000
+food 39 24 10000
+
+// example-critter.txt should be in the working directory
+critter example-critter.txt 2 5 3
+critter example-critter.txt 4 3 1
+critter example-critter.txt 4 4 2
+critter example-critter.txt 40 25 4
+critter example-critter.txt 88 93 0
+critter example-critter.txt 66 128 5
+critter example-critter.txt 71 40 5
+critter example-critter.txt 69 100 5
+critter example-critter.txt 42 28 5
+critter example-critter.txt 60 58 5
+critter example-critter.txt 32 81 5
+critter example-critter.txt 97 60 5
+critter example-critter.txt 14 128 5
+critter example-critter.txt 27 128 5
+
