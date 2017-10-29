@@ -35,8 +35,6 @@ public interface SimpleCritter extends WorldObject
 	
 	public String getLastAction();
 	
-	public Direction getOrientation();
-	
 	public void setLastAction(String s);
 	
 	/** Increments the pass number of this critter (memory index 5) by one, if it is less than 999. */
