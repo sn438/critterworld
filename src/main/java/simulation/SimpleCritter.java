@@ -1,6 +1,5 @@
 package simulation;
 
-import ast.Action;
 import ast.Program;
 
 public interface SimpleCritter extends WorldObject
@@ -9,6 +8,8 @@ public interface SimpleCritter extends WorldObject
 	public Program getProgram();
 	
 	public int size();
+	
+	public int getMemLength();
 	
 	/** 
 	 * Returns the value of {@code memory[index]}.
@@ -29,8 +30,6 @@ public interface SimpleCritter extends WorldObject
 	public String getName();
 	
 	public String getLastAction();
-	
-	public int[] getMemory();
 	
 	public void setLastAction(String s);
 	
@@ -55,7 +54,5 @@ public interface SimpleCritter extends WorldObject
 	
 	public int complexity(int ruleCost, int abilityCost);
 
-	void mutate();
-
-	int numberMutations();
+	public Program mutate();
 }

@@ -304,7 +304,7 @@ public class World extends AbstractWorld
 		
 		int newc = c + sc.changeInPosition(true)[0];
 		int newr = r + sc.changeInPosition(true)[1];
-		if(!isValidHex(c, r))
+		if(!isValidHex(newc, newr))
 			return;
 		
 		Hex directlyInFront = grid[newc][newr];
@@ -353,7 +353,7 @@ public class World extends AbstractWorld
 		
 		int newc = c + attacker.changeInPosition(true)[0];
 		int newr = r + attacker.changeInPosition(true)[1];
-		if(!isValidHex(c, r))
+		if(!isValidHex(newc, newr))
 			return;
 		
 		Hex directlyInFront = grid[newc][newr];
@@ -390,27 +390,57 @@ public class World extends AbstractWorld
 		int r = location.getRowIndex();
 		int newc = c + sc.changeInPosition(false)[0];
 		int newr = r + sc.changeInPosition(false)[1];
-		if(!isValidHex(c, r))
+		if(!isValidHex(newc, newr))
 			return;
-		sc.updateEnergy(-9 * sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue()), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
-		int[] memory = sc.getMemory();
-		memory[3] = 1;
-		memory[4] = 250;
-		memory[6] = 0;
-		memory[7] = 0;
-		for (int i = 8; i < memory.length; i++) {
-			memory[i] = 0;
+		
+		int complexity = sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
+		sc.updateEnergy(-9 * complexity, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return;
 		}
+		
+		//Constructs the baby critter's memory, copying memory length, offense, and defense from the parent
+		int[] babymem = new int[sc.getMemLength()];
+		babymem[0] = sc.getMemLength();
+		babymem[1] = sc.readMemory(1);
+		babymem[2] = sc.readMemory(2);
+		babymem[3] = 1;
+		babymem[4] = 250;
+		for (int i = 5; i < babymem.length; i++)
+			babymem[i] = 0;
+		
 		String name = sc.getName() + " Jr.";
 		Program prog = sc.getProgram();
-		SimpleCritter baby = new Critter(prog, memory, name, 0); 
-		int numberMutations = baby.numberMutations();
-		for(int i = 0; i < numberMutations; i++) {
-			baby.mutate();
-		}
-		this.loadOneCritter(baby, newc, newr);
+		int numMutations = numberMutations();
+		for(int i = 0; i < numMutations; i++)
+			prog = prog.mutate();
+		
+		SimpleCritter baby = new Critter(prog, babymem, name, 0); 
+		loadOneCritter(baby, newc, newr);
+		
+		if(sc.getEnergy() == 0)
+			kill(sc);
 	}
 	
+	/** Randomly determines the number of mutations that will occur during mating or budding. */
+	private int numberMutations()
+	{
+		double randomNumber = Math.random();
+		int returnValue = 0;
+		double temp = 0.25;
+		
+		for(int i = 0; i < 10; i++)
+		{
+			if(randomNumber < temp)
+				returnValue++;
+			temp = Math.pow(0.25, i + 1);
+		}
+		return returnValue;
+	}
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
