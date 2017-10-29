@@ -171,7 +171,9 @@ public class World extends AbstractWorld
 	{
 		if(c < 0 || r < 0)
 			return false;
-		if((2 * r - c) < 0 || (2 * r - c) >= (2 * rows - columns))
+		else if(c >= columns || r >= rows)
+			return false;
+		else if((2 * r - c) < 0 || (2 * r - c) >= (2 * rows - columns))
 			return false;
 		return true;
 	}
@@ -243,21 +245,68 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public int searchNearby(SimpleCritter sc, int index)
+	public int searchNearby(SimpleCritter sc, int dir)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if(dir < 0)
+			dir = 0;
+		else if(dir > 6)
+			dir %= 6;
+		int nearbyc = sc.changeInPosition(true, dir)[0];
+		int nearbyr = sc.changeInPosition(true, dir)[1];
+		if(!isValidHex(nearbyc, nearbyr))
+			return -1;
+		Hex nearby = grid[nearbyc][nearbyr];
+		WorldObject nearbyObj = nearby.getContent();
+		
+		if(nearbyObj == null)
+			return 0;
+		else if(nearbyObj instanceof Rock)
+			return -1;
+		else if(nearbyObj instanceof Food)
+		{
+			Food f = (Food) nearbyObj;
+			return -1 * (f.getCalories() + 1);
+		}
+		else if(nearbyObj instanceof SimpleCritter)
+		{
+			SimpleCritter neighbor = (SimpleCritter) nearbyObj;
+			return neighbor.getAppearance();
+		}
+		return -1;
 	}
 
 	@Override
 	public int searchAhead(SimpleCritter sc, int index)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if(index < 0)
+			index = 0;
+		int aheadc = sc.changeInPosition(true, sc.getOrientation())[0] * index;
+		int aheadr = sc.changeInPosition(true, sc.getOrientation())[1] * index;
+		
+		if(!isValidHex(aheadc, aheadr))
+			return -1;
+		Hex nearby = grid[aheadc][aheadr];
+		WorldObject aheadObj = nearby.getContent();
+		
+		if(aheadObj == null)
+			return 0;
+		else if(aheadObj instanceof Rock)
+			return -1;
+		else if(aheadObj instanceof Food)
+		{
+			Food f = (Food) aheadObj;
+			return -1 * (f.getCalories() + 1);
+		}
+		else if(aheadObj instanceof SimpleCritter)
+		{
+			SimpleCritter neighbor = (SimpleCritter) aheadObj;
+			return neighbor.getAppearance();
+		}
+		return -1;
 	}
 
 	@Override
-	public boolean moveCritter(SimpleCritter sc, boolean forward)
+	public void moveCritter(SimpleCritter sc, boolean forward)
 	{
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
@@ -270,19 +319,25 @@ public class World extends AbstractWorld
 		if(sc.getEnergy() < 0)
 		{
 			kill(sc);
-			return false;
+			return;
 		}
 		
-		int[] changeInCoords = sc.changeInPosition(forward);
+		int[] changeInCoords = sc.changeInPosition(forward, sc.getOrientation());
 		int newc = c + changeInCoords[0];
 		int newr = r + changeInCoords[1];
 		
 		if(!isValidHex(newc, newr) || !grid[newc][newr].isEmpty())
-			return false;
+		{
+			if(sc.getEnergy() == 0)
+				 kill(sc);
+			return;
+		}
 		grid[c][r].removeContent();
 		critterMap.remove(sc);
+		grid[newc][newr].addContent(sc);
 		critterMap.put(sc, grid[newc][newr]);
-		return true;
+		if(sc.getEnergy() == 0)
+			 kill(sc);
 	}
 	
 	@Override
@@ -302,10 +357,14 @@ public class World extends AbstractWorld
 			return;
 		}
 		
-		int newc = c + sc.changeInPosition(true)[0];
-		int newr = r + sc.changeInPosition(true)[1];
+		int newc = c + sc.changeInPosition(true, sc.getOrientation())[0];
+		int newr = r + sc.changeInPosition(true, sc.getOrientation())[1];
 		if(!isValidHex(newc, newr))
+		{
+			if(sc.getEnergy() == 0)
+				 kill(sc);
 			return;
+		}
 		
 		Hex directlyInFront = grid[newc][newr];
 		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof Food)
@@ -351,10 +410,14 @@ public class World extends AbstractWorld
 			return;
 		}
 		
-		int newc = c + attacker.changeInPosition(true)[0];
-		int newr = r + attacker.changeInPosition(true)[1];
+		int newc = c + attacker.changeInPosition(true, attacker.getOrientation())[0];
+		int newr = r + attacker.changeInPosition(true, attacker.getOrientation())[1];
 		if(!isValidHex(newc, newr))
+		{
+			if(attacker.getEnergy() == 0)
+				kill(attacker);
 			return;
+		}
 		
 		Hex directlyInFront = grid[newc][newr];
 		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
@@ -388,10 +451,6 @@ public class World extends AbstractWorld
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
-		int newc = c + sc.changeInPosition(false)[0];
-		int newr = r + sc.changeInPosition(false)[1];
-		if(!isValidHex(newc, newr))
-			return;
 		
 		int complexity = sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
 		sc.updateEnergy(-9 * complexity, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
@@ -400,6 +459,15 @@ public class World extends AbstractWorld
 		if(sc.getEnergy() < 0)
 		{
 			kill(sc);
+			return;
+		}
+		
+		int newc = c + sc.changeInPosition(false, sc.getOrientation())[0];
+		int newr = r + sc.changeInPosition(false, sc.getOrientation())[1];
+		if(!isValidHex(newc, newr) || !grid[newc][newr].isEmpty())
+		{
+			if(sc.getEnergy() == 0)
+				kill(sc);
 			return;
 		}
 		
@@ -426,6 +494,29 @@ public class World extends AbstractWorld
 			kill(sc);
 	}
 	
+	@Override
+	public void critterMate(SimpleCritter sc)
+	{
+		/*
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
+		sc.updateEnergy(-1 * sc.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return;
+		}
+		
+		
+		if(sc.getEnergy() == 0)
+			kill(sc);
+		*/
+	}
+	
 	/** Randomly determines the number of mutations that will occur during mating or budding. */
 	private int numberMutations()
 	{
@@ -441,13 +532,6 @@ public class World extends AbstractWorld
 		}
 		return returnValue;
 	}
-	@Override
-	public void critterMate(SimpleCritter sc)
-	{
-		Hex location = critterMap.get(sc);
-		int c = location.getColumnIndex();
-		int r = location.getRowIndex();
-	}
 	
 	/** Executes the mating process, as long as there is one empty hex around the two critters.*/
 	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2)
@@ -456,12 +540,40 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public void critterTag(SimpleCritter tagger, int index)
+	public void critterTag(SimpleCritter tagger, int val)
 	{
 		Hex location = critterMap.get(tagger);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 		
+		tagger.updateEnergy(-1 * tagger.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(tagger.getEnergy() < 0)
+		{
+			kill(tagger);
+			return;
+		}
+		
+		int newc = c + tagger.changeInPosition(true, tagger.getOrientation())[0];
+		int newr = r + tagger.changeInPosition(true, tagger.getOrientation())[1];
+		if(!isValidHex(newc, newr))
+		{
+			if(tagger.getEnergy() == 0)
+				kill(tagger);
+			return;
+		}
+		
+		Hex directlyInFront = grid[newc][newr];
+		if(!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
+		{
+			SimpleCritter taggee = (SimpleCritter) (directlyInFront.getContent());
+			if(!(val < 0 || val > 99))
+				taggee.setMemory(val, 6);
+		}
+		
+		if(tagger.getEnergy() == 0)
+			kill(tagger);
 	}
 	
 	@Override
@@ -470,6 +582,41 @@ public class World extends AbstractWorld
 		Hex location = critterMap.get(donator);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
+		
+		if(index < 0)
+			index = 0;
+		
+		donator.updateEnergy(-1 * (donator.size() + index), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(donator.getEnergy() < 0)
+		{
+			kill(donator);
+			return;
+		}
+		
+		int newc = c + donator.changeInPosition(true, donator.getOrientation())[0];
+		int newr = r + donator.changeInPosition(true, donator.getOrientation())[1];
+		if(!isValidHex(newc, newr))
+		{
+			if(donator.getEnergy() == 0)
+				kill(donator);
+			return;
+		}
+		
+		Hex directlyInFront = grid[newc][newr];
+		if(directlyInFront.isEmpty())
+		{
+			Food f = new Food(index);
+			directlyInFront.addContent(f);
+		}
+		if(donator.getEnergy() == 0)
+			kill(donator);
+	}
+	
+	public void critterSoakEnergy(SimpleCritter sc)
+	{
+		sc.updateEnergy(CONSTANTS.get("SOLAR_FLUX").intValue(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 	}
 	
 	/** Kills a critter and removes it from any lists or mappings of critters. Rest in peace, buddy. */
@@ -500,10 +647,5 @@ public class World extends AbstractWorld
 			result.append("\n");
 		}
 		return result;
-	}
-	
-	@Override
-	public void advanceOneTimeStep() {
-		
 	}
 }

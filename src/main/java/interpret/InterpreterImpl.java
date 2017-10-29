@@ -61,6 +61,7 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			return new Action(ActType.WAIT);
+		//System.out.println(a.toString()); //TODO remove when done testing
 		return a;
 	}
 	
@@ -79,10 +80,10 @@ public class InterpreterImpl implements Interpreter
 				world.moveCritter(c, false);
 				break;
 			case LEFT:
-				c.turn(true);
+				c.turn(false);
 				break;
 			case RIGHT:
-				c.turn(false);
+				c.turn(true);
 				break;
 			case EAT:
 				world.critterEat(c);
@@ -104,6 +105,9 @@ public class InterpreterImpl implements Interpreter
 				break;
 			case SERVE:
 				world.critterServe(c, val);
+				break;
+			case WAIT:
+				world.critterSoakEnergy(c);
 				break;
 		}
 	}
@@ -137,6 +141,11 @@ public class InterpreterImpl implements Interpreter
 	public boolean eval(Relation r)
 	{
 		boolean result = false;
+		if(r.getCond() != null)
+		{
+			result = r.getCond().acceptEvaluation(this);
+			return result;
+		}
 		int left = r.getLeft().acceptEvaluation(this);
 		int right = r.getRight().acceptEvaluation(this);
 		switch(r.getRelOp())

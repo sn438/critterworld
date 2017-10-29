@@ -42,10 +42,11 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public void advanceOneTimeStep()
 	{
-		for(SimpleCritter sc : critterList)
+		for(int i = 0; i < critterList.size(); i++)
 		{
-			Interpreter i = new InterpreterImpl(sc, this);
-			i.simulateCritterTurn();
+			SimpleCritter sc = critterList.get(i);
+			Interpreter im = new InterpreterImpl(sc, this);
+			im.simulateCritterTurn();
 		}
 	}
 
@@ -56,11 +57,11 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract StringBuilder printGrid();
 	
 
-	public abstract int searchNearby(SimpleCritter sc, int index);
+	public abstract int searchNearby(SimpleCritter sc, int dir);
 
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
-	public abstract boolean moveCritter(SimpleCritter sc, boolean forward);
+	public abstract void moveCritter(SimpleCritter sc, boolean forward);
 
 	public abstract void critterEat(SimpleCritter sc);
 
@@ -84,4 +85,6 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract void critterTag(SimpleCritter sc, int index);
 	
 	public abstract void critterServe(SimpleCritter sc, int index);
+	
+	public abstract void critterSoakEnergy(SimpleCritter sc);
 }

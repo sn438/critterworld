@@ -75,10 +75,10 @@ public class Critter implements SimpleCritter
 		return prog;
 	}
 	
-	/** Returns the orientation of this critter. */
-	public Direction getOrientation()
+	@Override
+	public int getOrientation()
 	{
-		return orientation;
+		return orientation.getValue();
 	}
 	
 	@Override
@@ -143,10 +143,10 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
-	public void turn(boolean counterclockwise)
+	public void turn(boolean clockwise)
 	{
 		int curDir = orientation.getValue();
-		int change = counterclockwise ? 1 : -1;
+		int change = clockwise ? 1 : -1;
 		
 		int newDir = curDir + change;
 		if(newDir > 5)
@@ -183,10 +183,17 @@ public class Critter implements SimpleCritter
 	}
 
 	@Override
-	public int[] changeInPosition(boolean forward)
+	public int getAppearance()
+	{
+		return memory[3] * 100000 + memory[6] * 1000 + memory[7] * 10 + orientation.getValue();
+	}
+	
+	@Override
+	public int[] changeInPosition(boolean forward, int dir)
 	{
 		int[] result = new int[2];
-		switch(orientation)
+		Direction d = Direction.constructDir(dir);
+		switch(d)
 		{
 			case NORTH:
 				result[0] = 0;
@@ -221,20 +228,14 @@ public class Critter implements SimpleCritter
 		return result;
 	}
 	
-	@Override
-	public Program mutate()
-	{
-		return prog.mutate();
-	}
-	
 	/** An enumeration of all the possible directions a critter can be facing. */
 	public enum Direction
 	{
-		NORTH, NORTHWEST, SOUTHWEST, SOUTH, SOUTHEAST, NORTHEAST;
+		NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST, NORTHWEST;
 		
 		/** 
 		 * Returns an integer value of this direction based on an arbitrary numbering system that sets NORTH to 0 and 
-		 * goes counterclockwise until it stops at NORTHEAST.
+		 * goes clockwise until it stops at NORTHWEST.
 		 */
 		public int getValue()
 		{
@@ -244,19 +245,19 @@ public class Critter implements SimpleCritter
 				case NORTH:
 					result = 0;
 					break;
-				case NORTHWEST:
+				case NORTHEAST:
 					result = 1;
 					break;
-				case SOUTHWEST:
+				case SOUTHEAST:
 					result = 2;
 					break;
 				case SOUTH:
 					result = 3;
 					break;
-				case SOUTHEAST:
+				case SOUTHWEST:
 					result = 4;
 					break;
-				case NORTHEAST:
+				case NORTHWEST:
 					result = 5;
 					break;
 			}
@@ -275,15 +276,15 @@ public class Critter implements SimpleCritter
 				case 0:
 					return NORTH;
 				case 1:
-					return NORTHWEST;
+					return NORTHEAST;
 				case 2:
-					return SOUTHWEST;
+					return SOUTHEAST;
 				case 3:
 					return SOUTH;
 				case 4:
-					return SOUTHEAST;
+					return SOUTHWEST;
 				case 5:
-					return NORTHEAST;
+					return NORTHWEST;
 				default:
 					return NORTH;
 			}

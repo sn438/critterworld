@@ -29,7 +29,7 @@ public class FileParser
 	 * @param filename
 	 * @return a String array containing the memory attributes needed to create the critter.
 	 */
-	private static String[] parseAttributes(BufferedReader br)
+	public static String[] parseAttributes(BufferedReader br)
 	{
 		String name = parseAttributeFromLine(br, "species: ");
 		String memsize = parseAttributeFromLine(br, "memsize: ");
