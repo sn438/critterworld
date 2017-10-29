@@ -9,7 +9,7 @@ public class Test
 		SimpleWorld sw = new World("biggerworld.txt");
 		System.out.println(sw.printGrid().toString() + "\ncritter #: " + sw.numRemainingCritters());
 		
-		for(int i = 0; i < 1; i++)
+		for(int i = 0; i < 1000; i++)
 			sw.advanceOneTimeStep();
 		System.out.println(sw.printGrid().toString() + "\ncritter #: " + sw.numRemainingCritters());
 	}

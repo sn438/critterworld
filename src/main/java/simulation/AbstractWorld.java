@@ -40,6 +40,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void advanceOneTimeStep()
 	{
 		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();

@@ -487,7 +487,7 @@ public class World extends AbstractWorld
 		for(int i = 0; i < numMutations; i++)
 			prog = prog.mutate();
 		
-		SimpleCritter baby = new Critter(prog, babymem, name, 0); 
+		SimpleCritter baby = new Critter(prog, babymem, name, sc.getOrientation()); 
 		loadOneCritter(baby, newc, newr);
 		
 		if(sc.getEnergy() == 0)
