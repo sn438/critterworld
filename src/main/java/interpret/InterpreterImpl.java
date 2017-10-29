@@ -30,8 +30,13 @@ public class InterpreterImpl implements Interpreter
 		executeAction(a);
 	}
 	
-	@Override
-	public Action interpret(Program p)
+	/**
+     * Execute program {@code p} until either the maximum number of rules per turn is reached or some rule
+     * whose command contains an action is executed.
+     * @param p
+     * @return the action to be performed
+     */
+	private Action interpret(Program p)
 	{
 		LinkedList<Rule> rl = p.getRulesList();
 		Action a = null;
@@ -81,10 +86,10 @@ public class InterpreterImpl implements Interpreter
 				world.moveCritter(c, false);
 				break;
 			case LEFT:
-				c.turn(false);
+				world.turnCritter(c, false);
 				break;
 			case RIGHT:
-				c.turn(true);
+				world.turnCritter(c, true);
 				break;
 			case EAT:
 				world.critterEat(c);
@@ -216,7 +221,6 @@ public class InterpreterImpl implements Interpreter
 				break;
 			case MEMORYVAL:
 				int index = e.getExp().acceptEvaluation(this);
-				//TODO add clause to check out of bounds
 				result = c.readMemory(index);
 				if(result == Integer.MIN_VALUE)
 					result = 0;

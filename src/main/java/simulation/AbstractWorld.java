@@ -59,12 +59,19 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public abstract StringBuilder printGrid();
 	
-
+	/**
+	 * Looks at the contents of a hex adjacent to a critter.
+	 * @param sc the critter who is observing its surroundings
+	 * @param dir the direction in which to look
+	 * @return an integer value based on the contents of the observed hex
+	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
 	public abstract void moveCritter(SimpleCritter sc, boolean forward);
+	
+	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
 	public abstract void critterEat(SimpleCritter sc);
 

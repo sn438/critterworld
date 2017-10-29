@@ -24,14 +24,20 @@ public class World extends AbstractWorld
 	/** The number of hexes that lie on the world grid. */
 	private int numValidHexes;
 	
-	/** Loads a world based on a world description file. */
+	/**
+	 * Loads a world based on a world description file. 
+	 * @param The name of the file that contains world information.
+	 * @throws FileNotFoundException if the world file could not be found
+	 * 		   IllegalArgumentException if the world constants file could not be found or was improperly formatted
+	 */
 	public World(String filename) throws FileNotFoundException, IllegalArgumentException
 	{
+		//sets constants and initializes instance fields
 		super();
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
-		critterList = new LinkedList<SimpleCritter>();
-		timePassed = 0;
+		super.critterList = new LinkedList<SimpleCritter>();
+		super.timePassed = 0;
 		
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
 		
@@ -61,6 +67,7 @@ public class World extends AbstractWorld
 		}
 		numValidHexes = 0;
 		
+		//initializes world grid
 		grid = new Hex[columns][rows];
 		for(int i = 0; i < grid.length; i++)
 			for(int j = 0; j < grid[0].length; j++)
@@ -72,6 +79,7 @@ public class World extends AbstractWorld
 		
 		try
 		{
+			//loads in world objects from file
 			String line = bf.readLine();
 			while(line != null)
 			{
@@ -100,15 +108,19 @@ public class World extends AbstractWorld
 		}
 	}
 	
-	/** Generates a default size world containing nothing but randomly placed rocks. */
+	/** 
+	 * Generates a default size world containing nothing but randomly placed rocks. 
+	 * @throws IllegalArgumentException if the world constants file could not be found or was improperly formatted
+	 */
 	public World() throws IllegalArgumentException
 	{
+		//sets constants and initializes instance fields
 		super();
 		worldname = "Arrakis";
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
-		critterList = new LinkedList<SimpleCritter>();
-		timePassed = 0;
+		super.critterList = new LinkedList<SimpleCritter>();
+		super.timePassed = 0;
 		
 		columns = CONSTANTS.get("COLUMNS").intValue();
 		rows = CONSTANTS.get("ROWS").intValue();
@@ -141,7 +153,10 @@ public class World extends AbstractWorld
 		}
 	}
 
-	/** Parses the constants file in the project directory and stores the constants in the CONSTANTS field. */
+	/** 
+	 * Parses the constants file in the project directory and stores the constants in the CONSTANTS field.
+	 * @throws IllegalArgumentException if the constants file couldn't be found or is improperly formatted
+	 */
 	private void setConstants() throws IllegalArgumentException
 	{
 		/*InputStream in = World.class.getResourceAsStream("src/main/resources/constants.txt");
@@ -162,12 +177,12 @@ public class World extends AbstractWorld
 		catch (FileNotFoundException e)
 		{
 			System.err.println("The constants.txt file could not be found in src/main/resources.");
-			System.exit(0);
+			throw new IllegalArgumentException();
 		}
 	}
 	
 	/** Checks if a coordinate pair is within the bounds of this world grid. */
-	public boolean isValidHex(int c, int r)
+	private boolean isValidHex(int c, int r)
 	{
 		if(c < 0 || r < 0)
 			return false;
@@ -211,7 +226,7 @@ public class World extends AbstractWorld
 	/**
 	 * Loads a single critter into the world at the specified coordinates, if possible. Does nothing if the hex is not within
 	 * the world boundaries or if there is something already present at the hex.
-	 * @param sc the Critter to add
+	 * @param sc the critter to add
 	 * @param c the column index of the hex where the critter will be added
 	 * @param r the row index of the hex where the critter will be added
 	 */
@@ -244,15 +259,22 @@ public class World extends AbstractWorld
 		grid[c][r].addContent(wo);
 	}
 	
+	/* ========================================= */
+	/* -----------	Critter Sensors	 ----------- */
+	/* ========================================= */
+	
 	@Override
 	public int searchNearby(SimpleCritter sc, int dir)
 	{
+		//finds the hex to look in, based on the value of dir
 		if(dir < 0)
 			dir = 0;
 		else if(dir > 6)
 			dir %= 6;
 		int nearbyc = sc.changeInPosition(true, dir)[0];
 		int nearbyr = sc.changeInPosition(true, dir)[1];
+		
+		//critters see rock when they look off the edge of the world
 		if(!isValidHex(nearbyc, nearbyr))
 			return -1;
 		Hex nearby = grid[nearbyc][nearbyr];
@@ -305,6 +327,10 @@ public class World extends AbstractWorld
 		return -1;
 	}
 
+	/* ========================================= */
+	/* -----------	Critter Actions	 ----------- */
+	/* ========================================= */
+	
 	@Override
 	public void moveCritter(SimpleCritter sc, boolean forward)
 	{
@@ -336,6 +362,24 @@ public class World extends AbstractWorld
 		critterMap.remove(sc);
 		grid[newc][newr].addContent(sc);
 		critterMap.put(sc, grid[newc][newr]);
+		if(sc.getEnergy() == 0)
+			 kill(sc);
+	}
+	
+	@Override
+	public void turnCritter(SimpleCritter sc, boolean clockwise)
+	{
+		int cost = sc.size();
+		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+		
+		//if the critter did not have enough energy to complete this action, kills the critter
+		if(sc.getEnergy() < 0)
+		{
+			kill(sc);
+			return;
+		}
+		
+		sc.turn(clockwise);
 		if(sc.getEnergy() == 0)
 			 kill(sc);
 	}
@@ -377,6 +421,7 @@ public class World extends AbstractWorld
 			 kill(sc);
 	}
 	
+	@Override
 	public void growCritter(SimpleCritter sc)
 	{	
 		int cost = sc.size() * sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
@@ -429,6 +474,7 @@ public class World extends AbstractWorld
 			int dmgBeforeScaling = attacker.size() * attacker.readMemory(2) - target.size() * target.readMemory(1);
 			int damage = baseDamage * attacker.size() * logisticFunction(dmgMultiplier * dmgBeforeScaling);
 			
+			//kills the target if it took damage greater than or equal to its current energy
 			target.updateEnergy(-1 * damage, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			if(target.getEnergy() <= 0)
 				kill(target);
@@ -633,7 +679,7 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public StringBuilder printGrid()
+	public StringBuilder printGrid() //TODO fix
 	{
 		StringBuilder result = new StringBuilder("World name: " + worldname + "\n");
 		for(int i = 0; i < columns; i++)

@@ -43,7 +43,7 @@ public interface SimpleCritter extends WorldObject
 	 * Turns this critter in the direction specified.
 	 * @param counterclockwise
 	 */
-	public void turn(boolean counterclockwise);
+	public void turn(boolean clockwise);
 	
 	public int[] changeInPosition(boolean forward, int dir);
 	
