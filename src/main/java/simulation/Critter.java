@@ -75,7 +75,7 @@ public class Critter implements SimpleCritter
 		return prog;
 	}
 	
-	/** Returns the orientation of this critter. */
+	@Override
 	public Direction getOrientation()
 	{
 		return orientation;

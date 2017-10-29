@@ -22,7 +22,5 @@ public class underlyingStructures {
 		BufferedReader reader = new BufferedReader((new FileReader("example-critter.txt")));
 		FileParser parser = new FileParser();
 		SimpleCritter baby = parser.parseCritter(reader, 8, -1);
-		baby.mutate();
-		
 	}
 }

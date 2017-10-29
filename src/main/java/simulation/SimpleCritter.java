@@ -1,6 +1,7 @@
 package simulation;
 
 import ast.Program;
+import simulation.Critter.Direction;
 
 public interface SimpleCritter extends WorldObject
 {
@@ -30,6 +31,8 @@ public interface SimpleCritter extends WorldObject
 	public String getName();
 	
 	public String getLastAction();
+	
+	public Direction getOrientation();
 	
 	public void setLastAction(String s);
 	
