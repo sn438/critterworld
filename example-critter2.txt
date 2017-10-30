@@ -1,15 +1,21 @@
 species: example
-memsize: 10
+memsize: 11
 defense: 2
 offense: 3
 size: 1
 energy: 500
 posture: 17
-mem[8] = 7 and ENERGY >= SIZE --> mem[8] := 0;
+
 ahead[1] < -1 --> eat;
-ahead[1] = 0 and ENERGY > SIZE * 3 --> forward;
+
+mem[9] = 0 and ENERGY > SIZE * 3 --> mem[9] := 1 forward;
+mem[8] = 7 --> mem[8] := 0 mem[9] := 0;
+
 mem[8] <= 1 and ENERGY >= SIZE --> mem[8] := mem[8] + 1 right;
-mem[8] != 7 and ENERGY >= SIZE --> mem[8] := mem[8] + 1 right; 
+
+//mem[10] is a boolean that stores whether or not the critter has moved forward in between turns
+mem[10] = 0 and ahead[1] = 0 and ENERGY > SIZE * 3 --> mem[10] := 1 forward;
+mem[8] != 7 and ENERGY >= SIZE --> mem[10] := 0 mem[8] := mem[8] + 1 right;
 
 
 
