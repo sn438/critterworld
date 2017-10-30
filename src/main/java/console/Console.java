@@ -69,7 +69,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world in order to load critters into it.");
+			System.err.println("You must first create a world before you load critters into it.");
 			printHelp();
 			return;
 		}
@@ -86,7 +86,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world in order to load critters into it.");
+			System.err.println("You must first create a world before you advance time in it.");
 			printHelp();
 			return;
 		}
@@ -100,7 +100,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world in order to load critters into it.");
+			System.err.println("You must first create a world before you can view its information.");
 			printHelp();
 			return;
 		}

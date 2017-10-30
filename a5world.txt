@@ -1,0 +1,13 @@
+name a5 world
+size 7 8
+rock 0 4
+rock 6 6
+rock 0 1
+rock 9 10
+
+// Some food
+food 2 5 500
+
+// example-critter.txt should be in the working directory
+critter example-critter.txt 2 3 1
+critter example-critter.txt 2 1 5

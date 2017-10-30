@@ -61,20 +61,49 @@ public abstract class AbstractWorld implements SimpleWorld
 	
 	/**
 	 * Looks at the contents of a hex adjacent to a critter.
-	 * @param sc the critter who is observing its surroundings
-	 * @param dir the direction in which to look
-	 * @return an integer value based on the contents of the observed hex
+	 * @param sc : the critter who is observing its surroundings
+	 * @param dir : the direction in which to look
+	 * @return an integer value based on the contents of the observed hex. This value depends on the content of the hex:
+	 * 		   <ul><li>If the hex contains a critter, the value will be a positive integer equal to the critter's
+	 * 				   appearance, as determined by {@code SimpleCritter.getAppearance()}.</li>
+	 * 		   <li>If the hex contains nothing, the value will be 0.</li>
+	 * 		   <li>If the hex contains a rock or the hex is out of the world bounds, the value will be -1.</li>
+	 * 		   <li>If the hex contains food, the value will be {@code -1 * ([food calories] + 1)}.</li.</ul>
 	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 
+	/**
+	 * Looks at the contents of a hex ahead of a critter.
+	 * @param sc : the critter who is observing its surroundings
+	 * @param index : how far ahead to look
+	 * @return an integer value based on the contents of the observed hex, following the same scheme as {@code searchNearby}.
+	 */
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
+	/**
+	 * Moves a critter, if there is nothing in the way and critter will not move off the world bounds.
+	 * @param sc : the moving critter
+	 * @param forward : whether or not the critter is moving forward or backward
+	 */
 	public abstract void moveCritter(SimpleCritter sc, boolean forward);
 	
+	/**
+	 * Turns a critter.
+	 * @param sc : the turning critter
+	 * @param forward : whether or not the critter is turning clockwise or counterclockwise
+	 */
 	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
+	/**
+	 * Forces a critter to eat, if there is food in the hex directly in front of it.
+	 * @param sc : the feasting critter
+	 */
 	public abstract void critterEat(SimpleCritter sc);
 
+	/**
+	 * 
+	 * @param sc
+	 */
 	public abstract void growCritter(SimpleCritter sc);
 
 	public abstract void critterBattle(SimpleCritter attacker);

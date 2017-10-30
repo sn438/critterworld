@@ -817,7 +817,7 @@ public class World extends AbstractWorld
 	@Override
 	public StringBuilder printGrid() // TODO fix
 	{
-		StringBuilder result = new StringBuilder("World name: " + worldname + "\n");
+		/*StringBuilder result = new StringBuilder("World name: " + worldname + "\n");
 		for (int i = 0; i < columns; i++)
 		{
 			for (int j = 0; j < rows; j++)
@@ -829,6 +829,21 @@ public class World extends AbstractWorld
 			}
 			result.append("\n");
 		}
+		return result;*/
+		
+		StringBuilder result = new StringBuilder();
+		for(int i = 0; i <= rows; i++)
+		{
+			StringBuilder sb = new StringBuilder();
+			if(i % 2 != 0)
+				sb.append("  ");
+			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++)
+			{
+				sb.append("" + grid[c][r].toString() + "   ");
+			}
+			result.insert(0, sb.toString() + "\n");
+		}
+		result.insert(0, "World name: " + worldname + "\n");
 		return result;
 	}
 }

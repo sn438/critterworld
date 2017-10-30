@@ -27,6 +27,7 @@ public interface SimpleWorld
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();
 	
+	/** 
 	/** Returns a StringBuilder containing the printed version of the world grid. */
 	StringBuilder printGrid();
 }

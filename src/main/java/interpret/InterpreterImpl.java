@@ -66,8 +66,9 @@ public class InterpreterImpl implements Interpreter
 		c.setMemory(0, 5);
 		
 		if(a == null)
-			return new Action(ActType.WAIT);
-		System.out.println(a.toString()); //TODO remove when done testing
+			a = new Action(ActType.WAIT);
+		//System.out.println(a.toString()); //TODO remove when done testing
+		c.setLastAction(a.getActType().toString());
 		return a;
 	}
 	
