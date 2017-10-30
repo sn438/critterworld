@@ -22,4 +22,10 @@ public class Food implements WorldObject
 	{
 		return "F";
 	}
+
+	@Override
+	public int getAppearance()
+	{
+		return -1 * (calories + 1);
+	}
 }

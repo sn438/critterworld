@@ -59,16 +59,15 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public abstract StringBuilder printGrid();
 	
+	/* ========================================= */
+	/* ----------- Critter Sensors ------------- */
+	/* ========================================= */
+	
 	/**
 	 * Looks at the contents of a hex adjacent to a critter.
 	 * @param sc : the critter who is observing its surroundings
 	 * @param dir : the direction in which to look
-	 * @return an integer value based on the contents of the observed hex. This value depends on the content of the hex:
-	 * 		   <ul><li>If the hex contains a critter, the value will be a positive integer equal to the critter's
-	 * 				   appearance, as determined by {@code SimpleCritter.getAppearance()}.</li>
-	 * 		   <li>If the hex contains nothing, the value will be 0.</li>
-	 * 		   <li>If the hex contains a rock or the hex is out of the world bounds, the value will be -1.</li>
-	 * 		   <li>If the hex contains food, the value will be {@code -1 * ([food calories] + 1)}.</li.</ul>
+	 * @return an integer value based on the contents of the observed hex. If the hex is empty, this
 	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 
@@ -80,6 +79,17 @@ public abstract class AbstractWorld implements SimpleWorld
 	 */
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
+	/* ========================================= */
+	/* ----------- Critter Actions ------------- */
+	/* ========================================= */
+	
+	/* 
+	  A NOTE ON ACTIONS: all critter actions except WAIT expend energy. Most of them expend the same amount of energy whether
+	  they succeed or not. If a critter tries to execute an action that requires more energy than it currently has, it will 
+	  die without executing that action. If a critter has just enough energy to perform an action (i.e. the energy required
+	  to perform that action is equal to the energy it currently has, it will execute that action and promptly die afterwards.
+	*/
+	
 	/**
 	 * Moves a critter, if there is nothing in the way and critter will not move off the world bounds.
 	 * @param sc : the moving critter
@@ -101,11 +111,15 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract void critterEat(SimpleCritter sc);
 
 	/**
-	 * 
-	 * @param sc
+	 * Grows a critter by one size.
+	 * @param sc : the growing critter
 	 */
 	public abstract void growCritter(SimpleCritter sc);
 
+	/** 
+	 * Simulates the results of one critter attacking another.
+	 * @param attacker
+	 */
 	public abstract void critterBattle(SimpleCritter attacker);
 	
 	/** 

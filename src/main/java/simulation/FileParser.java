@@ -10,14 +10,24 @@ import parse.ParserFactory;
 /** This class supplies several static methods that may be useful for parsing files needed for world creation and modification. */
 public class FileParser
 {
+	/**
+	 * 
+	 * @param br
+	 * @param minMemory
+	 * @param direction
+	 * @return A SimpleCritter object made from the parsed file, or null if the program contains syntax errors
+	 */
 	public static SimpleCritter parseCritter(BufferedReader br, int minMemory, int direction)
 	{
 		String[] parsed = parseAttributes(br);
 		String name = parsed[0].equals("") ? "Untitled #" : parsed[0];
 		int[] critMem = FileParser.makeCritterMemory(parsed, minMemory);
 		
+		//parses the critter program. If the program isn't syntactically valid, returns null
 		Parser p = ParserFactory.getParser();
 		Program prog = p.parse(br);
+		if(prog == null)
+			return null;
 		
 		if((direction < 0 || direction > 5))
 			return new Critter(prog, critMem, name);

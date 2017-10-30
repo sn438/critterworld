@@ -104,6 +104,8 @@ public class World extends AbstractWorld
 						BufferedReader critterreader = new BufferedReader(new FileReader(info[1]));
 						SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(),
 								Integer.parseInt(info[4]));
+						if(sc == null)
+							break;
 						loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
 						break;
 				}
@@ -297,17 +299,8 @@ public class World extends AbstractWorld
 			return 0;
 		else if (nearbyObj instanceof Rock)
 			return -1;
-		else if (nearbyObj instanceof Food)
-		{
-			Food f = (Food) nearbyObj;
-			return -1 * (f.getCalories() + 1);
-		}
-		else if (nearbyObj instanceof SimpleCritter)
-		{
-			SimpleCritter neighbor = (SimpleCritter) nearbyObj;
-			return neighbor.getAppearance();
-		}
-		return -1;
+		else 
+			return nearbyObj.getAppearance();
 	}
 
 	@Override
@@ -325,19 +318,8 @@ public class World extends AbstractWorld
 
 		if (aheadObj == null)
 			return 0;
-		else if (aheadObj instanceof Rock)
-			return -1;
-		else if (aheadObj instanceof Food)
-		{
-			Food f = (Food) aheadObj;
-			return -1 * (f.getCalories() + 1);
-		}
-		else if (aheadObj instanceof SimpleCritter)
-		{
-			SimpleCritter neighbor = (SimpleCritter) aheadObj;
-			return neighbor.getAppearance();
-		}
-		return -1;
+		else 
+			return aheadObj.getAppearance();
 	}
 
 	/* ========================================= */
@@ -811,7 +793,6 @@ public class World extends AbstractWorld
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		location.addContent(remnant);
-		System.out.println("RIP");
 	}
 
 	@Override

@@ -8,4 +8,10 @@ public class Rock implements WorldObject
 	{
 		return "#";
 	}
+
+	@Override
+	public int getAppearance()
+	{
+		return -1;
+	}
 }

@@ -18,10 +18,10 @@ class ParserImpl implements Parser {
 	public Program parse(Reader r) {
 		this.tokens = new Tokenizer(r);
 		try {
-			this.programAST = parseProgram(tokens);
-		} catch (SyntaxError e) {
-			System.out.println("The program inputted does not have the proper syntax.");
-			System.exit(0);
+			programAST = parseProgram(tokens);
+		}
+		catch (SyntaxError e) {
+			programAST = null;
 		}
 
 		return this.programAST;

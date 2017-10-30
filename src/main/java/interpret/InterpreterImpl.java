@@ -67,11 +67,12 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			a = new Action(ActType.WAIT);
-		//System.out.println(a.toString()); //TODO remove when done testing
+		System.out.println(a.toString()); //TODO remove when done testing
 		c.setLastAction(a.getActType().toString());
 		return a;
 	}
 	
+	/** Executes an action returned by the {@code interpret} method. */
 	private void executeAction(Action a)
 	{
 		int val = 0;

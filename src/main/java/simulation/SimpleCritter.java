@@ -58,6 +58,7 @@ public interface SimpleCritter extends WorldObject
 	
 	public int complexity(int ruleCost, int abilityCost);
 	
-	/** How this critter appears to other critters. */
+	@Override
+	
 	public int getAppearance();
 }
