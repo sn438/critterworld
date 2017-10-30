@@ -59,67 +59,24 @@ public abstract class AbstractWorld implements SimpleWorld
 	@Override
 	public abstract StringBuilder printGrid();
 	
-	/* ========================================= */
-	/* ----------- Critter Sensors ------------- */
-	/* ========================================= */
-	
 	/**
 	 * Looks at the contents of a hex adjacent to a critter.
-	 * @param sc : the critter who is observing its surroundings
-	 * @param dir : the direction in which to look
-	 * @return an integer value based on the contents of the observed hex. If the hex is empty, this
+	 * @param sc the critter who is observing its surroundings
+	 * @param dir the direction in which to look
+	 * @return an integer value based on the contents of the observed hex
 	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 
-	/**
-	 * Looks at the contents of a hex ahead of a critter.
-	 * @param sc : the critter who is observing its surroundings
-	 * @param index : how far ahead to look
-	 * @return an integer value based on the contents of the observed hex, following the same scheme as {@code searchNearby}.
-	 */
 	public abstract int searchAhead(SimpleCritter sc, int index);
 
-	/* ========================================= */
-	/* ----------- Critter Actions ------------- */
-	/* ========================================= */
-	
-	/* 
-	  A NOTE ON ACTIONS: all critter actions except WAIT expend energy. Most of them expend the same amount of energy whether
-	  they succeed or not. If a critter tries to execute an action that requires more energy than it currently has, it will 
-	  die without executing that action. If a critter has just enough energy to perform an action (i.e. the energy required
-	  to perform that action is equal to the energy it currently has, it will execute that action and promptly die afterwards.
-	*/
-	
-	/**
-	 * Moves a critter, if there is nothing in the way and critter will not move off the world bounds.
-	 * @param sc : the moving critter
-	 * @param forward : whether or not the critter is moving forward or backward
-	 */
 	public abstract void moveCritter(SimpleCritter sc, boolean forward);
 	
-	/**
-	 * Turns a critter.
-	 * @param sc : the turning critter
-	 * @param forward : whether or not the critter is turning clockwise or counterclockwise
-	 */
 	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
-	/**
-	 * Forces a critter to eat, if there is food in the hex directly in front of it.
-	 * @param sc : the feasting critter
-	 */
 	public abstract void critterEat(SimpleCritter sc);
 
-	/**
-	 * Grows a critter by one size.
-	 * @param sc : the growing critter
-	 */
 	public abstract void growCritter(SimpleCritter sc);
 
-	/** 
-	 * Simulates the results of one critter attacking another.
-	 * @param attacker
-	 */
 	public abstract void critterBattle(SimpleCritter attacker);
 	
 	/** 

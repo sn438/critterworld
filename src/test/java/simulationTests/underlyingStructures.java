@@ -20,7 +20,6 @@ public class underlyingStructures {
 	@Test	
 	public void setUp() throws FileNotFoundException {
 		BufferedReader reader = new BufferedReader((new FileReader("example-critter.txt")));
-		FileParser parser = new FileParser();
-		SimpleCritter baby = parser.parseCritter(reader, 8, -1);
+		SimpleCritter baby = FileParser.parseCritter(reader, 8, -1);
 	}
 }

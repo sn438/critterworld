@@ -1,0 +1,16 @@
+species: example
+memsize: 10
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+mem[8] = 7 and ENERGY >= SIZE --> mem[8] := 0;
+ahead[1] < -1 --> eat;
+ahead[1] = 0 and ENERGY > SIZE * 3 --> forward;
+mem[8] <= 1 and ENERGY >= SIZE --> mem[8] := mem[8] + 1 right;
+mem[8] != 7 and ENERGY >= SIZE --> mem[8] := mem[8] + 1 right; 
+
+
+
+  
