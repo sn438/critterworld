@@ -186,8 +186,8 @@ class Token {
 		 * Constructs a new error token containing the value {@code v}.
 		 * @param v - String value for this error token.
 		 */
-		ErrorToken(String v) {
-			super(TokenType.ERROR, -1);
+		ErrorToken(String v, int lineNo) {
+			super(TokenType.ERROR, lineNo);
 			value = v;
 		}
 

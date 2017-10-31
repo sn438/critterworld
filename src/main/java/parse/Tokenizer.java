@@ -1,9 +1,33 @@
 package parse;
 
+import static parse.TokenType.ARR;
+import static parse.TokenType.ASSIGN;
+import static parse.TokenType.DIV;
+import static parse.TokenType.EQ;
+import static parse.TokenType.GE;
+import static parse.TokenType.GT;
+import static parse.TokenType.LBRACE;
+import static parse.TokenType.LBRACKET;
+import static parse.TokenType.LE;
+import static parse.TokenType.LPAREN;
+import static parse.TokenType.LT;
+import static parse.TokenType.MINUS;
+import static parse.TokenType.MUL;
+import static parse.TokenType.NE;
+import static parse.TokenType.PLUS;
+import static parse.TokenType.RBRACE;
+import static parse.TokenType.RBRACKET;
+import static parse.TokenType.RPAREN;
+import static parse.TokenType.SEMICOLON;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+
+import parse.Token.EOFToken;
+import parse.Token.ErrorToken;
+import parse.Token.NumToken;
 
 /**
  * A Tokenizer turns a Reader into a stream of tokens that can be iterated over
@@ -11,500 +35,426 @@ import java.util.Iterator;
  */
 public class Tokenizer implements Iterator<Token> {
 
-	/**
-	 * BufferedReader to read from the {@code Reader} provided in the constructor,
-	 * not {@code null}.
-	 */
-	private final BufferedReader br;
+    private final BufferedReader br;
+    private final StringBuilder buf;
+    private int lineNo;
+    /**
+     * {@code tokenReady} is {@code false} if a token is not immediately
+     * available to be returned from {@code next()}, and {@code true} if a token
+     * is immediately ready to be returned from {@code next()}.
+     */
+    private boolean tokenReady = false;
+    private Token curTok =
+            new ErrorToken("Tokenizer has not yet begun reading", -1);
+    private boolean atEOF = false;
 
-	/** Builder to store read characters. */
-	private final StringBuilder sb;
+    /**
+     * Create a Tokenizer that reads from the specified reader
+     * 
+     * @param r
+     *            The source from which the Tokenizer lexes input into Tokens
+     */
+    Tokenizer(Reader r) {
+        br = new BufferedReader(r);
+        buf = new StringBuilder();
+        lineNo = 1;
+    }
 
-	/**
-	 * The number of the line being parsed from the reader. Starts at 1 and always
-	 * equals 1 + the number of new line characters encountered.
-	 */
-	private int lineNo;
+    /**
+     * Returns {@code true} if the iteration has more meaningful elements. (In
+     * other words, returns {@code true} if {@link #next} would return a non-EOF
+     * element rather than throwing an exception or returning EOF.)
+     *
+     * @return {@code true} if the iteration has more meaningful elements
+     */
+    @Override
+    public boolean hasNext() {
+        if (!tokenReady) {
+            try {
+                lexOneToken();
+            }
+            catch (IOException e) {
+                throw new TokenizerIOException(e);
+            }
+            catch (EOFException e) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * {@code tokenReady} is {@code false} if a token is not immediately available
-	 * to be returned from {@code next()}, and {@code true} if a token is
-	 * immediately ready to be returned from {@code next()}.
-	 */
-	private boolean tokenReady;
+    @Override
+    public Token next() throws TokenizerIOException {
+        Token tok = peek();
+        tokenReady = false;
+        return tok;
+    }
 
-	/**
-	 * The most recent token processed by this Tokenizer, or an error token. Not
-	 * {@code null}.
-	 */
-	private Token curTok;
+    /**
+     * Return the next token in the program without consuming the token.
+     * 
+     * @return the next token, without consuming it
+     * @throws IOException
+     *             if an IOException was thrown while trying to read from the
+     *             source Reader
+     * @throws EOFException
+     *             if EOF was encountered while trying to lex the next token
+     */
+    public Token peek() throws TokenizerIOException {
+        if (!tokenReady && !atEOF) try {
+            lexOneToken();
+        }
+        catch (IOException e) {
+            throw new TokenizerIOException(e);
+        }
+        catch (EOFException e) {
+            // EOFException is thrown by encounteredEOF(), which should set
+            // curTok to an EOFToken
+        }
+        return curTok;
+    }
 
-	/**
-	 * {@code false} if the EOF has not been encountered, {@code true} if it has
-	 * been encountered
-	 */
-	private boolean atEOF;
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Create a Tokenizer that reads from the specified reader
-	 * 
-	 * @param r
-	 *            - The source from which the Tokenizer lexes input into Tokens
-	 */
-	public Tokenizer(Reader r) {
-		br = new BufferedReader(r);
-		sb = new StringBuilder();
-		lineNo = 1;
-		tokenReady = false;
-		curTok = new Token.ErrorToken("Tokenizer has not yet begun reading");
-		atEOF = false;
-	}
+    /**
+     * Close the reader opened by this tokenizer.
+     */
+    void close() {
+        try {
+            br.close();
+        }
+        catch (IOException e) {
+            System.out.println("IOException:");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * Returns {@code true} if the iteration has more meaningful elements. (In other
-	 * words, returns {@code true} if {@link #next} would return a non-EOF element
-	 * rather than throwing an exception or returning EOF.)
-	 *
-	 * @return {@code true} if the iteration has more meaningful elements
-	 */
-	@Override
-	public boolean hasNext() {
-		if (!tokenReady) {
-			try {
-				lexOneToken();
-			} catch (IOException e) {
-				throw new TokenizerIOException(e);
-			} catch (EOFException e) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Read one token from the reader. One token is always produced if the end
+     * of file is not encountered, but that token may be an error token.
+     * 
+     * @throws IOException
+     *             if an IOException was thrown when trying to read from the
+     *             source Reader
+     * @throws EOFException
+     *             if EOF is encountered and a token cannot be produced.
+     */
+    private void lexOneToken() throws IOException, EOFException {
+        setBufToFirstMeaningfulChar();
+        char c = buf.charAt(0);
 
-	@Override
-	public Token next() throws TokenizerIOException {
-		Token tok = peek();
-		tokenReady = false;
-		return tok;
-	}
+        switch (c) {
+        case '[':
+            setNextTokenAndReset(LBRACKET);
+            break;
+        case ']':
+            setNextTokenAndReset(RBRACKET);
+            break;
+        case '(':
+            setNextTokenAndReset(LPAREN);
+            break;
+        case ')':
+            setNextTokenAndReset(RPAREN);
+            break;
+        case '{':
+            setNextTokenAndReset(LBRACE);
+            break;
+        case '}':
+            setNextTokenAndReset(RBRACE);
+            break;
+        case ';':
+            setNextTokenAndReset(SEMICOLON);
+            break;
+        case '=':
+            setNextTokenAndReset(EQ);
+            break;
+        case '+':
+            setNextTokenAndReset(PLUS);
+            break;
+        case '*':
+            setNextTokenAndReset(MUL);
+            break;
+        case '/':
+            lexSlash();
+            break;
+        case '<':
+            lexLAngle();
+            break;
+        case '>':
+            lexRAngle();
+            break;
+        case '-':
+            lexDash();
+            break;
+        case ':':
+            if (consume('=')) setNextTokenAndReset(ASSIGN);
+            break;
+        case '!':
+            if (consume('=')) setNextTokenAndReset(NE);
+            break;
+        default:
+            if (Character.isLetter(c))
+                lexIdentifier();
+            else if (Character.isDigit(c))
+                lexNum();
+            else unexpected();
+        }
+    }
 
-	/**
-	 * Return the next token in the program without consuming the token.
-	 *
-	 * @return the next token, without consuming it
-	 * @throws IOException
-	 *             if an IOException was thrown while trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF was encountered while trying to lex the next token
-	 */
-	public Token peek() throws TokenizerIOException {
-		if (!tokenReady && !atEOF) {
-			try {
-				lexOneToken();
-			} catch (IOException e) {
-				throw new TokenizerIOException(e);
-			} catch (EOFException e) {
-				// EOFException is thrown by encounteredEOF(), which should set
-				// curTok to an EOFToken, so this catch block should be empty.
-			}
-		}
-		return curTok;
-	}
+    /**
+     * Consumes whitespace up until the first non-whitespace character, and sets
+     * the buffer to that character
+     * 
+     * @throws IOException
+     *             if an IOException is encountered while reading from the
+     *             source Reader
+     */
+    private void setBufToFirstMeaningfulChar() throws IOException, EOFException {
+        // Make sure there isn't any leftover from a previous lexing operation
+        assert buf.length() <= 1;
+        char c = buf.length() == 1 ? c = buf.charAt(0) : getNextCharAndAppend();
 
-	@Override
-	public void remove() {
-		tokenReady = false;
-	}
+        // consume whitespaces
+        while (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+            if (c == '\n') lineNo++;
+            c = getNextCharAndAppend();
+        }
 
-	/** Close the reader opened by this tokenizer. */
-	void close() {
-		try {
-			br.close();
-		} catch (IOException e) {
-			System.out.println("IOException:");
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
+        resetBufferWith(c);
+    }
 
-	/**
-	 * Read one token from the reader. One token is always produced if the end of
-	 * file is not encountered, but that token may be an error token.
-	 *
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexOneToken() throws IOException, EOFException {
-		setBuilderToFirstMeaningfulChar();
-		char c = sb.charAt(0);
+    private void lexSlash() throws IOException, EOFException {
+        int c = nextChar(false);
+        if (c == -1)
+            setNextTokenAndReset(DIV);
+        else {
+            char cc = (char) c;
+            buf.append(cc);
+            if (cc == '/') {
+                // rest-of-line comment
+                while (cc != '\n')
+                    cc = getNextCharAndAppend();
+                resetBufferWith(cc);
+                setBufToFirstMeaningfulChar();
+            }
+            else setNextTokenAndResetWith(DIV, cc);
+        }
+    }
 
-		switch (c) {
-		case '[':
-			setNextTokenAndReset(TokenType.LBRACKET);
-			break;
-		case ']':
-			setNextTokenAndReset(TokenType.RBRACKET);
-			break;
-		case '(':
-			setNextTokenAndReset(TokenType.LPAREN);
-			break;
-		case ')':
-			setNextTokenAndReset(TokenType.RPAREN);
-			break;
-		case '{':
-			setNextTokenAndReset(TokenType.LBRACE);
-			break;
-		case '}':
-			setNextTokenAndReset(TokenType.RBRACE);
-			break;
-		case ';':
-			setNextTokenAndReset(TokenType.SEMICOLON);
-			break;
-		case '=':
-			setNextTokenAndReset(TokenType.EQ);
-			break;
-		case '+':
-			setNextTokenAndReset(TokenType.PLUS);
-			break;
-		case '*':
-			setNextTokenAndReset(TokenType.MUL);
-			break;
-		case '/':
-			if (consume('/')) {
-				br.readLine();
-				resetStringBuilder();
-				setBuilderToFirstMeaningfulChar();
-			} else {
-				setNextTokenAndReset(TokenType.DIV);
-			}
-			break;
-		case '<':
-			lexLAngle();
-			break;
-		case '>':
-			lexRAngle();
-			break;
-		case '-':
-			lexDash();
-			break;
-		case ':':
-			if (consume('='))
-				setNextTokenAndReset(TokenType.ASSIGN);
-			break;
-		case '!':
-			if (consume('='))
-				setNextTokenAndReset(TokenType.NE);
-			break;
-		default:
-			if (Character.isLetter(c))
-				lexIdentifier();
-			else if (Character.isDigit(c))
-				lexNum();
-			else
-				unexpected();
-		}
-	}
+    private void lexLAngle() throws IOException, EOFException {
+        int c = nextChar(false);
+        if (c == -1)
+            setNextTokenAndReset(LT);
+        else {
+            char cc = (char) c;
+            buf.append(cc);
+            if (cc == '=')
+                setNextTokenAndReset(LE);
+            else setNextTokenAndResetWith(LT, cc);
+        }
+    }
 
-	/**
-	 * Consumes whitespace up until the first non-whitespace character, and sets the
-	 * builder to that character
-	 *
-	 * @throws IOException
-	 *             if an IOException is encountered while reading from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void setBuilderToFirstMeaningfulChar() throws IOException, EOFException {
-		// Make sure there isn't any leftover from a previous lexing operation
-		assert sb.length() <= 1;
-		char c = sb.length() == 1 ? c = sb.charAt(0) : getNextCharAndAppend();
+    private void lexRAngle() throws IOException, EOFException {
+        int c = nextChar(false);
+        if (c == -1)
+            setNextTokenAndReset(GT);
+        else {
+            char cc = (char) c;
+            buf.append(cc);
+            if (cc == '=')
+                setNextTokenAndReset(GE);
+            else setNextTokenAndResetWith(GT, cc);
+        }
+    }
 
-		// consume whitespace
-		while (Character.isWhitespace(c)) {
-			if (c == '\n')
-				++lineNo;
-			c = getNextCharAndAppend();
-		}
+    private void lexDash() throws IOException, EOFException {
+        int[] cs = peekReader(2);
+        if (cs[0] == -1) {
+            consume('-'); // Dash already in the system
+            setNextTokenAndReset(MINUS);
+        }
+        else { // Have one dash, what's next
+               // If dash #2
+            if ((char) cs[0] == '-') {
+                // If >
+                if ((char) cs[1] == '>') { // It's an arrow!
+                    consume('-');
+                    consume('>');
+                    setNextTokenAndReset(ARR);
+                }
+                else {
+                    consume('-');
+                    setNextTokenAndResetWith(MINUS, '-');
+                }
+            }
+            else { // No dash #2
+                setNextTokenAndReset(MINUS);
+            }
+        }
+    }
 
-		resetBuilderWith(c);
-	}
+    private void lexIdentifier() throws IOException, EOFException {
+        int c;
+        for (c = nextChar(false); c != -1 && Character.isLetter(c); c =
+                nextChar(false))
+            buf.append((char) c);
 
-	/**
-	 * Lexes a left angle bracket. May be called only when the previously read
-	 * character is '<'.
-	 * 
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexLAngle() throws IOException, EOFException {
-		int c = nextChar(false);
-		if (c == -1) {
-			setNextTokenAndReset(TokenType.LT);
-		} else {
-			char cc = (char) c;
-			sb.append(cc);
-			if (cc == '=')
-				setNextTokenAndReset(TokenType.LE);
-			else
-				setNextTokenAndResetWith(TokenType.LT, cc);
-		}
-	}
+        String id = buf.toString();
+        TokenType tt = TokenType.getTypeFromString(id);
+        if (tt != null) {
+            setNextTokenAndReset(tt);
+        }
+        else {
+            unexpected();
+        }
 
-	/**
-	 * Lexes a right angle bracket. May be called only when the previously read
-	 * character '>'.
-	 * 
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexRAngle() throws IOException, EOFException {
-		int c = nextChar(false);
-		if (c == -1) {
-			setNextTokenAndReset(TokenType.GT);
-		} else {
-			char cc = (char) c;
-			sb.append(cc);
-			if (cc == '=')
-				setNextTokenAndReset(TokenType.GE);
-			else
-				setNextTokenAndResetWith(TokenType.GT, cc);
-		}
-	}
+        if (c != -1) buf.append((char) c);
+    }
 
-	/**
-	 * Lexes a dash character. If a dash is followed by another dash, then it is
-	 * part of an arrow. Otherwise it must represent a minus sign.
-	 * 
-	 * May only be called when the previously read char is a dash '-'.
-	 * 
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexDash() throws IOException, EOFException {
-		int c = nextChar(false);
-		if (c == -1) {
-			setNextTokenAndReset(TokenType.MINUS);
-		} else {
-			char cc = (char) c;
-			sb.append(cc);
-			if (cc == '-') {
-				if (consume('>'))
-					setNextTokenAndReset(TokenType.ARR);
-			} else
-				setNextTokenAndResetWith(TokenType.MINUS, cc);
-		}
-	}
+    private void lexNum() throws IOException, EOFException {
+        int c;
+        for (c = nextChar(false); c != -1 && Character.isDigit(c); c =
+                nextChar(false))
+            buf.append((char) c);
 
-	/**
-	 * Lexes an identifier. May be called only when the previously read character is
-	 * a letter.
-	 * 
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexIdentifier() throws IOException, EOFException {
-		int c;
-		for (c = nextChar(false); c != -1 && Character.isLetter(c); c = nextChar(false))
-			sb.append((char) c);
+        try {
+            String num = buf.toString();
+            int val = Integer.parseInt(num);
+            curTok = new NumToken(val, lineNo);
+            tokenReady = true;
+            buf.setLength(0);
+            if (c != -1) buf.append((char) c);
+        }
+        catch (NumberFormatException e) {
+            unexpected();
+        }
+    }
 
-		String id = sb.toString();
-		TokenType tt = TokenType.getTypeFromString(id);
-		if (tt != null)
-			setNextTokenAndReset(tt);
-		else
-			unexpected();
+    /**
+     * Read the next character from the reader, treating EOF as an error. If
+     * successful, append the character to the buffer.
+     * 
+     * @return The next character
+     * @throws IOException
+     *             if an IOException was thrown when trying to read the next
+     *             char
+     * @throws EOFException
+     *             if EOF is encountered
+     */
+    private char getNextCharAndAppend() throws IOException, EOFException {
+        char c = (char) nextChar(true);
+        buf.append(c);
+        return c;
+    }
 
-		if (c != -1)
-			sb.append((char) c);
-	}
+    /**
+     * Read the next character from the reader. If isEOFerror, treat EOF as an
+     * error. If successful, append the character to the buffer.
+     * 
+     * @param exceptionOnEOF
+     * @return The integer representation of the next character
+     * @throws IOException
+     *             if an {@code IOException} is thrown when trying to read from
+     *             the source Reader
+     * @throws EOFException
+     *             if EOF is encountered and isEOFerror is true
+     */
+    private int nextChar(boolean exceptionOnEOF) throws IOException,
+            EOFException {
+        int c = br.read();
+        if (exceptionOnEOF && c == -1) encounteredEOF();
+        return c;
+    }
 
-	/**
-	 * Lexes a number. May be called only when the previously read character is a
-	 * digit.
-	 * 
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and a token cannot be produced.
-	 */
-	private void lexNum() throws IOException, EOFException {
-		int c;
-		for (c = nextChar(false); c != -1 && Character.isDigit(c); c = nextChar(false))
-			sb.append((char) c);
+    private void setNextTokenAndReset(TokenType tokenType) {
+        curTok = new Token(tokenType, lineNo);
+        tokenReady = true;
+        buf.setLength(0);
+    }
 
-		try {
-			String num = sb.toString();
-			int val = Integer.parseInt(num);
-			curTok = new Token.NumToken(val, lineNo);
-			tokenReady = true;
-			resetStringBuilder();
-			if (c != -1)
-				sb.append((char) c);
-		} catch (NumberFormatException e) {
-			unexpected();
-		}
-	}
+    private void setNextTokenAndResetWith(TokenType tokenType, char c) {
+        setNextTokenAndReset(tokenType);
+        buf.append(c);
+    }
 
-	/**
-	 * Read the next character from the reader, treating EOF as an error. If
-	 * successful, append the character to the buffer.
-	 *
-	 * @return The next character
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read the next char
-	 * @throws EOFException
-	 *             if EOF is encountered
-	 */
-	private char getNextCharAndAppend() throws IOException, EOFException {
-		char c = (char) nextChar(true);
-		sb.append(c);
-		return c;
-	}
+    private void resetBufferWith(char c) {
+        buf.setLength(0);
+        buf.append(c);
+    }
 
-	/**
-	 * Read the next character from the reader. If {@code exceptionOnEOF}, treat EOF
-	 * as an error. If successful, append the character to the buffer.
-	 *
-	 * @param exceptionOnEOF
-	 *            {@code true} if EOF should be treated as an error
-	 * @return The integer representation of the next character
-	 * @throws IOException
-	 *             if an {@code IOException} is thrown when trying to read from the
-	 *             source Reader
-	 * @throws EOFException
-	 *             if EOF is encountered and isEOFerror is true
-	 */
-	private int nextChar(boolean exceptionOnEOF) throws IOException, EOFException {
-		int c = br.read(); // returns -1 if the stream's end has been reached
-		if (exceptionOnEOF && c == -1)
-			encounteredEOF();
-		return c;
-	}
+    /**
+     * Read the next character and determine whether it is the expected
+     * character. If not, the current buffer is an error
+     * 
+     * @param expected
+     *            The expected next character
+     * @return true if the next character is as expected
+     * @throws IOException
+     *             if an IOException was thrown when trying to read from the
+     *             source Reader
+     * @throws EOFException
+     *             if EOF is encountered
+     */
+    private boolean consume(char expected) throws IOException, EOFException {
+        int c = getNextCharAndAppend();
+        if (c != expected) {
+            unexpected();
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * Sets the next token to be a token of {@code tokenType} and clears the
-	 * {@code StringBuilder}.
-	 * 
-	 * @param tokenType
-	 *            - the type of the token to set, not {@code null}
-	 */
-	private void setNextTokenAndReset(TokenType tokenType) {
-		curTok = new Token(tokenType, lineNo);
-		tokenReady = true;
-		resetStringBuilder();
-	}
+    /**
+     * Make the current token an error token with the current contents of the
+     * buffer
+     */
+    private void unexpected() {
+        curTok = new ErrorToken(buf.toString(), lineNo);
+        tokenReady = true;
+        buf.setLength(0);
+    }
 
-	/**
-	 * Sets the next token to be a token of {@code tokenType}, clears the
-	 * {@code StringBuilder}, and inserts {@code c} to begin the next string.
-	 * 
-	 * @param tokenType
-	 *            - the type of the token to set, not {@code null}
-	 * @param c
-	 *            - the character to use at the start of the string builder
-	 */
-	private void setNextTokenAndResetWith(TokenType tokenType, char c) {
-		setNextTokenAndReset(tokenType);
-		sb.append(c);
-	}
+    private final int[] charBuf = new int[3];
 
-	/**
-	 * Resets the StringBuilder and starts a new string with {@code c}.
-	 * 
-	 * @param c
-	 *            - the character with which to start a new string
-	 */
-	private void resetBuilderWith(char c) {
-		resetStringBuilder();
-		sb.append(c);
-	}
+    private int[] peekReader(int distance) throws IOException {
+        assert distance <= 3 && distance > 0;
+        br.mark(distance + 1);
+        for (int i = 0; i < distance; i++) {
+            charBuf[i] = br.read();
+        }
+        br.reset();
+        return charBuf;
+    }
 
-	/** Resets the StringBuilder {@code sb} to clear its string. */
-	private void resetStringBuilder() {
-		sb.setLength(0);
-	}
+    /**
+     * Make the contents of the current buffer into an EOFToken, clearing the
+     * buffer in the process, set atEOF to true, and set the current token to
+     * the newly generated EOFToken, setting tokenReady in the process
+     */
+    private void encounteredEOF() throws EOFException {
+        curTok = new EOFToken(buf.toString(), lineNo);
+        buf.setLength(0);
+        atEOF = true;
+        tokenReady = true;
+        throw new EOFException();
+    }
 
-	/**
-	 * Read the next character and determine whether it is the expected character.
-	 * If not, the current buffer is an error
-	 *
-	 * @param expected
-	 *            - The expected next character
-	 * @return true if the next character is as expected
-	 * @throws IOException
-	 *             if an IOException was thrown when trying to read from the source
-	 *             Reader
-	 * @throws EOFException
-	 *             if EOF is encountered
-	 */
-	private boolean consume(char expected) throws IOException, EOFException {
-		int c = getNextCharAndAppend();
-		if (c == expected)
-			return true;
-		unexpected();
-		return false;
-	}
+    /**
+     * "Helper" exception to indicate that EOF was reached
+     */
+    static class EOFException extends Exception {
+        private static final long serialVersionUID = -7333947165525391472L;
+    }
 
-	/**
-	 * Makes the current token an error token with the current contents of the
-	 * buffer.
-	 */
-	private void unexpected() {
-		curTok = new Token.ErrorToken(sb.toString());
-		tokenReady = true;
-		resetStringBuilder();
-	}
+    static class TokenizerIOException extends RuntimeException {
+        private static final long serialVersionUID = 8014027094822746940L;
 
-	/**
-	 * Make the contents of the current buffer into an EOFToken, clearing the buffer
-	 * in the process, set atEOF to true, and set the current token to the newly
-	 * generated EOFToken, setting tokenReady in the process
-	 */
-	private void encounteredEOF() throws EOFException {
-		curTok = new Token.EOFToken(sb.toString(), lineNo);
-		resetStringBuilder();
-		atEOF = true;
-		tokenReady = true;
-		throw new EOFException();
-	}
-
-	/** "Helper" exception to indicate that EOF was reached */
-	static class EOFException extends Exception {
-		/** Unique serial version ID. @see Serializable#serialVersionUID */
-		private static final long serialVersionUID = -7333947165525391472L;
-	}
-
-	/** "Helper" exception to indicate an IO exception while tokenizing. */
-	static class TokenizerIOException extends RuntimeException {
-		/** Unique serial version ID. @see Serializable#serialVersionUID */
-		private static final long serialVersionUID = 8014027094822746940L;
-
-		/**
-		 * Constructs a new {@code TokenizerIOException} caused by {@code cause}.
-		 * 
-		 * @param cause
-		 *            - the cause of the IOException
-		 */
-		TokenizerIOException(Throwable cause) {
-			super(cause);
-		}
-	}
+        TokenizerIOException(Throwable cause) {
+            super(cause);
+        }
+    }
 }
