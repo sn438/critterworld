@@ -150,11 +150,11 @@ public class World extends AbstractWorld
 				}
 			}
 
-		// randomly fills about 1/20 of the hexes in the world with rocks
+		// randomly fills about 1/40 of the hexes in the world with rocks
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
-		while (n < numValidHexes / 20)
+		while (n < numValidHexes / 40)
 		{
 			c = (int) (Math.random() * columns);
 			r = (int) (Math.random() * rows);

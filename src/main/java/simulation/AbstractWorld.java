@@ -49,7 +49,6 @@ public abstract class AbstractWorld implements SimpleWorld
 			SimpleCritter sc = clone.get(i);
 			Interpreter im = new InterpreterImpl(sc, this);
 			im.simulateCritterTurn();
-			System.out.println("\n" + this.numRemainingCritters());
 		}
 		timePassed++;
 	}
