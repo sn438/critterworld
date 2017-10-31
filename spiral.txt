@@ -11,11 +11,11 @@ ENERGY <= SIZE * 3 --> wait;
 ahead[1] < -1 --> eat;
 
 //mem[8] goes from 0 to n, and is incremented each time the critter completes one spiral
-//mem[9] is a boolean value that is turned on whenever the critter is in the middle of a
-//spiral sequence
-//mem[10] counts how many times a critter has turned right in a spiral sequence
+//mem[9] is a boolean value that is turned on whenever the critter is in the middle of a spiral sequence
+
 mem[9] = 0 and mem[10] = 0 --> mem[8] := mem[8] + 1 mem[9] := 1 forward;
 
+//mem[10] counts how many times a critter has turned right in a spiral sequence
 //the first two right turns in a spiral sequence are executed right after the initial move forward
 mem[10] <= 1 --> mem[10] := mem[10] + 1 right;
 
