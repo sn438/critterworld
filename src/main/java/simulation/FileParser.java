@@ -125,7 +125,7 @@ public class FileParser
 		int tag = 0;
 		critterAttributes[6] = tag;
 		
-		int posture = parseIntFromString(strs[5]);
+		int posture = parseIntFromString(strs[6]);
 		if(posture < 0 || posture > 99)
 			posture = 0;
 		critterAttributes[7] = posture;
