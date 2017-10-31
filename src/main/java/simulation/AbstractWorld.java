@@ -49,7 +49,6 @@ public abstract class AbstractWorld implements SimpleWorld
 			SimpleCritter sc = clone.get(i);
 			Interpreter im = new InterpreterImpl(sc, this);
 			im.simulateCritterTurn();
-			System.out.println("\n" + this.numRemainingCritters());
 		}
 		timePassed++;
 	}
@@ -68,10 +67,8 @@ public abstract class AbstractWorld implements SimpleWorld
 	 * Looks at the contents of a hex adjacent to a critter.
 	 * @param sc : the critter who is observing its surroundings
 	 * @param dir : the direction in which to look
-	 * @return an integer value based on the contents of the observed hex. If the hex is empty, this
-	 * @param sc the critter who is observing its surroundings
-	 * @param dir the direction in which to look
-	 * @return an integer value based on the contents of the observed hex
+	 * @return an integer value based on the contents of the observed hex, determined by the {@code WorldObject}
+	 * 		   method {@code getAppearance()}.
 	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 

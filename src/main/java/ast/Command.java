@@ -120,7 +120,7 @@ public class Command extends AbstractNode
 	public StringBuilder prettyPrint(StringBuilder sb)
 	{
 		for(Update u : getUpdateList())
-			sb.append(u.toString() + "\n");
+			sb.append(u.toString() + " ");
 		sb.append(last.toString());
 		return sb;
 	}

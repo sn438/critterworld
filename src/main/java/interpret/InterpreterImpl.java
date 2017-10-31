@@ -27,7 +27,6 @@ public class InterpreterImpl implements Interpreter
 	public void simulateCritterTurn()
 	{
 		Action a = interpret(c.getProgram());
-		System.out.println(c.getEnergy());
 		executeAction(a);
 	}
 	
@@ -59,6 +58,7 @@ public class InterpreterImpl implements Interpreter
 					}
 					else
 						applyUpdate((Update) ruleCommand.getLast());
+					c.setLastRule(r.toString());
 					break;
 				}
 			}
@@ -69,7 +69,6 @@ public class InterpreterImpl implements Interpreter
 		if(a == null)
 			a = new Action(ActType.WAIT);
 		System.out.println(a.toString()); //TODO remove when done testing
-		c.setLastAction(a.getActType().toString());
 		return a;
 	}
 	

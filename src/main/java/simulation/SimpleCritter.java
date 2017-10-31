@@ -1,19 +1,26 @@
 package simulation;
 
 import ast.Program;
-import simulation.Critter.Direction;
 
 public interface SimpleCritter extends WorldObject
 {
 	/** Returns the ruleset of this critter. */
 	public Program getProgram();
 	
+	/** Returns the size of this critter. */
 	public int size();
 	
+	/** Returns the memory length of this critter. */
 	public int getMemLength();
 	
 	/** Returns the orientation of this critter. */
 	public int getOrientation();
+	
+	/** Returns the current energy level of this critter. */
+	public int getEnergy();
+	
+	/** Updates the critter's energy by the amount specified. */
+	public void updateEnergy(int amount, int maxEnergyPerSize);
 	
 	/** 
 	 * Returns the value of {@code memory[index]}.
@@ -31,11 +38,20 @@ public interface SimpleCritter extends WorldObject
 	 */
 	public boolean setMemory(int val, int index);
 	
+	@Override
+	public int getAppearance();
+	
+	/** Returns a copy of the memory. */
+	public int[] getMemoryCopy();
+	
+	/** Returns the species name of this critter. */
 	public String getName();
 	
-	public String getLastAction();
+	/** Returns a string representation of the last rule executed by this critter. */
+	public String getLastRule();
 	
-	public void setLastAction(String s);
+	/** Sets the last rule executed. */
+	public void setLastRule(String s);
 	
 	/** Increments the pass number of this critter (memory index 5) by one, if it is less than 999. */
 	public void incrementPass();
@@ -46,19 +62,19 @@ public interface SimpleCritter extends WorldObject
 	 */
 	public void turn(boolean clockwise);
 	
+	/**
+	 * Returns an array of length 2 that symbolizes the change in position of a critter if it moves one hex in the specified direction.
+	 * @param forward : whether or not the hex will be accessed by moving forward or backward
+	 * @param dir : the direction the hex is in
+	 */
 	public int[] changeInPosition(boolean forward, int dir);
 	
-	public int getEnergy();
-	
-	public void updateEnergy(int amount, int maxEnergyPerSize);
-	
+	/** Whether or not this critter wants to mate. */
 	public boolean wantsToMate();
 	
+	/** Turns mating signals of this critter on or off. */
 	public void toggleMatingPheromones(boolean b);
 	
+	/** Returns an integer value representing this critter's complexity. */
 	public int complexity(int ruleCost, int abilityCost);
-	
-	@Override
-	
-	public int getAppearance();
 }

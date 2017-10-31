@@ -150,11 +150,11 @@ public class World extends AbstractWorld
 				}
 			}
 
-		// randomly fills about 1/20 of the hexes in the world with rocks
+		// randomly fills about 1/40 of the hexes in the world with rocks
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
-		while (n < numValidHexes / 20)
+		while (n < numValidHexes / 40)
 		{
 			c = (int) (Math.random() * columns);
 			r = (int) (Math.random() * rows);
@@ -194,7 +194,8 @@ public class World extends AbstractWorld
 		}*/
 	}
 
-	private boolean isValidHex(int c, int r)
+	@Override
+	public boolean isValidHex(int c, int r)
 	{
 		if (c < 0 || r < 0)
 			return false;
@@ -298,14 +299,7 @@ public class World extends AbstractWorld
 		if (!isValidHex(nearbyc, nearbyr))
 			return -1;
 		Hex nearby = grid[nearbyc][nearbyr];
-		WorldObject nearbyObj = nearby.getContent();
-
-		if (nearbyObj == null)
-			return 0;
-		else if (nearbyObj instanceof Rock)
-			return -1;
-		else 
-			return nearbyObj.getAppearance();
+		return nearby.hexAppearance();
 	}
 
 	@Override
@@ -324,12 +318,7 @@ public class World extends AbstractWorld
 		if (!isValidHex(aheadc, aheadr))
 			return -1;
 		Hex nearby = grid[aheadc][aheadr];
-		WorldObject aheadObj = nearby.getContent();
-
-		if (aheadObj == null)
-			return 0;
-		else 
-			return aheadObj.getAppearance();
+		return nearby.hexAppearance();
 	}
 
 	/* ========================================= */
@@ -613,7 +602,7 @@ public class World extends AbstractWorld
 	/** Executes the mating process, as long as there is one empty hex around the two critters. */
 	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2)
 	{
-		/*Random random = new Random();
+		Random random = new Random();
 		// energy calculation
 		int complexity1 = sc1.complexity(CONSTANTS.get("RULE_COST").intValue(),
 				CONSTANTS.get("ABILITY_COST").intValue());
@@ -710,7 +699,7 @@ public class World extends AbstractWorld
 			if (sc2.getEnergy() == 0)
 				kill(sc2);
 			return;
-		}*/
+		}
 	}
 
 	@Override
@@ -817,7 +806,7 @@ public class World extends AbstractWorld
 			StringBuilder sb = new StringBuilder();
 			if(i % 2 != 0)
 				sb.append("  ");
-			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++)
+			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows + 1; c += 2, r++)
 			{
 				if(isValidHex(c, r))
 					sb.append("" + grid[c][r].toString() + "   ");
@@ -826,5 +815,21 @@ public class World extends AbstractWorld
 		}
 		result.insert(0, "World name: " + worldname + "\n");
 		return result;
+	}
+	
+	@Override
+	public int analyzeHex(int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return Integer.MIN_VALUE;
+		return grid[c][r].hexAppearance();
+	}
+	
+	@Override
+	public SimpleCritter analyzeCritter(int c, int r)
+	{
+		if(!isValidHex(c, r) || !(grid[c][r].getContent() instanceof SimpleCritter))
+			return null;
+		return (SimpleCritter) (grid[c][r].getContent());
 	}
 }

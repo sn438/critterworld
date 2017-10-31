@@ -13,7 +13,7 @@ public interface SimpleWorld
 	int numRemainingCritters();
 	
 	/** Returns the amount of time passed since this world's genesis. */
-	public int getTimePassed();
+	int getTimePassed();
 	
 	/**
 	 * Loads critters of following a set pattern into this world.
@@ -22,12 +22,30 @@ public interface SimpleWorld
 	 * @param direction the orientation of the critter. If this value is less than 0, a critter orientation
 	 * 					will be chosen at random.
 	 */
-	public void loadCritters(String filename, int n, int direction);
+	void loadCritters(String filename, int n, int direction);
 	
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();
 	
-	/** 
+	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
+	boolean isValidHex(int c, int r);
+	
+	/**
+	 * Returns information about a hex. Assumes that the 
+	 * @param c
+	 * @param r
+	 * @return
+	 */
+	int analyzeHex(int c, int r);
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @return
+	 */
+	SimpleCritter analyzeCritter(int c, int r);
+
 	/** Returns a StringBuilder containing the printed version of the world grid. */
 	StringBuilder printGrid();
 }

@@ -61,6 +61,16 @@ public class Hex
 		return content == null;
 	}
 	
+	/**
+	 * Returns an integer representing how this hex appears to a critter. If this hex is empty, this integer is 0,
+	 * but otherwise, this value is determined by {@code content.getAppearance()}, which follows the numbering scheme
+	 * described in the interface {@code WorldObject}.
+	 */
+	public int hexAppearance()
+	{
+		return isEmpty() ? 0 : content.getAppearance();
+	}
+	
 	@Override
 	public String toString()
 	{
