@@ -39,7 +39,9 @@ class ParserImpl implements Parser {
 	public static ProgramImpl parseProgram(Tokenizer t) throws SyntaxError {
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
-			RuleList.add(parseRule(t));
+			Rule r = parseRule(t);
+			RuleList.add(r);
+			
 		}
 		return new ProgramImpl(RuleList);
 	}
@@ -49,7 +51,6 @@ class ParserImpl implements Parser {
 		consume(t, TokenType.ARR);
 		Command command = parseCommand(t);
 		consume(t, TokenType.SEMICOLON);
-		//System.out.println((new Rule(condition, command)).toString()); //TODO remove when done tesing
 		return new Rule(condition, command);
 	}
 	
@@ -174,7 +175,6 @@ class ParserImpl implements Parser {
 		Condition conj = parseConjunction(t);
 		while (t.peek().getType() == TokenType.OR) {
 			consume(t, TokenType.OR);
-			//System.out.println((new BinaryCondition(conj, Operator.OR, parseConjunction(t)).toString())); //TODO remove when done
 			return new BinaryCondition(conj, Operator.OR, parseConjunction(t));
 		}
 		return conj;
@@ -186,7 +186,6 @@ class ParserImpl implements Parser {
 			consume(t, TokenType.AND);
 			return new BinaryCondition(rel, Operator.AND, parseRelation(t));
 		}
-		//System.out.println(condition.toString());
 		return rel;
 	}
 	public static Relation parseRelation(Tokenizer t) throws SyntaxError {
@@ -200,8 +199,6 @@ class ParserImpl implements Parser {
 		}
 		
 		Expr expression = parseExpression(t);
-		//System.out.println(expression.toString());
-		//Condition condition;
 		if (t.peek().getType().category() == TokenCategory.RELOP) {
 			String relationOperator = t.peek().toString();
 			consume(t, t.peek().getType());
