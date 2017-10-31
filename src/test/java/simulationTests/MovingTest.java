@@ -12,6 +12,8 @@ public class MovingTest
 	Console console1 = null;
 	Console console2 = null;
 	Console console3 = null;
+	Console console4 = null;
+	
 	@Before
 	public void setUp()
 	{
@@ -21,6 +23,9 @@ public class MovingTest
 		console2.loadWorld("MovingWorldFileRock.txt");
 		console3 = new Console();
 		console3.loadWorld("MovingWorldThree.txt");
+		console4 = new Console();
+		console4.loadWorld("MovingWorldFour.txt");
+		
 	}
 	/**
 	 * testNormalMove tests to see if moving forward normally works.
@@ -56,4 +61,14 @@ public class MovingTest
 		console3.worldInfo();
 	}
 
+	/**
+	 * testMoveInvalidLocation checks to see if a critter does not move to an invalid location
+	 */
+	@Test
+	public void testMovingInvalidLocation() {
+		System.out.println("testMovingInvalidLocation");
+		console4.worldInfo();
+		console4.advanceTime(1);
+		console4.worldInfo();
+	}
 }
