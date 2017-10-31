@@ -28,7 +28,7 @@ public class MateTest {
 	public void SimpleTest() {
 		System.out.println("SimpleTest");
 		console1.worldInfo();
-		console1.advanceTime(2);
+		console1.advanceTime(1);
 		console1.worldInfo();
 	}
 	
@@ -37,7 +37,7 @@ public class MateTest {
 	public void MateWithRock() {
 		System.out.println("Mating Around Rocks");
 		console2.worldInfo();
-		console2.advanceTime(2);
+		console2.advanceTime(1);
 		console2.worldInfo();
 	}
 	
@@ -61,7 +61,5 @@ public class MateTest {
 		console4.advanceTime(17);
 		console4.worldInfo();
 	}
-	
-	
 	
 }

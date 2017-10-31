@@ -539,6 +539,7 @@ public class World extends AbstractWorld
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
+		sc.toggleMatingPheromones(true);
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
