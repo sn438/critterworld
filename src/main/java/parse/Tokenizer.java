@@ -33,7 +33,7 @@ import parse.Token.NumToken;
  * A Tokenizer turns a Reader into a stream of tokens that can be iterated over
  * using a {@code for} loop.
  */
-class Tokenizer implements Iterator<Token> {
+public class Tokenizer implements Iterator<Token> {
 
     private final BufferedReader br;
     private final StringBuilder buf;

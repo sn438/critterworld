@@ -1,183 +1,207 @@
 package parse;
 
-import static parse.TokenCategory.ACTION;
-import static parse.TokenCategory.ADDOP;
-import static parse.TokenCategory.MEMSUGAR;
-import static parse.TokenCategory.MULOP;
-import static parse.TokenCategory.RELOP;
-import static parse.TokenCategory.SENSOR;
-import static parse.TokenType.EOF;
-import static parse.TokenType.ERROR;
-import static parse.TokenType.NUM;
-
 import java.util.InputMismatchException;
 
-/**
- * A Token represents a legal token (symbol) in the critter language
- */
+/** A Token represents a legal token (symbol) in the critter language */
 class Token {
-    private final TokenType type;
-    final int lineNo;
 
-    /**
-     * Create a token with the specified type.
-     * 
-     * @param type
-     *            The ID of the desired token type
-     * @param lineNo
-     *            The line number in the input file containing this token.
-     */
-    Token(final TokenType type, final int lineNo) {
-        this.type = type;
-        this.lineNo = lineNo;
-    }
+	/** The type of this Token. */
+	private final TokenType type;
 
-    /**
-     * @return The type of this token
-     */
-    TokenType getType() {
-        return type;
-    }
+	/**
+	 * The line number in the input file containing this token. Must be positive, or
+	 * -1 for the error token.
+	 */
+	private final int lineNo;
 
-    /**
-     * @return The line number in the input file of this token.
-     */
-    int lineNumber() {
-        return lineNo;
-    }
+	/**
+	 * Create a token with the specified type.
+	 *
+	 * @param type
+	 *            - The ID of the desired token type. Checks {@code type != null}.
+	 * @param lineNum
+	 *            - The line number in the input file containing this token, or
+	 *            {code -1} for an error token. Checks {@code lineNum > 0} or
+	 *            {@code lineNum == -1}.
+	 */
+	Token(TokenType t, int lineNum) {
+		assert t != null : "TokenType may not be null";
+		assert lineNum > 0 || lineNum == -1 : "lineNum must be positive or -1 for an error token, but is; " + lineNum;
+		type = t;
+		lineNo = lineNum;
+	}
 
-    /**
-     * Determine whether this token is of number type.
-     * 
-     * @return true if this token is of number type
-     */
-    boolean isNum() {
-        return type == NUM;
-    }
+	/** @return The type of this token */
+	TokenType getType() {
+		return type;
+	}
 
-    /**
-     * @return The number token associated with this token.
-     * @throws InputMismatchException
-     *             if this token is not of number type
-     */
-    NumToken toNumToken() {
-        if (isNum()) return (NumToken) this;
-        throw new InputMismatchException("Token is not a number.");
-    }
+	/** @return The line number in the input file of this token. */
+	int lineNumber() {
+		return lineNo;
+	}
 
-    /**
-     * Determine whether this token is of action type.
-     * 
-     * @return true if this token is of action type
-     */
-    boolean isAction() {
-        return type.category == ACTION;
-    }
+	/**
+	 * Determine whether this token is of number type.
+	 * @return true if this token is of number type
+	 */
+	boolean isNum() {
+		return type == TokenType.NUM;
+	}
 
-    boolean isRelOp() {
-        return type.category == RELOP;
-    }
+	/**
+	 * Returns the number token associated with this Token.
+	 * 
+	 * @return The number token associated with this token.
+	 * @throws InputMismatchException if this token is not of number type
+	 */
+	NumToken toNumToken() {
+		if (isNum())
+			return (NumToken) this;
+		throw new InputMismatchException("Token is not a number.");
+	}
 
-    /**
-     * Determine whether this token is of addop type.
-     * 
-     * @return true if this token is of addop type
-     */
-    boolean isAddOp() {
-        return type.category == ADDOP;
-    }
+	/**
+	 * Determine whether this token is of action type.
+	 * @return true if this token is of action type
+	 */
+	boolean isAction() {
+		return type.category() == TokenCategory.ACTION;
+	}
 
-    /**
-     * Determine whether this token is of mulop type.shorthand.
-     * 
-     * @return true if this token is of mulop type.shorthand
-     */
-    boolean isMulOp() {
-        return type.category == MULOP;
-    }
+	/**
+	 * Determine whether this token is of addop type.
+	 * @return true if this token is of addop type
+	 */
+	boolean isAddOp() {
+		return type.category() == TokenCategory.ADDOP;
+	}
 
-    /**
-     * Determine whether this token is of sensor type.shorthand.
-     * 
-     * @return true if this token is of sensor type.shorthand
-     */
-    boolean isSensor() {
-        return type.category == SENSOR;
-    }
+	/**
+	 * Determine whether this token is of mulop type.shorthand.
+	 * @return true if this token is of mulop type.shorthand
+	 */
+	boolean isMulOp() {
+		return type.category() == TokenCategory.MULOP;
+	}
 
-    /**
-     * Determine whether this token is syntactic sugar for memory locations
-     * 
-     * @return true if this token is syntactic sugar for memory locations
-     */
-    boolean isMemSugar() {
-        return type.category == MEMSUGAR;
-    }
+	/**
+	 * Determine whether this token is of sensor type.shorthand.
+	 * @return true if this token is of sensor type.shorthand
+	 */
+	boolean isSensor() {
+		return type.category() == TokenCategory.SENSOR;
+	}
 
-    @Override
-    public String toString() {
-        return type.stringRep;
-    }
+	/**
+	 * Determine whether this token is syntactic sugar for memory locations
+	 * @return true if this token is syntactic sugar for memory locations
+	 */
+	boolean isMemSugar() {
+		return type.category() == TokenCategory.MEMSUGAR;
+	}
 
-    /**
-     * A NumToken is a token containing a number.
-     * 
-     * @author Chinawat
-     */
-    static class NumToken extends Token {
+	@Override
+	public String toString() {
+		return type.toString();
+	}
 
-        private final int value;
+	/** A NumToken is a token containing a number. */
+	static class NumToken extends Token {
 
-        NumToken(final int value, final int lineNo) {
-            super(NUM, lineNo);
-            this.value = value;
-        }
+		/** The int value this token represents. */
+		private final int value;
 
-        int getValue() {
-            return value;
-        }
+		/**
+		 * Constructs a new {@code NumToken} representing the integer value {@code v} on
+		 * line {@code lineNum}.
+		 * 
+		 * @param v - the integer value this token represents
+		 * @param lineNum - The line number in the input file containing this token. Checks
+		 *            		{@code lineNum > 0}. Note that a {@code NumToken} is not an error
+		 *            		token, so the line number must be positive.
+		 */
+		NumToken(int v, int lineNum) {
+			super(TokenType.NUM, lineNum);
+			assert lineNum > 0 : "NumToken line number must be positive.";
+			value = v;
+		}
 
-        @Override
-        public String toString() {
-            return Integer.toString(value);
-        }
-    }
+		/**
+		 * Returns the value of the number this token represents.
+		 * @return the value of the number this token represents
+		 */
+		int getValue() {
+			return value;
+		}
 
-    static class EOFToken extends Token {
+		@Override
+		public String toString() {
+			return Integer.toString(value);
+		}
+	}
 
-        private final String bufferContents;
+	/** Helper class to represent an end of file token. */
+	static class EOFToken extends Token {
 
-        EOFToken(final String bufferContents, final int lineNo) {
-            super(EOF, lineNo);
-            this.bufferContents = bufferContents;
-        }
+		/** Contents of the string builder at the time the EOF was encountered. */
+		private final String builderContents;
 
-        String getBufferContents() {
-            return bufferContents;
-        }
+		/**
+		 * Constructs a new {@code EOFToken} at line {@code lineNum} containing the
+		 * contents of the string builder when the EOF was encountered.
+		 * 
+		 * @param sbContents - contents of the string builder at the time the EOF was encountered
+		 * @param lineNum - The line number in the input file containing this token. Checks
+		 *            		{@code lineNum > 0}. Note that an {@code EOFToken} is not an error
+		 *            		token, so the line number must be positive.
+		 */
+		EOFToken(String sbContents, int lineNum) {
+			super(TokenType.EOF, lineNum);
+			assert lineNum > 0 : "EOFToken lineNum must be positive.";
+			builderContents = sbContents;
+		}
 
-        @Override
-        public String toString() {
-            return "Buffer contained " + bufferContents + " at EOF";
-        }
-    }
+		/**
+		 * Returns the contents of the string builder when the EOF was encountered.
+		 * @return the contents of the string builder when the EOF was encountered
+		 */
+		String getBufferContents() {
+			return builderContents;
+		}
 
-    static class ErrorToken extends Token {
+		@Override
+		public String toString() {
+			return "Buffer contained " + builderContents + " at EOF";
+		}
+	}
 
-        private final String value;
+	/** Helper class to represent an error token. */
+	static class ErrorToken extends Token {
 
-        ErrorToken(final String value, final int lineNo) {
-            super(ERROR, lineNo);
-            this.value = value;
-        }
+		/** String value stored by this error token. */
+		private final String value;
 
-        String getValue() {
-            return value;
-        }
+		/**
+		 * Constructs a new error token containing the value {@code v}.
+		 * @param v - String value for this error token.
+		 */
+		ErrorToken(String v, int lineNo) {
+			super(TokenType.ERROR, lineNo);
+			value = v;
+		}
 
-        @Override
-        public String toString() {
-            return "[error@" + lineNo + "]: " + value;
-        }
-    }
+		/**
+		 * Returns the string value stored by this error token.
+		 * @return the string value stored by this error token
+		 */
+		String getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			return "[error@" + lineNumber() + "]: " + value;
+		}
+	}
 }
