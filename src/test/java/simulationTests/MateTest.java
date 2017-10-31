@@ -23,7 +23,7 @@ public class MateTest {
 		console4 = new Console();
 		console4.loadWorld("MateWorldDifferentTimeSteps.txt");
 	}
-	/*
+	
 	@Test
 	public void SimpleTest() {
 		System.out.println("SimpleTest");
@@ -31,7 +31,7 @@ public class MateTest {
 		console1.advanceTime(2);
 		console1.worldInfo();
 	}
-	*/
+	
 	
 	@Test
 	public void MateWithRock() {
@@ -42,7 +42,7 @@ public class MateTest {
 	}
 	
 	
-	/*
+	
 	@Test
 	public void MateLittleEnergy() {
 		System.out.println("MateWithLittleEnergy");
@@ -61,7 +61,7 @@ public class MateTest {
 		console4.advanceTime(17);
 		console4.worldInfo();
 	}
-	*/
+	
 	
 	
 }
