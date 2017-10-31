@@ -16,12 +16,6 @@ public class MateTest {
 	{
 		console1 = new Console();
 		console1.loadWorld("MateWorld.txt");
-		console2 = new Console();
-		console2.loadWorld("MovingWorldFileRock.txt");
-		console3 = new Console();
-		console3.loadWorld("MovingWorldThree.txt");
-		console4 = new Console();
-		console4.loadWorld("MovingWorldFour.txt");
 		
 	}
 	
