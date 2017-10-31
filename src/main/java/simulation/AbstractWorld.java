@@ -51,6 +51,7 @@ public abstract class AbstractWorld implements SimpleWorld
 			im.simulateCritterTurn();
 			System.out.println("\n" + this.numRemainingCritters());
 		}
+		timePassed++;
 	}
 
 	@Override

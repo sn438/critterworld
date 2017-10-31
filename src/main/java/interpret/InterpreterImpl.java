@@ -8,6 +8,7 @@ import simulation.SimpleCritter;
 
 import java.util.LinkedList;
 
+/** Interprets and executes the AST of a critter. */
 public class InterpreterImpl implements Interpreter
 {
 	/** The critter whose AST this Interpreter interprets. */
@@ -58,10 +59,10 @@ public class InterpreterImpl implements Interpreter
 					}
 					else
 						applyUpdate((Update) ruleCommand.getLast());
-					c.incrementPass();
 					break;
 				}
 			}
+			c.incrementPass();
 		}
 		c.setMemory(0, 5);
 		

@@ -281,13 +281,18 @@ public class World extends AbstractWorld
 	@Override
 	public int searchNearby(SimpleCritter sc, int dir)
 	{
+		//determines the row and column coordinates of the critter
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
 		// finds the hex to look in, based on the value of dir
 		if (dir < 0)
 			dir = 0;
 		else if (dir > 6)
 			dir %= 6;
-		int nearbyc = sc.changeInPosition(true, dir)[0];
-		int nearbyr = sc.changeInPosition(true, dir)[1];
+		int nearbyc = c + sc.changeInPosition(true, dir)[0];
+		int nearbyr = r + sc.changeInPosition(true, dir)[1];
 
 		// critters see rock when they look off the edge of the world
 		if (!isValidHex(nearbyc, nearbyr))
@@ -306,10 +311,15 @@ public class World extends AbstractWorld
 	@Override
 	public int searchAhead(SimpleCritter sc, int index)
 	{
+		//determines the row and column coordinates of the critter
+		Hex location = critterMap.get(sc);
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		
 		if (index < 0)
 			index = 0;
-		int aheadc = sc.changeInPosition(true, sc.getOrientation())[0] * index;
-		int aheadr = sc.changeInPosition(true, sc.getOrientation())[1] * index;
+		int aheadc = c + sc.changeInPosition(true, sc.getOrientation())[0] * index;
+		int aheadr = r + sc.changeInPosition(true, sc.getOrientation())[1] * index;
 
 		if (!isValidHex(aheadc, aheadr))
 			return -1;
@@ -820,7 +830,8 @@ public class World extends AbstractWorld
 				sb.append("  ");
 			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++)
 			{
-				sb.append("" + grid[c][r].toString() + "   ");
+				if(isValidHex(c, r))
+					sb.append("" + grid[c][r].toString() + "   ");
 			}
 			result.insert(0, sb.toString() + "\n");
 		}
