@@ -539,26 +539,39 @@ public class World extends AbstractWorld
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
+		sc.toggleMatingPheromones(true);
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 		int behindColumnParent1 = c + sc.changeInPosition(false, sc.getOrientation())[0];
 		int behindRowParent1 = r + sc.changeInPosition(false, sc.getOrientation())[1];
 		if (!isValidHex(behindColumnParent1, behindRowParent1))
+		{
+			sc.toggleMatingPheromones(false);
 			return;
+		}
 		// coordinates of Parent 2
 		int columnParent2 = c + sc.changeInPosition(true, sc.getOrientation())[0];
 		int rowParent2 = r + sc.changeInPosition(true, sc.getOrientation())[1];
 		if (!isValidHex(columnParent2, rowParent2))
+		{
+			sc.toggleMatingPheromones(false);
 			return;
+		}
 		Hex directlyInFront = grid[columnParent2][rowParent2];
 		if (!(directlyInFront.getContent() instanceof SimpleCritter))
+		{
+			sc.toggleMatingPheromones(false);
 			return;
+		}
 		SimpleCritter parent2 = (SimpleCritter) (directlyInFront.getContent());
 		int behindColumnParent2 = columnParent2 + sc.changeInPosition(false, sc.getOrientation())[0];
 		int behindRowParent2 = rowParent2 + sc.changeInPosition(false, sc.getOrientation())[1];
 		if (!isValidHex(behindColumnParent2, behindRowParent2))
+		{
+			sc.toggleMatingPheromones(false);
 			return;
+		}
 		// checks if Parent 2 wants to mate
 		if (!parent2.wantsToMate())
 			return;
@@ -567,7 +580,10 @@ public class World extends AbstractWorld
 
 		// direction checking
 		if (!(Math.abs(parent1Direction - parent2Direction) == 3))
+		{
+			sc.toggleMatingPheromones(false);
 			return;
+		}
 
 		// energy calculation
 		sc.updateEnergy(-sc.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
@@ -700,6 +716,8 @@ public class World extends AbstractWorld
 				kill(sc2);
 			return;
 		}
+		sc1.toggleMatingPheromones(false);
+		sc2.toggleMatingPheromones(false);
 	}
 
 	@Override

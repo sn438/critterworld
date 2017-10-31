@@ -1,0 +1,5 @@
+name Mate World Different Time Steps
+size 5 10
+
+critter MatingParent5.txt 3 4 0
+critter MatingParent6.txt 3 5 3

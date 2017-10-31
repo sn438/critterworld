@@ -13,3 +13,7 @@ content
 *.DS_Store
 
 src/main/java/interpret/ActionOutcome.java
+src/main/java/parse/Token.java
+src/main/java/parse/TokenCategory.java
+src/main/java/parse/Tokenizer.java
+src/main/java/parse/TokenType.java

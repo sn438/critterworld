@@ -1,0 +1,9 @@
+species: Parent 6
+memsize: 11
+defense: 2
+offense: 3
+size: 5
+energy: 50000
+posture: 17
+mem[8] = 0 --> mem[8] := 1 mate;
+mem[8] = 1 --> mem[8] := 0 wait;

@@ -50,6 +50,13 @@ public abstract class AbstractWorld implements SimpleWorld
 			Interpreter im = new InterpreterImpl(sc, this);
 			im.simulateCritterTurn();
 		}
+		
+		for(int i = 0; i < clone.size(); i++)
+		{
+			SimpleCritter sc = clone.get(i);
+			sc.toggleMatingPheromones(false);
+}
+		
 		timePassed++;
 	}
 
