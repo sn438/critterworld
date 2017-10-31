@@ -1,91 +1,122 @@
 package parse;
 
-import static parse.TokenCategory.ACTION;
-import static parse.TokenCategory.ADDOP;
-import static parse.TokenCategory.MEMSUGAR;
-import static parse.TokenCategory.MULOP;
-import static parse.TokenCategory.OTHER;
-import static parse.TokenCategory.RELOP;
-import static parse.TokenCategory.SENSOR;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-enum TokenType {
-    MEM(OTHER, "mem"),
-    WAIT(ACTION, "wait"),
-    FORWARD(ACTION, "forward"),
-    BACKWARD(ACTION, "backward"),
-    LEFT(ACTION, "left"),
-    RIGHT(ACTION, "right"),
-    EAT(ACTION, "eat"),
-    ATTACK(ACTION, "attack"),
-    GROW(ACTION, "grow"),
-    BUD(ACTION, "bud"),
-    MATE(ACTION, "mate"),
-    TAG(ACTION, "tag"),
-    SERVE(ACTION, "serve"),
-    OR(OTHER, "or"),
-    AND(OTHER, "and"),
-    LT(RELOP, "<"),
-    LE(RELOP, "<="),
-    EQ(RELOP, "="),
-    GE(RELOP, ">="),
-    GT(RELOP, ">"),
-    NE(RELOP, "!="),
-    PLUS(ADDOP, "+"),
-    MINUS(ADDOP, "-"),
-    MUL(MULOP, "*"),
-    DIV(MULOP, "/"),
-    MOD(MULOP, "mod"),
-    ASSIGN(OTHER, ":="),
-    NEARBY(SENSOR, "nearby"),
-    AHEAD(SENSOR, "ahead"),
-    RANDOM(SENSOR, "random"),
-    SMELL(SENSOR, "smell"),
-    LBRACKET(OTHER, "["),
-    RBRACKET(OTHER, "]"),
-    LPAREN(OTHER, "("),
-    RPAREN(OTHER, ")"),
-    LBRACE(OTHER, "{"),
-    RBRACE(OTHER, "}"),
-    ARR(OTHER, "-->"),
-    SEMICOLON(OTHER, ";"),
-    ABV_MEMSIZE(MEMSUGAR, "MEMSIZE"),
-    ABV_DEFENSE(MEMSUGAR, "DEFENSE"),
-    ABV_OFFENSE(MEMSUGAR, "OFFENSE"),
-    ABV_SIZE(MEMSUGAR, "SIZE"),
-    ABV_ENERGY(MEMSUGAR, "ENERGY"),
-    ABV_PASS(MEMSUGAR, "PASS"),
-    ABV_TAG(MEMSUGAR, "TAG"),
-    ABV_POSTURE(MEMSUGAR, "POSTURE"),
-    NUM(OTHER, "<number>"),
-    ERROR(OTHER, "[error]"),
-    EOF(OTHER, "EOF");
+/** An instance represents a Token with a category and a string representation. */
+public enum TokenType
+{
+	MEM(TokenCategory.OTHER, "mem"),
+	WAIT(TokenCategory.ACTION, "wait"),
+	FORWARD(TokenCategory.ACTION, "forward"),
+	BACKWARD(TokenCategory.ACTION, "backward"),
+	LEFT(TokenCategory.ACTION, "left"),
+	RIGHT(TokenCategory.ACTION, "right"),
+	EAT(TokenCategory.ACTION, "eat"),
+	ATTACK(TokenCategory.ACTION, "attack"),
+	GROW(TokenCategory.ACTION, "grow"),
+	BUD(TokenCategory.ACTION, "bud"),
+	MATE(TokenCategory.ACTION, "mate"),
+	TAG(TokenCategory.ACTION, "tag"),
+	SERVE(TokenCategory.ACTION, "serve"),
+	OR(TokenCategory.OTHER, "or"),
+	AND(TokenCategory.OTHER, "and"),
+	LT(TokenCategory.RELOP, "<"),
+	LE(TokenCategory.RELOP, "<="),
+	EQ(TokenCategory.RELOP, "="),
+	GE(TokenCategory.RELOP, ">="),
+	GT(TokenCategory.RELOP, ">"),
+	NE(TokenCategory.RELOP, "!="),
+	PLUS(TokenCategory.ADDOP, "+"),
+	MINUS(TokenCategory.ADDOP, "-"),
+	MUL(TokenCategory.MULOP, "*"),
+	DIV(TokenCategory.MULOP, "/"),
+	COMMENT(TokenCategory.OTHER, "//"),
+	MOD(TokenCategory.MULOP, "mod"),
+	ASSIGN(TokenCategory.OTHER, ":="),
+	NEARBY(TokenCategory.SENSOR, "nearby"),
+	AHEAD(TokenCategory.SENSOR, "ahead"),
+	RANDOM(TokenCategory.SENSOR, "random"),
+	SMELL(TokenCategory.SENSOR, "smell"),
+	LBRACKET(TokenCategory.OTHER, "["),
+	RBRACKET(TokenCategory.OTHER, "]"),
+	LPAREN(TokenCategory.OTHER, "("),
+	RPAREN(TokenCategory.OTHER, ")"),
+	LBRACE(TokenCategory.OTHER, "{"),
+	RBRACE(TokenCategory.OTHER, "}"),
+	ARR(TokenCategory.OTHER, "-->"),
+	SEMICOLON(TokenCategory.OTHER, ";"),
+	ABV_MEMSIZE(TokenCategory.MEMSUGAR, "MEMSIZE"),
+	ABV_DEFENSE(TokenCategory.MEMSUGAR, "DEFENSE"),
+	ABV_OFFENSE(TokenCategory.MEMSUGAR, "OFFENSE"),
+	ABV_SIZE(TokenCategory.MEMSUGAR, "SIZE"),
+	ABV_ENERGY(TokenCategory.MEMSUGAR, "ENERGY"),
+	ABV_PASS(TokenCategory.MEMSUGAR, "PASS"),
+	ABV_TAG(TokenCategory.MEMSUGAR, "TAG"),
+	ABV_POSTURE(TokenCategory.MEMSUGAR, "POSTURE"),
+	NUM(TokenCategory.OTHER, "<number>"),
+	ERROR(TokenCategory.OTHER, "[error]"),
+	EOF(TokenCategory.OTHER, "EOF");
 
-    private static final Map<String, TokenType> stringToTypeMap;
-    static {
-        final Map<String, TokenType> temp = new HashMap<>();
-        for (final TokenType t : values()) {
-            temp.put(t.stringRep, t);
-        }
-        stringToTypeMap = Collections.unmodifiableMap(temp);
-    }
+	/** Maps the string representation of a token to its enum. */
+	private static final Map<String, TokenType> stringToTypeMap;
 
-    protected final TokenCategory category;
-    protected final String stringRep;
+	// static initializer to initialize the values of stringToTypeMap
+	static
+	{
+		final Map<String, TokenType> temp = new HashMap<>();
+		for (TokenType t : TokenType.values()) { temp.put(t.stringRep, t); }
+		stringToTypeMap = Collections.unmodifiableMap(temp);
+	}
 
-    private TokenType(final TokenCategory category, final String stringRep) {
-        this.category = category;
-        this.stringRep = stringRep;
-    }
+	/** The category of this TokenType. */
+	private final TokenCategory category;
 
-    public TokenCategory category() {
-        return category;
-    }
+	/** String representation of this TokenType. */
+	private final String stringRep;
 
-    public static TokenType getTypeFromString(final String rep) {
-        return stringToTypeMap.get(rep);
-    }
+	/**
+     * Constructs a new {@code TokenType} with category {@code cat} and string
+     * representation {@code s}.
+     * 
+     * @param tcat - token category, checks {@code tcat != null}
+     * @param s - string representation of this token, check {@code s != null}
+     */
+	private TokenType(TokenCategory tcat, String s)
+	{
+		assert tcat != null : "TokenType must have a category";
+		assert s != null : "TokenType must have a string representation";
+		category = tcat;
+		stringRep = s;
+	}
+   
+	/**
+     * Returns this {@code TokenType}'s category.
+     * @return this {@code TokenType}'s category
+     */
+	public TokenCategory category()
+	{
+		return category;
+	}
+
+	/**
+     * Returns the {@code TokenType} that is represented by the string {@code rep}.
+     * 
+     * @param rep - the string representing the {@code TokenType}, checks
+     *            {@code rep} indeed represents a valid {@code TokenType}
+     * @return the {@code TokenType} represented by the string {@code rep}
+     */
+	public static TokenType getTypeFromString(String rep)
+	{
+		//assert stringToTypeMap.containsKey(rep) : "'" + rep
+												//+ "' is not the string representation of any TokenType";
+		return stringToTypeMap.get(rep);
+	}
+
+	@Override
+	public String toString()
+	{
+		return stringRep;
+	}
 }

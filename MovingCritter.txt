@@ -1,4 +1,4 @@
-species: Parent 1
+species: example
 memsize: 11
 defense: 2
 offense: 3
