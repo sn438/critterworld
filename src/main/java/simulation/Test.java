@@ -15,7 +15,7 @@ public class Test
 		for(int i = 0; i < 30; i++)
 		{
 			c.advanceTime(1);
-			c.worldInfo();
+			//c.worldInfo();
 		}
 	}
 }

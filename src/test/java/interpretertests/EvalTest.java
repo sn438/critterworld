@@ -66,7 +66,9 @@ public class EvalTest
 	@Test
 	public void testEvalUnaryExpr()
 	{
-		fail("Not yet implemented");
+		int[] arr = {3, 5};
+		Interpreter i = new InterpreterImpl(new Critter(null, arr, "TESTCRITTER"), new World());
+		
 	}
 
 }
