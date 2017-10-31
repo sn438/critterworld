@@ -11,6 +11,7 @@ public class BudTest {
 	public void testOne() {
 		Console console = new Console();
 		console.loadWorld("SpiralCritterWorld.txt");
+<<<<<<< HEAD
 		console.worldInfo();
 		//console.loadCritters("example-critter2.txt", 1);
 		
@@ -20,5 +21,11 @@ public class BudTest {
 			console.worldInfo();
 		}
 		
+=======
+		//console.loadCritters("example-critter2.txt", 1);
+		console.worldInfo();
+		//console.advanceTime(1);
+		//console.worldInfo();
+>>>>>>> 5a4812d93de841aed1720ee36c4a6e9304f368e0
 	}
 }
