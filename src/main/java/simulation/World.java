@@ -175,7 +175,7 @@ public class World extends AbstractWorld
 		InputStream in = World.class.getResourceAsStream("constants.txt");
 		if(in == null)
 		{ 
-			System.err.println("The constants.txt file could not be found in src/main/resources.");
+			System.err.println("The constants.txt file could not be found in bin/simulation.");
 			System.exit(0);
 		}
 		
@@ -539,7 +539,6 @@ public class World extends AbstractWorld
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
-		sc.toggleMatingPheromones(true);
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
