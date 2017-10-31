@@ -6,9 +6,6 @@ size: 1
 energy: 500
 posture: 17
 
-//MEMORY ENTRY KEY:
-//
-
 ahead[1] < -1 --> eat;
 
 mem[9] = 0 and ENERGY > SIZE * 3 --> mem[9] := 1 forward;
