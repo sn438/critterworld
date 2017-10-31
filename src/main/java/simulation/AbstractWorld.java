@@ -109,7 +109,8 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
 	/**
-	 * Forces a critter to eat, if there is food in the hex directly in front of it.
+	 * Forces a critter to eat, if there is food in the hex directly in front of it. This action replenishes energy
+	 * equal to the caloric content of the food eaten.
 	 * @param sc : the feasting critter
 	 */
 	public abstract void critterEat(SimpleCritter sc);
@@ -143,21 +144,22 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract void critterMate(SimpleCritter sc);
 	
 	/**
-	 * 
+	 * One critter "tags" another critter by setting its "tag" attribute in memory equal to the value of {@code index}.
 	 * @param sc
 	 * @param index
 	 */
 	public abstract void critterTag(SimpleCritter sc, int index);
 	
 	/**
-	 * 
-	 * @param sc
-	 * @param index
+	 * One critter severs a part of its soul (its energy) and places it on the hex in front of it in the form of food. It is
+	 * possible for the critter to serve all of its remaining energy, killing it in the process
+	 * @param sc : the overly generous critter
+	 * @param index : the amount of food to serve
 	 */
 	public abstract void critterServe(SimpleCritter sc, int index);
 	
 	/**
-	 * 
+	 * A critter does nothing but sit in the sun. It replenishes some energy in the process.
 	 * @param sc
 	 */
 	public abstract void critterSoakEnergy(SimpleCritter sc);

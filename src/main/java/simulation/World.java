@@ -550,7 +550,7 @@ public class World extends AbstractWorld
 	@Override
 	public void critterMate(SimpleCritter sc)
 	{
-		/*Hex location = critterMap.get(sc);
+		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 		int behindColumnParent1 = c + sc.changeInPosition(false, sc.getOrientation())[0];
@@ -591,7 +591,7 @@ public class World extends AbstractWorld
 				kill(parent2);
 			return;
 		}
-		initiateMatingProcess(sc, parent2);*/
+		initiateMatingProcess(sc, parent2);
 	}
 
 	/** Randomly determines the number of mutations that will occur during mating or budding. */
@@ -759,6 +759,8 @@ public class World extends AbstractWorld
 
 		if (index < 0)
 			index = 0;
+		else if(index > donator.getEnergy() + donator.size())
+			index = donator.getEnergy() + donator.size();
 
 		donator.updateEnergy(-1 * (donator.size() + index), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
@@ -788,6 +790,7 @@ public class World extends AbstractWorld
 			kill(donator);
 	}
 
+	@Override
 	public void critterSoakEnergy(SimpleCritter sc)
 	{
 		sc.updateEnergy(CONSTANTS.get("SOLAR_FLUX").intValue(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
@@ -806,22 +809,8 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public StringBuilder printGrid() // TODO fix
-	{
-		/*StringBuilder result = new StringBuilder("World name: " + worldname + "\n");
-		for (int i = 0; i < columns; i++)
-		{
-			for (int j = 0; j < rows; j++)
-			{
-				if (grid[i][j] == null)
-					result.append("% ");
-				else
-					result.append(grid[i][j].toString() + " ");
-			}
-			result.append("\n");
-		}
-		return result;*/
-		
+	public StringBuilder printGrid()
+	{	
 		StringBuilder result = new StringBuilder();
 		for(int i = 0; i <= rows; i++)
 		{
