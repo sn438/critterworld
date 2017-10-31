@@ -1,0 +1,8 @@
+species: Parent 1
+memsize: 11
+defense: 2
+offense: 3
+size: 5
+energy: 50000
+posture: 17
+3 = 3 --> mate;
