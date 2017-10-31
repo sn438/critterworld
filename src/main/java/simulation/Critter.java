@@ -1,7 +1,9 @@
 package simulation;
 
 import ast.Program;
+import java.util.Arrays;
 
+/** A critter is a creature that inhabits CritterWorld. */
 public class Critter implements SimpleCritter
 {
 	/** The set of rules for this critter. */
@@ -16,8 +18,8 @@ public class Critter implements SimpleCritter
 	private boolean readyToMingle;
 	/** The name of this critter, used for identification purposes. */
 	private String name;
-	/** A string containing information about the last action this critter completed. */
-	private String lastActionCompleted;
+	/** A string containing information about the last rule this critter completed. */
+	private String lastRuleCompleted;
 	
 	/**
 	 * Creates a new Critter with a specified ruleset, memory, orientation, and name.
@@ -33,7 +35,7 @@ public class Critter implements SimpleCritter
 		memLength = mem[0];
 		name = s;
 		readyToMingle = false;
-		lastActionCompleted = null;
+		lastRuleCompleted = null;
 		
 		orientation = Direction.constructDir(dir);
 	}
@@ -51,7 +53,7 @@ public class Critter implements SimpleCritter
 		memLength = mem[0];
 		name = s;
 		readyToMingle = false;
-		lastActionCompleted = null;
+		lastRuleCompleted = null;
 		
 		int rand = (int) (Math.random() * 6);
 		orientation = Direction.constructDir(rand);
@@ -82,14 +84,14 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
-	public String getLastAction()
+	public String getLastRule()
 	{
-		return lastActionCompleted;
+		return lastRuleCompleted;
 	}
 	@Override
-	public void setLastAction(String s)
+	public void setLastRule(String s)
 	{
-		lastActionCompleted = s;
+		lastRuleCompleted = s;
 	}
 	
 	@Override
@@ -129,7 +131,6 @@ public class Critter implements SimpleCritter
 	@Override
 	public void updateEnergy(int amount, int maxEnergyPerSize)
 	{
-		// TODO Auto-generated method stub
 		memory[4] += amount;
 		if(memory[4] > maxEnergyPerSize * size())
 			memory[4] = maxEnergyPerSize * size();
@@ -157,10 +158,8 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
-	public String toString() //TODO fix when done testing
+	public String toString()
 	{
-		//String result = name + Arrays.toString(memory) + "\n" + prog.toString();
-		//return result;
 		return "" + orientation.getValue();
 	}
 	
@@ -226,6 +225,12 @@ public class Critter implements SimpleCritter
 			result[1] *= -1;
 		}
 		return result;
+	}
+	
+	@Override
+	public int[] getMemoryCopy()
+	{
+		return Arrays.copyOf(memory, memLength);
 	}
 	
 	/** An enumeration of all the possible directions a critter can be facing. */

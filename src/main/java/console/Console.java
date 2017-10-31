@@ -2,6 +2,8 @@ package console;
 
 import java.io.*;
 import java.util.Scanner;
+
+import simulation.SimpleCritter;
 import simulation.SimpleWorld;
 import simulation.World;
 
@@ -117,11 +119,30 @@ public class Console
 	 */
 	public void hexInfo(int c, int r)
 	{
-		// TODO implement and call appropriate method
-
-		critterInfo(null, null, null, null);
-		// OR
-		// terrainInfo(0);
+		//This method can't do anything if no world has been created yet.
+		if(world == null)
+		{
+			System.err.println("You must first create a world before you can view its information.");
+			printHelp();
+			return;
+		}
+		
+		if(!world.isValidHex(c, r))
+		{
+			System.err.println("Invalid world coordinates.");
+			return;
+		}
+		
+		SimpleCritter sc;
+		int hexAnalysis = world.analyzeHex(c, r);
+		if(hexAnalysis <= 0)
+			terrainInfo(hexAnalysis);
+		
+		sc = world.analyzeCritter(c, r);
+		if(sc == null)
+			return;
+		
+		critterInfo(sc.getName(), sc.getMemoryCopy(), sc.getProgram().toString(), sc.getLastRule());
 	}
 
 	/* =========================== */
