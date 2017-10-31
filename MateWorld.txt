@@ -1,0 +1,5 @@
+name Mate World 
+size 5 5
+
+critter MatingParent1.txt 3 4 0
+critter MatingParent2.txt 3 5 3
