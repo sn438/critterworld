@@ -52,8 +52,7 @@ public class World extends AbstractWorld
 		if (worldname.equals(""))
 			worldname = "Arrakis";
 
-		// parses world dimensions, and supplies default ones if no valid dimensions are
-		// parsed
+		// parses world dimensions, and supplies default ones if no valid dimensions are parsed
 		try
 		{
 			String worldDimensions = FileParser.parseAttributeFromLine(bf, "size ");
@@ -185,17 +184,6 @@ public class World extends AbstractWorld
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
 		CONSTANTS = FileParser.parseConstants(bf);
-
-		/*try
-		{
-			BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/constants.txt"));
-			CONSTANTS = FileParser.parseConstants(bf);
-		}
-		catch (FileNotFoundException e)
-		{
-			System.err.println("The constants.txt file could not be found in src/main/resources.");
-			throw new IllegalArgumentException();
-		}*/
 	}
 
 	@Override

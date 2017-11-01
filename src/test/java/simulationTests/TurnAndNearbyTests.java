@@ -24,8 +24,6 @@ public class TurnAndNearbyTests {
 	/**
 	 * simpleTurn checks to see if a critter can turn right and left properly
 	 */
-	
-	
 	@Test
 	public void simpleTurn() {
 		System.out.println("simpleTurn");
@@ -33,7 +31,7 @@ public class TurnAndNearbyTests {
 		console1.advanceTime(1);
 		console1.worldInfo();
 	}
-	
+
 	/**
 	 * turnIfFood tests to see if a critter can turn if there is food right next to it. Nearby was
 	 * also tested by placing the food at different points around the critter and having the critter turn if
