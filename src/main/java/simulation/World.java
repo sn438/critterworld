@@ -105,7 +105,11 @@ public class World extends AbstractWorld
 						SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(),
 								Integer.parseInt(info[4]));
 						if(sc == null)
+						{
+							System.err.println("The critter file " + filename + " does not have the right syntax, so it was not loaded.");
 							break;
+						}
+							
 						loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
 						break;
 				}
@@ -819,12 +823,12 @@ public class World extends AbstractWorld
 	public StringBuilder printGrid()
 	{	
 		StringBuilder result = new StringBuilder();
-		for(int i = 0; i <= rows; i++)
+		for(int i = 0; i < 2 * rows - columns; i++)
 		{
 			StringBuilder sb = new StringBuilder();
 			if(i % 2 != 0)
 				sb.append("  ");
-			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows + 1; c += 2, r++)
+			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++)
 			{
 				if(isValidHex(c, r))
 					sb.append("" + grid[c][r].toString() + "   ");

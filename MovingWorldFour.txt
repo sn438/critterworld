@@ -1,4 +1,4 @@
 name Moving World 4
 size 5 10
 
-critter MovingCritter.txt 4 7 0
+critter MovingCritter.txt 4 9 0

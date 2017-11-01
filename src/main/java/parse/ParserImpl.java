@@ -40,7 +40,6 @@ class ParserImpl implements Parser {
 		LinkedList<Rule> RuleList = new LinkedList<Rule>();
 		while (t.hasNext()) {
 			Rule r = parseRule(t);
-			System.out.println(r.toString());
 			RuleList.add(r);
 			
 		}
