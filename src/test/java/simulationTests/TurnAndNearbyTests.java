@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import console.Console;
 
-public class TurnTests {
+public class TurnAndNearbyTests {
 
 	Console console1 = null;
 	Console console2 = null;
@@ -24,6 +24,11 @@ public class TurnTests {
 	/**
 	 * simpleTurn checks to see if a critter can turn right and left properly
 	 */
+<<<<<<< HEAD:src/test/java/simulationTests/TurnTests.java
+=======
+	
+	
+>>>>>>> 41fe28e826698ca5cf3e31913bdf54842644b50c:src/test/java/simulationTests/TurnAndNearbyTests.java
 	@Test
 	public void simpleTurn() {
 		System.out.println("simpleTurn");
@@ -32,9 +37,16 @@ public class TurnTests {
 		console1.worldInfo();
 	}
 	
+<<<<<<< HEAD:src/test/java/simulationTests/TurnTests.java
 	
 	/**
 	 * turnIfFood tests to see if a critter can turn if there is food right next to it.
+=======
+	/**
+	 * turnIfFood tests to see if a critter can turn if there is food right next to it. Nearby was
+	 * also tested by placing the food at different points around the critter and having the critter turn if
+	 * it can sense it. As a result, this test covers both functionalities. 
+>>>>>>> 41fe28e826698ca5cf3e31913bdf54842644b50c:src/test/java/simulationTests/TurnAndNearbyTests.java
 	 */
 	
 	@Test
