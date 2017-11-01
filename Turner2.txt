@@ -1,0 +1,8 @@
+species: Turner 1
+memsize: 11
+defense: 2
+offense: 3
+size: 1
+energy: 50000
+posture: 17
+3 = 3  --> left;
