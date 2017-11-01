@@ -16,7 +16,8 @@ public class AttackTests {
 	 }
 	
 	/**
-	 * testBasicAttack tests attack by having a massive critter attack a tiny critter. 
+	 * testBasicAttack tests attack by having a massive critter attack a tiny critter. The smaller critter
+	 * should die.
 	 */
 	@Test
 	public void testBasicAttack() {

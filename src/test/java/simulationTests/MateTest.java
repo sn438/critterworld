@@ -28,7 +28,7 @@ public class MateTest {
 	 * simpleTest tests to see if two critters who want to mate can mate and create an offspring.
 	 */
 	
-	/*
+	
 	@Test
 	public void simpleTest() {
 		System.out.println("simpleTest");
@@ -36,7 +36,7 @@ public class MateTest {
 		console1.advanceTime(1);
 		console1.worldInfo();
 	}
-	*/
+	
 	
 	/**
 	 * mateWithRock tests to see what happens when a couple of critters tries to mate but with a rock behind one of
@@ -52,10 +52,12 @@ public class MateTest {
 		console2.worldInfo();
 	}
 	
-	
-	/*
+	/**
+	 * mateLittleEnergy checks to see what happens to the parents when they try to mate when they
+	 * do not have enough energy. The parents then die. 
+	 */
 	@Test
-	public void MateLittleEnergy() {
+	public void mateLittleEnergy() {
 		System.out.println("mateLittleEnergy");
 		console3.worldInfo();
 		console3.advanceTime(1);
@@ -64,7 +66,12 @@ public class MateTest {
 	
 	
 	
-	
+	/**
+	 * mateDifferentTimeStep checks to see what happens when two parents want to mate, but they
+	 * want to mate on different time steps. While one of the parents wants to mate, the other one waits
+	 * and vice versa. As a result, the parents should not be able to mate. During this test, wait is also
+	 * tested in this test.
+	 */
 	@Test
 	public void mateDifferentTimeStep() {
 		System.out.println("mateDifferentTimeStep");
@@ -72,5 +79,5 @@ public class MateTest {
 		console4.advanceTime(17);
 		console4.worldInfo();
 	}
-	*/
+	
 }
