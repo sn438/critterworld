@@ -12,10 +12,10 @@ public class Test
 		c.loadWorld("SpiralCritterWorld.txt");
 		c.worldInfo();
 		
-		for(int i = 0; i < 30; i++)
+		for(int i = 0; i < 40; i++)
 		{
 			c.advanceTime(1);
-			//c.worldInfo();
+			c.worldInfo();
 		}
 	}
 }

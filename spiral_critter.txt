@@ -1,4 +1,4 @@
-species: example
+species: Spiral
 memsize: 12
 defense: 2
 offense: 3
@@ -6,18 +6,16 @@ size: 1
 energy: 500
 posture: 17
 
-//MEMORY ENTRY KEY:
-//
-
+//ensures that the critter has enough energy, and will eat food in its way
+ENERGY <= SIZE * 3 --> wait;
 ahead[1] < -1 --> eat;
 
-mem[9] = 0 and ENERGY > SIZE * 3 --> mem[9] := 1 forward;
-mem[11] = 1 --> mem[11] := 0 left;
+mem[9] = 0 --> mem[8] := mem[8] + 1 mem[9] := 1 forward;
 
-mem[8] = 7 --> mem[8] := 0 mem[9] := 0 mem[11] := 1;
+mem[9] = 1 and mem[10] = 0 --> mem[10] := mem[10] + 1 right;
+mem[10] = 1 and mem[11] < mem[8] - 1 --> mem[11] := mem[11] + 1 forward;
+mem[10] = 1 and mem[11] = mem[8] - 1 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
 
-mem[8] <= 1 and ENERGY >= SIZE --> mem[8] := mem[8] + 1 right;
-
-//mem[10] is a boolean that stores whether or not the critter has moved forward in between turns
-mem[10] = 0 and {ahead[1] = 0 and ENERGY > SIZE * 3} --> mem[10] := mem[10] + 1 forward;
-mem[10] = 1 and {mem[8] != 7 and ENERGY >= SIZE} --> mem[10] := 0 mem[8] := mem[8] + 1 right;
+mem[11] < mem[8] --> mem[11] := mem[11] + 1 forward;
+mem[11] = mem[8] and mem[10] < 6 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
+mem[10] = 6 and mem[9] = 1 --> mem[9] := 0 mem[10] := 0 mem[11] := 0;

@@ -28,6 +28,7 @@ public class InterpreterImpl implements Interpreter
 	{
 		Action a = interpret(c.getProgram());
 		executeAction(a);
+		System.out.println("RightCount: " + c.readMemory(10) + "forwardCount: " + c.readMemory(11));
 	}
 	
 	/**
@@ -54,6 +55,7 @@ public class InterpreterImpl implements Interpreter
 					if(ruleCommand.getLast().getType() == NodeType.ACTION)
 					{
 						a = (Action) ruleCommand.getLast();
+						//System.out.println(r.toString());//TODO remove
 						actionInterpreted = true;
 					}
 					else
@@ -180,6 +182,9 @@ public class InterpreterImpl implements Interpreter
 				result = r.getCond().acceptEvaluation(this);
 				break;
 		}
+		//System.out.println("Left: " + r.getLeft().toString() + left);
+		//System.out.println("Right: " + r.getRight().toString() + right);
+		//System.out.println(r.toString() + result);
 		return result;
 	}
 	
