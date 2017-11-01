@@ -9,6 +9,7 @@ import parse.Parser;
 import parse.ParserFactory;
 import simulation.Critter;
 import simulation.FileParser;
+import simulation.SimpleCritter;
 
 public class FileParserTest
 {
@@ -19,8 +20,6 @@ public class FileParserTest
 		try
 		{
 			String[] test = FileParser.parseAttributes(new BufferedReader(new FileReader("examples/example-critter.txt")));
-			//for(int i = 0; i < test.length; i++)
-				//System.out.println("Element " + i + ": "+ test[i]);
 			
 			assertEquals(test.length, 7);
 			assertTrue(test[0].equals("example"));
@@ -43,8 +42,6 @@ public class FileParserTest
 		try
 		{
 			String[] test = FileParser.parseAttributes(new BufferedReader(new FileReader("examples/failure-example-critter1.txt")));
-			//for(int i = 0; i < test.length; i++)
-				//System.out.println("Element " + i + ": "+ test[i]);
 			
 			assertEquals(test.length, 7);
 			assertTrue(test[0].equals(""));
@@ -74,8 +71,7 @@ public class FileParserTest
 			Parser p = ParserFactory.getParser();
 			Program prog = p.parse(br);
 			
-			System.out.println((new Critter(prog, critAttr, name)).toString());
-			//world.loadCritters(name, critAttr, prog, n);
+			SimpleCritter sc = new Critter(prog, critAttr, name, -1);
 		}
 		catch (FileNotFoundException e)
 		{

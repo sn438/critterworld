@@ -24,8 +24,6 @@ public class TurnTests {
 	/**
 	 * simpleTurn checks to see if a critter can turn right and left properly
 	 */
-	
-	/*
 	@Test
 	public void simpleTurn() {
 		System.out.println("simpleTurn");
@@ -33,10 +31,10 @@ public class TurnTests {
 		console1.advanceTime(1);
 		console1.worldInfo();
 	}
-	*/
+	
+	
 	/**
-	 * turnIfFood tests to see if a critter can turn if there is food right next to
-	 * it.
+	 * turnIfFood tests to see if a critter can turn if there is food right next to it.
 	 */
 	
 	@Test
