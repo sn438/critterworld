@@ -1,0 +1,4 @@
+name Moving World
+size 5 10
+
+critter src/test/resources/simulationTests/MovingCritter.txt 3 5 0

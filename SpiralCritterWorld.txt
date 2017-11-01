@@ -1,3 +1,0 @@
-name Spiral World
-size 11 13
-critter spiral_critter.txt 5 6 0

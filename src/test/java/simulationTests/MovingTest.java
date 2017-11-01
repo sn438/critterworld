@@ -18,13 +18,13 @@ public class MovingTest
 	public void setUp()
 	{
 		console1 = new Console();
-		console1.loadWorld("MovingWorld.txt");
+		console1.loadWorld("src/test/resources/simulationTests/MovingWorld.txt");
 		console2 = new Console();
-		console2.loadWorld("MovingWorldFileRock.txt");
+		console2.loadWorld("src/test/resources/simulationTests/MovingWorldFileRock.txt");
 		console3 = new Console();
-		console3.loadWorld("MovingWorldThree.txt");
+		console3.loadWorld("src/test/resources/simulationTests/MovingWorldThree.txt");
 		console4 = new Console();
-		console4.loadWorld("MovingWorldFour.txt");
+		console4.loadWorld("src/test/resources/simulationTests/MovingWorldFour.txt");
 		
 	}
 	/**

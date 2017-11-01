@@ -16,7 +16,7 @@ public class SpiralCritterTest
 	public void test()
 	{
 		Console c = new Console();
-		c.loadWorld("SpiralCritterWorld.txt");
+		c.loadWorld("src/test/resources/simulationTests/SpiralCritterWorld.txt");
 		c.worldInfo();
 		
 		for(int i = 0; i < 60; i++)

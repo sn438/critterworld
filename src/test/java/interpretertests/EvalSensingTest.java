@@ -112,7 +112,7 @@ public class EvalSensingTest
 	public void testSenseWorldEdge()
 	{
 		Console c = new Console();
-		c.loadWorld("SensingWorld.txt");
+		c.loadWorld("src/test/resources/simulationTests/SensingWorld.txt");
 		c.worldInfo();
 		c.advanceTime(1);
 		c.worldInfo();

@@ -15,9 +15,9 @@ public class TurnAndNearbyTests {
 	@Before
 	public void setUp() {
 		console1 = new Console();
-		console1.loadWorld("TurnWorldTwo.txt");
+		console1.loadWorld("src/test/resources/simulationTests/TurnWorldTwo.txt");
 		console2 = new Console();
-		console2.loadWorld("TurnNearbyWorld.txt");
+		console2.loadWorld("src/test/resources/simulationTests/TurnNearbyWorld.txt");
 
 	}
 

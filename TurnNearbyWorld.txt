@@ -1,4 +1,0 @@
-name Turn World 1
-size 5 10
-food 3 3 500
-critter Turner1.txt 3 4 0

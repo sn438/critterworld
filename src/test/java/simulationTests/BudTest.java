@@ -16,11 +16,11 @@ public class BudTest {
 	@Before
 	public void setup() {
 		console1 = new Console();
-		console1.loadWorld("BudWorld.txt");
+		console1.loadWorld("src/test/resources/simulationTests/BudWorld.txt");
 		console2 = new Console();
-		console2.loadWorld("BudWorldRock.txt");
+		console2.loadWorld("src/test/resources/simulationTests/BudWorldRock.txt");
 		console3 = new Console();
-		console3.loadWorld("BudWorld3.txt");
+		console3.loadWorld("src/test/resources/simulationTests/BudWorld3.txt");
 	}
 
 	/**

@@ -15,13 +15,13 @@ public class MateTest {
 	public void setUp()
 	{
 		console1 = new Console();
-		console1.loadWorld("MateWorld.txt");
+		console1.loadWorld("src/test/resources/simulationTests/MateWorld.txt");
 		console2 = new Console();
-		console2.loadWorld("MateWorldRock.txt");
+		console2.loadWorld("src/test/resources/simulationTests/MateWorldRock.txt");
 		console3 = new Console();
-		console3.loadWorld("MateWorldLittleEnergy.txt");
+		console3.loadWorld("src/test/resources/simulationTests/MateWorldLittleEnergy.txt");
 		console4 = new Console();
-		console4.loadWorld("MateWorldDifferentTimeSteps.txt");
+		console4.loadWorld("src/test/resources/simulationTests/MateWorldDifferentTimeSteps.txt");
 	}
 	
 	/**

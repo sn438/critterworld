@@ -1,5 +1,0 @@
-name Attack World 
-size 5 10
-
-critter AttackCritter1.txt 3 4 0
-critter AttackCritter2.txt 3 5 3

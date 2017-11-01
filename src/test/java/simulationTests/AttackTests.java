@@ -12,7 +12,7 @@ public class AttackTests {
 	@Before
 	 public void setup() {
 		 console1 = new Console();
-		 console1.loadWorld("AttackWorld.txt");
+		 console1.loadWorld("src/test/resources/simulationTests/AttackWorld.txt");
 	 }
 	
 	/**
