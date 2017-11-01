@@ -108,9 +108,17 @@ public class Console
 		}
 		
 		out.println(world.printGrid().toString());
-		worldInfo(world.getTimePassed(), world.numRemainingCritters());
+		worldInfo(world.getTimePassed(), crittersAlive());
 	}
 
+	/** Returns the number of critters still alive. Useful for testing purposes. */
+	public int crittersAlive()
+	{
+		if(world == null)
+			return Integer.MIN_VALUE;
+		return world.numRemainingCritters();
+	}
+	
 	/**
 	 * Prints description of the contents of hex (c,r).
 	 *

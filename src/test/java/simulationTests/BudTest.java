@@ -1,5 +1,7 @@
 package simulationTests;
 
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,9 +29,11 @@ public class BudTest {
 	@Test
 	public void testBasicBud() {
 		System.out.println("testBasicBud");
+		int initialNumCritters = console1.crittersAlive();
 		console1.worldInfo();
 		console1.advanceTime(1);
 		console1.worldInfo();
+		assertEquals(initialNumCritters + 1, console1.crittersAlive());
 	}
 
 	/**
@@ -39,21 +43,25 @@ public class BudTest {
 	@Test
 	public void testBudWithRock() {
 		System.out.println("testBudWithRock");
+		int initialNumCritters = console2.crittersAlive();
 		console2.worldInfo();
 		console2.advanceTime(1);
 		console2.worldInfo();
+		assertEquals(initialNumCritters, console2.crittersAlive());
 	}
 
 	/**
-	 * testBudNoEnergy checks to see if a critter will die when it tries to bud with
-	 * no energy.
+	 * testBudNoEnergy checks to see if a critter will die when it tries to bud with no energy.
+	 * It also tests to see if critter death properly adds a food object onto the site of death.
 	 */
 	@Test
 	public void testBudNoEnergy() {
 		System.out.println("testBudNoEnergy");
+		int initialNumCritters = console3.crittersAlive();
 		console3.worldInfo();
 		console3.advanceTime(1);
 		console3.worldInfo();
+		assertEquals(initialNumCritters - 1, console3.crittersAlive());
 	}
 
 }
