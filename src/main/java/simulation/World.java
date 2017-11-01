@@ -469,9 +469,9 @@ public class World extends AbstractWorld
 			// Calculates the damage dealt to the target critter
 			SimpleCritter target = (SimpleCritter) (directlyInFront.getContent());
 			int baseDamage = CONSTANTS.get("BASE_DAMAGE").intValue();
-			int dmgMultiplier = CONSTANTS.get("DAMAGE_INC").intValue();
-			int dmgBeforeScaling = attacker.size() * attacker.readMemory(2) - target.size() * target.readMemory(1);
-			int damage = baseDamage * attacker.size() * logisticFunction(dmgMultiplier * dmgBeforeScaling);
+			double dmgMultiplier = CONSTANTS.get("DAMAGE_INC").doubleValue();
+			int dmgBeforeScaling = (attacker.size() * attacker.readMemory(2)) - (target.size() * target.readMemory(1));
+			int damage = baseDamage * attacker.size() * logisticFunction(dmgMultiplier * (double)dmgBeforeScaling);
 
 			// kills the target if it took damage greater than or equal to its current energy
 			target.updateEnergy(-1 * damage, CONSTANTS.get("ENERGY_PER_SIZE").intValue());

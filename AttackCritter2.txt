@@ -1,0 +1,8 @@
+species: Attack Critter 2
+memsize: 11
+defense: 1
+offense: 3
+size: 1
+energy: 5
+posture: 17
+3 = 3 --> wait;
