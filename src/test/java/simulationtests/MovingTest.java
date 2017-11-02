@@ -1,6 +1,4 @@
-package simulationTests;
-
-import static org.junit.Assert.*;
+package simulationtests;
 
 import org.junit.Before;
 import org.junit.Test;

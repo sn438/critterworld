@@ -129,7 +129,6 @@ public class TestMutateRemove
 		BinaryExpr be = new BinaryExpr(ue, MathOp.ADD, new UnaryExpr(2));
 		
 		int previousSize = be.size();
-		String before = be.toString();
 		ue.acceptMutation(new MutationRemove(true));
 		assertTrue(previousSize > be.size());
 		assertTrue("3 + 2".equals(be.toString()));

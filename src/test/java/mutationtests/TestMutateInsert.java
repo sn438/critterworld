@@ -8,15 +8,7 @@ import java.io.Reader;
 import org.junit.Before;
 import org.junit.Test;
 
-import ast.BinaryExpr;
-import ast.Condition;
-import ast.MutationInsert;
-import ast.MutationRemove;
-import ast.Node;
-import ast.Program;
-import ast.Relation;
-import ast.Sensor;
-import ast.UnaryExpr;
+import ast.*;
 import parse.Parser;
 import parse.ParserFactory;
 import parsertests.ASTParserTest;

@@ -1,4 +1,4 @@
-package simulationTests;
+package simulationtests;
 
 import org.junit.Test;
 

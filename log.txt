@@ -1,122 +1,147 @@
-[33mcommit fce536fec1b6d39c94b8eb25247226e99b89f023[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+commit 06cb727814873d6888a15d8da8ad12d94cb8e408
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Oct 31 23:26:00 2017 -0400
+
+    Testing Finished
+
+commit 0536fee80bfb57c1dac79b65123fbaa29a995502
+Merge: 221e8ca cb93ef2
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Oct 31 23:09:59 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 221e8cafbb3634896fea5fd40c47cb06e9eb8172
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Oct 31 23:09:32 2017 -0400
+
+    Attack Tests
+
+commit cb93ef26d11bd86c1a934f2a1b9d46993bb0cb53
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 31 22:49:26 2017 -0400
+
+    fix merge
+
+commit fce536fec1b6d39c94b8eb25247226e99b89f023
 Merge: faaae27 41fe28e
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 22:47:22 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit faaae27e8751ae57808ad7b3b0819f7624e3e782[m
+commit faaae27e8751ae57808ad7b3b0819f7624e3e782
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 22:46:48 2017 -0400
 
     Final tests
 
-[33mcommit 41fe28e826698ca5cf3e31913bdf54842644b50c[m
+commit 41fe28e826698ca5cf3e31913bdf54842644b50c
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 22:44:40 2017 -0400
 
     Testing Done
 
-[33mcommit 3f34641d080ef40ea4dbab4d1980324643736d26[m
+commit 3f34641d080ef40ea4dbab4d1980324643736d26
 Merge: 3631e4c 2e8bab8
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 21:38:55 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit 3631e4cef53d386e115ab7fa8364e9d22a95efe9[m
+commit 3631e4cef53d386e115ab7fa8364e9d22a95efe9
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 21:38:49 2017 -0400
 
     Turning Tests
 
-[33mcommit 2e8bab888d0b606f53dda0b449210c2f3996abdc[m
+commit 2e8bab888d0b606f53dda0b449210c2f3996abdc
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 21:35:36 2017 -0400
 
     More Tests
 
-[33mcommit 90fd50cc87b830aff15673e999c4cd22044a9543[m
+commit 90fd50cc87b830aff15673e999c4cd22044a9543
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 20:43:50 2017 -0400
 
     Tests!
 
-[33mcommit 0edcfbd68771f1bed74c2f699a211fdb6a60c7a5[m
+commit 0edcfbd68771f1bed74c2f699a211fdb6a60c7a5
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 20:14:08 2017 -0400
 
     SpiralCritter works now
 
-[33mcommit 9bdbd6cc4f186af60209dce78176917924f76428[m
+commit 9bdbd6cc4f186af60209dce78176917924f76428
 Merge: 4c6c2ee 4892088
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 16:57:49 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit 4c6c2ee00ac1d482311238e8b27924a6ba4d2b51[m
+commit 4c6c2ee00ac1d482311238e8b27924a6ba4d2b51
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 16:57:41 2017 -0400
 
     Minor fixes
 
-[33mcommit 48920886f5e3ac44e22a57eae5f0fc9f1045d3ac[m
+commit 48920886f5e3ac44e22a57eae5f0fc9f1045d3ac
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 15:37:39 2017 -0400
 
     Mating Testing Final
 
-[33mcommit 35f9b0ef281e2a40ce0bbb213ba29acc3d81e8e3[m
+commit 35f9b0ef281e2a40ce0bbb213ba29acc3d81e8e3
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 15:31:26 2017 -0400
 
     Mating Testing
 
-[33mcommit 7429469fac45d9dc7908a5e9a1bc92ec6d2f7460[m
+commit 7429469fac45d9dc7908a5e9a1bc92ec6d2f7460
 Merge: d3b6060 753823a
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 14:59:59 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit d3b60607e47ccc71ddb9a8a65f249e65e127bb22[m
+commit d3b60607e47ccc71ddb9a8a65f249e65e127bb22
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 14:58:53 2017 -0400
 
     Mate Test Change
 
-[33mcommit 9ca82f204cd008b0e3449775ebc042e96557f9a4[m
+commit 9ca82f204cd008b0e3449775ebc042e96557f9a4
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 14:57:30 2017 -0400
 
     File Parser Update
 
-[33mcommit ecdea17320fd143cf698fc9faa53d5b39131f071[m
+commit ecdea17320fd143cf698fc9faa53d5b39131f071
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 14:57:00 2017 -0400
 
     Mate Testing Done and Bug Fixed
 
-[33mcommit b669ff85cd406986cb387789b43c622d2fd53366[m
+commit b669ff85cd406986cb387789b43c622d2fd53366
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 13:11:19 2017 -0400
 
     Mate Testing
 
-[33mcommit b24dcaeecb0961141406915da0977e58847259c1[m
+commit b24dcaeecb0961141406915da0977e58847259c1
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 13:01:45 2017 -0400
 
     Testing
 
-[33mcommit d9804214694a1287b36387ab5096161119fb7d2a[m
+commit d9804214694a1287b36387ab5096161119fb7d2a
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 13:00:32 2017 -0400
 
     Testing2
 
-[33mcommit 760b3702d46d973fc51fdfe2988e1365e553c229[m
+commit 760b3702d46d973fc51fdfe2988e1365e553c229
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 12:59:02 2017 -0400
 
@@ -124,25 +149,25 @@ Date:   Tue Oct 31 12:59:02 2017 -0400
     
     This reverts commit bd9403c57b9d23d8f0ecd32ef96eacbf7338ae28.
 
-[33mcommit bd9403c57b9d23d8f0ecd32ef96eacbf7338ae28[m
+commit bd9403c57b9d23d8f0ecd32ef96eacbf7338ae28
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 12:54:41 2017 -0400
 
     Testing
 
-[33mcommit 753823a1f154f70f6e374d0b5e88df5d8239cd1e[m
+commit 753823a1f154f70f6e374d0b5e88df5d8239cd1e
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 12:49:12 2017 -0400
 
     more fixes
 
-[33mcommit 086816869af82477368bfd3c77e6e9f1cff9e8fd[m
+commit 086816869af82477368bfd3c77e6e9f1cff9e8fd
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 12:46:23 2017 -0400
 
     Fixes
 
-[33mcommit a02473c4318c5f7012d276aed173e05a84fa7cfd[m
+commit a02473c4318c5f7012d276aed173e05a84fa7cfd
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 12:42:26 2017 -0400
 
@@ -151,121 +176,1232 @@ Date:   Tue Oct 31 12:42:26 2017 -0400
     This reverts commit 31fb48dc99c9546fcb9e68f5898b4d5f19c9e72b, reversing
     changes made to 21179a6b02c48db2457e6bdb649d6b4b581bd6e3.
 
-[33mcommit 31fb48dc99c9546fcb9e68f5898b4d5f19c9e72b[m
+commit 31fb48dc99c9546fcb9e68f5898b4d5f19c9e72b
 Merge: 21179a6 8fc49a4
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 12:41:21 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit 21179a6b02c48db2457e6bdb649d6b4b581bd6e3[m
+commit 21179a6b02c48db2457e6bdb649d6b4b581bd6e3
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 12:40:30 2017 -0400
 
     Stuff
 
-[33mcommit 8fc49a48b7b0d7351fe1b0df63e19cf2fea71d24[m
+commit 8fc49a48b7b0d7351fe1b0df63e19cf2fea71d24
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 12:39:25 2017 -0400
 
     Tokenizer Has Been Updated With Correct Solution
 
-[33mcommit cebe8f1a5273b0a0a02553cd42f682511f53e186[m
+commit cebe8f1a5273b0a0a02553cd42f682511f53e186
 Merge: 0343510 878321e
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 09:16:26 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit 03435103759b26ede1d3b7c4215dd1f117cd927a[m
+commit 03435103759b26ede1d3b7c4215dd1f117cd927a
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Tue Oct 31 09:16:19 2017 -0400
 
     Bud Test
 
-[33mcommit 878321e363ceaa0b2d586c8be5b0102618d50634[m
+commit 878321e363ceaa0b2d586c8be5b0102618d50634
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 02:11:11 2017 -0400
 
     Documentation
 
-[33mcommit dc3812325cb76cf5af623bba64f907b01ca7e243[m
+commit dc3812325cb76cf5af623bba64f907b01ca7e243
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 01:31:22 2017 -0400
 
     Misc stuff
 
-[33mcommit fd5e0b2a528f1ef885e8b1d6de2d101fb0e205ba[m
+commit fd5e0b2a528f1ef885e8b1d6de2d101fb0e205ba
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 01:09:31 2017 -0400
 
     Documentation + finishing up console
 
-[33mcommit c52c9c5df62e77374dc9d24a9d5f5f3d9c69c0f9[m
+commit c52c9c5df62e77374dc9d24a9d5f5f3d9c69c0f9
 Author: Andy <az389@cornell.edu>
 Date:   Tue Oct 31 00:01:43 2017 -0400
 
     More documentation
 
-[33mcommit 4c6783d0533f75d5d9b97742f61e7803f5aa4390[m
+commit 4c6783d0533f75d5d9b97742f61e7803f5aa4390
 Merge: c4f5689 adc8c91
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 23:51:40 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit c4f56899144a8923b956408256221a5e46fcc436[m
+commit c4f56899144a8923b956408256221a5e46fcc436
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 23:51:38 2017 -0400
 
     Documentation
 
-[33mcommit adc8c91a7ca3d83830c6458fc17aee3d81a02d3b[m
+commit adc8c91a7ca3d83830c6458fc17aee3d81a02d3b
 Merge: 88613b7 ef684b3
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Mon Oct 30 23:47:38 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit 88613b73a6b7c55a034c69ce17b39b15b2f98ad2[m
+commit 88613b73a6b7c55a034c69ce17b39b15b2f98ad2
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Mon Oct 30 23:47:33 2017 -0400
 
     Moving Test Done
 
-[33mcommit ef684b37c2fe6924efcc416a45c716297c9f46d6[m
+commit ef684b37c2fe6924efcc416a45c716297c9f46d6
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 23:45:01 2017 -0400
 
     Fixes
 
-[33mcommit 067278303066953f1241de39755d7545b4cb4b1e[m
+commit 067278303066953f1241de39755d7545b4cb4b1e
 Merge: a6d2ead 5a4812d
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 23:43:56 2017 -0400
 
     Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
 
-[33mcommit a6d2eadf9badd7c0c163420549e66e2f9eaa2145[m
+commit a6d2eadf9badd7c0c163420549e66e2f9eaa2145
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 23:43:41 2017 -0400
 
     Spiral stuff
 
-[33mcommit 5a4812d93de841aed1720ee36c4a6e9304f368e0[m
+commit 5a4812d93de841aed1720ee36c4a6e9304f368e0
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Mon Oct 30 23:25:53 2017 -0400
 
     Moving Test Initial
 
-[33mcommit 6bdc8658cab5adde9acf8c61cdc1d384bc30a32c[m
+commit 6bdc8658cab5adde9acf8c61cdc1d384bc30a32c
 Author: Andy <az389@cornell.edu>
 Date:   Mon Oct 30 17:53:50 2017 -0400
 
     SpiralCritter stuff
 
-[33mcommit 200b419d4d5d2162ef30ddeb630491a180dd968d[m
+commit 200b419d4d5d2162ef30ddeb630491a180dd968d
 Author: sn438 <31802007+sn438@users.noreply.github.com>
 Date:   Mon Oct 30 17:35:38 2017 -0400
 
- 
+    SpiralCritter
+
+commit b4cab4286088176f2f7ee316592c66d85e0d54f5
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 30 16:49:55 2017 -0400
+
+    Misc documentation
+
+commit 4fe3d49e3f68f9dd82055f7a2ab67133fa85d7c3
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 30 13:45:54 2017 -0400
+
+    printGrid() done + documentation
+
+commit a8a0b4d970eb609ccdd7ca775bbd6be0f16e69e9
+Merge: 9c7dfe2 ccf4130
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 16:48:55 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 9c7dfe2312d03c62c5836b8bad57421da07b2bcc
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 16:48:52 2017 -0400
+
+    Fixing stuff
+
+commit ccf413096637d20c08578d5a8471d265917e5b91
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 29 15:51:11 2017 -0400
+
+    Revert "Revert "Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw""
+    
+    This reverts commit 1659d793a583869999bcf2ca34ff03cf3d7a0325.
+
+commit 1659d793a583869999bcf2ca34ff03cf3d7a0325
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 29 15:51:04 2017 -0400
+
+    Revert "Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw"
+    
+    This reverts commit 1dc49ddf303427f10e7b9c582c9b300e915c92ee, reversing
+    changes made to 3c4e297b634c05eb3ff84b6914cc68f1249cdb62.
+
+commit 1dc49ddf303427f10e7b9c582c9b300e915c92ee
+Merge: 3c4e297 b95cc0d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 29 15:45:30 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 3c4e297b634c05eb3ff84b6914cc68f1249cdb62
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 29 15:42:47 2017 -0400
+
+    Mate is Now Written
+
+commit b95cc0d1aea9e658efa280b562408048438a012a
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 14:34:45 2017 -0400
+
+    Documentation and misc fixes
+
+commit 2f35f14b524a751d259dba895bf349faeab53abf
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 12:55:05 2017 -0400
+
+    Bug fixes
+
+commit 39c7d863224537bf0cf67f30caec497663b95fae
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 02:19:48 2017 -0400
+
+    Minor changes
+
+commit 6634ef197704354faec0a7b034f6b247ca272555
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 29 01:33:02 2017 -0400
+
+    Everything except mate seems to be working
+
+commit 688c6243af2b3043fe323a82912db4a89029c96e
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 28 20:03:09 2017 -0400
+
+    Bug fixes
+
+commit e17d79d4e673173cee38ae77407ec73ccaaacef5
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 28 18:50:25 2017 -0400
+
+    Mutations Now Works For the Offspring
+
+commit 574213e79aa5e7cc53ae933330ba27746fa1cc0d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 28 17:45:31 2017 -0400
+
+    Bud Written Not Tested Yet
+
+commit d6b1f8e0753d0729480649d58fd6df8711f5e4cb
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 28 15:56:42 2017 -0400
+
+    More work on actions
+
+commit ba76d56c96f3cdaefab5a3f0f39e316eb5f4081c
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 28 14:05:44 2017 -0400
+
+    Bug fix
+
+commit 230d8656c6b125a062282412a7de04656dd53e7b
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 28 13:48:55 2017 -0400
+
+    Working on critter actions
+
+commit 6864476813997db576208179515867002b196da4
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 28 02:35:09 2017 -0400
+
+    Work on executing actions
+
+commit eded6017adc247fd6b87d6efeb51f9c53e4e9456
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 27 16:23:06 2017 -0400
+
+    Miscellaneous fixes for world creation
+
+commit 817e650e1e7db5b5331a4451d3e1bd84090b33f6
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 27 15:34:25 2017 -0400
+
+    We can parse and create worlds now!
+
+commit b85b3471c254a4ee7e833dcb0b0171cb6de01812
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 27 02:23:09 2017 -0400
+
+    Random world creation seems to work now
+
+commit 0505e11fa4626d992d410e1cb6bc4e4fe43169ce
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 26 13:16:13 2017 -0400
+
+    A5 grind
+
+commit ed8272a172cba17610fa47e1b46b9439929a40ed
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 25 00:44:21 2017 -0400
+
+    More A5 stuff!
+
+commit 026920b66cdbb1770bb68f357d95b2fd22ec9c01
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 24 22:47:15 2017 -0400
+
+    More stuff on A5!
+
+commit 99d68e420850d05d9909afc7a4dd3bd3a77f695f
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 23 14:29:41 2017 -0400
+
+    Finishing up interpreter
+
+commit 33f80a05f8d015b98f73df2d4472e38d083547eb
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 23 00:44:43 2017 -0400
+
+    A crap ton of work for A5
+
+commit 9644950902cbbc61d88496792a8b3f41b4bd01c9
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 22 00:32:16 2017 -0400
+
+    Beginning of A5
+
+commit 234a8439af7fdd86f54cef7019fc9988347a6b11
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 18 15:33:29 2017 -0400
+
+    Deleted old log
+
+commit 1d3a3be36fa9efdef8151b9499ffb94c9a963f2b
+Merge: 9e38ff4 815597a
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Tue Oct 17 07:59:37 2017 -0400
+
+    Merge branch 'master' of github.coecis.cornell.edu:cs2112-f17/a4-release
+
+commit 9e38ff4fbd847de76c423e16030186127ff61a09
+Merge: 539a973 b6b5f8a
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 23:42:49 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 539a973e0a1f2fd93738bc8548010653f62d3dec
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 23:42:44 2017 -0400
+
+    Final Test Cases
+
+commit b6b5f8aeb7baf817366791f98bf13014fd5b7707
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 23:20:26 2017 -0400
+
+    More cleanup
+
+commit 1a1c3d3553c93eb032c45404eb36f35c72c7a24f
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 23:01:09 2017 -0400
+
+    Adding print statements
+
+commit 8a5f8d6866f15d8e16b2c9350d0c27aa40aa3861
+Merge: bd7441c 881c12e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 22:48:57 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit bd7441c49ab620dc59422d9581ffc0551b75b7f1
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 22:47:36 2017 -0400
+
+    Comments and Stuff
+
+commit 881c12e3a491495aa1cbbe61ec014c593153da90
+Merge: cdf51fe f2b31b9
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 22:39:06 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit cdf51fecb03134fd191148a1a1f0c8f06ee69dc2
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 22:39:04 2017 -0400
+
+    Miscellaneous changes
+
+commit f2b31b9cd307bbf907a39144dd1767f1d06d5833
+Merge: 0dde501 be7a6a2
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 22:13:53 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 0dde5016b2473b3d613e3b1948602e10653c19ea
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 22:13:06 2017 -0400
+
+    Mutation Print Statements
+
+commit be7a6a2b421e718c7e3eea8350bd0acbb7531348
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 21:22:41 2017 -0400
+
+    Added findRoot method to AbstractMutation
+
+commit c3c23f9177547bc361c9ec616369dfd6ea77ef04
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 20:58:58 2017 -0400
+
+    Weird merge conflict stuff
+
+commit 80d565be7e0f32e0182148a87cac4ca258143483
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 20:55:46 2017 -0400
+
+    Weird merge stuff
+
+commit f26b34db1f30d59e2c56eef98676916f577339b7
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 20:50:37 2017 -0400
+
+    Fixing merge conflicts
+
+commit b4502b00fd077833f6575bebdbdac40c22a51a55
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 20:48:48 2017 -0400
+
+    More cleanup
+
+commit cab431590fb2de5ef7deb5d279f39ae118b7f252
+Merge: ac14d01 2aa663d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 20:29:09 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit ac14d0164cea23c7df5135484e9cd6d40011a1f4
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 20:29:00 2017 -0400
+
+    Some Tests
+
+commit 2aa663d222343983b171ec0e4fc96e99f8212812
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 20:21:33 2017 -0400
+
+    Cleanups and bug fixes
+
+commit 77c50a2f2d3ca7911530e09be609d7b16ff40e91
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 18:52:09 2017 -0400
+
+    Work on insert
+
+commit 052da7bfa11e0af2d724abd4bd13e7a10d117043
+Merge: 4348a7f 49143d7
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 16:36:52 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 4348a7fd47861e5aaa1a22107e0d666f82eb5b28
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 16:36:47 2017 -0400
+
+    Misc work and documentation
+
+commit 49143d7b6092206f2dab796946e131ff0ccfc1d4
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 16:35:11 2017 -0400
+
+    Test File
+
+commit 15bbc3900bca53f73ad3bb93098b38fefa10e330
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 15:20:10 2017 -0400
+
+    Some work with insert and transform
+
+commit adcfb0219416b5f91e935af7173dd4e7c08e3d87
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 14:40:50 2017 -0400
+
+    Fixes and testing
+
+commit 7f8a314e2ced238eac2adc978e9fe8ad62894119
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 14:40:22 2017 -0400
+
+    Testing Files
+
+commit 965e2c3c48b6c322c753bcab5e1622f2e1a3097c
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 14:33:15 2017 -0400
+
+    Commit Initial Insert Implementation
+
+commit 3a959f4ced103fd74673d3143364e34f4d7bff3c
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 13:39:31 2017 -0400
+
+    Fixed a bug in NodeAt
+
+commit c0fcbf70408211cdbde427b43ca0cb205254dcc7
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 12:37:22 2017 -0400
+
+    Debugging replace
+
+commit 2b2ef6c1b2244f0158abb886610f1444ad62c2cf
+Merge: 5579cb2 cf67aa2
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 03:24:25 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 5579cb28b24cfb8bced689e99425491f2c13a7fa
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 03:24:18 2017 -0400
+
+    MutateTransform Seems To Work
+
+commit cf67aa2c2c409216685336a0dbad683c23579e1f
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 02:33:39 2017 -0400
+
+    Work on MutationDuplicate
+
+commit f5077ecfad932393c2169603cabf21d4d212c5d4
+Merge: 3fb5b19 794d787
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 00:37:58 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 3fb5b19bc7b640015fb64e10a8f3cf378bc464a8
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 16 00:37:54 2017 -0400
+
+    Merge Commit
+
+commit 794d787d96838141819c1a0c058ad517e4953e58
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 16 00:25:57 2017 -0400
+
+    Finished MutationRemove and added test
+
+commit 67d2fc084ce4f9255c8458739709060518916d2c
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 23:43:32 2017 -0400
+
+    Work with MutationRemove
+
+commit fce2eb0a237809e95033466be57fa074339ba33c
+Merge: dee740e 69ab4d9
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 20:50:35 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit dee740e95e3b8f21629e303d0b5ac5924f6163be
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 20:49:52 2017 -0400
+
+    More Cleanup
+
+commit 69ab4d9e8387ae53be31316f33f36c6a86777cad
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 20:47:49 2017 -0400
+
+    MergeSwap Now Works
+
+commit bcde017f3da5a46ebd5a3060e3d47eaba6f6bdef
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 20:37:07 2017 -0400
+
+    Mutation interface changes
+
+commit e22722cb347b4bd4597320b36c3e2d687b9329b1
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 20:34:00 2017 -0400
+
+    Start on searchChildrenForType
+
+commit 4890a5574cdfc395934203b490a71e9005c4bf8f
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 18:53:58 2017 -0400
+
+    Cleanup
+
+commit 3cf383381d9e20c46263215b7c53dd673660079d
+Merge: be1604c 5433934
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 18:46:22 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit be1604cea9b62399a5eb8d9a5fb2cb72fa7735f4
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 18:45:03 2017 -0400
+
+    Work on Mutations
+
+commit 5433934f070810b8dc4f55f12d6be122aa8ca303
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 18:43:22 2017 -0400
+
+    Tokenizer Bug Fix
+
+commit 815597af6fb9f775869ef2ba51bb5d6f66027c42
+Author: Shiyu <sw673@cornell.edu>
+Date:   Sun Oct 15 18:38:42 2017 -0400
+
+    update A5 README
+
+commit d31d9d429f0307d5ecb5b5d2498d5b406add1989
+Merge: 5433ba1 08798b1
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 18:11:20 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 5433ba10a88a3470d48feefb5100f6e8e70f4636
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 18:11:04 2017 -0400
+
+    Merge
+
+commit 08798b19810497041a9105b84cbdfcdc1a92851e
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 15:58:22 2017 -0400
+
+    Fixing merge gibberish
+
+commit ed7b982c359a0cf5028f3907ca2a366c9dc0487c
+Merge: 6198a3a 6bf1984
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 15:56:24 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 6198a3a2db240f566d1fe0a1395fbfc2f0ba04cb
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 15:56:21 2017 -0400
+
+    Added NodeType functionality
+
+commit 6bf1984c29bbb21a072ec9ab88e98af3b034ab2c
+Merge: cdbf211 d2ffb8d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 12:43:36 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit cdbf21130d6847eb62f3f09849e45138d0e86053
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Oct 15 12:43:17 2017 -0400
+
+    Merge
+
+commit d2ffb8dbde25f019f2e6121692a2c1093fbf7594
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 12:41:57 2017 -0400
+
+    Added parent pointers and some basic mutation stuff
+
+commit 11944723dbd966f12e45714c69d45eda8fe23af6
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 15 03:08:30 2017 -0400
+
+    Initial Mutation stuff
+
+commit c81daea79acf1103989b63f10af31fea388a1c80
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 14 18:23:03 2017 -0400
+
+    Cleanup
+
+commit 41775701fe1f4cd4e303419abde0f7cea7f50c06
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 14 17:16:23 2017 -0400
+
+    AST Now Understands Comments
+
+commit 364eada1687bb165343dc1308ecab6728bb28857
+Merge: f5e3749 4a58bfd
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 14 16:53:32 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit f5e3749e998d2d41338f7d078823fb27ea415b3e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 14 16:53:28 2017 -0400
+
+    Merge
+
+commit 4a58bfd50f953b609438bbc6bbb1964685051f63
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 14 16:52:18 2017 -0400
+
+    Added Deep Copy functionality (UNTESTED)
+
+commit d8c3aa8b584ede7a25e30f0ce44137271248f632
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Sat Oct 14 07:48:38 2017 -0400
+
+    Revert "Remove a4 main class"
+    
+    This reverts commit 620c7a43d207103c789c3fb1c4c2290bae429a95.
+
+commit 8903ca5826cbcffb5d969663e051fb3d949ed641
+Author: Shiyu <sw673@cornell.edu>
+Date:   Fri Oct 13 23:03:05 2017 -0400
+
+    added example world and critter
+
+commit 01683953258616d8f04a2a1a243b74bdae4fdfc3
+Author: Shiyu <sw673@cornell.edu>
+Date:   Fri Oct 13 22:54:15 2017 -0400
+
+    update main class in build.gradle
+
+commit 620c7a43d207103c789c3fb1c4c2290bae429a95
+Author: Shiyu <sw673@cornell.edu>
+Date:   Fri Oct 13 22:48:04 2017 -0400
+
+    Remove a4 main class
+
+commit e0892b69efdf555834a762fa1e1afcf557191e94
+Author: Shiyu <sw673@cornell.edu>
+Date:   Fri Oct 13 22:19:12 2017 -0400
+
+    Initial commit for A5
+
+commit a1b0c9a25c1d72d5515a5f710187730fb5cc3212
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 13 13:16:17 2017 -0400
+
+    Cleanups
+
+commit d2cf11bbe6b8d6c36003611c02d76551ee31a446
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Fri Oct 13 01:27:54 2017 -0400
+
+    Example Failing Test Case
+
+commit 033ac4142a2e18462f1bb8bb7d96d9cdc3057ee5
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 13 00:53:51 2017 -0400
+
+    Garbage push
+
+commit 75f7148b8470b3f597517da1e261da53ca76ad4d
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 13 00:51:07 2017 -0400
+
+    Completed Parser? Need to test more
+
+commit ba48d2d9dc0cfee34bca14de6a24ae305076c74b
+Merge: a27ded0 45e3d2d
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 23:32:43 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a27ded04f3377f3ac5c0f3b206837f30efdd88e1
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 23:32:41 2017 -0400
+
+    Finished parseCommand and parseUpdate and parseAction
+
+commit 45e3d2d5f5c2616c5ee58cacad3c68b9d7a347ba
+Merge: d386876 e95541a
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Oct 12 23:14:38 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit e95541ad13e483b8c30e3409b9eec240ff9a70fb
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 23:07:02 2017 -0400
+
+    Some progress on parseCommand
+
+commit d3868761baad8d335305a4e91c28a86889a836f8
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Oct 12 22:55:48 2017 -0400
+
+    Tiniest Bug Fix Possible
+
+commit 5b6b5dea06ff0fc7f29a750e2bd36f767e612d55
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 20:50:01 2017 -0400
+
+    Cleanup
+
+commit 91c94e87e37f76410ccf4101db475ebe47d58020
+Merge: 8e6f5e2 8cf5213
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Oct 12 20:45:21 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 8e6f5e292e1bc5ef54b26a136b449802d5514b4d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Oct 12 20:44:58 2017 -0400
+
+    Why Dis Class So Hard Man Why?
+
+commit 8cf521393c289017de01457c5e0ded53f4e22941
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 20:42:01 2017 -0400
+
+    Please work
+
+commit a7ff5c820d294545869aa282db3b5114cabd9cc6
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 11:47:24 2017 -0400
+
+    Cleanup
+
+commit 969d32c75a5faf0c28a1617be5eb52066a3d3b7a
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 11:47:03 2017 -0400
+
+    Fixed null pointer exception
+
+commit fd04c2d04013628a89e5bb5412c731c1d01caa73
+Author: Andy <az389@cornell.edu>
+Date:   Thu Oct 12 00:53:40 2017 -0400
+
+    nodeAt (haven't tested yet)
+
+commit 3a1dda2498a8d6bb6b87a91cb8c867f14eb52326
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 22:30:07 2017 -0400
+
+    Misc cleanups and nodeAt
+
+commit 466b9b9a08343fb7921d06495253c19e53cbd300
+Merge: 903080a af51dd6
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 22:01:12 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 903080a857fcbc75d73630f33da1784c05539f7c
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 22:00:44 2017 -0400
+
+    Beginning work on nodeAt
+
+commit af51dd6f4ed60fcbc5caa0996d3d3c2caee47e47
+Merge: 54b7d39 eee15a8
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 21:47:27 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 54b7d3996d9c29b7bfac734a9a66f855d0ddfca6
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 21:47:19 2017 -0400
+
+    Merge Commit
+
+commit eee15a85f8b493a6be97175f53db9e3b95752016
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 21:30:38 2017 -0400
+
+    Fixed reading negative factors
+
+commit ddf500da2295a4719b474d3d6b379d811fdc6ddc
+Merge: d63d441 c501e26
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 20:29:20 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit d63d4411597c35f42363e0a75a3d632aa2200184
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 20:29:18 2017 -0400
+
+    Cleaning up messy switch statements
+
+commit c501e26957402726c65b8b4300ec505a0b66c0a3
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 20:28:49 2017 -0400
+
+    Terrible Implementation
+
+commit e933565781f0b5707a5446ecdbc0fdccdfbd3ff2
+Merge: c8f60da f17469e
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 18:46:08 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit c8f60da07b0ccae5da938571eb81463efcdf4c9e
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 18:46:06 2017 -0400
+
+    Testing and added a //TODO comment
+
+commit f17469ec34dbcd41116efc06a7eb332fbb9a5aa5
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 18:37:07 2017 -0400
+
+    Expression Should Work Now After Office Hours
+
+commit b9a4e80a64f9bc28831138393851c5b40905d5ce
+Merge: a4c8cf4 cdfd63d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 18:12:26 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a4c8cf478fcac632de340171beedd3ee6ce0465e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 18:12:21 2017 -0400
+
+    Expression With Different Negation Implementation
+
+commit cdfd63d7bfa7201a37b73d20dc57b792df0cf637
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 11 13:22:29 2017 -0400
+
+    Added proper ProgramImpl creation to ParserImpl.
+    
+    Also wrote a bunch of documentation.
+
+commit af0ea59522e428a21b3778495eae7eb25e903ae9
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 02:47:25 2017 -0400
+
+    Expression Seems to Be Working
+
+commit 5719f8120bc4964435082a0356ed3d73c3629170
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 11 01:34:27 2017 -0400
+
+    Parsing With Factor Implementation
+    
+    Has some String statements in it that should be taken out later.
+
+commit 6b706c206f2527bd22b0f9d9a746120244dfae85
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 17:09:35 2017 -0400
+
+    Quick tests for pretty printing and size
+
+commit 889d7b84753d324325101306191ca57dc1a13ad2
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 16:49:40 2017 -0400
+
+    Added size() functionality.
+    
+    Still untested.
+
+commit e1030c17f851653566849017e22b768c052e6031
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 16:10:05 2017 -0400
+
+    Changed name of evaluateNode() to evaluate()
+
+commit 2ada007083b7cdecbb26dbdd7dfcc4b67d2f34bb
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 16:02:24 2017 -0400
+
+    More AST pretty printing
+    
+    Also added some more documentation.
+
+commit 383380ffb26ff7e01067a28cb44c33bb60536a0d
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 15:07:29 2017 -0400
+
+    Adding more AST nodes
+    
+    Completed pretty printing functionality? Have yet to test it
+
+commit 19867a0c71bac3e419e5338a676d45dcf943e363
+Merge: b54de06 98c4bd3
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Oct 10 01:36:10 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit b54de06e76296f1ba7df64efe344799b03d2e238
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Oct 10 01:35:15 2017 -0400
+
+    Merge Test
+
+commit 98c4bd3a5a800d9369962d220742cc0b2b9c1275
+Author: Andy <az389@cornell.edu>
+Date:   Tue Oct 10 01:17:13 2017 -0400
+
+    More nodes
+
+commit 0dae210c65395ae9820102e9a71cf7702131efe3
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 9 23:02:17 2017 -0400
+
+    Cleaning up prettyprinting
+
+commit 98c807bfc3555f5b885f2ab601d13f6e0d549707
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 9 22:14:32 2017 -0400
+
+    Cleaned Up Some of The Weird Git Merge Errors
+
+commit 7e4058e0ef9cb2cefa542892c68551b810d2c5b5
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 9 20:39:48 2017 -0400
+
+    Garbage Commit
+
+commit d8c18b9e183bddf66b80cfd3979fdf24b54fef16
+Merge: 14f9246 bcbac9a
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 9 20:36:49 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 14f9246264248a07b22811dc4322c8773963b6ef
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 9 20:36:28 2017 -0400
+
+    Initial Parsing Commit: Barely Working
+
+commit bcbac9a71a41a75cc4a622474fdf2d9fa785a8ad
+Author: Andy <az389@cornell.edu>
+Date:   Mon Oct 9 13:38:50 2017 -0400
+
+    Added PrettyPrint functionality to some nodes.
+
+commit 2dca9ff6a23bf526c5f994bc090580fa5ced4a0d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Oct 9 02:40:38 2017 -0400
+
+    Initial Parsing Code
+
+commit b44bc837fd76add8a499b11b53ee9bd154c8ef72
+Author: Andy <az389@cornell.edu>
+Date:   Sun Oct 8 23:24:03 2017 -0400
+
+    Creating a few more classes
+
+commit 1eacab181ac1ee04aa9b05b959639b6829f78fe0
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 23:17:48 2017 -0400
+
+    More misc
+
+commit 9cacefa5a19dbc46c63c8c6d55670c5820ee824d
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 23:17:00 2017 -0400
+
+    Miscellaneous work
+
+commit d82ed5429c812f117f6140060fc55498975f3a37
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 7 21:11:25 2017 -0400
+
+    UnaryExpr
+
+commit 312ed20a032d4fa9877d84c950b145762fc7b797
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 19:19:06 2017 -0400
+
+    Work on BinaryExpr
+
+commit c73bb400d579e7c63fd6cd4518213c3be54b099a
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 17:38:42 2017 -0400
+
+    Testing
+
+commit 00e1fa6f353a61b9381ef49841235a87da6eee0a
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 17:35:03 2017 -0400
+
+    What is going on
+
+commit c003dedf29be628930a8790de3114bec89d4eaa8
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 7 17:32:34 2017 -0400
+
+    Commit
+
+commit 8ae4fdc7dc881dc1ef2fb01c30d0841bbc14e492
+Merge: 6f05ca4 53c4c2b
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 7 17:28:23 2017 -0400
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+    
+    That's okay just let it merge.
+
+commit 6f05ca4d729156e6660d11e35db5cc4476a70eaa
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Oct 7 17:27:41 2017 -0400
+
+    Third Test
+
+commit 53c4c2b2145a668b9c209d5424c0d100e8456a74
+Author: Andy <az389@cornell.edu>
+Date:   Sat Oct 7 17:25:38 2017 -0400
+
+    Adding new classes
+    
+    Added BinaryExpr and AbstractNode
+
+commit d01569a2a53f3e351619f70779987c94d145f8a4
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 6 16:15:07 2017 -0400
+
+    FORMATTING AHHHHH
+    
+    yes.
+
+commit 8bc818d587a8432fa93c77b69d2ba5eac16ddde4
+Author: Andy <az389@cornell.edu>
+Date:   Fri Oct 6 01:23:17 2017 -0400
+
+    FORMATTING.
+    
+    AHHHHHH
+
+commit 9a24289728ff1947e893643e7d52f3631401faea
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Oct 4 23:26:09 2017 -0400
+
+    Second Test
+
+commit 27b2ad811e24b1b047922ab388e7607e3dcb4e27
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 4 21:10:07 2017 -0400
+
+    Test commit
+
+commit d86b272fc0997fb0e6317c52a4b008a10876e047
+Author: Andy <az389@cornell.edu>
+Date:   Wed Oct 4 16:33:10 2017 -0400
+
+    Formatting.
+    
+    Did not touch the classes Tokenizer and TokenType.
+
+commit ec0c0cbfcf07c48337cb8418401fd0706f517d00
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Wed Sep 27 07:00:30 2017 -0400
+
+    fix build.gradle
+
+commit 04b331b5522051b14e575f07b2604064ff6a2331
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Wed Sep 27 06:57:53 2017 -0400
+
+    update main class in jar
+
+commit 12522579bc0cd8c1ac044bf393c472d01c0b8bbc
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Wed Sep 27 06:56:20 2017 -0400
+
+    update readme
+
+commit a93e8a384e79dcf6275a0388d7c2e7903fdea7d9
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Wed Sep 27 06:54:42 2017 -0400
+
+    update readme
+
+commit 36f6c0347f6c3833028aa5e3d85a2cd1bf552a7c
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Tue Sep 26 20:28:47 2017 -0400
+
+    update gitignore
+
+commit 8821b53a01fc5c1b3ed87534b79dc77701244810
+Author: Jacob Glueck <swimgiraffe435@gmail.com>
+Date:   Tue Sep 26 20:15:08 2017 -0400
+
+    rename
+
+commit 7df160b24f17047dc8728648aef62e25d002364e
+Author: Kenneth Wang Fang <kwf37@cornell.edu>
+Date:   Sun Sep 24 21:33:33 2017 -0400
+
+    Update README.md
+
+commit eaec237ed515ae2af243f363faf468de1f0bf79d
+Author: Kenneth Wang Fang <kwf37@cornell.edu>
+Date:   Sun Sep 24 19:19:05 2017 -0400
+
+    Update README.md
+
+commit f3047f3b22aab046b1bcad165dd49edee47efa6e
+Author: Travis Stephen Westura <tsw52@cornell.edu>
+Date:   Sun Sep 24 16:07:29 2017 -0400
+
+    Updated README.md to fix a few typos
+
+commit 20b5fdf1415a432f9883ecea18a3693e50f637e9
+Author: Kenneth Wang Fang <kwf37@cornell.edu>
+Date:   Sun Sep 24 15:04:08 2017 -0400
+
+    Added some gradle info
+
+commit 9071e6c4bea8d968e0228b7c421f3389cc3f3164
+Author: Kenneth Wang Fang <kwf37@cornell.edu>
+Date:   Sun Sep 24 14:28:28 2017 -0400
+
+    Added Git instructinos
+
+commit f35fb464b5841565a1d7499cfada19183b1a1f02
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 19:01:04 2017 -0400
+
+    small update to example test
+
+commit e166fa58cf171728212f8b39a5654485f796d41c
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:59:35 2017 -0400
+
+    Add example test
+
+commit f68e672761aaf65c8d725208c6e96a949ffe0518
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:32:19 2017 -0400
+
+    Add readme file to the test directory
+
+commit 0962bf39e4b12cde0a84e89e705ba3590dae28ea
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:30:05 2017 -0400
+
+    Update jar output in gradle build file
+
+commit 614cf3ad27c42a61bfc1555f1d87ccaa1efcceda
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:28:02 2017 -0400
+
+    Move example program resources to the test
+
+commit 69d53902393fb0cab3dd9cba9a187a11d7466bbb
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:25:39 2017 -0400
+
+    Remove repeated resources folder
+
+commit fe07f661c087d1eaab52333f88fc237afd0c9879
+Author: Travis Westura <twestura@gmail.com>
+Date:   Sat Sep 23 18:21:52 2017 -0400
+
+    Initial commit of a4 files

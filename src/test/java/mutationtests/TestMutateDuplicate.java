@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.MutationDuplicate;
-import ast.MutationReplace;
 import ast.Program;
 import parse.Parser;
 import parse.ParserFactory;

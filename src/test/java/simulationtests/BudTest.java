@@ -1,4 +1,4 @@
-package simulationTests;
+package simulationtests;
 
 import static org.junit.Assert.*;
 

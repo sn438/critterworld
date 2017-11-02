@@ -12,7 +12,6 @@ import org.junit.Test;
 import ast.Program;
 import parse.Parser;
 import parse.ParserFactory;
-import parse.Tokenizer;
 
 /** This class contains tests for the Critter parser. */
 public class ASTParserTest

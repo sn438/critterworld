@@ -4,23 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import ast.Action;
-import ast.BinaryCondition;
-import ast.BinaryExpr;
-import ast.Command;
-import ast.Condition;
-import ast.MutationRemove;
-import ast.MutationTransform;
-import ast.Program;
-import ast.Relation;
-import ast.Sensor;
-import ast.UnaryExpr;
-import ast.Update;
+import ast.*;
 import parse.Parser;
 import parse.ParserFactory;
 import parsertests.ASTParserTest;
