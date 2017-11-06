@@ -30,40 +30,26 @@ public class hexes extends Application {
 		Group root = new Group();
 		Canvas canvas = new Canvas(width, height);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		Polygon polygon = new Polygon();
-		polygon.getPoints().addAll(new Double[] { 0.0, 0.0, 20.0, 10.0, 10.0, 20.0 });
 
-		int column = 5;
-		int row = 5;
-		double a = (height) / ((1 + row) * (Math.sqrt(3)));
-		int divider = 0;
-		row -= column/2;
-		if (column % 2 == 0) {
-			divider = (column / 2) * 3;
-		}
-		else {
-			divider = ((column / 2) + 1) * 3;
-			}
-		double b = width / divider;
-		if (b < a) {
-			a = b;
-		}
-
-		double x_position = a;
-		double y_position = (Math.sqrt(3) * (a / 2));
-
+		int column = 6;
+		int row = 10;
+		row -= column / 2;
+		double a = 30;
+		double x_position = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * a) + (a / 2);
+		double y_position = (((double) height / 2) - (((double) row / 2)*(Math.sqrt(3) * (a))))  + (Math.sqrt(3) * (a / 2));
+		System.out.println(y_position);
 		for (int i = 0; i < column; i++) {
 			if (i % 2 == 0) {
 				y_position += Math.sqrt(3) * (a / 2);
 			}
-			if (i%2 == 0 && column%2 == 1) {
+			if (i % 2 == 0 && column % 2 == 1) {
 				y_position = (Math.sqrt(3) * (a / 2));
 			}
-			if (i%2 == 1 && column%2 == 1) {
+			if (i % 2 == 1 && column % 2 == 1) {
 				y_position += Math.sqrt(3) * (a / 2);
 				row--;
 			}
-			
+
 			for (int j = 0; j < row; j++) {
 				gc.strokePolygon(
 						new double[] { x_position + a, x_position + (a / 2), x_position - (a / 2), x_position - a,
@@ -74,17 +60,19 @@ public class hexes extends Application {
 						6);
 				y_position += (Math.sqrt(3) * (a));
 			}
+
 			x_position += a + (a / 2);
-			y_position = (Math.sqrt(3) * (a / 2));
-			if (i%2 == 1 && column%2 == 1) {
+			y_position = (((double) height / 2) - (((double) row / 2)*(Math.sqrt(3) * (a))))  + (Math.sqrt(3) * (a / 2));;
+			if (i % 2 == 1 && column % 2 == 1) {
 				row++;
 			}
 		}
-
+		gc.strokePolygon(new double[] { 0, 400, 400, 0 }, new double[] { 0, 0, 600, 600 }, 4);
+		gc.strokePolygon(new double[] { -50, 0, 0, -50 }, new double[] { 0, 0, 50, 50 }, 4);
 		root.getChildren().add(canvas);
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
-		
+
 		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -92,9 +80,9 @@ public class hexes extends Application {
 				canvas.setScaleX(1.5);
 				canvas.setScaleY(1.5);
 				System.out.println(event.getSceneX());
-				
-			} 
-	       });
+
+			}
+		});
 	}
 
 }
