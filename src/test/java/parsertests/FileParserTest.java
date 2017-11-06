@@ -72,6 +72,7 @@ public class FileParserTest
 			Program prog = p.parse(br);
 			
 			SimpleCritter sc = new Critter(prog, critAttr, name, -1);
+			sc.getEnergy();
 		}
 		catch (FileNotFoundException e)
 		{
