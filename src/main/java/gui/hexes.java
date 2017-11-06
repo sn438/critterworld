@@ -1,4 +1,4 @@
-package hextiles;
+package gui;
 
 import java.io.File;
 import java.io.FileInputStream;
