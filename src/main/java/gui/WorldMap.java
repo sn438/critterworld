@@ -33,10 +33,11 @@ public class WorldMap {
 	}
 
 	public void draw() {
+		// TODO have map redraw upon resizing window
+		// TODO fix zooming + panning position
 		x_position = x_position_marker;
 		y_position = y_position_marker;
 		for (int i = 0; i < column; i++) {
-
 			if (i % 2 == 0 && column % 2 == 0) {
 				y_position += Math.sqrt(3) * (sideLength / 2);
 			}

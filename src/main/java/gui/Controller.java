@@ -70,7 +70,7 @@ public class Controller {
 	private double mousePanPressedY;
 	private double xCoordinateSelected;
 	private double yCoordinateSelected;
-//hi
+
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
@@ -85,7 +85,7 @@ public class Controller {
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		c.setVisible(false);
+		c.setVisible(true); // TODO why was this false originally??????????????
 		map = new WorldMap(c, model, c.getHeight(), c.getWidth());
 
 		timeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {

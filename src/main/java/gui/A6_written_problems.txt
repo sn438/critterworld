@@ -9,11 +9,11 @@ public TVBool or(TVBool that) {
 
 2. normalize() is implemented correctly because it is simply a checking method whose job is to assert that there isn't any flaws in the logic of the other methods. It never actually changes the representation of the TVBool when being accessed by different classes because if the normalize method retains the sign of the field state even if the technical value of the field is changed. not() is implemented correctly because it never actually changes the value of the field state. It creates a new object, sets the state of that object, and returns that object. It never alters the state of the original object.
 
-3. The hashCode() method is incorrect because it does not generate a sufficiently random hash value to use in a hash table. This implementation would lead to massive amounts of collisions, drastically slowing down the performance of the hash table. A correct implementation is provided below:
+3. The hashCode() method is incorrect because if two TVBools are equal, they need to have the same hash code. The given implementation does not have this property. A correct implementation is provided below:
 
 @Override
 public int hashCode() {
-	// TODO do hashcode method
+	return Integer.signum(state);
 }
 
 An implementation of equals() is provided below:
