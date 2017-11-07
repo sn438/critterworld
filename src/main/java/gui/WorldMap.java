@@ -1,11 +1,9 @@
 package gui;
 
 import javafx.scene.canvas.Canvas;
-
 import javafx.scene.canvas.GraphicsContext;
 
-public class WorldMap
-{
+public class WorldMap {
 	private WorldModel model;
 	private GraphicsContext gc;
 	private double height;
@@ -113,22 +111,21 @@ public class WorldMap
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
-<<<<<<< HEAD
-	
+
 	public void select(double xCoordinate, double yCoordinate) {
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
- 		
+
 	}
 
 	private int[] closestHex(double xCoordinate, double yCoordinate) {
 		int possibleColumnOne = (int) Math.ceil(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
 		int possibleColumnTwo = (int) Math.floor(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
 		int possibleRowOne = (int) Math
-				.ceil(((Math.sqrt(3) * (-yCoordinate + origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
+				.ceil(((Math.sqrt(3) * (yCoordinate - origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
 		int possibleRowTwo = (int) Math
-				.floor(((Math.sqrt(3) * (-yCoordinate + origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
+				.floor(((Math.sqrt(3) * (yCoordinate - origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
 
 		int[][] possibleCoordinates = new int[4][2];
 		possibleCoordinates[0] = new int[] { possibleColumnOne, possibleRowOne };
@@ -149,17 +146,16 @@ public class WorldMap
 			}
 			counter++;
 		}
-		System.out.println(possibleCoordinates[returnIndex][0]+ " " +  possibleCoordinates[returnIndex][1]);
-		//System.out.println(possibleCoordinates[counter][0] + " " +  possibleCoordinates[counter][1]);
+		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
+		// System.out.println(possibleCoordinates[counter][0] + " " +
+		// possibleCoordinates[counter][1]);
 		return possibleCoordinates[returnIndex];
 	}
-	
+
 	private double[] hexToCartesian(int[] hexCoordinates) {
-		double x_coordinate = ((3*sideLength)/2)*hexCoordinates[0] + origin_x;
-		double y_cooridnate = (((-Math.sqrt(3))*sideLength)/2)*hexCoordinates[0] + sideLength*Math.sqrt(3)*hexCoordinates[1] + origin_y;
-		return new double[] {x_coordinate, y_cooridnate};
+		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
+		double y_cooridnate = (((-Math.sqrt(3)) * sideLength) / 2) * hexCoordinates[0]
+				+ sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
+		return new double[] { x_coordinate, y_cooridnate };
 	}
 }
-=======
-}
->>>>>>> 3b16306b2a0697c45aefaaaa6cdee1ab21278cf5
