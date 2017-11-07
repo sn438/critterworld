@@ -25,8 +25,8 @@ public class WorldMap
 		gc = canvas.getGraphicsContext2D();
 		this.height = height;
 		this.width = width;
-		column = 5;
-		row = 10;
+		column = 50;
+		row = 100;
 		row -= column / 2;
 		sideLength = 30;
 		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
@@ -70,6 +70,8 @@ public class WorldMap
 		x_position = x_position_marker;
 		origin_x = x_position;
 		origin_y = y_position+ (sideLength*(Math.sqrt(3))*row) - (Math.sqrt(3) * (sideLength / 2));
+		if (column%2 == 0)
+			origin_y += (sideLength/2)*(Math.sqrt(3));
 		highlightOrigin();
 	}
 
@@ -84,6 +86,9 @@ public class WorldMap
 			if (sideLength <= 10)
 				sideLength = 10;
 		}
+		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) row / 2) * (Math.sqrt(3) * (sideLength))))
+				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
@@ -106,8 +111,6 @@ public class WorldMap
 	}
 	
 	public void drag(double deltaX, double deltaY) {
-		System.out.println(deltaX);
-		System.out.println(deltaY);
 		x_position_marker += deltaX*15;
 		y_position_marker += deltaY*15;
 		gc.clearRect(0, 0, width, height);
