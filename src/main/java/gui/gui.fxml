@@ -19,7 +19,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <Canvas fx:id="worldMap" height="775.0" width="750.0" AnchorPane.leftAnchor="0.0" />
+      <Canvas fx:id="c" height="775.0" width="750.0" AnchorPane.leftAnchor="0.0" />
       <MenuBar fx:id="Menu" prefHeight="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
@@ -60,8 +60,8 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0">
                            <children>
-                              <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleNewWorldPressed" onMouseClicked="#handleNewWorldPressed" text="New World" />
-                              <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleLoadWorldPressed" text="Load World" />
+                              <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#handleNewWorldPressed" text="New World" />
+                              <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#handleLoadWorldPressed" text="Load World" />
                            </children>
                         </AnchorPane>
                      </content>

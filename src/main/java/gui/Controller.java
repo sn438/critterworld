@@ -5,10 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
 import java.io.File;
-
-import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -47,7 +44,7 @@ public class Controller
 	@FXML private Button reset;
 	@FXML private Slider simulationSpeed;
 	
-	@FXML private Canvas worldMap;
+	@FXML private Canvas c;
 	@FXML private Label crittersAlive;
 	@FXML private Label stepsTaken;
 	private Timeline timeline;
@@ -74,32 +71,35 @@ public class Controller
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		map = new WorldMap(worldMap, worldMap.getHeight(), worldMap.getWidth());
+		c.setVisible(false);
+		map = new WorldMap(c, model, c.getHeight(), c.getWidth());
+		
 		
 		
 		timeline = new Timeline(new KeyFrame(Duration.millis(100),
 	               new EventHandler<ActionEvent>() {
 	                  @Override
-	                  public void handle(ActionEvent ae) {
+	                  public void handle(ActionEvent ae)
+	                  {
 	                     map.draw();
 	                  }
 	               }));
-	      timeline.setCycleCount(Timeline.INDEFINITE);
-	      timeline.play();
-	      
-	      worldMap.setOnScroll(new EventHandler<ScrollEvent>() {
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
+	    
+		c.setOnScroll(new EventHandler<ScrollEvent>() {
 
-				@Override
-				public void handle(ScrollEvent event) {
-					
-					if (event.getDeltaY() > 0)
-						map.zoom(true);
-					else 
-						map.zoom(false);
-				}
-			});
-	      worldMap.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {			
+				if (event.getDeltaY() > 0)
+					map.zoom(true);
+				else 
+					map.zoom(false);
+			}
+		});
+		c.setOnMousePressed(new EventHandler<MouseEvent>() {
 
+<<<<<<< HEAD
 				@Override
 				public void handle(MouseEvent event) {
 					if (!event.isPrimaryButtonDown()) {
@@ -113,9 +113,18 @@ public class Controller
 					}
 				}
 			});	
+=======
+			@Override
+			public void handle(MouseEvent event) {
+				mousePressedX = event.getScreenX();
+				mousePressedY = event.getScreenY();
+			}
+		});	
+>>>>>>> 3b16306b2a0697c45aefaaaa6cdee1ab21278cf5
 	
-	      worldMap.setOnDragDetected(new EventHandler<MouseEvent>() {
+		c.setOnDragDetected(new EventHandler<MouseEvent>() {
 
+<<<<<<< HEAD
 				@Override
 				public void handle(MouseEvent event) {
 					if (!event.isPrimaryButtonDown()) {
@@ -123,9 +132,20 @@ public class Controller
 					}
 				}
 			});	}
+=======
+			@Override
+			public void handle(MouseEvent event) {
+				System.out.println(event.getX() - mousePressedX);
+				System.out.println(event.getY() - mousePressedY);
+				map.drag(event.getScreenX() - mousePressedX, event.getScreenY() - mousePressedY);
+				
+			}
+		});
+	}
+>>>>>>> 3b16306b2a0697c45aefaaaa6cdee1ab21278cf5
 	
 	@FXML
-	private void handleNewWorldPressed(ActionEvent ae)
+	private void handleNewWorldPressed(MouseEvent me)
 	{
 		model.createNewWorld();
 		loadCritterFile.setDisable(false);
@@ -136,15 +156,24 @@ public class Controller
 		run.setDisable(false);
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
+		c.setVisible(true);
 	}
 	
 	@FXML
-	private void handleLoadWorldPressed(ActionEvent ae)
+	private void handleLoadWorldPressed(MouseEvent ae)
 	{
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File worldFile = fc.showOpenDialog(new Popup());
 		model.loadWorld(worldFile);
-
+		loadCritterFile.setDisable(false);
+		chkRand.setDisable(false);
+		chkSpecify.setDisable(false);
+		numCritters.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		reset.setDisable(false);
+		simulationSpeed.setDisable(false);
+		c.setVisible(true);
 	}
 }

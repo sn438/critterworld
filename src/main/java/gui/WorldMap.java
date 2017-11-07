@@ -5,9 +5,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class WorldMap
-
 {
-
+	private WorldModel model;
 	private GraphicsContext gc;
 	private double height;
 	private double width;
@@ -21,8 +20,9 @@ public class WorldMap
 	private double origin_x;
 	private double origin_y;
 
-	public WorldMap(Canvas canvas, double height, double width) {
+	public WorldMap(Canvas canvas, WorldModel wm, double height, double width) {
 		gc = canvas.getGraphicsContext2D();
+		model = wm;
 		this.height = height;
 		this.width = width;
 		column = 6;
@@ -113,6 +113,7 @@ public class WorldMap
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
+<<<<<<< HEAD
 	
 	public void select(double xCoordinate, double yCoordinate) {
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
@@ -159,3 +160,6 @@ public class WorldMap
 		return new double[] {x_coordinate, y_cooridnate};
 	}
 }
+=======
+}
+>>>>>>> 3b16306b2a0697c45aefaaaa6cdee1ab21278cf5
