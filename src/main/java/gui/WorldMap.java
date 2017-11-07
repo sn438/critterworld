@@ -1,11 +1,13 @@
 package gui;
 
 import javafx.scene.canvas.Canvas;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class WorldMap
 
 {
+
 	private GraphicsContext gc;
 	private double height;
 	private double width;
@@ -80,3 +82,5 @@ public class WorldMap
 		draw();
 	}
 }
+
+

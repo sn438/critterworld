@@ -19,63 +19,8 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <Canvas fx:id="worldMap" height="775.0" width="750.0" />
-      <VBox layoutX="749.0" layoutY="26.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="775.0" prefWidth="250.0">
-         <children>
-            <TitledPane animated="false" prefHeight="275.0" prefWidth="250.0" text="World Info">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="249.0" />
-               </content>
-            </TitledPane>
-            <TitledPane animated="false" prefHeight="150.0" prefWidth="250.0" text="Create World">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0">
-                     <children>
-                        <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" text="New World" />
-                        <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" text="Load World" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-            <TitledPane animated="false" prefHeight="275.0" prefWidth="250.0" text="World Controls">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="338.0" prefWidth="249.0">
-                     <children>
-                        <Button fx:id="loadCritterFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Load Critter File" />
-                        <RadioButton fx:id="chkRand" layoutX="24.0" layoutY="55.0" mnemonicParsing="false" text="Random hex">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="HexChoice" />
-                           </toggleGroup>
-                        </RadioButton>
-                        <RadioButton fx:id="chkSpecify" layoutX="143.0" layoutY="55.0" mnemonicParsing="false" text="Specify hex" toggleGroup="$HexChoice" />
-                        <TextField fx:id="numCritters" layoutX="201.0" layoutY="15.0" prefHeight="23.0" prefWidth="30.0">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </TextField>
-                        <Label layoutX="144.0" layoutY="18.0" text="Number" />
-                        <Button fx:id="stepForward" layoutX="83.0" layoutY="102.0" mnemonicParsing="false" text="Step Forward" />
-                        <Button fx:id="run" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" text=" Run " />
-                        <Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" text="Pause" />
-                        <Button fx:id="reset" layoutX="104.0" layoutY="190.0" mnemonicParsing="false" text="Reset" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-            <TitledPane animated="false" prefHeight="150.0" prefWidth="250.0" text="Simulation Controls">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="250.0">
-                     <children>
-                        <Slider fx:id="simulationSpeed" layoutX="69.0" layoutY="41.0" prefWidth="110.0" />
-                        <Label layoutX="61.0" layoutY="39.0" text="0" />
-                        <Label layoutX="179.0" layoutY="39.0" text="100" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </TitledPane>
-         </children>
-      </VBox>
-      <MenuBar fx:id="Menu" prefHeight="26.0" prefWidth="1000.0">
+      <Canvas fx:id="worldMap" height="775.0" width="750.0" AnchorPane.leftAnchor="0.0" />
+      <MenuBar fx:id="Menu" prefHeight="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
@@ -85,22 +30,81 @@
             </Menu>
          </menus>
       </MenuBar>
-      <HBox layoutY="774.0" prefHeight="25.0" prefWidth="750.0">
+      <HBox alignment="BOTTOM_LEFT" layoutY="774.0" prefHeight="25.0" AnchorPane.bottomAnchor="2.1316282072803006E-14" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0">
          <children>
-            <SplitPane dividerPositions="0.5" prefHeight="26.0" prefWidth="758.0" style="-fx-background-color: lightgray;">
+            <SplitPane dividerPositions="0.5" prefHeight="26.0" style="-fx-background-color: lightgray;" HBox.hgrow="ALWAYS">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="crittersAlive" layoutX="172.0" layoutY="4.0" text="Critters Alive:" />
+                        <Label fx:id="crittersAlive" alignment="CENTER" text="Critters Alive:" />
                      </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="stepsTaken" layoutX="154.0" layoutY="3.0" text="Time Steps: " />
+                        <Label fx:id="stepsTaken" text="Time Steps: " />
                      </children>
-                  </AnchorPane>
+                  </HBox>
               </items>
             </SplitPane>
          </children></HBox>
+      <VBox layoutX="749.0" layoutY="26.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="775.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.5999999999999943" AnchorPane.topAnchor="25.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <TitledPane animated="false" prefWidth="250.0" text="World Info" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="249.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" layoutY="40.79999923706055" prefWidth="250.0" text="Create World">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleNewWorldPressed" onMouseClicked="#handleNewWorldPressed" text="New World" />
+                              <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleLoadWorldPressed" text="Load World" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" layoutY="145.60000610351562" prefWidth="250.0" text="World Controls">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="338.0" prefWidth="249.0">
+                           <children>
+                              <Button fx:id="loadCritterFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Load Critter File" />
+                              <RadioButton fx:id="chkRand" layoutX="24.0" layoutY="55.0" mnemonicParsing="false" text="Random hex">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="HexChoice" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="chkSpecify" layoutX="143.0" layoutY="55.0" mnemonicParsing="false" text="Specify hex" toggleGroup="$HexChoice" />
+                              <TextField fx:id="numCritters" layoutX="201.0" layoutY="15.0" prefHeight="23.0" prefWidth="30.0">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="144.0" layoutY="18.0" text="Number" />
+                              <Button fx:id="stepForward" layoutX="83.0" layoutY="102.0" mnemonicParsing="false" text="Step Forward" />
+                              <Button fx:id="run" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" text=" Run " />
+                              <Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" text="Pause" />
+                              <Button fx:id="reset" layoutX="104.0" layoutY="190.0" mnemonicParsing="false" text="Reset" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" layoutY="504.79998779296875" prefWidth="250.0" text="Simulation Controls">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="250.0">
+                           <children>
+                              <Slider fx:id="simulationSpeed" layoutX="69.0" layoutY="41.0" prefWidth="110.0" />
+                              <Label layoutX="61.0" layoutY="39.0" text="0" />
+                              <Label layoutX="179.0" layoutY="39.0" text="100" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
