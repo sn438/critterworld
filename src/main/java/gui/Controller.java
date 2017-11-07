@@ -63,7 +63,6 @@ public class Controller {
 	@FXML
 	private Label stepsTaken;
 	private Timeline timeline;
-<<<<<<< HEAD
 
 	private WorldModel model;
 	private WorldMap map;
@@ -72,13 +71,6 @@ public class Controller {
 	private double xCoordinateSelected;
 	private double yCoordinateSelected;
 //hi
-=======
-	private WorldModel model;
-	private WorldMap map;
-	private double mousePressedX;
-	private double mousePressedY;
-	
->>>>>>> parent of 7539542... Hex Selection
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
@@ -117,7 +109,6 @@ public class Controller {
 		});
 		c.setOnMousePressed(new EventHandler<MouseEvent>() {
 
-<<<<<<< HEAD
 			@Override
 			public void handle(MouseEvent event) {
 				if (!event.isPrimaryButtonDown()) {
@@ -127,32 +118,16 @@ public class Controller {
 					xCoordinateSelected = event.getSceneX();
 					yCoordinateSelected = event.getSceneY();
 					map.select(xCoordinateSelected, yCoordinateSelected);
-=======
-				@Override
-				public void handle(MouseEvent event) {
-					mousePressedX = event.getScreenX();
-					mousePressedY = event.getScreenY();
-					
->>>>>>> parent of 7539542... Hex Selection
 				}
 			}
 		});
 
-<<<<<<< HEAD
 		c.setOnDragDetected(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
 				if (!event.isPrimaryButtonDown()) {
 					map.drag(event.getScreenX() - mousePanPressedX, event.getScreenY() - mousePanPressedY);
-=======
-				@Override
-				public void handle(MouseEvent event) {
-					//System.out.println(event.getX() - mousePressedX);
-					//System.out.println(event.getY() - mousePressedY);
-					map.drag(event.getScreenX() - mousePressedX, event.getScreenY() - mousePressedY);
-					
->>>>>>> parent of 7539542... Hex Selection
 				}
 			}
 		});

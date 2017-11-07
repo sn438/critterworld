@@ -23,8 +23,8 @@ public class WorldMap {
 		model = wm;
 		this.height = height;
 		this.width = width;
-		column = 50;
-		row = 100;
+		column = 6;
+		row = 10;
 		row -= column / 2;
 		sideLength = 30;
 		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
@@ -41,10 +41,9 @@ public class WorldMap {
 				y_position += Math.sqrt(3) * (sideLength / 2);
 			}
 			if (i % 2 == 1 && column % 2 == 1) {
-				 y_position += Math.sqrt(3) * (sideLength / 2);
+				y_position += Math.sqrt(3) * (sideLength / 2);
 				row--;
 			}
-
 
 			for (int j = 0; j < row; j++) {
 				gc.strokePolygon(
@@ -67,10 +66,10 @@ public class WorldMap {
 		}
 		x_position = x_position_marker;
 		origin_x = x_position;
-		origin_y = y_position+ (sideLength*(Math.sqrt(3))*row) - (Math.sqrt(3) * (sideLength / 2));
-		if (column%2 == 0)
-			origin_y += (sideLength/2)*(Math.sqrt(3));
-		highlightOrigin();
+		origin_y = y_position + (sideLength * (Math.sqrt(3)) * row) - (Math.sqrt(3) * (sideLength / 2));
+		if (column % 2 == 0)
+			origin_y += (sideLength / 2) * (Math.sqrt(3));
+		highlightHex(origin_x, origin_y);
 	}
 
 	public void zoom(boolean zoomIn) {
@@ -78,8 +77,7 @@ public class WorldMap {
 			sideLength += 5;
 			if (sideLength >= 70)
 				sideLength = 70;
-		}
-		else {
+		} else {
 			sideLength -= 5;
 			if (sideLength <= 10)
 				sideLength = 10;
@@ -89,32 +87,30 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
+
 	}
-	
-	public void highlightOrigin() {
-		
-		double fill_x = origin_x;
-		double fill_y = origin_y -  (Math.sqrt(3) * (sideLength / 2));
-		
+
+	public void highlightHex(double xCoordinate, double yCoordinate) {
+
+		double fill_x = xCoordinate;
+		double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
+
 		gc.fillPolygon(
-				new double[] { fill_x + sideLength, fill_x + (sideLength / 2),
-						fill_x - (sideLength / 2), fill_x - sideLength, fill_x - (sideLength / 2),
-						fill_x + (sideLength / 2) },
+				new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x - (sideLength / 2),
+						fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
 				new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
-						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y,
-						fill_y + (Math.sqrt(3) * (sideLength / 2)),
+						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) * (sideLength / 2)),
 						fill_y + (Math.sqrt(3) * (sideLength / 2)) },
 				6);
-				
+
 	}
-	
+
 	public void drag(double deltaX, double deltaY) {
-		x_position_marker += deltaX*15;
-		y_position_marker += deltaY*15;
+		x_position_marker += deltaX * 15;
+		y_position_marker += deltaY * 15;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
-<<<<<<< HEAD
 
 	public void select(double xCoordinate, double yCoordinate) {
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
@@ -163,8 +159,3 @@ public class WorldMap {
 		return new double[] { x_coordinate, y_cooridnate };
 	}
 }
-=======
-}
-
-
->>>>>>> parent of 7539542... Hex Selection
