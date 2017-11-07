@@ -23,7 +23,7 @@ public class WorldMap {
 		model = wm;
 		this.height = height;
 		this.width = width;
-		column = 5;
+		column = 6;
 		row = 10;
 		row -= column / 2;
 		sideLength = 30;
@@ -89,6 +89,7 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
+
 	}
 
 	public void highlightHex(double xCoordinate, double yCoordinate) {
