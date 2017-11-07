@@ -51,10 +51,13 @@ public class Controller
 	@FXML private Label crittersAlive;
 	@FXML private Label stepsTaken;
 	private Timeline timeline;
+	
 	private WorldModel model;
 	private WorldMap map;
-	private double mousePressedX;
-	private double mousePressedY;
+	private double mousePanPressedX;
+	private double mousePanPressedY;
+	private double xCoordinateSelected;
+	private double yCoordinateSelected;
 	
 	@FXML
 	public void initialize()
@@ -99,9 +102,15 @@ public class Controller
 
 				@Override
 				public void handle(MouseEvent event) {
-					mousePressedX = event.getScreenX();
-					mousePressedY = event.getScreenY();
-					
+					if (!event.isPrimaryButtonDown()) {
+					mousePanPressedX = event.getScreenX();
+					mousePanPressedY = event.getScreenY();
+					}
+					else {
+						xCoordinateSelected = event.getSceneX();
+						yCoordinateSelected = event.getSceneY();
+						map.select(xCoordinateSelected, yCoordinateSelected);
+					}
 				}
 			});	
 	
@@ -109,10 +118,9 @@ public class Controller
 
 				@Override
 				public void handle(MouseEvent event) {
-					//System.out.println(event.getX() - mousePressedX);
-					//System.out.println(event.getY() - mousePressedY);
-					map.drag(event.getScreenX() - mousePressedX, event.getScreenY() - mousePressedY);
-					
+					if (!event.isPrimaryButtonDown()) {
+					map.drag(event.getScreenX() - mousePanPressedX, event.getScreenY() - mousePanPressedY);
+					}
 				}
 			});	}
 	
