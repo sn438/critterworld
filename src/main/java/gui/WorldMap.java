@@ -18,6 +18,8 @@ public class WorldMap
 	private double y_position;
 	private double x_position_marker;
 	private double y_position_marker;
+	private double origin_x;
+	private double origin_y;
 
 	public WorldMap(Canvas canvas, double height, double width) {
 		gc = canvas.getGraphicsContext2D();
@@ -65,6 +67,10 @@ public class WorldMap
 				row++;
 			}
 		}
+		x_position = x_position_marker;
+		origin_x = x_position;
+		origin_y = y_position+ (sideLength*(Math.sqrt(3))*row) - (Math.sqrt(3) * (sideLength / 2));
+		highlightOrigin();
 	}
 
 	public void zoom(boolean zoomIn) {
@@ -78,6 +84,32 @@ public class WorldMap
 			if (sideLength <= 10)
 				sideLength = 10;
 		}
+		gc.clearRect(0, 0, width, height);
+		draw();
+	}
+	
+	public void highlightOrigin() {
+		
+		double fill_x = origin_x;
+		double fill_y = origin_y -  (Math.sqrt(3) * (sideLength / 2));
+		
+		gc.fillPolygon(
+				new double[] { fill_x + sideLength, fill_x + (sideLength / 2),
+						fill_x - (sideLength / 2), fill_x - sideLength, fill_x - (sideLength / 2),
+						fill_x + (sideLength / 2) },
+				new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
+						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y,
+						fill_y + (Math.sqrt(3) * (sideLength / 2)),
+						fill_y + (Math.sqrt(3) * (sideLength / 2)) },
+				6);
+				
+	}
+	
+	public void drag(double deltaX, double deltaY) {
+		System.out.println(deltaX);
+		System.out.println(deltaY);
+		x_position_marker += deltaX*15;
+		y_position_marker += deltaY*15;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}

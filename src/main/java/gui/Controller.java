@@ -1,15 +1,15 @@
 package gui;
 
-<<<<<<< HEAD
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-=======
+
 import java.io.File;
 
 import javafx.event.ActionEvent;
->>>>>>> 0b4eca94c9bd988d146f2947796c237b9b3d40f1
+
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -19,14 +19,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-<<<<<<< HEAD
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.util.Duration;
-=======
+
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
->>>>>>> 0b4eca94c9bd988d146f2947796c237b9b3d40f1
+
 
 /** This class handles user inputs and sends information to the world model and world view to update their states accordingly. */
 public class Controller
@@ -53,6 +53,8 @@ public class Controller
 	private Timeline timeline;
 	private WorldModel model;
 	private WorldMap map;
+	private double mousePressedX;
+	private double mousePressedY;
 	
 	@FXML
 	public void initialize()
@@ -93,8 +95,26 @@ public class Controller
 						map.zoom(false);
 				}
 			});
+	      worldMap.setOnMousePressed(new EventHandler<MouseEvent>() {
 
-	}
+				@Override
+				public void handle(MouseEvent event) {
+					mousePressedX = event.getScreenX();
+					mousePressedY = event.getScreenY();
+					
+				}
+			});	
+	
+	      worldMap.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent event) {
+					//System.out.println(event.getX() - mousePressedX);
+					//System.out.println(event.getY() - mousePressedY);
+					map.drag(event.getScreenX() - mousePressedX, event.getScreenY() - mousePressedY);
+					
+				}
+			});	}
 	
 	@FXML
 	private void handleNewWorldPressed(ActionEvent ae)
