@@ -4,64 +4,58 @@ import java.io.*;
 import ast.*;
 import parse.*;
 
-public class ParseAndMutateApp
-{
-
-	public static void main(String[] args) throws Exception
-	{
+public class ParseAndMutateApp {
+	// TODO fix this thing from A5: When we divide Integer.MAX_VALUE by the nextInt
+	// method of Random, my partner and I realized that there is the small chance
+	// that 0 could be returned and hence cause a divide by 0. Of course, this
+	// chance is very small, but should we change our code to avoid this? Yes.
+	public static void main(String[] args) throws Exception {
 		int n = 0;
 		String file;
-		try
-		{
-			if (args.length == 1)
-			{
+		try {
+			if (args.length == 1) {
 				file = args[0];
 				InputStream in = new FileInputStream(file);
-		        Reader r = new BufferedReader(new InputStreamReader(in));
-		        Parser p = ParserFactory.getParser();
-		        Program critter = p.parse(r);
-		        System.out.println(critter.toString());
-		        
-			}
-			else if (args.length == 3 && args[0].equals("--mutate"))
-			{
+				Reader r = new BufferedReader(new InputStreamReader(in));
+				Parser p = ParserFactory.getParser();
+				Program critter = p.parse(r);
+				System.out.println(critter.toString());
+
+			} else if (args.length == 3 && args[0].equals("--mutate")) {
 				n = parsePositive(args[1]);
 				file = args[2];
 				InputStream in = new FileInputStream(file);
-		        Reader r = new BufferedReader(new InputStreamReader(in));
-		        Parser p = ParserFactory.getParser();
-		        Program critter = p.parse(r);
-		        
-		        for(int i = 0; i < n; i++)
-		        	critter = critter.mutate();
-		        
-		        System.out.println(critter.toString());
-			}
-			else
-			{
+				Reader r = new BufferedReader(new InputStreamReader(in));
+				Parser p = ParserFactory.getParser();
+				Program critter = p.parse(r);
+
+				for (int i = 0; i < n; i++)
+					critter = critter.mutate();
+
+				System.out.println(critter.toString());
+			} else {
 				throw new IllegalArgumentException();
 			}
 			// TODO print program and mutations
-		}
-		catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e)
-		{
+		} catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
 			System.out.println("Usage:\n" + "  <input_file>\n" + "  --mutate <n> <input_file");
-		}
-		catch (FileNotFoundException f)
-		{
+		} catch (FileNotFoundException f) {
 			System.out.println("File not found.");
 		}
 	}
 
 	/**
 	 * Parses {@code str} to an integer.
-	 * @param str - the string to parse
+	 * 
+	 * @param str
+	 *            - the string to parse
 	 * @return the integer represented by {@code str}
-	 * @throws NumberFormatException if {@code str} does not contain a parsable integer
-	 * @throws IllegalArgumentException if {@code str} represents a negative integer
+	 * @throws NumberFormatException
+	 *             if {@code str} does not contain a parsable integer
+	 * @throws IllegalArgumentException
+	 *             if {@code str} represents a negative integer
 	 */
-	public static int parsePositive(String str)
-	{
+	public static int parsePositive(String str) {
 		int n = Integer.parseInt(str);
 		if (n < 0)
 			throw new IllegalArgumentException();
