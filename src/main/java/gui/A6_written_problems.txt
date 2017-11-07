@@ -1,0 +1,27 @@
+1. An implementation of or() is provided below:
+
+/** Returns: disjunction of this and that (this OR that). */
+public TVBool or(TVBool that) {
+	TVBool result = new TVBool();
+	result.state = Math.max(this.state, that.state);
+	return result;
+}
+
+2. normalize() is implemented correctly because it is simply a checking method whose job is to assert that there isn't any flaws in the logic of the other methods. not() is implemented correctly because it never actually changes the value of the field state. It creates a new object, sets the state of that object, and returns that object -- it never alters the state of the original object.
+
+// TODO needs to be 3-4 sentences
+// TODO is logic for normalize() correct?
+
+3. The hashCode() method is incorrect because it does not generate a sufficiently random hash value to use in a hash table. This implementation would lead to massive amounts of collisions, drastically slowing down the performance of the hash table. A correct implementation is provided below:
+
+@Override
+public int hashCode() {
+	// TODO how to do hashcode method?
+}
+
+An implementation of equals() is provided below:
+
+@Override
+public boolean equals(Object o) {
+	return toString().equals(o.toString());
+}
