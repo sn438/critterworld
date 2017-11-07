@@ -5,53 +5,78 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class WorldMap
 
-
 {
 	private GraphicsContext gc;
 	private double height;
 	private double width;
-	
+	private int column;
+	private int row;
+	private int sideLength;
+	private double x_position;
+	private double y_position;
+	private double x_position_marker;
+	private double y_position_marker;
+
 	public WorldMap(Canvas canvas, double height, double width) {
 		gc = canvas.getGraphicsContext2D();
 		this.height = height;
 		this.width = width;
-	}
-	
-	public void draw() {
-		int column = 6;
-		int row = 10;
+		column = 5;
+		row = 10;
 		row -= column / 2;
-		double a = 30;
-		double x_position = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * a) + (a / 2);
-		double y_position = (((double) height / 2) - (((double) row / 2)*(Math.sqrt(3) * (a))))  + (Math.sqrt(3) * (a / 2));
+		sideLength = 30;
+		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) row / 2) * (Math.sqrt(3) * (sideLength))))
+				+ (Math.sqrt(3) * (sideLength / 2));
+	}
+
+	public void draw() {
+		x_position = x_position_marker;
+		y_position = y_position_marker;
 		for (int i = 0; i < column; i++) {
-			if (i % 2 == 0) {
-				y_position += Math.sqrt(3) * (a / 2);
-			}
-			if (i % 2 == 0 && column % 2 == 1) {
-				y_position = (Math.sqrt(3) * (a / 2));
+
+			if (i % 2 == 0 && column % 2 == 0) {
+				y_position += Math.sqrt(3) * (sideLength / 2);
 			}
 			if (i % 2 == 1 && column % 2 == 1) {
-				y_position += Math.sqrt(3) * (a / 2);
+				 y_position += Math.sqrt(3) * (sideLength / 2);
 				row--;
 			}
 
+
 			for (int j = 0; j < row; j++) {
 				gc.strokePolygon(
-						new double[] { x_position + a, x_position + (a / 2), x_position - (a / 2), x_position - a,
-								x_position - (a / 2), x_position + (a / 2) },
-						new double[] { y_position, y_position - (Math.sqrt(3) * (a / 2)),
-								y_position - (Math.sqrt(3) * (a / 2)), y_position,
-								y_position + (Math.sqrt(3) * (a / 2)), y_position + (Math.sqrt(3) * (a / 2)) },
+						new double[] { x_position + sideLength, x_position + (sideLength / 2),
+								x_position - (sideLength / 2), x_position - sideLength, x_position - (sideLength / 2),
+								x_position + (sideLength / 2) },
+						new double[] { y_position, y_position - (Math.sqrt(3) * (sideLength / 2)),
+								y_position - (Math.sqrt(3) * (sideLength / 2)), y_position,
+								y_position + (Math.sqrt(3) * (sideLength / 2)),
+								y_position + (Math.sqrt(3) * (sideLength / 2)) },
 						6);
-				y_position += (Math.sqrt(3) * (a));
+				y_position += (Math.sqrt(3) * (sideLength));
 			}
 
-			x_position += a + (a / 2);
-			y_position = (((double) height / 2) - (((double) row / 2)*(Math.sqrt(3) * (a))))  + (Math.sqrt(3) * (a / 2));;
+			x_position += sideLength + (sideLength / 2);
+			y_position = y_position_marker;
 			if (i % 2 == 1 && column % 2 == 1) {
 				row++;
 			}
 		}
+	}
+
+	public void zoom(boolean zoomIn) {
+		if (zoomIn) {
+			sideLength += 5;
+			if (sideLength >= 70)
+				sideLength = 70;
+		}
+		else {
+			sideLength -= 5;
+			if (sideLength <= 10)
+				sideLength = 10;
+		}
+		gc.clearRect(0, 0, width, height);
+		draw();
 	}
 }

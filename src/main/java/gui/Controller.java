@@ -13,6 +13,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.util.Duration;
 
 /** This class handles user inputs and sends information to the world model and world view to update their states accordingly. */
@@ -69,5 +71,17 @@ public class Controller
 	               }));
 	      timeline.setCycleCount(Timeline.INDEFINITE);
 	      timeline.play();
+	      
+	      worldMap.setOnScroll(new EventHandler<ScrollEvent>() {
+
+				@Override
+				public void handle(ScrollEvent event) {
+					
+					if (event.getDeltaY() > 0)
+						map.zoom(true);
+					else 
+						map.zoom(false);
+				}
+			});
 	}
 }
