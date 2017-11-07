@@ -5,9 +5,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class WorldMap
-
 {
-
+	private WorldModel model;
 	private GraphicsContext gc;
 	private double height;
 	private double width;
@@ -21,8 +20,9 @@ public class WorldMap
 	private double origin_x;
 	private double origin_y;
 
-	public WorldMap(Canvas canvas, double height, double width) {
+	public WorldMap(Canvas canvas, WorldModel wm, double height, double width) {
 		gc = canvas.getGraphicsContext2D();
+		model = wm;
 		this.height = height;
 		this.width = width;
 		column = 50;
@@ -117,5 +117,3 @@ public class WorldMap
 		draw();
 	}
 }
-
-
