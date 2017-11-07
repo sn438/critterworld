@@ -70,7 +70,7 @@ public class Controller {
 	private double mousePanPressedY;
 	private double xCoordinateSelected;
 	private double yCoordinateSelected;
-//hi
+
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
