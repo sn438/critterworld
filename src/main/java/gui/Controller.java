@@ -118,6 +118,7 @@ public class Controller {
 					xCoordinateSelected = event.getSceneX();
 					yCoordinateSelected = event.getSceneY();
 					map.select(xCoordinateSelected, yCoordinateSelected);
+
 				}
 			}
 		});
@@ -128,6 +129,7 @@ public class Controller {
 			public void handle(MouseEvent event) {
 				if (!event.isPrimaryButtonDown()) {
 					map.drag(event.getScreenX() - mousePanPressedX, event.getScreenY() - mousePanPressedY);
+
 				}
 			}
 		});

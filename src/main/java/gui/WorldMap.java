@@ -23,7 +23,7 @@ public class WorldMap {
 		model = wm;
 		this.height = height;
 		this.width = width;
-		column = 6;
+		column = 5;
 		row = 10;
 		row -= column / 2;
 		sideLength = 30;
@@ -35,6 +35,7 @@ public class WorldMap {
 	public void draw() {
 		// TODO have map redraw upon resizing window
 		// TODO fix zooming + panning position
+		// TODO right-click + drag doesn't work for most laptops...
 		x_position = x_position_marker;
 		y_position = y_position_marker;
 		for (int i = 0; i < column; i++) {
@@ -88,7 +89,6 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
-
 	}
 
 	public void highlightHex(double xCoordinate, double yCoordinate) {
@@ -159,4 +159,5 @@ public class WorldMap {
 				+ sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_cooridnate };
 	}
+
 }
