@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
       <Canvas fx:id="worldMap" height="775.0" width="750.0" AnchorPane.leftAnchor="0.0" />
       <MenuBar fx:id="Menu" prefHeight="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -34,16 +34,16 @@
          <children>
             <SplitPane dividerPositions="0.5" prefHeight="26.0" style="-fx-background-color: lightgray;" HBox.hgrow="ALWAYS">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="crittersAlive" alignment="CENTER" layoutX="172.0" layoutY="4.0" text="Critters Alive:" />
+                        <Label fx:id="crittersAlive" alignment="CENTER" text="Critters Alive:" />
                      </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0">
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="stepsTaken" layoutX="154.0" layoutY="3.0" text="Time Steps: " />
+                        <Label fx:id="stepsTaken" text="Time Steps: " />
                      </children>
-                  </AnchorPane>
+                  </HBox>
               </items>
             </SplitPane>
          </children></HBox>
@@ -60,8 +60,8 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0">
                            <children>
-                              <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" text="New World" />
-                              <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" text="Load World" />
+                              <Button fx:id="newWorld" layoutX="33.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleNewWorldPressed" onMouseClicked="#handleNewWorldPressed" text="New World" />
+                              <Button fx:id="loadWorld" layoutX="137.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleLoadWorldPressed" text="Load World" />
                            </children>
                         </AnchorPane>
                      </content>

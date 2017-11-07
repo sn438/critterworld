@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.File;
 import simulation.SimpleWorld;
 
 public class WorldModel
@@ -8,6 +9,16 @@ public class WorldModel
 	private SimpleWorld world;
 	
 	public void advanceTime()
+	{
+		
+	}
+	
+	public void createNewWorld()
+	{
+		
+	}
+	
+	public void loadWorld(File worldfile)
 	{
 		
 	}

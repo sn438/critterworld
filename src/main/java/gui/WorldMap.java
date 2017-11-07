@@ -12,4 +12,9 @@ public class WorldMap
 		canvas = c;
 		world = w;
 	}
+	
+	public void draw()
+	{
+		
+	}
 }
