@@ -70,11 +70,7 @@ public class Controller {
 	private double mousePanPressedY;
 	private double xCoordinateSelected;
 	private double yCoordinateSelected;
-<<<<<<< HEAD
 
-=======
-//hi
->>>>>>> 467e2cb77f7d1f4e28576e6c4aa3fa7a6bb2638c
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
@@ -122,10 +118,7 @@ public class Controller {
 					xCoordinateSelected = event.getSceneX();
 					yCoordinateSelected = event.getSceneY();
 					map.select(xCoordinateSelected, yCoordinateSelected);
-<<<<<<< HEAD
 
-=======
->>>>>>> 467e2cb77f7d1f4e28576e6c4aa3fa7a6bb2638c
 				}
 			}
 		});
@@ -136,10 +129,7 @@ public class Controller {
 			public void handle(MouseEvent event) {
 				if (!event.isPrimaryButtonDown()) {
 					map.drag(event.getScreenX() - mousePanPressedX, event.getScreenY() - mousePanPressedY);
-<<<<<<< HEAD
 
-=======
->>>>>>> 467e2cb77f7d1f4e28576e6c4aa3fa7a6bb2638c
 				}
 			}
 		});
