@@ -123,9 +123,9 @@ public class WorldMap {
 		int possibleColumnOne = (int) Math.ceil(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
 		int possibleColumnTwo = (int) Math.floor(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
 		int possibleRowOne = (int) Math
-				.ceil(((Math.sqrt(3) * (yCoordinate - origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
+				.ceil((1/Math.sqrt(3)) * (yCoordinate - origin_y) + ((xCoordinate - origin_x)/(3*sideLength)));
 		int possibleRowTwo = (int) Math
-				.floor(((Math.sqrt(3) * (yCoordinate - origin_y) + (xCoordinate - origin_x)) / (3 * sideLength)));
+				.floor((1/Math.sqrt(3)) * (yCoordinate - origin_y) + ((xCoordinate - origin_x)/(3*sideLength)));
 
 		int[][] possibleCoordinates = new int[4][2];
 		possibleCoordinates[0] = new int[] { possibleColumnOne, possibleRowOne };
