@@ -123,8 +123,8 @@ public class Controller
 		run.setDisable(false);
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
+		c.setDisable(true);
+		c.setVisible(false);
 		
 		map = new WorldMap(c, model);
 		map.draw();
