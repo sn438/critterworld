@@ -149,6 +149,7 @@ public class WorldMap {
 		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
 		System.out.println("\n");
 		return possibleCoordinates[returnIndex];
+		// TODO why does this give off by one errors on colum number when mouse is in right half of hex????
 	}
 
 	private double[] hexToCartesian(int[] hexCoordinates) {
