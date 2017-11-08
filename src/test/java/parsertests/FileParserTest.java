@@ -59,7 +59,7 @@ public class FileParserTest
 	}
 	
 	@Test
-	public void testConsoleLoad() //TODO remove when done testing
+	public void testConsoleLoad()
 	{
 		try
 		{

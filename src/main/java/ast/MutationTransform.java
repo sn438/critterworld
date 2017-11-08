@@ -154,7 +154,7 @@ public class MutationTransform extends AbstractMutation
 	public boolean mutate(UnaryExpr ue)
 	{
 		Random r = new Random();
-		ue.setValue(java.lang.Integer.MAX_VALUE/r.nextInt());
+		ue.setValue(java.lang.Integer.MAX_VALUE/(r.nextInt(java.lang.Integer.MAX_VALUE) + 1));
 		if(printMutationDetail)
 			System.out.println("Transformed the Unary Expression node\n" + ue + "\n");
 		return true;

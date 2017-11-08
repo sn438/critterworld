@@ -5,10 +5,6 @@ import ast.*;
 import parse.*;
 
 public class ParseAndMutateApp {
-	// TODO fix this thing from A5: When we divide Integer.MAX_VALUE by the nextInt
-	// method of Random, my partner and I realized that there is the small chance
-	// that 0 could be returned and hence cause a divide by 0. Of course, this
-	// chance is very small, but should we change our code to avoid this? Yes.
 	public static void main(String[] args) throws Exception {
 		int n = 0;
 		String file;
@@ -36,7 +32,6 @@ public class ParseAndMutateApp {
 			} else {
 				throw new IllegalArgumentException();
 			}
-			// TODO print program and mutations
 		} catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
 			System.out.println("Usage:\n" + "  <input_file>\n" + "  --mutate <n> <input_file");
 		} catch (FileNotFoundException f) {

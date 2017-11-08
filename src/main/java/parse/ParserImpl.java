@@ -341,8 +341,6 @@ class ParserImpl implements Parser {
 		return expression;
 	}
 
-	// TODO
-	// add more as necessary...
 
 	/**
 	 * Consumes a token of the expected type.
