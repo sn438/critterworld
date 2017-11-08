@@ -25,54 +25,38 @@ import javafx.util.Duration;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
-public class Controller {
-	@FXML
-	private MenuItem help;
-	@FXML
-	private MenuItem close;
+public class Controller
+{
+	@FXML private MenuItem help;
+	@FXML private MenuItem close;
 
-	@FXML
-	private Button newWorld;
-	@FXML
-	private Button loadWorld;
-	@FXML
-	private Button loadCritterFile;
-	@FXML
-	private ToggleGroup HexChoice;
-	@FXML
-	private RadioButton chkRand;
-	@FXML
-	private RadioButton chkSpecify;
-	@FXML
-	private TextField numCritters;
-	@FXML
-	private Button stepForward;
-	@FXML
-	private Button run;
-	@FXML
-	private Button pause;
-	@FXML
-	private Button reset;
-	@FXML
-	private Slider simulationSpeed;
+	@FXML private Button newWorld;
+	@FXML private Button loadWorld;
+	@FXML private Button loadCritterFile;
+	@FXML private ToggleGroup HexChoice;
+	@FXML private RadioButton chkRand;
+	@FXML private RadioButton chkSpecify;
+	@FXML private TextField numCritters;
+	@FXML private Button stepForward;
+	@FXML private Button run;
+	@FXML private Button pause;
+	@FXML private Button reset;
+	@FXML private Slider simulationSpeed;
 
-	@FXML
-	private Canvas c;
-	@FXML
-	private Label crittersAlive;
-	@FXML
-	private Label stepsTaken;
+	@FXML private Canvas c;
+	@FXML private Label crittersAlive;
+	@FXML private Label stepsTaken;
+	
 	private Timeline timeline;
-
 	private WorldModel model;
 	private WorldMap map;
+	
 	private double mousePanPressedX;
 	private double mousePanPressedY;
-	private double xCoordinateSelected;
-	private double yCoordinateSelected;
 
 	@FXML
-	public void initialize() {
+	public void initialize()
+	{
 		model = new WorldModel();
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -85,54 +69,8 @@ public class Controller {
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		c.setVisible(true); // TODO why was this false originally??????????????
-		map = new WorldMap(c, model, c.getHeight(), c.getWidth());
-
-		timeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent ae) {
-				map.draw();
-			}
-		}));
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
-
-		c.setOnScroll(new EventHandler<ScrollEvent>() {
-
-			@Override
-			public void handle(ScrollEvent event) {
-				if (event.getDeltaY() > 0)
-					map.zoom(true);
-				else
-					map.zoom(false);
-			}
-		});
-		c.setOnMousePressed(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				if (!event.isPrimaryButtonDown()) {
-					mousePanPressedX = event.getScreenX();
-					mousePanPressedY = event.getScreenY();
-				} else {
-					xCoordinateSelected = event.getSceneX();
-					yCoordinateSelected = event.getSceneY();
-					map.select(xCoordinateSelected, yCoordinateSelected);
-
-				}
-			}
-		});
-
-		c.setOnDragDetected(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				if (!event.isPrimaryButtonDown()) {
-					map.drag(event.getScreenX() - mousePanPressedX, event.getScreenY() - mousePanPressedY);
-
-				}
-			}
-		});
+		c.setDisable(true);
+		c.setVisible(false);
 	}
 
 	@FXML
@@ -146,15 +84,20 @@ public class Controller {
 		run.setDisable(false);
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
+		c.setDisable(false);
 		c.setVisible(true);
+		
+		map = new WorldMap(c, model);
+		map.draw();
 	}
 
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent ae) {
+	private void handleLoadWorldPressed(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File worldFile = fc.showOpenDialog(new Popup());
 		model.loadWorld(worldFile);
+		
 		loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
@@ -163,6 +106,55 @@ public class Controller {
 		run.setDisable(false);
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
+		c.setDisable(false);
 		c.setVisible(true);
+		
+		map = new WorldMap(c, model);
+		map.draw();
+	}
+	
+	@FXML
+	private void handleRunPressed(MouseEvent me)
+	{
+		timeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent ae) {
+				map.draw();
+			}
+		}));
+		
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
+	}
+	
+	@FXML
+	private void handleMapClicked(MouseEvent me)
+	{
+		if (!me.isPrimaryButtonDown()) {
+			mousePanPressedX = me.getScreenX();
+			mousePanPressedY = me.getScreenY();
+		} else {
+			double xCoordinateSelected = me.getSceneX();
+			double yCoordinateSelected = me.getSceneY();
+			map.select(xCoordinateSelected, yCoordinateSelected);
+
+		}
+	}
+	
+	@FXML
+	private void handleMapScroll(ScrollEvent se)
+	{
+		if (se.getDeltaY() > 0)
+			map.zoom(true);
+		else
+			map.zoom(false);
+	}
+	
+	@FXML
+	private void handleMapDrag(MouseEvent me)
+	{
+		if (!me.isPrimaryButtonDown()) {
+			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
+		}
 	}
 }

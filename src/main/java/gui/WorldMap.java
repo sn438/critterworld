@@ -2,6 +2,7 @@ package gui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class WorldMap {
 	private WorldModel model;
@@ -18,13 +19,13 @@ public class WorldMap {
 	private double origin_x;
 	private double origin_y;
 
-	public WorldMap(Canvas canvas, WorldModel wm, double height, double width) {
+	public WorldMap(Canvas canvas, WorldModel wm) {
 		gc = canvas.getGraphicsContext2D();
 		model = wm;
-		this.height = height;
-		this.width = width;
-		column = 6;
-		row = 10;
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+		column = 15;
+		row = 20;
 		row -= column / 2;
 		sideLength = 30;
 		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
@@ -71,7 +72,7 @@ public class WorldMap {
 		origin_y = y_position + (sideLength * (Math.sqrt(3)) * row) - (Math.sqrt(3) * (sideLength / 2));
 		if (column % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
-		highlightHex(origin_x, origin_y);
+		//highlightHex(origin_x, origin_y); //TODO why was this here?
 	}
 
 	public void zoom(boolean zoomIn) {
@@ -97,19 +98,19 @@ public class WorldMap {
 		double fill_x = xCoordinate;
 		double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
 
+		gc.setFill(Color.LIGHTCYAN);
 		gc.fillPolygon(
 				new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x - (sideLength / 2),
 						fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
 				new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
 						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) * (sideLength / 2)),
-						fill_y + (Math.sqrt(3) * (sideLength / 2)) },
-				6);
+						fill_y + (Math.sqrt(3) * (sideLength / 2)) }, 6);
 
 	}
 
 	public void drag(double deltaX, double deltaY) {
-		x_position_marker += deltaX * 15;
-		y_position_marker += deltaY * 15;
+		x_position_marker += deltaX * 0.05;
+		y_position_marker += deltaY * 0.05;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
@@ -156,9 +157,9 @@ public class WorldMap {
 
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
-		double y_cooridnate = (((-Math.sqrt(3)) * sideLength) / 2) * hexCoordinates[0]
+		double y_coordinate = (((-Math.sqrt(3)) * sideLength) / 2) * hexCoordinates[0]
 				+ sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
-		return new double[] { x_coordinate, y_cooridnate };
+		return new double[] { x_coordinate, y_coordinate };
 	}
 
 }
