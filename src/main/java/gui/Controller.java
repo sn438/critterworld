@@ -69,8 +69,8 @@ public class Controller
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		c.setDisable(true);
-		c.setVisible(false);
+		c.setDisable(false); // hi
+		c.setVisible(true); // hi
 	}
 
 	@FXML
