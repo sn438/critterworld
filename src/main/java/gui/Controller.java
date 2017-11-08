@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +16,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
@@ -92,11 +95,21 @@ public class Controller
 	}
 
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent me) {
+	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File worldFile = fc.showOpenDialog(new Popup());
-		model.loadWorld(worldFile);
+		try
+		{
+			model.loadWorld(worldFile);
+		}
+		catch (FileNotFoundException f)
+		{
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		}
 		
 		loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
