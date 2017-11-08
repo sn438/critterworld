@@ -72,13 +72,15 @@ public class Controller
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		c.setDisable(false); // hi
-		c.setVisible(true); // hi
+		c.setDisable(true); // hi
+		c.setVisible(false); // hi
 	}
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
 		model.createNewWorld();
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
@@ -111,6 +113,8 @@ public class Controller
 			return;
 		}
 		
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
@@ -150,7 +154,6 @@ public class Controller
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
 			map.select(xCoordinateSelected, yCoordinateSelected);
-
 		}
 	}
 	
