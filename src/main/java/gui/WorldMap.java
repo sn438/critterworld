@@ -9,8 +9,8 @@ public class WorldMap {
 	private GraphicsContext gc;
 	private double height;
 	private double width;
-	private int column;
-	private int row;
+	private int columns;
+	private int rows;
 	private int sideLength;
 	private double x_position;
 	private double y_position;
@@ -24,12 +24,12 @@ public class WorldMap {
 		model = wm;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
-		column = 15;
-		row = 20;
-		row -= column / 2;
+		columns = 15;
+		rows = 20;
+		rows -= columns / 2;
 		sideLength = 30;
-		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) row / 2) * (Math.sqrt(3) * (sideLength))))
+		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 	}
 
@@ -39,16 +39,16 @@ public class WorldMap {
 		// TODO right-click + drag doesn't work for most laptops...
 		x_position = x_position_marker;
 		y_position = y_position_marker;
-		for (int i = 0; i < column; i++) {
-			if (i % 2 == 0 && column % 2 == 0) {
+		for (int i = 0; i < columns; i++) {
+			if (i % 2 == 0 && columns % 2 == 0) {
 				y_position += Math.sqrt(3) * (sideLength / 2);
 			}
-			if (i % 2 == 1 && column % 2 == 1) {
+			if (i % 2 == 1 && columns % 2 == 1) {
 				y_position += Math.sqrt(3) * (sideLength / 2);
-				row--;
+				rows--;
 			}
 
-			for (int j = 0; j < row; j++) {
+			for (int j = 0; j < rows; j++) {
 				gc.strokePolygon(
 						new double[] { x_position + sideLength, x_position + (sideLength / 2),
 								x_position - (sideLength / 2), x_position - sideLength, x_position - (sideLength / 2),
@@ -63,14 +63,14 @@ public class WorldMap {
 
 			x_position += sideLength + (sideLength / 2);
 			y_position = y_position_marker;
-			if (i % 2 == 1 && column % 2 == 1) {
-				row++;
+			if (i % 2 == 1 && columns % 2 == 1) {
+				rows++;
 			}
 		}
 		x_position = x_position_marker;
 		origin_x = x_position;
-		origin_y = y_position + (sideLength * (Math.sqrt(3)) * row) - (Math.sqrt(3) * (sideLength / 2));
-		if (column % 2 == 0)
+		origin_y = y_position + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
+		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		//highlightHex(origin_x, origin_y); //TODO why was this here?
 	}
@@ -85,8 +85,8 @@ public class WorldMap {
 			if (sideLength <= 10)
 				sideLength = 10;
 		}
-		x_position_marker = ((double) width / 2) - ((((double) column / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) row / 2) * (Math.sqrt(3) * (sideLength))))
+		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
@@ -98,7 +98,7 @@ public class WorldMap {
 		double fill_x = xCoordinate;
 		double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
 
-		gc.setFill(Color.LIGHTCYAN);
+		gc.setFill(Color.SKYBLUE);
 		gc.fillPolygon(
 				new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x - (sideLength / 2),
 						fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },

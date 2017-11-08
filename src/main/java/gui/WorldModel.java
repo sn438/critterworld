@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,6 +14,7 @@ public class WorldModel
 	private SimpleWorld world;
 	private IntegerProperty crittersAlive;
 	private IntegerProperty stepsTaken;
+	private IntegerProperty simulationSpeed;
 	
 	public void createNewWorld()
 	{
@@ -21,14 +23,15 @@ public class WorldModel
 		stepsTaken = new SimpleIntegerProperty(0);
 	}
 	
-	public void loadWorld(File worldfile)
+	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException
 	{
-		
+		world = new World(worldfile);
 	}
 	
 	public void advanceTime()
 	{
 		world.advanceOneTimeStep();
 		stepsTaken.set(stepsTaken.get() + 1);
+		crittersAlive.set(world.numRemainingCritters());
 	}
 }

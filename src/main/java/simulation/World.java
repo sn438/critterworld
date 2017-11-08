@@ -1,6 +1,7 @@
 package simulation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -121,6 +122,97 @@ public class World extends AbstractWorld
 		}
 	}
 
+	/**
+	 * Loads a world from a world description file, in the form of a pre-determined file.
+	 * 
+	 * @param filename The name of the file that contains world information.
+	 * @throws FileNotFoundException if the world file could not be found
+	 * 		   IllegalArgumentException if the world constants file could not be found or was improperly formatted
+	 */
+	public World(File file) throws FileNotFoundException, IllegalArgumentException
+	{
+		// sets constants and initializes instance fields
+		super();
+		setConstants();
+		critterMap = new HashMap<SimpleCritter, Hex>();
+		super.critterList = new LinkedList<SimpleCritter>();
+		super.timePassed = 0;
+
+		BufferedReader bf = new BufferedReader(new FileReader(file));
+
+		// parses the world name, and if no valid one is parsed, supplies a default one
+		worldname = FileParser.parseAttributeFromLine(bf, "name ");
+		if (worldname.equals(""))
+			worldname = "Arrakis";
+
+		// parses world dimensions, and supplies default ones if no valid dimensions are parsed
+		try
+		{
+			String worldDimensions = FileParser.parseAttributeFromLine(bf, "size ");
+			String[] dim = worldDimensions.split(" ");
+			columns = Integer.parseInt(dim[0]);
+			rows = Integer.parseInt(dim[1]);
+
+			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0))
+			{
+				columns = CONSTANTS.get("COLUMNS").intValue();
+				rows = CONSTANTS.get("ROWS").intValue();
+			}
+		}
+		catch (Exception e)
+		{
+			columns = CONSTANTS.get("COLUMNS").intValue();
+			rows = CONSTANTS.get("ROWS").intValue();
+		}
+		numValidHexes = 0;
+
+		// initializes world grid
+		grid = new Hex[columns][rows];
+		for (int i = 0; i < grid.length; i++)
+			for (int j = 0; j < grid[0].length; j++)
+				if (isValidHex(i, j))
+				{
+					grid[i][j] = new Hex(i, j);
+					numValidHexes++;
+				}
+
+		try
+		{
+			// loads in world objects from file
+			String line = bf.readLine();
+			while (line != null)
+			{
+				String[] info = line.split(" ");
+				switch (info[0])
+				{
+					case "rock":
+						addNonCritterObject(new Rock(), Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+						break;
+					case "food":
+						Food f = new Food(Integer.parseInt(info[3]));
+						addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+						break;
+					case "critter":
+						BufferedReader critterreader = new BufferedReader(new FileReader(info[1]));
+						SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(),
+								Integer.parseInt(info[4]));
+						if(sc == null)
+						{
+							System.err.println("The critter file " + file.toString() + " does not have the right syntax, so it was not loaded.");
+							break;
+						}
+							
+						loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
+						break;
+				}
+				line = bf.readLine();
+			}
+		}
+		catch (Exception e)
+		{
+			return;
+		}
+	}
 	/**
 	 * Generates a default size world containing nothing but randomly placed rocks.
 	 * @throws IllegalArgumentException if the world constants file could not be found or was improperly formatted
