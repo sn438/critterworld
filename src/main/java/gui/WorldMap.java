@@ -69,7 +69,8 @@ public class WorldMap {
 		origin_y = y_position + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
 		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
-		//highlightHex(origin_x, origin_y); //TODO why was this here?
+		// highlightHex(origin_x, origin_y); //TODO remove eventually because just for
+		// testing i think?
 	}
 
 	public void zoom(boolean zoomIn) {
@@ -101,7 +102,8 @@ public class WorldMap {
 						fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
 				new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
 						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) * (sideLength / 2)),
-						fill_y + (Math.sqrt(3) * (sideLength / 2)) }, 6);
+						fill_y + (Math.sqrt(3) * (sideLength / 2)) },
+				6);
 
 	}
 
@@ -120,35 +122,32 @@ public class WorldMap {
 	}
 
 	private int[] closestHex(double xCoordinate, double yCoordinate) {
-		int possibleColumnOne = (int) Math.ceil(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
-		int possibleColumnTwo = (int) Math.floor(((2) * (xCoordinate - origin_x)) / (3 * sideLength));
-		int possibleRowOne = (int) Math
-				.ceil((1/Math.sqrt(3)) * (yCoordinate - origin_y) + ((xCoordinate - origin_x)/(3*sideLength)));
-		int possibleRowTwo = (int) Math
-				.floor((1/Math.sqrt(3)) * (yCoordinate - origin_y) + ((xCoordinate - origin_x)/(3*sideLength)));
+		int possibleColumnOne = (int) Math.ceil(2 * (xCoordinate - origin_x) / (3 * sideLength));
+		int possibleColumnTwo = (int) Math.floor(2 * (xCoordinate - origin_x) / (3 * sideLength));
+		int possibleRowOne = (int) Math.ceil((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
+				+ ((xCoordinate - origin_x) / (3 * sideLength)));
+		int possibleRowTwo = (int) Math.floor((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
+				+ ((xCoordinate - origin_x) / (3 * sideLength)));
 
 		int[][] possibleCoordinates = new int[4][2];
 		possibleCoordinates[0] = new int[] { possibleColumnOne, possibleRowOne };
 		possibleCoordinates[1] = new int[] { possibleColumnOne, possibleRowTwo };
 		possibleCoordinates[2] = new int[] { possibleColumnTwo, possibleRowOne };
 		possibleCoordinates[3] = new int[] { possibleColumnTwo, possibleRowTwo };
-		int counter = 0;
+
 		double distanceSquared = Integer.MAX_VALUE;
 		int returnIndex = 0;
-		while (counter < 4) {
-			System.out.println(possibleCoordinates[counter][0] + " " + possibleCoordinates[counter][1]);
-			double tempArray[] = hexToCartesian(possibleCoordinates[counter]);
-			double distanceSquare = Math.pow(xCoordinate - tempArray[0], 2) + Math.pow(yCoordinate - tempArray[1], 2);
-			System.out.println(distanceSquare);
-			if (distanceSquare < distanceSquared) {
-				distanceSquared = distanceSquare;
-				returnIndex = counter;
+		for (int i = 0; i < 4; i++) {
+			System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
+			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
+			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2) + Math.pow(yCoordinate - tempArray[1], 2);
+			if (tempDistanceSquared < distanceSquared) {
+				distanceSquared = tempDistanceSquared;
+				returnIndex = i;
 			}
-			counter++;
 		}
 		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
-		// System.out.println(possibleCoordinates[counter][0] + " " +
-		// possibleCoordinates[counter][1]);
+		System.out.println("\n");
 		return possibleCoordinates[returnIndex];
 	}
 
