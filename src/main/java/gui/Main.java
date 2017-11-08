@@ -31,3 +31,9 @@ public class Main extends Application {
 	}
 
 }
+
+// TODO have map redraw upon resizing window
+// TODO fix zooming + panning position
+// TODO right-click + drag doesn't work for most laptops...
+// TODO clicking new world breaks stuff
+// TODO clicking screen before a world has been loaded causes a ton of errors
