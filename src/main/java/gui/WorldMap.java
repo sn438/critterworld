@@ -37,6 +37,8 @@ public class WorldMap {
 		// TODO have map redraw upon resizing window
 		// TODO fix zooming + panning position
 		// TODO right-click + drag doesn't work for most laptops...
+		// TODO clicking new world breaks stuff
+		// TODO clicking screen before a world has been loaded causes a ton of errors
 		x_position = x_position_marker;
 		y_position = y_position_marker;
 		for (int i = 0; i < columns; i++) {
