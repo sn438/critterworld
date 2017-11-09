@@ -66,12 +66,15 @@ public class WorldMap {
 		int hexCoordinates[] = new int[] {r, c};
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
-//		if(in == null)
-//			System.out.println("SDAS:LKDAJ:HSfkH");
-		gc.drawImage(image, cartX, cartY);
+		gc.drawImage(image, cartX - (sideLength/2), cartY - ((sideLength*Math.sqrt(3))),  sideLength, sideLength*Math.sqrt(3));
 	}
 
 	public void draw() {
+		if (y_position_marker - (sideLength/2) * Math.sqrt(3)< 0) {
+			y_position_marker = 0;
+			return;
+		}
+	
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < columns; i++) {
@@ -100,7 +103,8 @@ public class WorldMap {
 		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		drawWorldObject(0, 0);
-		highlightHex(origin_x, origin_y); //TODO remove eventually because just for
+		double [] cooridnates = hexToCartesian(new int[] {0, 1});
+		highlightHex(cooridnates[0], cooridnates[1]); //TODO remove eventually because just for
 		// testing i think?
 	}
 
@@ -154,6 +158,7 @@ public class WorldMap {
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
+		
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
