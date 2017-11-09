@@ -193,11 +193,15 @@ public class WorldMap {
 		return possibleCoordinates[returnIndex];
 	}
 
+	/**
+	 * A method that converts 
+	 * @param hexCoordinates
+	 * @return
+	 */
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
 		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
 				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
 	}
-
 }

@@ -106,7 +106,7 @@
             </TitledPane>
          </children>
       </AnchorPane>
-      <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" layoutY="25.0" pannable="true" prefHeight="775.0" prefWidth="750.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0">
+      <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="25.0" prefHeight="775.0" prefWidth="750.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0">
          <content>
             <Canvas fx:id="c" height="800.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="1000.0" />
          </content>
