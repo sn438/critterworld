@@ -16,6 +16,8 @@ public class WorldMap {
 	private double x_position;
 	private double y_position;
 	// TODO have sujith tell us what position markers are
+	// x_position and y_position are just used as the left markers from which the rest of the canvas
+	// is drawn, it is only used during drawing of the map
 	private double x_position_marker;
 	private double y_position_marker;
 	private double origin_x;
