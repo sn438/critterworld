@@ -2,6 +2,7 @@ package gui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class WorldMap {
 	private WorldModel model;
@@ -14,6 +15,7 @@ public class WorldMap {
 	private int sideLength;
 	private double x_position;
 	private double y_position;
+	// TODO have sujith tell us what position markers are
 	private double x_position_marker;
 	private double y_position_marker;
 	private double origin_x;
@@ -98,21 +100,20 @@ public class WorldMap {
 
 	}
 
-	public void highlightHex(double xCoordinate, double yCoordinate) {
+	public void highlightHex(double x, double y) {
+		double a = (double) sideLength; // for visual clarity in the calculations
+		double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
-		// double fill_x = xCoordinate;
-		// double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
-		//
-		// gc.setFill(Color.SKYBLUE);
-		// gc.fillPolygon(
-		// new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x -
-		// (sideLength / 2),
-		// fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
-		// new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
-		// fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) *
-		// (sideLength / 2)),
-		// fill_y + (Math.sqrt(3) * (sideLength / 2)) },
-		// 6);
+		double[] xPoints = { x + a, x + a / 2, x - a / 2, x - a, x - a / 2, x + a / 2 };
+		double[] yPoints = { y, y - m, y - m, y, y + m, y + m };
+		
+		// this for loop somehow fixes off by one errors
+		for (int i = 0; i < 6; i++) {
+			yPoints[i] -= m;
+		}
+
+		gc.setFill(Color.HOTPINK);
+		gc.fillPolygon(xPoints, yPoints, 6);
 
 	}
 
@@ -131,12 +132,12 @@ public class WorldMap {
 	}
 
 	private int[] closestHex(double xCoordinate, double yCoordinate) {
-		int possibleColumnOne = (int) Math.ceil(2 * (xCoordinate - origin_x) / (3 * sideLength));
-		int possibleColumnTwo = (int) Math.floor(2 * (xCoordinate - origin_x) / (3 * sideLength));
+		int possibleColumnOne = (int) Math.ceil(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
+		int possibleColumnTwo = (int) Math.floor(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
 		int possibleRowOne = (int) Math.ceil((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
-				+ ((xCoordinate - origin_x) / (3 * sideLength)));
+				+ ((xCoordinate - origin_x) / (3.0 * sideLength)));
 		int possibleRowTwo = (int) Math.floor((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
-				+ ((xCoordinate - origin_x) / (3 * sideLength)));
+				+ ((xCoordinate - origin_x) / (3.0 * sideLength)));
 
 		int[][] possibleCoordinates = new int[4][2];
 		possibleCoordinates[0] = new int[] { possibleColumnOne, possibleRowOne };
