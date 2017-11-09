@@ -5,9 +5,12 @@ import java.io.FileNotFoundException;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
@@ -61,6 +65,7 @@ public class Controller
 	public void initialize()
 	{
 		model = new WorldModel();
+		map = new WorldMap(c, model);
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -74,6 +79,24 @@ public class Controller
 		simulationSpeed.setDisable(true);
 		c.setDisable(true); // hi
 		c.setVisible(false); // hi
+		
+		c.heightProperty().addListener(new ChangeListener<Number>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+			{
+				map.refreshDimensions();
+			}
+		});
+		
+		c.widthProperty().addListener(new ChangeListener<Number>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+			{
+				map.refreshDimensions();
+			}
+		});
 	}
 
 	@FXML
@@ -92,8 +115,10 @@ public class Controller
 		c.setDisable(false);
 		c.setVisible(true);
 		
-		map = new WorldMap(c, model);
 		map.draw();
+
+		//c.getGraphicsContext2D().setFill(Color.BLACK);
+		//c.getGraphicsContext2D().fillRect(0, 0, c.getWidth(), c.getHeight());
 	}
 
 	@FXML
@@ -126,14 +151,13 @@ public class Controller
 		c.setDisable(true);
 		c.setVisible(false);
 		
-		map = new WorldMap(c, model);
 		map.draw();
 	}
 	
 	@FXML
 	private void handleRunPressed(MouseEvent me)
 	{
-		timeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent ae) {
 				map.draw();

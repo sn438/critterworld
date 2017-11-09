@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 public class WorldMap {
 	private WorldModel model;
 	private GraphicsContext gc;
+	private Canvas c;
 	private double height;
 	private double width;
 	private int columns;
@@ -22,9 +23,10 @@ public class WorldMap {
 
 	public WorldMap(Canvas canvas, WorldModel wm) {
 		gc = canvas.getGraphicsContext2D();
+		c = canvas;
 		model = wm;
-		height = canvas.getHeight();
-		width = canvas.getWidth();
+		height = c.getHeight();
+		width = c.getWidth();
 		columns = 15;
 		rows = 20;
 		rows -= columns / 2;
@@ -34,6 +36,12 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 	}
 
+	public void refreshDimensions()
+	{
+		height = c.getHeight();
+		width = c.getWidth();
+	}
+	
 	public void draw() {
 		x_position = x_position_marker;
 		y_position = y_position_marker;
@@ -76,11 +84,11 @@ public class WorldMap {
 
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
-			sideLength += 5;
+			sideLength += 3;
 			if (sideLength >= 70)
 				sideLength = 70;
 		} else {
-			sideLength -= 5;
+			sideLength -= 3;
 			if (sideLength <= 10)
 				sideLength = 10;
 		}

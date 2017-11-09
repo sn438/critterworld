@@ -16,6 +16,7 @@ public class WorldModel
 	private IntegerProperty stepsTaken;
 	private IntegerProperty simulationSpeed;
 	
+	/** Creates a new random world. */
 	public void createNewWorld()
 	{
 		world = new World();
@@ -23,11 +24,18 @@ public class WorldModel
 		stepsTaken = new SimpleIntegerProperty(0);
 	}
 	
+	/**
+	 * Loads in a world file.
+	 * @param worldfile
+	 * @throws FileNotFoundException if the file could not be found or is somehow invalid
+	 * @throws IllegalArgumentException if the constants.txt file could not be read
+	 */
 	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException
 	{
 		world = new World(worldfile);
 	}
 	
+	/** Advances one time step. */
 	public void advanceTime()
 	{
 		world.advanceOneTimeStep();
