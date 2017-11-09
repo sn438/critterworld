@@ -18,6 +18,7 @@ public class WorldMap {
 	private double y_position_marker;
 	private double origin_x;
 	private double origin_y;
+	// distance between hex centers is sideLength * sqrt(3)
 
 	public WorldMap(Canvas canvas, WorldModel wm) {
 		gc = canvas.getGraphicsContext2D();
@@ -121,7 +122,7 @@ public class WorldMap {
 
 	}
 
-	private int[] closestHex(double xCoordinate, double yCoordinate) {
+	private int[] closestHex(double xCoordinate, double yCoordinate) {		
 		int possibleColumnOne = (int) Math.ceil(2 * (xCoordinate - origin_x) / (3 * sideLength));
 		int possibleColumnTwo = (int) Math.floor(2 * (xCoordinate - origin_x) / (3 * sideLength));
 		int possibleRowOne = (int) Math.ceil((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
@@ -154,8 +155,8 @@ public class WorldMap {
 
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
-		double y_coordinate = (((-Math.sqrt(3)) * sideLength) / 2) * hexCoordinates[0]
-				+ sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
+		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
+				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
 	}
 
