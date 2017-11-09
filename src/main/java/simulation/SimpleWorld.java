@@ -3,6 +3,12 @@ package simulation;
 /** An interface containing the basic functions of the world. */
 public interface SimpleWorld
 {
+	/** Returns the number of columns in this world. */
+	int getColumns();
+	
+	/** Returns the number of rows in this world. */
+	int getRows();
+	
 	/** Returns the minimum critter memory size for this world. Cannot be less than 8. */
 	int getMinMemory();
 	
@@ -31,7 +37,7 @@ public interface SimpleWorld
 	boolean isValidHex(int c, int r);
 	
 	/**
-	 * Returns information about a hex. Assumes that the 
+	 * Returns information about a hex.
 	 * @param c
 	 * @param r
 	 * @return
@@ -39,7 +45,7 @@ public interface SimpleWorld
 	int analyzeHex(int c, int r);
 	
 	/**
-	 * 
+	 * Returns the critter on a hex, for analysis.
 	 * @param c
 	 * @param r
 	 * @return

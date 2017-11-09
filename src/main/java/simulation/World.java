@@ -278,6 +278,18 @@ public class World extends AbstractWorld
 	}
 
 	@Override
+	public int getColumns()
+	{
+		return columns;
+	}
+	
+	@Override
+	public int getRows()
+	{
+		return rows;
+	}
+	
+	@Override
 	public boolean isValidHex(int c, int r)
 	{
 		if (c < 0 || r < 0)

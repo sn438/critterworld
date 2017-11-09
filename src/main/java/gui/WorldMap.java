@@ -26,9 +26,8 @@ public class WorldMap {
 		model = wm;
 		height = c.getHeight();
 		width = c.getWidth();
-		columns = 15;
-		rows = 20;
-		rows -= columns / 2;
+		columns = wm.getColumns();
+		rows = wm.getRows();
 		sideLength = 30;
 		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))

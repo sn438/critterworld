@@ -12,16 +12,20 @@ public class WorldModel
 {
 	private boolean isRunning;
 	private SimpleWorld world;
-	private IntegerProperty crittersAlive;
-	private IntegerProperty stepsTaken;
+	IntegerProperty numCritters;
+	IntegerProperty time;
 	private IntegerProperty simulationSpeed;
+	
+	public WorldModel()
+	{
+		numCritters = new SimpleIntegerProperty(0);
+		time = new SimpleIntegerProperty(0);
+	}
 	
 	/** Creates a new random world. */
 	public void createNewWorld()
 	{
 		world = new World();
-		crittersAlive = new SimpleIntegerProperty(0);
-		stepsTaken = new SimpleIntegerProperty(0);
 	}
 	
 	/**
@@ -35,11 +39,28 @@ public class WorldModel
 		world = new World(worldfile);
 	}
 	
+	public boolean isReady()
+	{
+		return world != null;
+	}
+	
+	/** Returns the number of columns in the world. */
+	public int getColumns()
+	{
+		return world.getColumns();
+	}
+	
+	/** Returns the number of rows in the world. */
+	public int getRows()
+	{
+		return world.getRows();
+	}
+	
 	/** Advances one time step. */
 	public void advanceTime()
 	{
 		world.advanceOneTimeStep();
-		stepsTaken.set(stepsTaken.get() + 1);
-		crittersAlive.set(world.numRemainingCritters());
+		time.set(time.get() + 1);
+		numCritters.set(world.numRemainingCritters());
 	}
 }

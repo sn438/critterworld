@@ -65,7 +65,6 @@ public class Controller
 	public void initialize()
 	{
 		model = new WorldModel();
-		map = new WorldMap(c, model);
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -85,7 +84,8 @@ public class Controller
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
 			{
-				map.refreshDimensions();
+				if(map != null)
+					map.refreshDimensions();
 			}
 		});
 		
@@ -94,14 +94,19 @@ public class Controller
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
 			{
-				map.refreshDimensions();
+				if(map != null)
+					map.refreshDimensions();
 			}
 		});
+		
+		model.numCritters.addListener(update -> crittersAlive.setText("Number of Critters: " + model.numCritters.intValue()));
+		model.time.addListener(update -> stepsTaken.setText("Time: " + model.time.intValue()));
 	}
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
 		model.createNewWorld();
+		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(false);
@@ -138,6 +143,7 @@ public class Controller
 			return;
 		}
 		
+		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(false);
@@ -148,8 +154,8 @@ public class Controller
 		run.setDisable(false);
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
-		c.setDisable(true);
-		c.setVisible(false);
+		c.setDisable(false);
+		c.setVisible(true);
 		
 		map.draw();
 	}
@@ -160,12 +166,26 @@ public class Controller
 		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent ae) {
+				model.advanceTime();
 				map.draw();
 			}
 		}));
 		
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
+		
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
+		loadCritterFile.setDisable(true);
+		chkRand.setDisable(true);
+		chkSpecify.setDisable(true);
+		numCritters.setDisable(true);
+		stepForward.setDisable(true);
+		run.setDisable(true);
+		reset.setDisable(true);
+		simulationSpeed.setDisable(true);
+		
+		pause.setDisable(false);
 	}
 	
 	@FXML
