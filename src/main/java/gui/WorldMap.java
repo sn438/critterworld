@@ -2,7 +2,6 @@ package gui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class WorldMap {
 	private WorldModel model;
@@ -19,6 +18,7 @@ public class WorldMap {
 	private double y_position_marker;
 	private double origin_x;
 	private double origin_y;
+	// distance between hex centers is sideLength * sqrt(3)
 
 	public WorldMap(Canvas canvas, WorldModel wm) {
 		gc = canvas.getGraphicsContext2D();
@@ -34,12 +34,11 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 	}
 
-	public void refreshDimensions()
-	{
+	public void refreshDimensions() {
 		height = c.getHeight();
 		width = c.getWidth();
 	}
-	
+
 	public void draw() {
 		x_position = x_position_marker;
 		y_position = y_position_marker;
@@ -100,17 +99,19 @@ public class WorldMap {
 
 	public void highlightHex(double xCoordinate, double yCoordinate) {
 
-		double fill_x = xCoordinate;
-		double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
-
-		gc.setFill(Color.SKYBLUE);
-		gc.fillPolygon(
-				new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x - (sideLength / 2),
-						fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
-				new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
-						fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) * (sideLength / 2)),
-						fill_y + (Math.sqrt(3) * (sideLength / 2)) },
-				6);
+		// double fill_x = xCoordinate;
+		// double fill_y = yCoordinate - (Math.sqrt(3) * (sideLength / 2));
+		//
+		// gc.setFill(Color.SKYBLUE);
+		// gc.fillPolygon(
+		// new double[] { fill_x + sideLength, fill_x + (sideLength / 2), fill_x -
+		// (sideLength / 2),
+		// fill_x - sideLength, fill_x - (sideLength / 2), fill_x + (sideLength / 2) },
+		// new double[] { fill_y, fill_y - (Math.sqrt(3) * (sideLength / 2)),
+		// fill_y - (Math.sqrt(3) * (sideLength / 2)), fill_y, fill_y + (Math.sqrt(3) *
+		// (sideLength / 2)),
+		// fill_y + (Math.sqrt(3) * (sideLength / 2)) },
+		// 6);
 
 	}
 
@@ -147,7 +148,8 @@ public class WorldMap {
 		for (int i = 0; i < 4; i++) {
 			System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
 			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
-			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2) + Math.pow(yCoordinate - tempArray[1], 2);
+			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2)
+					+ Math.pow(yCoordinate - tempArray[1], 2);
 			if (tempDistanceSquared < distanceSquared) {
 				distanceSquared = tempDistanceSquared;
 				returnIndex = i;
@@ -156,13 +158,12 @@ public class WorldMap {
 		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
 		System.out.println("\n");
 		return possibleCoordinates[returnIndex];
-		// TODO why does this give off by one errors on colum number when mouse is in right half of hex????
 	}
 
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
-		double y_coordinate = (((-Math.sqrt(3)) * sideLength) / 2) * hexCoordinates[0]
-				+ sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
+		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
+				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
 	}
 

@@ -8,8 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import simulation.SimpleWorld;
 import simulation.World;
 
-public class WorldModel
-{
+public class WorldModel {
 	private boolean isRunning;
 	private SimpleWorld world;
 	IntegerProperty numCritters;
@@ -21,21 +20,22 @@ public class WorldModel
 		numCritters = new SimpleIntegerProperty(0);
 		time = new SimpleIntegerProperty(0);
 	}
-	
+
 	/** Creates a new random world. */
-	public void createNewWorld()
-	{
+	public void createNewWorld() {
 		world = new World();
 	}
-	
+
 	/**
 	 * Loads in a world file.
+	 * 
 	 * @param worldfile
-	 * @throws FileNotFoundException if the file could not be found or is somehow invalid
-	 * @throws IllegalArgumentException if the constants.txt file could not be read
+	 * @throws FileNotFoundException
+	 *             if the file could not be found or is somehow invalid
+	 * @throws IllegalArgumentException
+	 *             if the constants.txt file could not be read
 	 */
-	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException
-	{
+	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException {
 		world = new World(worldfile);
 	}
 	
@@ -57,8 +57,7 @@ public class WorldModel
 	}
 	
 	/** Advances one time step. */
-	public void advanceTime()
-	{
+	public void advanceTime() {
 		world.advanceOneTimeStep();
 		time.set(time.get() + 1);
 		numCritters.set(world.numRemainingCritters());
