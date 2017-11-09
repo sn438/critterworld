@@ -1,20 +1,23 @@
 package gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class WorldMap {
 	private WorldModel model;
 	private GraphicsContext gc;
-	private Canvas c;
+	private Canvas canvas;
 	private double height;
 	private double width;
 	private int columns;
 	private int rows;
 	private int sideLength;
-	private double x_position;
-	private double y_position;
 	// TODO have sujith tell us what position markers are
 	// x_position and y_position are just used as the left markers from which the rest of the canvas
 	// is drawn, it is only used during drawing of the map
@@ -24,65 +27,95 @@ public class WorldMap {
 	private double origin_y;
 	// distance between hex centers is sideLength * sqrt(3)
 
-	public WorldMap(Canvas canvas, WorldModel wm) {
-		gc = canvas.getGraphicsContext2D();
-		c = canvas;
+	public WorldMap(Canvas can, WorldModel wm) {
+		gc = can.getGraphicsContext2D();
+		canvas = can;
 		model = wm;
-		height = c.getHeight();
-		width = c.getWidth();
-		columns = wm.getColumns();
-		rows = wm.getRows();
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+		columns = 7;//wm.getColumns();
+		rows = 9;//wm.getRows();
+		rows -= columns / 2;
 		sideLength = 30;
 		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 	}
-
+	
 	public void refreshDimensions() {
-		height = c.getHeight();
-		width = c.getWidth();
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+	}
+
+	private void drawWorldObject(int r, int c)
+	{
+		//InputStream in = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
+		InputStream in;
+		Image image = null;
+		try
+		{
+			in = new FileInputStream("src/main/resources/gui/images/critter_0.png");
+			image = new Image(in);
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int hexCoordinates[] = new int[] {r, c};
+		double cartX = hexToCartesian(hexCoordinates)[0];
+		double cartY = hexToCartesian(hexCoordinates)[1];
+//		if(in == null)
+//			System.out.println("SDAS:LKDAJ:HSfkH");
+		gc.drawImage(image, cartX, cartY);
 	}
 
 	public void draw() {
-		x_position = x_position_marker;
-		y_position = y_position_marker;
+		double hexMarkerX = x_position_marker;
+		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < columns; i++) {
 			if (i % 2 == 0 && columns % 2 == 0) {
-				y_position += Math.sqrt(3) * (sideLength / 2);
+				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
 			}
 			if (i % 2 == 1 && columns % 2 == 1) {
-				y_position += Math.sqrt(3) * (sideLength / 2);
+				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
 				rows--;
 			}
 
 			for (int j = 0; j < rows; j++) {
-				gc.strokePolygon(
-						new double[] { x_position + sideLength, x_position + (sideLength / 2),
-								x_position - (sideLength / 2), x_position - sideLength, x_position - (sideLength / 2),
-								x_position + (sideLength / 2) },
-						new double[] { y_position, y_position - (Math.sqrt(3) * (sideLength / 2)),
-								y_position - (Math.sqrt(3) * (sideLength / 2)), y_position,
-								y_position + (Math.sqrt(3) * (sideLength / 2)),
-								y_position + (Math.sqrt(3) * (sideLength / 2)) },
-						6);
-				y_position += (Math.sqrt(3) * (sideLength));
+				drawHex(hexMarkerX, hexMarkerY);
+				hexMarkerY += (Math.sqrt(3) * (sideLength));
 			}
 
-			x_position += sideLength + (sideLength / 2);
-			y_position = y_position_marker;
+			hexMarkerX += sideLength + (sideLength / 2);
+			hexMarkerY = y_position_marker;
 			if (i % 2 == 1 && columns % 2 == 1) {
 				rows++;
 			}
 		}
-		x_position = x_position_marker;
-		origin_x = x_position;
-		origin_y = y_position + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
+		hexMarkerX = x_position_marker;
+		origin_x = hexMarkerX;
+		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
 		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
-		// highlightHex(origin_x, origin_y); //TODO remove eventually because just for
+		drawWorldObject(0, 0);
+		highlightHex(origin_x, origin_y); //TODO remove eventually because just for
 		// testing i think?
 	}
 
+	private void drawHex(double centerX, double centerY)
+	{
+		gc.strokePolygon(
+				new double[] { centerX + sideLength, centerX + (sideLength / 2),
+						centerX - (sideLength / 2), centerX - sideLength, centerX - (sideLength / 2),
+						centerX + (sideLength / 2) },
+				new double[] { centerY, centerY - (Math.sqrt(3) * (sideLength / 2)),
+						centerY - (Math.sqrt(3) * (sideLength / 2)), centerY,
+						centerY + (Math.sqrt(3) * (sideLength / 2)),
+						centerY + (Math.sqrt(3) * (sideLength / 2)) }, 6);
+	}
+	
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
 			sideLength += 3;
