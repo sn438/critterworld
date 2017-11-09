@@ -17,7 +17,7 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		stage.setMinHeight(800);
 		stage.setMinWidth(1000);
-		
+
 		try {
 			URL r = getClass().getResource("gui.fxml");
 			if (r == null)
@@ -35,6 +35,5 @@ public class Main extends Application {
 
 }
 
-// TODO have map redraw upon resizing window
 // TODO fix zooming + panning position
 // TODO right-click + drag doesn't work for most laptops...
