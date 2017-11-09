@@ -114,8 +114,8 @@ public class WorldMap {
 		if (rectColumns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		drawWorldObject(0, 0);
-		double [] cooridnates = hexToCartesian(new int[] {0, 1});
-		highlightHex(cooridnates[0], cooridnates[1]); //TODO remove eventually because just for
+		//double [] coordinates = hexToCartesian(new int[] {0, 1});
+		//highlightHex(coordinates[0], coordinates[1]); //TODO remove eventually because just for
 		// testing i think?
 	}
 
