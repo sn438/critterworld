@@ -7,6 +7,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import simulation.SimpleWorld;
 import simulation.World;
+import simulation.WorldObject;
 
 public class WorldModel {
 	private boolean isRunning;
@@ -55,6 +56,19 @@ public class WorldModel {
 	{
 		return world.getRows();
 	}
+	
+	/*public WorldObject getHexContent(int c, int r)
+	{
+		int hexCont = world.analyzeHex(c, r);
+		if(hexCont == 0)
+			return null;
+		else if(hexCont > 0)
+			return world.analyzeCritter(c, r);
+		else if(hexCont == -1)
+			return new Rock();
+		
+			
+	}*/
 	
 	/** Advances one time step. */
 	public void advanceTime() {

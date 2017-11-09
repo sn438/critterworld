@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -62,6 +64,8 @@ public class Controller {
 	private Slider simulationSpeed;
 
 	@FXML
+	private ScrollPane scroll;
+	@FXML
 	private Canvas c;
 	@FXML
 	private Label crittersAlive;
@@ -92,22 +96,19 @@ public class Controller {
 		c.setDisable(true); // hi
 		c.setVisible(false); // hi
 
-		c.heightProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{
-				if(map != null)
-					map.refreshDimensions();
-			}
+		c.heightProperty().bind(scroll.heightProperty());
+		c.widthProperty().bind(scroll.widthProperty());
+		
+		c.heightProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
 		});
-
-		c.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{
-				if(map != null)
-					map.refreshDimensions();
-			}
+		
+		c.widthProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
 		});
 		
 		model.numCritters.addListener(update -> crittersAlive.setText("Number of Critters: " + model.numCritters.intValue()));
@@ -173,8 +174,17 @@ public class Controller {
 		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent ae) {
-				model.advanceTime();
-				map.draw();
+				Thread simulationHandler = new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						model.advanceTime();
+					}
+				});
+				simulationHandler.setDaemon(true);
+				simulationHandler.start();
+				Platform.runLater(() -> map.draw());
 			}
 		}));
 

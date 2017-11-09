@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
@@ -19,7 +20,6 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <Canvas fx:id="c" height="775.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="750.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0" />
       <MenuBar fx:id="Menu" prefHeight="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
@@ -34,7 +34,7 @@
          <children>
             <SplitPane dividerPositions="0.5" prefHeight="26.0" style="-fx-background-color: lightgray;" HBox.hgrow="ALWAYS">
               <items>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="200.0">
                      <children>
                         <Label fx:id="crittersAlive" alignment="CENTER" text="Critters Alive:" />
                      </children>
@@ -49,7 +49,7 @@
          </children></HBox>
       <AnchorPane layoutX="749.0" layoutY="25.0" prefHeight="775.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
-            <TitledPane animated="false" minHeight="300.0" prefHeight="300.0" prefWidth="250.0" text="World Info">
+            <TitledPane animated="false" minHeight="300.0" prefHeight="300.0" prefWidth="250.0" text="World Info" AnchorPane.bottomAnchor="510.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="249.0">
                      <children>
@@ -58,7 +58,7 @@
                   </AnchorPane>
                </content>
             </TitledPane>
-            <TitledPane animated="false" layoutY="300.0" minHeight="100.0" prefHeight="100.0" prefWidth="250.0" text="Create World">
+            <TitledPane animated="false" layoutY="300.0" minHeight="100.0" prefHeight="100.0" prefWidth="250.0" text="Create World" AnchorPane.bottomAnchor="410.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
@@ -68,7 +68,7 @@
                   </AnchorPane>
                </content>
             </TitledPane>
-            <TitledPane animated="false" layoutY="400.0" minHeight="260.0" prefHeight="260.0" prefWidth="250.0" text="World Controls">
+            <TitledPane animated="false" layoutY="400.0" minHeight="260.0" prefHeight="260.0" prefWidth="250.0" text="World Controls" AnchorPane.bottomAnchor="150.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="249.0">
                      <children>
@@ -106,5 +106,10 @@
             </TitledPane>
          </children>
       </AnchorPane>
+      <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" layoutY="25.0" pannable="true" prefHeight="775.0" prefWidth="750.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0">
+         <content>
+            <Canvas fx:id="c" height="800.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="1000.0" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

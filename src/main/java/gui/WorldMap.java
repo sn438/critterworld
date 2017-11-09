@@ -13,10 +13,21 @@ public class WorldMap {
 	private WorldModel model;
 	private GraphicsContext gc;
 	private Canvas canvas;
+	/** The height of the canvas to display. */
 	private double height;
+	/** The width of the canvas to display. */
 	private double width;
-	private int columns;
-	private int rows;
+	
+	/** The number of world columns, in hexagonal coordinates. */
+	private int hexColumns;
+	/** The number of world rows, in hexagonal coordinates. */
+	private int hexRows;
+	
+	/** The number of columns in a rectangular rendering system. Used for easier drawing of hexagons.*/
+	private int rectColumns;
+	/** The number of rows in a rectangular rendering system. Used for easier drawing of hexagons. */
+	private int rectRows;
+	/** The side length of a hexagon. Used as an measurement of scale. */
 	private int sideLength;
 	// TODO have sujith tell us what position markers are
 	// x_position and y_position are just used as the left markers from which the rest of the canvas
@@ -33,20 +44,19 @@ public class WorldMap {
 		model = wm;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
-		columns = 7;//wm.getColumns();
-		rows = 9;//wm.getRows();
-		rows -= columns / 2;
+		
+		hexColumns = 17;//wm.getColumns();
+		rectColumns = hexColumns;
+		hexRows = 19;//wm.getRows();
+		rectRows = hexRows - hexColumns / 2;
 		sideLength = 30;
-		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
+		
+		//finds the origin to start drawing from
+		x_position_marker = ((double) width / 2) - ((((double) rectColumns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) rectRows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 	}
 	
-	public void refreshDimensions() {
-		height = canvas.getHeight();
-		width = canvas.getWidth();
-	}
-
 	private void drawWorldObject(int r, int c)
 	{
 		//InputStream in = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
@@ -66,38 +76,39 @@ public class WorldMap {
 		int hexCoordinates[] = new int[] {r, c};
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
-//		if(in == null)
-//			System.out.println("SDAS:LKDAJ:HSfkH");
+
 		gc.drawImage(image, cartX, cartY);
 	}
 
 	public void draw() {
+		height = canvas.getHeight();
+		width = canvas.getWidth();
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
-		for (int i = 0; i < columns; i++) {
-			if (i % 2 == 0 && columns % 2 == 0) {
+		for (int i = 0; i < rectColumns; i++) {
+			if (i % 2 == 0 && rectColumns % 2 == 0) {
 				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
 			}
-			if (i % 2 == 1 && columns % 2 == 1) {
+			if (i % 2 == 1 && rectColumns % 2 == 1) {
 				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
-				rows--;
+				rectRows--;
 			}
 
-			for (int j = 0; j < rows; j++) {
+			for (int j = 0; j < rectRows; j++) {
 				drawHex(hexMarkerX, hexMarkerY);
 				hexMarkerY += (Math.sqrt(3) * (sideLength));
 			}
 
 			hexMarkerX += sideLength + (sideLength / 2);
 			hexMarkerY = y_position_marker;
-			if (i % 2 == 1 && columns % 2 == 1) {
-				rows++;
+			if (i % 2 == 1 && rectColumns % 2 == 1) {
+				rectRows++;
 			}
 		}
 		hexMarkerX = x_position_marker;
 		origin_x = hexMarkerX;
-		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
-		if (columns % 2 == 0)
+		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * rectRows) - (Math.sqrt(3) * (sideLength / 2));
+		if (rectColumns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		drawWorldObject(0, 0);
 		highlightHex(origin_x, origin_y); //TODO remove eventually because just for
@@ -126,8 +137,8 @@ public class WorldMap {
 			if (sideLength <= 10)
 				sideLength = 10;
 		}
-		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
+		x_position_marker = ((double) width / 2) - ((((double) rectColumns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
+		y_position_marker = (((double) height / 2) - (((double) rectRows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 		gc.clearRect(0, 0, width, height);
 		draw();
