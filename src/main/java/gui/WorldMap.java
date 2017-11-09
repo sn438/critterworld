@@ -13,26 +13,43 @@ public class WorldMap {
 	private int columns;
 	private int rows;
 	private int sideLength;
-	private double x_position;
-	private double y_position;
+	//private double x_position;
+	//private double y_position;
 	// TODO have sujith tell us what position markers are
-	// x_position and y_position are just used as the left markers from which the rest of the canvas
-	// is drawn, it is only used during drawing of the map
 	private double x_position_marker;
 	private double y_position_marker;
+	
 	private double origin_x;
 	private double origin_y;
 	// distance between hex centers is sideLength * sqrt(3)
 
+	/**
+	 * Creates a new world map.
+	 * @param canvas
+	 * @param wm
+	 */
 	public WorldMap(Canvas canvas, WorldModel wm) {
 		gc = canvas.getGraphicsContext2D();
 		c = canvas;
 		model = wm;
 		height = c.getHeight();
 		width = c.getWidth();
-		columns = wm.getColumns();
-		rows = wm.getRows();
+		columns = 7;//wm.getColumns();
+		rows = 9;//wm.getRows();
 		sideLength = 30;
+		
+		double centerX = width / 2.0;
+		double centerY = height / 2.0;
+		
+		double totalGridWidth = columns * (sideLength + sideLength * (.5 * Math.sqrt(3))) + sideLength * (.5 * Math.sqrt(3));
+		double totalGridHeight = Math.ceil((2 * rows - columns) / 2.0) * sideLength * Math.sqrt(3);
+		if(columns % 2 == 0)
+			totalGridHeight += sideLength * (0.5 * Math.sqrt(3));
+		
+		//sets the origin to start drawing from
+		origin_x = centerX - totalGridWidth / 2.0;
+		origin_y = centerY + totalGridHeight / 2.0;
+		
 		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
@@ -44,7 +61,7 @@ public class WorldMap {
 	}
 
 	public void draw() {
-		x_position = x_position_marker;
+		/*x_position = x_position_marker;
 		y_position = y_position_marker;
 		for (int i = 0; i < columns; i++) {
 			if (i % 2 == 0 && columns % 2 == 0) {
@@ -80,9 +97,55 @@ public class WorldMap {
 		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		// highlightHex(origin_x, origin_y); //TODO remove eventually because just for
-		// testing i think?
+		// testing i think?*/
+		
+		double hexCenterX = origin_x;
+		double hexCenterY = origin_y;
+		
+		for (int i = 0; i < columns; i++)
+		{
+			if(i % 2 == 1)
+				hexCenterY -= sideLength * (0.5 * Math.sqrt(3));
+			
+			int numHexesInColumn = (i % 2 == 0) ? (int) Math.ceil((2 * rows - columns) / 2.0) : (2 * rows - columns) / 2;
+			for (int j = 0; j < numHexesInColumn; j++)
+			{
+				drawHex(hexCenterX, hexCenterY);
+				hexCenterY -= sideLength * Math.sqrt(3);
+			}
+			hexCenterX += sideLength * 1.5;
+			hexCenterY = origin_y;
+		}
 	}
 
+	/**
+	 * Draws a hexagon with the given center coordinates.
+	 * @param centerX
+	 * @param centerY
+	 */
+	private void drawHex(double centerX, double centerY)
+	{
+		gc.strokePolygon(
+				new double[] { centerX + sideLength, centerX + (sideLength / 2),
+						centerX - (sideLength / 2), centerX - sideLength, centerX - (sideLength / 2),
+						centerX + (sideLength / 2) },
+				new double[] { centerY, centerY - (Math.sqrt(3) * (sideLength / 2)),
+						centerY - (Math.sqrt(3) * (sideLength / 2)), centerY,
+						centerY + (Math.sqrt(3) * (sideLength / 2)),
+						centerY + (Math.sqrt(3) * (sideLength / 2)) }, 6);
+	}
+	
+	private boolean isValidHex(int col, int row)
+	{
+		if (col < 0 || row < 0)
+			return false;
+		else if (col >= columns || row >= rows)
+			return false;
+		else if ((2 * row - col) < 0 || (2 * row - col) >= (2 * rows - columns))
+			return false;
+		return true;
+	}
+	
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
 			sideLength += 3;
@@ -109,13 +172,12 @@ public class WorldMap {
 		double[] yPoints = { y, y - m, y - m, y, y + m, y + m };
 		
 		// this for loop somehow fixes off by one errors
-		for (int i = 0; i < 6; i++) {
+		/*for (int i = 0; i < 6; i++) {
 			yPoints[i] -= m;
-		}
+		}*/
 
 		gc.setFill(Color.HOTPINK);
 		gc.fillPolygon(xPoints, yPoints, 6);
-
 	}
 
 	public void drag(double deltaX, double deltaY) {
