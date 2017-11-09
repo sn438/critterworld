@@ -267,11 +267,10 @@ public class World extends AbstractWorld
 	 */
 	private void setConstants() throws IllegalArgumentException
 	{
-		InputStream in = World.class.getResourceAsStream("/constants.txt");
+		InputStream in = World.class.getClassLoader().getResourceAsStream("simulation/constants.txt");
 		if(in == null)
 		{ 
-			System.err.println("The constants.txt file could not be found in bin/simulation.");
-			System.exit(0);
+			throw new IllegalArgumentException();
 		}
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
