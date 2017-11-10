@@ -41,7 +41,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="stepsTaken" text="Time Steps: 0" />
+                        <Label fx:id="stepsTaken" text="Time: 0" />
                      </children>
                   </HBox>
               </items>
@@ -49,7 +49,7 @@
          </children></HBox>
       <AnchorPane layoutX="749.0" layoutY="25.0" prefHeight="775.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
-            <TitledPane animated="false" minHeight="300.0" prefHeight="300.0" prefWidth="250.0" text="World Info" AnchorPane.bottomAnchor="510.0">
+            <TitledPane animated="false" minHeight="300.0" prefHeight="300.0" prefWidth="250.0" text="World Info" AnchorPane.bottomAnchor="510.0" AnchorPane.topAnchor="0.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="249.0">
                      <children>
@@ -85,9 +85,9 @@
                            </font>
                         </TextField>
                         <Label layoutX="144.0" layoutY="18.0" text="Number" />
-                        <Button fx:id="stepForward" layoutX="83.0" layoutY="102.0" mnemonicParsing="false" text="Step Forward" />
+                        <Button fx:id="stepForward" layoutX="83.0" layoutY="102.0" mnemonicParsing="false" onMousePressed="#handleStep" text="Step Forward" />
                         <Button fx:id="run" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handleRunPressed" text=" Run " />
-                        <Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" text="Pause" />
+                        <Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handlePauseClicked" text="Pause" />
                         <Button fx:id="reset" layoutX="104.0" layoutY="190.0" mnemonicParsing="false" text="Reset" />
                      </children>
                   </AnchorPane>

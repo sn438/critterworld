@@ -78,6 +78,8 @@ public class Controller {
 
 	private double mousePanPressedX;
 	private double mousePanPressedY;
+	
+	private boolean isRunning;
 
 	@FXML
 	public void initialize() {
@@ -167,26 +169,39 @@ public class Controller {
 	}
 
 	@FXML
+	private void handleStep(MouseEvent me)
+	{
+		model.advanceTime();
+		map.draw();
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
+	}
+	
+	@FXML
 	private void handleRunPressed(MouseEvent me) {
+		isRunning = true;
 		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent ae) {
-				Thread simulationHandler = new Thread(new Runnable()
+				if(isRunning)
 				{
-					@Override
-					public void run()
+					Thread simulationHandler = new Thread(new Runnable()
 					{
-						model.advanceTime();
-					}
-				});
-				simulationHandler.setDaemon(true);
-				simulationHandler.start();
-				Platform.runLater(() -> 
-				{
-					map.draw();
-					crittersAlive.setText("Critters Alive: " + model.numCritters);
-					stepsTaken.setText("Time: " + model.time);
-				});
+						@Override
+						public void run()
+						{
+							model.advanceTime();
+						}
+					});
+					simulationHandler.setDaemon(true);
+					simulationHandler.start();
+					Platform.runLater(() -> 
+					{
+						map.draw();
+						crittersAlive.setText("Critters Alive: " + model.numCritters);
+						stepsTaken.setText("Time: " + model.time);
+					});
+				}
 			}
 		}));
 
@@ -210,7 +225,19 @@ public class Controller {
 	@FXML
 	private void handlePauseClicked(MouseEvent me)
 	{
+		newWorld.setDisable(false);
+		loadWorld.setDisable(false);
+		loadCritterFile.setDisable(false);
+		chkRand.setDisable(false);
+		chkSpecify.setDisable(false);
+		numCritters.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		reset.setDisable(false);
+		simulationSpeed.setDisable(false);
 		
+		pause.setDisable(true);
+		isRunning = false;
 	}
 	
 	@FXML
