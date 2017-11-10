@@ -31,6 +31,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
+import simulation.Hex;
 
 /**
  * This class handles user inputs and sends information to the world model and
@@ -286,7 +287,7 @@ public class Controller {
 		} else {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
-			map.select(xCoordinateSelected, yCoordinateSelected, hexContent, critterContent);
+			map.select(xCoordinateSelected, yCoordinateSelected, critterContent, critterContent);
 		}
 	}
 
