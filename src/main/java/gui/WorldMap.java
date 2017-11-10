@@ -151,6 +151,10 @@ public class WorldMap {
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
+		if (y_position_marker  < 0)
+			y_position_marker = Math.sqrt(3) * (sideLength/2);
+		if (x_position_marker - sideLength  < 0)
+			x_position_marker = sideLength;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
