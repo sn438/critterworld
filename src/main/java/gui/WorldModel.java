@@ -15,7 +15,6 @@ public class WorldModel {
 	private SimpleWorld world;
 	int numCritters;
 	int time;
-	private int simulationSpeed;
 	
 	/** Creates a new blank world model. */
 	public WorldModel()
@@ -48,13 +47,13 @@ public class WorldModel {
 	}
 	
 	/** Returns the number of columns in the world. */
-	public synchronized int getColumns()
+	public int getColumns()
 	{
 		return world.getColumns();
 	}
 	
 	/** Returns the number of rows in the world. */
-	public synchronized int getRows()
+	public int getRows()
 	{
 		return world.getRows();
 	}
@@ -80,9 +79,15 @@ public class WorldModel {
 	}
 	
 	/** Advances one time step. */
-	public synchronized void advanceTime() {
+	public synchronized void advanceTime()
+	{
 		world.advanceOneTimeStep();
 		time++;
 		numCritters = world.numRemainingCritters();
+	}
+	
+	public synchronized void loadCritters(int n)
+	{
+		
 	}
 }

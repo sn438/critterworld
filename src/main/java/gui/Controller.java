@@ -2,6 +2,9 @@ package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -80,10 +83,15 @@ public class Controller {
 	private double mousePanPressedY;
 	
 	private boolean isRunning;
+	private long simulationRate;
+	private ScheduledExecutorService executor;
 
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
+		simulationRate = 50;
+		isRunning = false;
+		
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -120,10 +128,10 @@ public class Controller {
 		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		loadCritterFile.setDisable(false);
+		//loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
-		numCritters.setDisable(false);
+		//numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
 		reset.setDisable(false);
@@ -132,9 +140,6 @@ public class Controller {
 		c.setVisible(true);
 
 		map.draw();
-
-		// c.getGraphicsContext2D().setFill(Color.BLACK);
-		// c.getGraphicsContext2D().fillRect(0, 0, c.getWidth(), c.getHeight());
 	}
 
 	@FXML
@@ -154,10 +159,10 @@ public class Controller {
 		
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		loadCritterFile.setDisable(false);
+		//loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
-		numCritters.setDisable(false);
+		//numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
 		reset.setDisable(false);
@@ -166,6 +171,27 @@ public class Controller {
 		c.setVisible(true);
 		
 		map.draw();
+	}
+	
+	@FXML
+	private void handleChkRandom(ActionEvent ae)
+	{
+		numCritters.setDisable(false);
+	}
+	
+	@FXML
+	private void handleChkSpecify(ActionEvent ae)
+	{
+		numCritters.setDisable(true);
+	}
+	
+	//@FXML
+	//private void 
+	
+	@FXML
+	private void handleLoadCritters(MouseEvent me)
+	{
+		
 	}
 
 	@FXML
@@ -183,28 +209,52 @@ public class Controller {
 		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent ae) {
-				if(isRunning)
+				Thread simulationHandler = new Thread(new Runnable()
 				{
-					Thread simulationHandler = new Thread(new Runnable()
+					@Override
+					public void run()
 					{
-						@Override
-						public void run()
-						{
+						if(isRunning)
 							model.advanceTime();
-						}
-					});
-					simulationHandler.setDaemon(true);
-					simulationHandler.start();
-					Platform.runLater(() -> 
-					{
-						map.draw();
-						crittersAlive.setText("Critters Alive: " + model.numCritters);
-						stepsTaken.setText("Time: " + model.time);
-					});
-				}
+					}
+				});
+				simulationHandler.setDaemon(true);
+				simulationHandler.start();
+				Platform.runLater(() -> 
+				{
+					map.draw();
+					crittersAlive.setText("Critters Alive: " + model.numCritters);
+					stepsTaken.setText("Time: " + model.time);
+				});
 			}
 		}));
+		
+		/*isRunning = true;
+		Thread worldUpdateThread = new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(isRunning)
+					model.advanceTime();
+				System.out.println(model.time);//TODO REMOVE
+			}
+		});
+		worldUpdateThread.setDaemon(true);
+		
+		executor = Executors.newSingleThreadScheduledExecutor();
+		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
 
+		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent ae) {
+				map.draw();
+				crittersAlive.setText("Critters Alive: " + model.numCritters);
+				stepsTaken.setText("Time: " + model.time);
+			}
+		}));*/
+		
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
 		
@@ -225,6 +275,8 @@ public class Controller {
 	@FXML
 	private void handlePauseClicked(MouseEvent me)
 	{
+		//executor.shutdownNow();
+		
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(false);
@@ -236,8 +288,8 @@ public class Controller {
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		
-		pause.setDisable(true);
 		isRunning = false;
+		pause.setDisable(true);
 	}
 	
 	@FXML
@@ -265,5 +317,13 @@ public class Controller {
 		if (!me.isPrimaryButtonDown()) {
 			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
 		}
+	}
+	
+	@FXML
+	private void close(ActionEvent ae)
+	{
+		if(executor != null)
+			executor.shutdownNow();
+		System.exit(0);
 	}
 }
