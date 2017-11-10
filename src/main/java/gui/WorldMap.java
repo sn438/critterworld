@@ -25,9 +25,9 @@ public class WorldMap
 	private Canvas canvas;
 	private int[] selectedHex;
 	/** The minimum acceptable hex sidelength (zoom will not allow the user to zoom in any further. */
-	private final int MIN_SIDELENGTH = 10;
+	private final int MIN_SIDELENGTH = 30;
 	/** The maximum acceptable hex sidelength (zoom will not allow the user to zoom out any further. */
-	private final int MAX_SIDELENGTH = 70;
+	private final int MAX_SIDELENGTH = 60;
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
 	
