@@ -29,6 +29,10 @@ public class WorldMap {
 	private final int MAX_SIDELENGTH = 60;
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
+	
+	private final Color BACKGROUND_COLOR = Color.DIMGRAY;
+	private final Color HEX_COLOR = Color.LIGHTGRAY;
+	private final Color HIGHLIGHT_COLOR = Color.POWDERBLUE;
 
 	private double height;
 	private double width;
@@ -133,8 +137,10 @@ public class WorldMap {
 	public void draw() {
 		height = canvas.getHeight();
 		width = canvas.getWidth();
-
 		gc.clearRect(0, 0, width, height);
+		gc.setFill(BACKGROUND_COLOR);
+		gc.fillRect(0, 0, width, height);
+		
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < columns; i++) {
@@ -265,6 +271,7 @@ public class WorldMap {
 	 * @param centerY
 	 */
 	private void drawHex(double centerX, double centerY) {
+		gc.setStroke(HEX_COLOR);
 		gc.strokePolygon(
 				new double[] { centerX + sideLength, centerX + (sideLength / 2), centerX - (sideLength / 2),
 						centerX - sideLength, centerX - (sideLength / 2), centerX + (sideLength / 2) },
@@ -333,13 +340,13 @@ public class WorldMap {
 		double[] highlightCoordinates = null;
 		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
 			highlightCoordinates = hexToCartesian(selectedHex);
-			highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.WHITE);
+			highlightHex(highlightCoordinates[0], highlightCoordinates[1], BACKGROUND_COLOR);
 			selectedHex = closestHexCoordinates;
 		} else {
 			selectedHex = closestHexCoordinates;
 		}
 		highlightCoordinates = hexToCartesian(closestHexCoordinates);
-		highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.POWDERBLUE);
+		highlightHex(highlightCoordinates[0], highlightCoordinates[1], HIGHLIGHT_COLOR);
 		// hexContent = new TableView<Hex>();
 		critterContent.getItems().clear();
 		ObservableList<Hex> data = FXCollections
