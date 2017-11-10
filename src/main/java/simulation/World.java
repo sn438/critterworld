@@ -262,7 +262,7 @@ public class World extends AbstractWorld
 			r = (int) (Math.random() * rows);
 			if (isValidHex(c, r))
 			{
-				grid[c][r].addContent(new Rock());
+				addNonCritterObject(new Rock(), c, r);
 				n++;
 			}
 		}
