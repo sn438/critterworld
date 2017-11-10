@@ -15,11 +15,9 @@ public class WorldModel {
 	private SimpleWorld world;
 	int numCritters;
 	int time;
-	private int simulationSpeed;
-	
+
 	/** Creates a new blank world model. */
-	public WorldModel()
-	{
+	public WorldModel() {
 		numCritters = 0;
 		time = 0;
 	}
@@ -41,48 +39,45 @@ public class WorldModel {
 	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException {
 		world = new World(worldfile);
 	}
-	
-	public boolean isReady()
-	{
+
+	public boolean isReady() {
 		return world != null;
 	}
-	
+
 	/** Returns the number of columns in the world. */
-	public synchronized int getColumns()
-	{
+	public int getColumns() {
 		return world.getColumns();
 	}
-	
+
 	/** Returns the number of rows in the world. */
-	public synchronized int getRows()
-	{
+	public int getRows() {
 		return world.getRows();
 	}
-	
-	public synchronized int hexContent(int c, int r)
-	{
-		return world.analyzeHex(c, r);		
+
+	public synchronized int hexContent(int c, int r) {
+		return world.analyzeHex(c, r);
 	}
-	
-	public synchronized SimpleCritter getCritter(int c, int r)
-	{
+
+	public synchronized SimpleCritter getCritter(int c, int r) {
 		return world.analyzeCritter(c, r);
 	}
-	
-	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
-	{
+
+	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
 		return world.getCritterMap();
 	}
-	
-	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap()
-	{
+
+	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
 		return world.getObjectMap();
 	}
-	
+
 	/** Advances one time step. */
 	public synchronized void advanceTime() {
 		world.advanceOneTimeStep();
 		time++;
 		numCritters = world.numRemainingCritters();
+	}
+
+	public synchronized void loadCritters(int n) {
+
 	}
 }
