@@ -3,6 +3,7 @@ package gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,28 +26,70 @@ public class WorldMap {
 	private double y_position_marker;
 	private double origin_x;
 	private double origin_y;
+	
+	private HashMap<String, Image> pictures;
 	// distance between hex centers is sideLength * sqrt(3)
 
+	/**
+	 * Creates a new world map.
+	 * @param can The Canvas to draw on
+	 * @param wm The WorldModel to work off of
+	 */
 	public WorldMap(Canvas can, WorldModel wm) {
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
+		
 		columns = 17;//wm.getColumns();
 		rows = 19;//wm.getRows();
 		rows -= columns / 2;
 		sideLength = 30;
+		
 		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
+		
+		initializeImages();
+	}
+	
+	private void initializeImages()
+	{
+		pictures = new HashMap<String, Image>();
+		InputStream is1 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
+		InputStream is2 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_60.png");
+		InputStream is3 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_120.png");
+		InputStream is4 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_180.png");
+		InputStream is5 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_240.png");
+		InputStream is6 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_300.png");
+		InputStream is7 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/rock.png");
+		InputStream is8 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/apple.png");
+		//TODO add general critter image
+	
+		Image i1 = new Image(is1);
+		Image i2 = new Image(is2);
+		Image i3 = new Image(is3);
+		Image i4 = new Image(is4);
+		Image i5 = new Image(is5);
+		Image i6 = new Image(is6);
+		Image i7 = new Image(is7);
+		Image i8 = new Image(is8);
+		
+		pictures.put("CRITTER_NORTH", i1);
+		pictures.put("CRITTER_NORTHEAST", i2);
+		pictures.put("CRITTER_SOUTHEAST", i3);
+		pictures.put("CRITTER_SOUTH", i4);
+		pictures.put("CRITTER_SOUTHWEST", i5);
+		pictures.put("CRITTER_NORTHWEST", i6);
+		pictures.put("ROCK", i7);
+		pictures.put("FOOD", i8);
 	}
 	
 	private void drawWorldObject(int r, int c)
 	{
-		InputStream in = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
-
-		Image image = new Image(in);
+//		InputStream in = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
+//		Image image = null;
 //		try
 //		{
 //			in = new FileInputStream("src/main/resources/gui/images/critter_0.png");
@@ -57,6 +100,7 @@ public class WorldMap {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		Image image = pictures.get("FOOD");
 		
 		int hexCoordinates[] = new int[] {r, c};
 		double cartX = hexToCartesian(hexCoordinates)[0];

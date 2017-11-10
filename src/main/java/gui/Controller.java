@@ -110,9 +110,6 @@ public class Controller {
 			if(map != null)
 				map.draw();
 		});
-		
-		model.numCritters.addListener(update -> crittersAlive.setText("Number of Critters: " + model.numCritters.intValue()));
-		model.time.addListener(update -> stepsTaken.setText("Time: " + model.time.intValue()));
 	}
 
 	@FXML
@@ -184,7 +181,12 @@ public class Controller {
 				});
 				simulationHandler.setDaemon(true);
 				simulationHandler.start();
-				Platform.runLater(() -> map.draw());
+				Platform.runLater(() -> 
+				{
+					map.draw();
+					crittersAlive.setText("Critters Alive: " + model.numCritters);
+					stepsTaken.setText("Time: " + model.time);
+				});
 			}
 		}));
 
@@ -205,6 +207,12 @@ public class Controller {
 		pause.setDisable(false);
 	}
 
+	@FXML
+	private void handlePauseClicked(MouseEvent me)
+	{
+		
+	}
+	
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
 		if (!me.isPrimaryButtonDown()) {

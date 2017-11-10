@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import simulation.SimpleCritter;
 import simulation.SimpleWorld;
 import simulation.World;
 import simulation.WorldObject;
@@ -12,14 +13,14 @@ import simulation.WorldObject;
 public class WorldModel {
 	private boolean isRunning;
 	private SimpleWorld world;
-	IntegerProperty numCritters;
-	IntegerProperty time;
-	private IntegerProperty simulationSpeed;
+	int numCritters;
+	int time;
+	private int simulationSpeed;
 	
 	public WorldModel()
 	{
-		numCritters = new SimpleIntegerProperty(0);
-		time = new SimpleIntegerProperty(0);
+		numCritters = 0;
+		time = 0;
 	}
 
 	/** Creates a new random world. */
@@ -46,34 +47,31 @@ public class WorldModel {
 	}
 	
 	/** Returns the number of columns in the world. */
-	public int getColumns()
+	public synchronized int getColumns()
 	{
 		return world.getColumns();
 	}
 	
 	/** Returns the number of rows in the world. */
-	public int getRows()
+	public synchronized int getRows()
 	{
 		return world.getRows();
 	}
 	
-	/*public WorldObject getHexContent(int c, int r)
+	public synchronized int hexContent(int c, int r)
 	{
-		int hexCont = world.analyzeHex(c, r);
-		if(hexCont == 0)
-			return null;
-		else if(hexCont > 0)
-			return world.analyzeCritter(c, r);
-		else if(hexCont == -1)
-			return new Rock();
-		
-			
-	}*/
+		return world.analyzeHex(c, r);		
+	}
+	
+	public synchronized SimpleCritter getCritter(int c, int r)
+	{
+		return world.analyzeCritter(c, r);
+	}
 	
 	/** Advances one time step. */
-	public void advanceTime() {
+	public synchronized void advanceTime() {
 		world.advanceOneTimeStep();
-		time.set(time.get() + 1);
-		numCritters.set(world.numRemainingCritters());
+		time++;
+		numCritters = world.numRemainingCritters();
 	}
 }
