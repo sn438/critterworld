@@ -323,9 +323,9 @@ public class WorldMap {
 		double[] yPoints = { y, y - m, y - m, y, y + m, y + m };
 
 		// this for loop somehow fixes off by one errors
-//		for (int i = 0; i < 6; i++) {
-//			yPoints[i] -= m;
-//		}
+		for (int i = 0; i < 6; i++) {
+			yPoints[i] -= m;
+		}
 
 		gc.setFill(c);
 		gc.fillPolygon(xPoints, yPoints, 6);

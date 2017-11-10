@@ -36,8 +36,7 @@ public class Main extends Application {
 }
 
 // TODO fix zooming + panning position
-// TODO right-click + drag doesn't work for most laptops...
-// TODO fix hex selection
+// TODO fix hex selection upon zoom
 // TODO make highlighting an outline instead of a fill
 // TODO fix weird lagginess in panning
 // TODO black universe, grey hex grid, grey fully filled hexes as rocks, neon
