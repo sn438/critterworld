@@ -4,8 +4,11 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -331,19 +334,25 @@ public class WorldMap
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate) {
+	public void select(double xCoordinate, double yCoordinate, TableView hexContent, TableView critterContent) {
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
 		double[] highlightCoordinates = null;
-		/*
 		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
 			highlightCoordinates = hexToCartesian(selectedHex);
 			highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.WHITE);
 			selectedHex = closestHexCoordinates;
 		}
-		*/
+		else {
+			selectedHex = closestHexCoordinates;
+		}
 		highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.POWDERBLUE);
-		
+		//hexContent = new TableView<Hex>();
+		critterContent.getItems().clear();
+		ObservableList<Hex> data =
+		            FXCollections.observableArrayList(new Hex(closestHexCoordinates[0], closestHexCoordinates[1]));
+		critterContent.setItems(data);
+		hexContent.disabledProperty();
 	}
 
 	/**

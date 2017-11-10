@@ -20,6 +20,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -62,7 +63,12 @@ public class Controller {
 	private Button reset;
 	@FXML
 	private Slider simulationSpeed;
-
+	
+	@FXML
+	private TableView hexContent;
+	@FXML
+	private TableView critterContent;
+	
 	@FXML
 	private ScrollPane scroll;
 	@FXML
@@ -248,7 +254,7 @@ public class Controller {
 		} else {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
-			map.select(xCoordinateSelected, yCoordinateSelected);
+			map.select(xCoordinateSelected, yCoordinateSelected, hexContent, critterContent);
 		}
 	}
 
