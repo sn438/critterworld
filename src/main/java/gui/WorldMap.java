@@ -22,23 +22,11 @@ public class WorldMap {
 	private GraphicsContext gc;
 	private Canvas canvas;
 	private int[] selectedHex;
-<<<<<<< HEAD
+
 	/** The minimum acceptable hex sidelength (zoom will not allow the user to zoom in any further. */
 	private final int MIN_SIDELENGTH = 30;
 	/** The maximum acceptable hex sidelength (zoom will not allow the user to zoom out any further. */
 	private final int MAX_SIDELENGTH = 60;
-=======
-	/**
-	 * The minimum acceptable hex sidelength (zoom will not allow the user to zoom
-	 * in any further.
-	 */
-	private final int MIN_SIDELENGTH = 10;
-	/**
-	 * The maximum acceptable hex sidelength (zoom will not allow the user to zoom
-	 * out any further.
-	 */
-	private final int MAX_SIDELENGTH = 70;
->>>>>>> f06bd7d21b842453539d61fc91e8d8a58ffb62ce
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
 
@@ -59,13 +47,9 @@ public class WorldMap {
 	private double x_position_marker;
 	private double y_position_marker;
 
-	/**
-	 * Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate).
-	 */
+	/** Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_x;
-	/**
-	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
-	 */
+	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
 
 	private HashMap<String, Image> pictures;
@@ -74,10 +58,8 @@ public class WorldMap {
 	/**
 	 * Creates a new world map.
 	 * 
-	 * @param can
-	 *            The Canvas to draw on
-	 * @param wm
-	 *            The WorldModel to work off of
+	 * @param can The Canvas to draw on
+	 * @param wm The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
 		gc = can.getGraphicsContext2D();
@@ -101,10 +83,7 @@ public class WorldMap {
 		initializeImages();
 	}
 
-	/**
-	 * Reads the images needed to display world objects and stores them in a
-	 * hashmap.
-	 */
+	/** Reads the images needed to display world objects and stores them in a hashmap. */
 	private void initializeImages() {
 		pictures = new HashMap<String, Image>();
 		InputStream is1 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
