@@ -131,6 +131,8 @@ public class WorldMap
 	public void draw() {
 		height = canvas.getHeight();
 		width = canvas.getWidth();
+		
+		gc.clearRect(0, 0, width, height);
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < columns; i++) {
@@ -285,7 +287,7 @@ public class WorldMap
 	 */
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
-			sideLength += sideLength;
+			sideLength += ZOOM_FACTOR;
 			if (sideLength >= MAX_SIDELENGTH)
 				sideLength = MAX_SIDELENGTH;
 		} else {
@@ -296,7 +298,6 @@ public class WorldMap
 		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
-		gc.clearRect(0, 0, width, height);
 		draw();
 
 	}

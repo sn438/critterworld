@@ -95,7 +95,7 @@ public class Controller {
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
-		simulationRate = 50;
+		simulationRate = 30;
 		isRunning = false;
 		
 		newWorld.setDisable(false);
@@ -109,23 +109,13 @@ public class Controller {
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
-		c.setDisable(true); // hi
-		c.setVisible(false); // hi
+		
+		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
+		c.setDisable(true);
+		c.setVisible(false);
 
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
-		
-		c.heightProperty().addListener(update -> 
-		{
-			if(map != null)
-				map.draw();
-		});
-		
-		c.widthProperty().addListener(update -> 
-		{
-			if(map != null)
-				map.draw();
-		});
 	}
 
 	@FXML
@@ -220,8 +210,8 @@ public class Controller {
 					@Override
 					public void run()
 					{
-						if(isRunning)
-							model.advanceTime();
+						//if(isRunning)
+						model.advanceTime();
 					}
 				});
 				simulationHandler.setDaemon(true);
@@ -241,8 +231,7 @@ public class Controller {
 			@Override
 			public void run()
 			{
-				if(isRunning)
-					model.advanceTime();
+				model.advanceTime();
 				System.out.println(model.time);//TODO REMOVE
 			}
 		});
@@ -294,7 +283,8 @@ public class Controller {
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		
-		isRunning = false;
+		//isRunning = false;
+		timeline.stop();
 		pause.setDisable(true);
 	}
 	
@@ -310,6 +300,16 @@ public class Controller {
 		}
 	}
 
+	@FXML
+	private void handleResetClicked(MouseEvent me)
+	{
+		if(executor != null)
+			executor.shutdownNow();
+		if(timeline != null)
+			timeline.stop();
+		initialize();
+	}
+	
 	@FXML
 	private void handleMapScroll(ScrollEvent se) {
 		if (se.getDeltaY() > 0)
@@ -330,6 +330,8 @@ public class Controller {
 	{
 		if(executor != null)
 			executor.shutdownNow();
+		if(timeline != null)
+			timeline.stop();
 		System.exit(0);
 	}
 }
