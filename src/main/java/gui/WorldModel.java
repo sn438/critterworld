@@ -2,16 +2,16 @@ package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Set;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import simulation.SimpleCritter;
 import simulation.SimpleWorld;
 import simulation.World;
 import simulation.WorldObject;
+import simulation.Hex;
 
 public class WorldModel {
-	private boolean isRunning;
 	private SimpleWorld world;
 	int numCritters;
 	int time;
@@ -66,6 +66,16 @@ public class WorldModel {
 	public synchronized SimpleCritter getCritter(int c, int r)
 	{
 		return world.analyzeCritter(c, r);
+	}
+	
+	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
+	{
+		return world.getCritterMap();
+	}
+	
+	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap()
+	{
+		return world.getObjectMap();
 	}
 	
 	/** Advances one time step. */

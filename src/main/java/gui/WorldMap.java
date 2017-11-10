@@ -2,12 +2,18 @@ package gui;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+
 import simulation.SimpleCritter;
+import simulation.WorldObject;
+import simulation.Rock;
+import simulation.Food;
+import simulation.Hex;
 
 public class WorldMap
 {
@@ -116,73 +122,8 @@ public class WorldMap
 			return false;
 		return true;
 	}
-	
-	/**
-	 * 
-	 * @param c
-	 * @param r
-	 */
-	private void drawOneWorldObject(int c, int r)
-	{
-		if(!isValidHex(c, r))
-			return;
-		
-		int hexCoordinates[] = new int[] {c, r};
-		double cartX = hexToCartesian(hexCoordinates)[0];
-		double cartY = hexToCartesian(hexCoordinates)[1];
-		
-		Image content = null;
-		int hexContent = model.hexContent(c, r);
-		if(hexContent > 0)
-		{
-			SimpleCritter sc = model.getCritter(c, r);
-			if(sc == null)
-				return;
-			int size = sc.size();
-			int dir = sc.getOrientation();
-			String imageKey;
-			switch(dir)
-			{
-				case 0:
-					imageKey = "CRITTER_NORTH";
-					break;
-				case 1:
-					imageKey = "CRITTER_NORTHEAST";
-					break;
-				case 2: 
-					imageKey = "CRITTER_SOUTHEAST";
-					break;
-				case 3: 
-					imageKey = "CRITTER_SOUTH";
-					break;
-				case 4:
-					imageKey = "CRITTER_SOUTHWEST";
-					break;
-				case 5:
-					imageKey = "CRITTER_NORTHWEST";
-					break;
-				default:
-					return;
-			}
-			content = pictures.get(imageKey);
-		}
-		else if(hexContent == -1)
-			content = pictures.get("ROCK");
-		else if(hexContent < -1)
-		{
-			int calories = -1 * hexContent + 1;
-			content = pictures.get("FOOD");
-		}
-		else if(hexContent == 0)
-		{
-			//highlightHex(cartX, cartY, Color.WHITE);
-		}
-		else
-			return;
 
-		gc.drawImage(content, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))),  sideLength, sideLength * Math.sqrt(3));
-	}
-
+	/** Redraws the world grid. */
 	public void draw() {
 		height = canvas.getHeight();
 		width = canvas.getWidth();
@@ -219,15 +160,95 @@ public class WorldMap
 		// testing i think?
 	}
 	
+	/** Used to update the grid and draw updates after each time step. */
+	public void updateGrid()
+	{
+		
+	}
+	
 	/** Draws the world objects onto the grid. */
 	private void drawObjects()
 	{
-		for(int i = 0; i < worldColumns; i++)
-			for(int j = 0; j < worldRows; j++)
-				if(isValidHex(i, j))
-					drawOneWorldObject(i, j);
+		for(Map.Entry<SimpleCritter, Hex> entry : model.getCritterMap())
+		{
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawCritter(entry.getKey(), c, r);
+		}
+		
+		for(Map.Entry<WorldObject, Hex> entry : model.getObjectMap())
+		{
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawWorldObject(entry.getKey(), c, r);
+		}
 	}
 
+	private void drawCritter(SimpleCritter sc, int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return;
+		
+		int hexCoordinates[] = new int[] {c, r};
+		double cartX = hexToCartesian(hexCoordinates)[0];
+		double cartY = hexToCartesian(hexCoordinates)[1];
+		
+		if(sc == null)
+			return;
+		int size = sc.size();
+		int dir = sc.getOrientation();
+		String imageKey;
+		switch(dir)
+		{
+			case 0:
+				imageKey = "CRITTER_NORTH";
+				break;
+			case 1:
+				imageKey = "CRITTER_NORTHEAST";
+				break;
+			case 2: 
+				imageKey = "CRITTER_SOUTHEAST";
+				break;
+			case 3: 
+				imageKey = "CRITTER_SOUTH";
+				break;
+			case 4:
+				imageKey = "CRITTER_SOUTHWEST";
+				break;
+			case 5:
+				imageKey = "CRITTER_NORTHWEST";
+				break;
+			default:
+				return;
+		}
+		Image critter = pictures.get(imageKey);
+		gc.drawImage(critter, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))),  sideLength, sideLength * Math.sqrt(3));
+	}
+	
+	/**
+	 * 
+	 */
+	private void drawWorldObject(WorldObject wo, int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return;
+		
+		int hexCoordinates[] = new int[] {c, r};
+		double cartX = hexToCartesian(hexCoordinates)[0];
+		double cartY = hexToCartesian(hexCoordinates)[1];
+
+		Image obj = null;
+		if(wo instanceof Rock)
+			obj = pictures.get("ROCK");
+		else if(wo instanceof Food)
+		{
+			int calories = ((Food) wo).getCalories();
+			obj = pictures.get("FOOD");
+		}
+		
+		gc.drawImage(obj, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))),  sideLength, sideLength * Math.sqrt(3));
+	}
+	
 	private void drawHex(double centerX, double centerY)
 	{
 		gc.strokePolygon(
@@ -242,7 +263,7 @@ public class WorldMap
 	
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
-			sideLength += ZOOM_FACTOR;
+			sideLength += sideLength;
 			if (sideLength >= MAX_SIDELENGTH)
 				sideLength = MAX_SIDELENGTH;
 		} else {

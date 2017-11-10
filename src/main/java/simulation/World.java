@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import ast.Program;
 import ast.ProgramImpl;
@@ -21,8 +23,10 @@ public class World extends AbstractWorld
 	private String worldname;
 	/** Contains the hex grid of the world. */
 	private Hex[][] grid;
-	/** Maps each critter to a location in the world */
+	/** Maps each critter to a location in the world. */
 	private HashMap<SimpleCritter, Hex> critterMap;
+	/** Maps each non critter object to a location in the world. */
+	private HashMap<WorldObject, Hex> nonCritterObjectMap;
 	/** The number of columns in the world grid. */
 	private int columns;
 	/** The number of rows in the world grid. */
@@ -43,6 +47,7 @@ public class World extends AbstractWorld
 		super();
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
+		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
@@ -135,6 +140,7 @@ public class World extends AbstractWorld
 		super();
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
+		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
@@ -224,6 +230,7 @@ public class World extends AbstractWorld
 		worldname = "Arrakis";
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
+		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		critterList = new LinkedList<SimpleCritter>();
 		timePassed = 0;
 
@@ -367,6 +374,7 @@ public class World extends AbstractWorld
 			return;
 		if (!isValidHex(c, r))
 			return;
+		nonCritterObjectMap.put(wo, grid[c][r]);
 		grid[c][r].addContent(wo);
 	}
 
@@ -504,6 +512,7 @@ public class World extends AbstractWorld
 		{
 			Food nourishment = (Food) directlyInFront.getContent();
 			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
+			nonCritterObjectMap.remove(nourishment);
 			directlyInFront.removeContent();
 		}
 		if (sc.getEnergy() == 0)
@@ -886,6 +895,7 @@ public class World extends AbstractWorld
 		if (directlyInFront.isEmpty())
 		{
 			Food f = new Food(index);
+			nonCritterObjectMap.put(f, directlyInFront);
 			directlyInFront.addContent(f);
 		}
 		if (donator.getEnergy() == 0)
@@ -907,6 +917,7 @@ public class World extends AbstractWorld
 		critterList.remove(sc);
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
+		nonCritterObjectMap.put(remnant, location);
 		location.addContent(remnant);
 	}
 
@@ -928,6 +939,18 @@ public class World extends AbstractWorld
 		}
 		result.insert(0, "World name: " + worldname + "\n");
 		return result;
+	}
+	
+	@Override
+	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
+	{
+		return critterMap.entrySet();
+	}
+	
+	@Override
+	public Set<Map.Entry<WorldObject, Hex>> getObjectMap()
+	{
+		return nonCritterObjectMap.entrySet();
 	}
 	
 	@Override

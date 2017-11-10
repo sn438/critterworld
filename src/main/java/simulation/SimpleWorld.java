@@ -1,5 +1,8 @@
 package simulation;
 
+import java.util.Map;
+import java.util.Set;
+
 /** An interface containing the basic functions of the world. */
 public interface SimpleWorld
 {
@@ -35,6 +38,12 @@ public interface SimpleWorld
 	
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	boolean isValidHex(int c, int r);
+	
+	/** Returns an entry set mapping the world critters to hex locations. */
+	Set<Map.Entry<SimpleCritter, Hex>> getCritterMap();
+	
+	/** Returns an entry set mapping the world objects to hex locations. */
+	Set<Map.Entry<WorldObject, Hex>> getObjectMap();
 	
 	/**
 	 * Returns information about a hex.
