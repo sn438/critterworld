@@ -17,6 +17,7 @@ public class WorldModel {
 	int time;
 	private int simulationSpeed;
 	
+	/** Creates a new blank world model. */
 	public WorldModel()
 	{
 		numCritters = 0;

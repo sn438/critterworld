@@ -79,6 +79,7 @@ public class WorldMap
 		initializeImages();
 	}
 	
+	/** Reads the images needed to display world objects and stores them in a hashmap. */
 	private void initializeImages()
 	{
 		pictures = new HashMap<String, Image>();
@@ -184,6 +185,12 @@ public class WorldMap
 		}
 	}
 
+	/**
+	 * Draws one critter onto the world grid.
+	 * @param sc
+	 * @param c
+	 * @param r
+	 */
 	private void drawCritter(SimpleCritter sc, int c, int r)
 	{
 		if(!isValidHex(c, r))
@@ -226,7 +233,10 @@ public class WorldMap
 	}
 	
 	/**
-	 * 
+	 * Draws one non-critter object onto the world grid.
+	 * @param wo
+	 * @param c
+	 * @param r
 	 */
 	private void drawWorldObject(WorldObject wo, int c, int r)
 	{
@@ -249,6 +259,11 @@ public class WorldMap
 		gc.drawImage(obj, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))),  sideLength, sideLength * Math.sqrt(3));
 	}
 	
+	/**
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 */
 	private void drawHex(double centerX, double centerY)
 	{
 		gc.strokePolygon(
@@ -261,6 +276,10 @@ public class WorldMap
 						centerY + (Math.sqrt(3) * (sideLength / 2)) }, 6);
 	}
 	
+	/**
+	 * 
+	 * @param zoomIn
+	 */
 	public void zoom(boolean zoomIn) {
 		if (zoomIn) {
 			sideLength += sideLength;
@@ -279,6 +298,12 @@ public class WorldMap
 
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param c
+	 */
 	public void highlightHex(double x, double y, Color c) {
 		double a = (double) sideLength; // for visual clarity in the calculations
 		double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
