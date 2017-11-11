@@ -390,10 +390,9 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param c
+	 * highlightHex highlights the hex that is currently selected 
+	 * @param x xCoordinate of the spot that the user clicks
+	 * @param y yCooridnate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -410,6 +409,11 @@ public class WorldMap {
 		gc.fillPolygon(xPoints, yPoints, 6);
 	}
 
+	/**
+	 * drag implements panning
+	 * @param deltaX 
+	 * @param deltaY
+	 */
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
