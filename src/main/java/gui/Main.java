@@ -23,7 +23,7 @@ public class Main extends Application {
 			if (r == null)
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
-			stage.setTitle("CritterWorld Simulation");
+			stage.setTitle("Critters IN SPACE!");
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -36,8 +36,6 @@ public class Main extends Application {
 }
 
 // TODO fix zooming + panning position
-// TODO fix hex selection upon zoom
-// TODO make highlighting an outline instead of a fill
 // TODO fix weird lagginess in panning
 // TODO black universe, grey hex grid, grey fully filled hexes as rocks, neon
 // circles for food (maybe yellow), neon isosceles triangles for critters (maybe

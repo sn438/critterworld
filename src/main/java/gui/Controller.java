@@ -50,7 +50,7 @@ public class Controller {
 	@FXML
 	private Button loadCritterFile;
 	@FXML
-	private ToggleGroup HexChoice;
+	private ToggleGroup LoadChoice;
 	@FXML
 	private RadioButton chkRand;
 	@FXML
@@ -173,19 +173,43 @@ public class Controller {
 	@FXML
 	private void handleChkRandom(ActionEvent ae) {
 		numCritters.setDisable(false);
+		loadCritterFile.setDisable(false);
 	}
 
 	@FXML
 	private void handleChkSpecify(ActionEvent ae) {
 		numCritters.setDisable(true);
+		loadCritterFile.setDisable(false);
 	}
-
-	// @FXML
-	// private void
 
 	@FXML
 	private void handleLoadCritters(MouseEvent me) {
-
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose Critter File");
+		File critterFile = fc.showOpenDialog(new Popup());
+		
+		RadioButton choice = (RadioButton) LoadChoice.getSelectedToggle();
+		if(choice == chkRand)
+		{
+			try
+			{
+				int n = Integer.parseInt(numCritters.getText());
+				model.loadRandomCritters(critterFile, n);
+			}
+			catch (NumberFormatException e)
+			{
+				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
+				a.setTitle("Invalid Number");
+				a.showAndWait();
+				return;
+			}
+		}
+		else if(choice == chkSpecify)
+		{
+			
+		}
+		
+		//map.draw();
 	}
 
 	@FXML

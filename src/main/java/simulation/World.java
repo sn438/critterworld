@@ -309,7 +309,7 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public void loadCritters(String filename, int n, int direction)
+	public synchronized void loadCritters(String filename, int n, int direction)
 	{
 		try
 		{
@@ -338,6 +338,53 @@ public class World extends AbstractWorld
 		}
 	}
 
+	@Override
+	public synchronized void loadCritters(File file, int n, int direction)
+	{
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
+
+			for (int i = 0; i < n; i++)
+			{
+
+				int randc = (int) (Math.random() * columns);
+				int randr = (int) (Math.random() * rows);
+				while (!isValidHex(randc, randr))
+				{
+					randc = (int) (Math.random() * columns);
+					randr = (int) (Math.random() * rows);
+				}
+
+				if (isValidHex(randc, randr))
+					loadOneCritter(sc, randc, randr);
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("Critter file not found.");
+			return;
+		}
+	}
+	
+	@Override
+	public synchronized void loadCritterAtLocation(File file, int c, int r)
+	{
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), -1);
+			if(isValidHex(c, r))
+				loadOneCritter(sc, c, r);
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("Critter file not found.");
+			return;
+		}
+	}
+	
 	/**
 	 * Loads a single critter into the world at the specified coordinates, if possible. Does nothing if
 	 * the hex is not within the world boundaries, or if there is something already present at the hex.
@@ -942,13 +989,13 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
+	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
 	{
 		return critterMap.entrySet();
 	}
 	
 	@Override
-	public Set<Map.Entry<WorldObject, Hex>> getObjectMap()
+	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap()
 	{
 		return nonCritterObjectMap.entrySet();
 	}
