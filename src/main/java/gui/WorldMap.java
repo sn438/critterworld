@@ -248,8 +248,6 @@ public class WorldMap {
 		}
 		gc.setStroke(Color.GREEN);
 		gc.strokePolygon(xPoints, yPoints, 3);
-		gc.strokeLine(cartX, cartY, 5, 5);
-		gc.strokeLine(origin_x, origin_y, 5, 5);
 	}
 
 	private void drawCritterFAKE(SimpleCritter sc, int c, int r) { // TODO REMOVE
