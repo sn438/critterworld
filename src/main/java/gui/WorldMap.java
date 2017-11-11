@@ -2,6 +2,8 @@ package gui;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -335,7 +337,7 @@ public class WorldMap {
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate, TableView hexContent, TableView critterContent) {
+	public void select(double xCoordinate, double yCoordinate) {
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
 		double[] highlightCoordinates = null;
 		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
@@ -347,12 +349,6 @@ public class WorldMap {
 		}
 		highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1], HIGHLIGHT_COLOR);
-		// hexContent = new TableView<Hex>();
-		critterContent.getItems().clear();
-		ObservableList<Hex> data = FXCollections
-				.observableArrayList(new Hex(closestHexCoordinates[0], closestHexCoordinates[1]));
-		critterContent.setItems(data);
-		hexContent.disabledProperty();
 	}
 
 	/**
@@ -407,5 +403,9 @@ public class WorldMap {
 		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
 				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
+	}
+
+	public int[] getSelectedHex() {
+		return selectedHex;
 	}
 }
