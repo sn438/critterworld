@@ -3,6 +3,8 @@ package gui;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -313,7 +315,6 @@ public class WorldMap {
 		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 		draw();
-
 	}
 
 	/**
@@ -349,38 +350,17 @@ public class WorldMap {
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate, TableView hexContent, TableView critterContent) {
-//		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
-//		double[] highlightCoordinates = null;
-//		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
-//			highlightCoordinates = hexToCartesian(selectedHex);
-//			highlightHex(highlightCoordinates[0], highlightCoordinates[1], BACKGROUND_COLOR);
-//			selectedHex = closestHexCoordinates;
-//		} else {
-//			selectedHex = closestHexCoordinates;
-//		}
-//		highlightCoordinates = hexToCartesian(closestHexCoordinates);
-//		highlightHex(highlightCoordinates[0], highlightCoordinates[1], HIGHLIGHT_COLOR);
-//		// hexContent = new TableView<Hex>();
-//		critterContent.getItems().clear();
-//		ObservableList<Hex> data = FXCollections
-//				.observableArrayList(new Hex(closestHexCoordinates[0], closestHexCoordinates[1]));
-//		critterContent.setItems(data);
-//		hexContent.disabledProperty();
-		
+	public void select(double xCoordinate, double yCoordinate) {		
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
 		if(selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates))
 			selectedHex = null;
 		else
 			selectedHex = closestHexCoordinates;
 		
-		draw();
+		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
+		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		
-		critterContent.getItems().clear();
-		ObservableList<Hex> data = FXCollections
-				.observableArrayList(new Hex(closestHexCoordinates[0], closestHexCoordinates[1]));
-		critterContent.setItems(data);
-		hexContent.disabledProperty();
+		draw();
 	}
 
 	/**
@@ -435,5 +415,9 @@ public class WorldMap {
 		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
 				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
+	}
+
+	public int[] getSelectedHex() {
+		return selectedHex;
 	}
 }

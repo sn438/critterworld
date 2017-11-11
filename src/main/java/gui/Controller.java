@@ -23,15 +23,17 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
 import simulation.Hex;
+import simulation.SimpleCritter;
 
 /**
  * This class handles user inputs and sends information to the world model and
@@ -43,6 +45,33 @@ public class Controller {
 	@FXML
 	private MenuItem close;
 
+	@FXML
+	private Text columnText;
+	@FXML
+	private Text rowText;
+	@FXML
+	private Text memSizeText;
+	@FXML
+	private Text speciesText;
+	@FXML
+	private Text defenseText;
+	@FXML
+	private Text offenseText;
+	@FXML
+	private Text energyText;
+	@FXML
+	private Text passText;
+	@FXML
+	private Text tagText;
+	@FXML
+	private Text postureText;
+	@FXML
+	private Text sizeText;
+	@FXML
+	private TextArea lastRuleDisplay;
+	@FXML
+	private Button displayProgram;
+	
 	@FXML
 	private Button newWorld;
 	@FXML
@@ -69,11 +98,6 @@ public class Controller {
 	private Slider simulationSpeed;
 
 	@FXML
-	private TableView hexContent;
-	@FXML
-	private TableView critterContent;
-
-	@FXML
 	private ScrollPane scroll;
 	@FXML
 	private Canvas c;
@@ -98,7 +122,7 @@ public class Controller {
 		model = new WorldModel();
 		simulationRate = 30;
 		isRunning = false;
-
+		
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -311,7 +335,28 @@ public class Controller {
 		} else {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
-			map.select(xCoordinateSelected, yCoordinateSelected, critterContent, critterContent);
+			int[] hexCoordinatesSelected = new int[2];
+			map.select(xCoordinateSelected, yCoordinateSelected);
+			hexCoordinatesSelected = map.getSelectedHex();
+			System.out.println(hexCoordinatesSelected[0]);
+			
+			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
+			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null)
+			{
+				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+				memSizeText.setText(String.valueOf(critter.getMemLength()));
+				speciesText.setText(critter.getName());
+				int[] critterMemoryCopy = new int[critter.getMemLength()];
+				critterMemoryCopy = critter.getMemoryCopy();
+				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+				energyText.setText(String.valueOf(critterMemoryCopy[4]));
+				passText.setText(String.valueOf(critterMemoryCopy[5]));
+				tagText.setText(String.valueOf(critterMemoryCopy[6]));
+				postureText.setText(String.valueOf(critterMemoryCopy[7]));
+			}
 		}
 	}
 
@@ -346,5 +391,10 @@ public class Controller {
 		if (timeline != null)
 			timeline.stop();
 		System.exit(0);
+	}
+	
+	@FXML
+	private void handleDisplayProgram(MouseEvent me) {
+		
 	}
 }

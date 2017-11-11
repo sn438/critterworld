@@ -26,7 +26,7 @@
             <Menu mnemonicParsing="false" text="File">
                <items>
                   <MenuItem fx:id="help" mnemonicParsing="false" text="Help" />
-                  <MenuItem fx:id="close" mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#close" text="Close" />
                </items>
             </Menu>
          </menus>
@@ -66,18 +66,20 @@
                               <Label layoutX="10.0" layoutY="99.0" prefHeight="10.0" prefWidth="35.0" text="Tag" />
                               <Label layoutX="110.0" layoutY="99.0" prefHeight="10.0" prefWidth="54.0" text="Posture" />
                               <Label layoutX="110.0" layoutY="37.0" text="Species" />
-                              <TextArea disable="true" layoutX="41.0" layoutY="120.0" prefHeight="150.0" prefWidth="167.0" />
-                              <Button id="displayProgramButton" layoutX="60.0" layoutY="277.0" mnemonicParsing="false" text="Display Program" />
-                              <Text id="columnText" layoutX="70.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
-                              <Text id="rowText" layoutX="160.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
-                              <Text id="memSizeText" layoutX="75.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="28.0" />
-                              <Text id="speciesNameText" layoutX="170.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="76.0" />
-                              <Text id="defenseText" layoutX="70.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
-                              <Text id="offenseText" layoutX="179.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
-                              <Text id="energyText" layoutX="55.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.0" />
-                              <Text id="passText" layoutX="146.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.0" />
-                              <Text id="tagText" layoutX="39.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.0" />
-                              <Text id="postureText" layoutX="164.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.0" />
+                              <TextArea fx:id="lastRuleDisplay" disable="true" layoutX="41.0" layoutY="120.0" prefHeight="150.0" prefWidth="167.0" />
+                              <Button fx:id="displayProgram" layoutX="60.0" layoutY="277.0" mnemonicParsing="false" onMouseClicked="#handleDisplayProgram" text="Display Program" />
+                              <Text fx:id="columnText" layoutX="70.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
+                              <Text fx:id="rowText" layoutX="147.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="27.0" />
+                              <Text fx:id="memSizeText" layoutX="81.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="28.0" />
+                              <Text fx:id="speciesText" layoutX="170.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="76.0" />
+                              <Text fx:id="defenseText" layoutX="70.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
+                              <Text fx:id="offenseText" layoutX="179.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.0" />
+                              <Text fx:id="energyText" layoutX="65.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.0" />
+                              <Text fx:id="passText" layoutX="146.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.0" />
+                              <Text fx:id="tagText" layoutX="39.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.0" />
+                              <Text fx:id="postureText" layoutX="164.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.0" />
+                              <Label layoutX="176.0" layoutY="16.0" text="Size" />
+                              <Text fx:id="sizeText" layoutX="198.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="40.0" />
                            </children></AnchorPane>
                     </content>
                   </ScrollPane>

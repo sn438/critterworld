@@ -339,16 +339,16 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public synchronized void loadCritters(File file, int n, int direction)
+	public void loadCritters(File file, int n, int direction)
 	{
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
+			//SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 
 			for (int i = 0; i < n; i++)
 			{
-
+				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
 				while (!isValidHex(randc, randr))
@@ -369,7 +369,7 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public synchronized void loadCritterAtLocation(File file, int c, int r)
+	public void loadCritterAtLocation(File file, int c, int r)
 	{
 		try
 		{
@@ -989,13 +989,13 @@ public class World extends AbstractWorld
 	}
 	
 	@Override
-	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
+	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
 	{
 		return critterMap.entrySet();
 	}
 	
 	@Override
-	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap()
+	public Set<Map.Entry<WorldObject, Hex>> getObjectMap()
 	{
 		return nonCritterObjectMap.entrySet();
 	}
