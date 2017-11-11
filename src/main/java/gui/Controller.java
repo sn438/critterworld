@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import ast.Program;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -18,20 +19,25 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
 import simulation.Hex;
+import simulation.SimpleCritter;
 
 /**
  * This class handles user inputs and sends information to the world model and
@@ -44,13 +50,40 @@ public class Controller {
 	private MenuItem close;
 
 	@FXML
+	private Text columnText;
+	@FXML
+	private Text rowText;
+	@FXML
+	private Text memSizeText;
+	@FXML
+	private Text speciesText;
+	@FXML
+	private Text defenseText;
+	@FXML
+	private Text offenseText;
+	@FXML
+	private Text energyText;
+	@FXML
+	private Text passText;
+	@FXML
+	private Text tagText;
+	@FXML
+	private Text postureText;
+	@FXML
+	private Text sizeText;
+	@FXML
+	private TextArea lastRuleDisplay;
+	@FXML
+	private Button displayProgram;
+	
+	@FXML
 	private Button newWorld;
 	@FXML
 	private Button loadWorld;
 	@FXML
 	private Button loadCritterFile;
 	@FXML
-	private ToggleGroup HexChoice;
+	private ToggleGroup LoadChoice;
 	@FXML
 	private RadioButton chkRand;
 	@FXML
@@ -67,11 +100,6 @@ public class Controller {
 	private Button reset;
 	@FXML
 	private Slider simulationSpeed;
-
-	@FXML
-	private TableView hexContent;
-	@FXML
-	private TableView critterContent;
 
 	@FXML
 	private ScrollPane scroll;
@@ -98,7 +126,7 @@ public class Controller {
 		model = new WorldModel();
 		simulationRate = 30;
 		isRunning = false;
-
+		
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -173,19 +201,43 @@ public class Controller {
 	@FXML
 	private void handleChkRandom(ActionEvent ae) {
 		numCritters.setDisable(false);
+		loadCritterFile.setDisable(false);
 	}
 
 	@FXML
 	private void handleChkSpecify(ActionEvent ae) {
 		numCritters.setDisable(true);
+		loadCritterFile.setDisable(false);
 	}
-
-	// @FXML
-	// private void
 
 	@FXML
 	private void handleLoadCritters(MouseEvent me) {
-
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose Critter File");
+		File critterFile = fc.showOpenDialog(new Popup());
+		
+		RadioButton choice = (RadioButton) LoadChoice.getSelectedToggle();
+		if(choice == chkRand)
+		{
+			try
+			{
+				int n = Integer.parseInt(numCritters.getText());
+				model.loadRandomCritters(critterFile, n);
+			}
+			catch (NumberFormatException e)
+			{
+				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
+				a.setTitle("Invalid Number");
+				a.showAndWait();
+				return;
+			}
+		}
+		else if(choice == chkSpecify)
+		{
+			
+		}
+		
+		//map.draw();
 	}
 
 	@FXML
@@ -198,45 +250,49 @@ public class Controller {
 
 	@FXML
 	private void handleRunPressed(MouseEvent me) {
-		isRunning = true;
-		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
+//		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent ae) {
+//				Thread simulationHandler = new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						model.advanceTime();
+//					}
+//				});
+//				simulationHandler.setDaemon(true);
+//				simulationHandler.start();
+//				Platform.runLater(() -> {
+//					map.draw();
+//					crittersAlive.setText("Critters Alive: " + model.numCritters);
+//					stepsTaken.setText("Time: " + model.time);
+//				});
+//			}
+//		}));
+
+		Thread worldUpdateThread = new Thread(new Runnable()
+		{
 			@Override
-			public void handle(ActionEvent ae) {
-				Thread simulationHandler = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						// if(isRunning)
-						model.advanceTime();
-					}
-				});
-				simulationHandler.setDaemon(true);
-				simulationHandler.start();
-				Platform.runLater(() -> {
-					map.draw();
-					crittersAlive.setText("Critters Alive: " + model.numCritters);
-					stepsTaken.setText("Time: " + model.time);
-				});
+			public void run()
+			{
+				model.advanceTime();
+				System.out.println(model.time);//TODO REMOVE
+			}
+		});
+		worldUpdateThread.setDaemon(true);
+		
+		executor = Executors.newSingleThreadScheduledExecutor();
+		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
+		
+		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
+		
+			@Override
+			public void handle(ActionEvent ae)
+			{ 
+				map.draw();
+				crittersAlive.setText("Critters Alive: " + model.numCritters);
+				stepsTaken.setText("Time: " + model.time);
 			}
 		}));
-
-		/*
-		 * isRunning = true; Thread worldUpdateThread = new Thread(new Runnable() {
-		 * 
-		 * @Override public void run() { model.advanceTime();
-		 * System.out.println(model.time);//TODO REMOVE } });
-		 * worldUpdateThread.setDaemon(true);
-		 * 
-		 * executor = Executors.newSingleThreadScheduledExecutor();
-		 * executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate,
-		 * TimeUnit.MILLISECONDS);
-		 * 
-		 * timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new
-		 * EventHandler<ActionEvent>() {
-		 * 
-		 * @Override public void handle(ActionEvent ae) { map.draw();
-		 * crittersAlive.setText("Critters Alive: " + model.numCritters);
-		 * stepsTaken.setText("Time: " + model.time); } }));
-		 */
 
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
@@ -257,7 +313,7 @@ public class Controller {
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		// executor.shutdownNow();
+		executor.shutdownNow();
 
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -280,10 +336,47 @@ public class Controller {
 		if (!me.isPrimaryButtonDown()) {
 			mousePanPressedX = me.getScreenX();
 			mousePanPressedY = me.getScreenY();
-		} else {
+		}
+		else
+		{
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
-			map.select(xCoordinateSelected, yCoordinateSelected, critterContent, critterContent);
+			int[] hexCoordinatesSelected = new int[2];
+			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
+			hexCoordinatesSelected = map.getSelectedHex();
+			if(shouldUpdateRowColumn)
+			{
+				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
+				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null)
+				{
+					SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+					memSizeText.setText(String.valueOf(critter.getMemLength()));
+					speciesText.setText(critter.getName());
+					int[] critterMemoryCopy = new int[critter.getMemLength()];
+					critterMemoryCopy = critter.getMemoryCopy();
+					defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+					offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+					sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+					energyText.setText(String.valueOf(critterMemoryCopy[4]));
+					passText.setText(String.valueOf(critterMemoryCopy[5]));
+					tagText.setText(String.valueOf(critterMemoryCopy[6]));
+					postureText.setText(String.valueOf(critterMemoryCopy[7]));
+					lastRuleDisplay.setText(critter.getLastRule());
+				}
+				else
+				{
+					memSizeText.setText("");
+					speciesText.setText("");
+					defenseText.setText("");
+					offenseText.setText("");
+					sizeText.setText("");
+					energyText.setText("");
+					passText.setText("");
+					tagText.setText("");
+					postureText.setText("");
+				}
+			}
 		}
 	}
 
@@ -318,5 +411,19 @@ public class Controller {
 		if (timeline != null)
 			timeline.stop();
 		System.exit(0);
+	}
+	
+	@FXML
+	private void handleDisplayProgram(MouseEvent me) {
+		int[] hexCoordinates = new int[2];
+		hexCoordinates = map.getSelectedHex();
+		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
+			Program critterProgram = critter.getProgram();
+			String critterProgramString = critterProgram.toString();
+			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+			alert.showAndWait();
+		}
+		
 	}
 }

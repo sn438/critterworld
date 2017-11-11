@@ -1,7 +1,10 @@
 package gui;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -37,6 +40,13 @@ public class WorldMap {
 
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
+
+	/** The background color of the canvas. */
+	private final Color BACKGROUND_COLOR = Color.DIMGRAY;
+	/** The outline color of hexagons. */
+	private final Color HEX_COLOR = Color.LIGHTGRAY;
+	/** The color of a highlighted hex. */
+	private final Color HIGHLIGHT_COLOR = Color.rgb(176, 224, 230, 0.3);
 
 	private double height;
 	private double width;
@@ -145,12 +155,16 @@ public class WorldMap {
 		return true;
 	}
 
-	/** Redraws the world grid. */	
+	/** Redraws the world grid. */
 	public void draw() {
+		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
-
 		gc.clearRect(0, 0, width, height);
+		gc.setFill(BACKGROUND_COLOR);
+		gc.fillRect(0, 0, width, height);
+
+		// draws the hexagons and sets the origin
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < column_drawing_marker; i++) {
@@ -179,7 +193,14 @@ public class WorldMap {
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3); // manual override of sujith's calculations
+
+		// draws the world objects in
 		drawObjects();
+
+		if (selectedHex != null) {
+			double[] highlightCoordinates = hexToCartesian(selectedHex);
+			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
+		}
 	}
 
 	/** Used to update the grid and draw updates after each time step. */
@@ -246,7 +267,7 @@ public class WorldMap {
 		default:
 			return;
 		}
-		gc.setStroke(Color.GREEN);
+		gc.setStroke(Color.WHITE);
 		gc.strokePolygon(xPoints, yPoints, 3);
 	}
 
@@ -316,7 +337,6 @@ public class WorldMap {
 			gc.strokeOval(cartX - side / 2, cartY - side / 2, side, side);
 		}
 
-		
 	}
 
 	/**
@@ -325,6 +345,7 @@ public class WorldMap {
 	 * @param centerY
 	 */
 	private void drawHex(double centerX, double centerY) {
+		gc.setStroke(HEX_COLOR);
 		gc.strokePolygon(
 				new double[] { centerX + sideLength, centerX + (sideLength / 2), centerX - (sideLength / 2),
 						centerX - sideLength, centerX - (sideLength / 2), centerX + (sideLength / 2) },
@@ -354,7 +375,6 @@ public class WorldMap {
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 		draw();
-
 	}
 
 	/**
@@ -363,14 +383,18 @@ public class WorldMap {
 	 * @param y
 	 * @param c
 	 */
-	public void highlightHex(double x, double y, Color c) {
+	public void highlightHex(double x, double y) {
+		int[] hexCoordinates = closestHex(x, y);
+		if (!isValidHex(hexCoordinates[0], hexCoordinates[1])) {
+			return;
+		}
 		double a = (double) sideLength; // for visual clarity in the calculations
 		double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
 		double[] xPoints = { x + a, x + a / 2, x - a / 2, x - a, x - a / 2, x + a / 2 };
 		double[] yPoints = { y, y - m, y - m, y, y + m, y + m };
 
-		gc.setFill(c);
+		gc.setFill(HIGHLIGHT_COLOR);
 		gc.fillPolygon(xPoints, yPoints, 6);
 	}
 
@@ -385,24 +409,21 @@ public class WorldMap {
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate, TableView hexContent, TableView critterContent) {
+	public boolean select(double xCoordinate, double yCoordinate) {
+		boolean returnValue;
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
-		double[] highlightCoordinates = null;
-		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
-			highlightCoordinates = hexToCartesian(selectedHex);
-			highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.WHITE);
-			selectedHex = closestHexCoordinates;
+		if (selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates)) {
+			selectedHex = null;
+			returnValue = false;
 		} else {
 			selectedHex = closestHexCoordinates;
+			returnValue = true;
 		}
-		highlightCoordinates = hexToCartesian(closestHexCoordinates);
-		highlightHex(highlightCoordinates[0], highlightCoordinates[1], Color.POWDERBLUE);
-		// hexContent = new TableView<Hex>();
-		critterContent.getItems().clear();
-		ObservableList<Hex> data = FXCollections
-				.observableArrayList(new Hex(closestHexCoordinates[0], closestHexCoordinates[1]));
-		critterContent.setItems(data);
-		hexContent.disabledProperty();
+		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
+		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
+
+		draw();
+		return returnValue;
 	}
 
 	/**
@@ -457,5 +478,9 @@ public class WorldMap {
 		double y_coordinate = ((Math.sqrt(3) * sideLength) / 2) * hexCoordinates[0]
 				- sideLength * Math.sqrt(3) * hexCoordinates[1] + origin_y;
 		return new double[] { x_coordinate, y_coordinate };
+	}
+
+	public int[] getSelectedHex() {
+		return selectedHex;
 	}
 }

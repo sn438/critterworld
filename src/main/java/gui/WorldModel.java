@@ -75,9 +75,18 @@ public class WorldModel {
 		world.advanceOneTimeStep();
 		time++;
 		numCritters = world.numRemainingCritters();
+		System.out.println(world.printGrid());
 	}
 
-	public synchronized void loadCritters(int n) {
-
+	public synchronized void loadRandomCritters(File f, int n) {
+		world.loadCritters(f, n, -1);
+		System.out.println(getCritterMap().toString());
+		numCritters = world.numRemainingCritters();
+		System.out.println("ASASF");
+	}
+	
+	public synchronized void loadCritterAtLocation(File f, int c, int r) {
+		world.loadCritterAtLocation(f, c, r);
+		numCritters = world.numRemainingCritters();
 	}
 }

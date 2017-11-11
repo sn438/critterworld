@@ -1,5 +1,6 @@
 package simulation;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +33,17 @@ public interface SimpleWorld
 	 * 					will be chosen at random.
 	 */
 	void loadCritters(String filename, int n, int direction);
+	
+	/**
+	 * Loads critters of following a set pattern into this world.
+	 * @param file the file containing the critter information
+	 * @param n the number of critters to load
+	 * @param direction the orientation of the critter. If this value is less than 0, a critter orientation
+	 * 					will be chosen at random.
+	 */
+	void loadCritters(File file, int n, int direction);
+	
+	void loadCritterAtLocation(File file, int c, int r);
 	
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();

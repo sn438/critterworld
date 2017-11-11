@@ -44,6 +44,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	public void advanceOneTimeStep()
 	{
 		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
+		System.out.println(clone.toString());
 		for(int i = 0; i < clone.size(); i++)
 		{
 			SimpleCritter sc = clone.get(i);
@@ -55,7 +56,7 @@ public abstract class AbstractWorld implements SimpleWorld
 		{
 			SimpleCritter sc = clone.get(i);
 			sc.toggleMatingPheromones(false);
-}
+		}
 		
 		timePassed++;
 	}
