@@ -40,6 +40,7 @@ import simulation.SimpleCritter;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
+//test
 public class Controller {
 	@FXML
 	private MenuItem help;
@@ -72,7 +73,7 @@ public class Controller {
 	private TextArea lastRuleDisplay;
 	@FXML
 	private Button displayProgram;
-	
+
 	@FXML
 	private Button newWorld;
 	@FXML
@@ -115,7 +116,7 @@ public class Controller {
 
 	private double mousePanPressedX;
 	private double mousePanPressedY;
-	
+
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
@@ -125,7 +126,7 @@ public class Controller {
 	public void initialize() {
 		model = new WorldModel();
 		simulationRate = 30;
-		
+
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
@@ -144,7 +145,7 @@ public class Controller {
 
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
-		
+
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                         simulationRate = new_val.longValue();
@@ -216,7 +217,7 @@ public class Controller {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
 		File critterFile = fc.showOpenDialog(new Popup());
-		
+
 		RadioButton choice = (RadioButton) LoadChoice.getSelectedToggle();
 		if(choice == chkRand)
 		{
@@ -234,15 +235,15 @@ public class Controller {
 			}
 		}
 		else
-		{	
+		{
 			TextInputDialog dialog = new TextInputDialog();
 			dialog.setTitle("Choose Hex");
 			dialog.setHeaderText("Enter \"[columns] [rows]\".");
 			Optional<String> result = dialog.showAndWait();
-			
+
 			try
 			{
-				result.ifPresent(location -> 
+				result.ifPresent(location ->
 				{
 					String col = result.get().split(" ")[0];
 					String row = result.get().split(" ")[1];
@@ -259,7 +260,7 @@ public class Controller {
 				return;
 			}
 		}
-		
+
 		map.draw();
 	}
 
@@ -275,7 +276,7 @@ public class Controller {
 	private void handleRunPressed(MouseEvent me) {
 		if(simulationRate == 0)
 			return;
-		
+
 		Thread worldUpdateThread = new Thread(new Runnable()
 		{
 			@Override
@@ -285,15 +286,15 @@ public class Controller {
 			}
 		});
 		worldUpdateThread.setDaemon(true);
-		
+
 		executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
-		
+
 		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
-		
+
 			@Override
 			public void handle(ActionEvent ae)
-			{ 
+			{
 				map.draw();
 				crittersAlive.setText("Critters Alive: " + model.numCritters);
 				stepsTaken.setText("Time: " + model.time);
@@ -417,7 +418,7 @@ public class Controller {
 			timeline.stop();
 		System.exit(0);
 	}
-	
+
 	@FXML
 	private void handleDisplayProgram(MouseEvent me) {
 		int[] hexCoordinates = new int[2];
