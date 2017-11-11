@@ -27,7 +27,7 @@ public class WorldMap {
 	private int[] selectedHex;
 
 	/** The minimum acceptable hex sidelength (zoom will not allow the user to zoom in any further. */
-	private final int MIN_SIDELENGTH = 30;
+	private final int MIN_SIDELENGTH = 20;
 	/** The maximum acceptable hex sidelength (zoom will not allow the user to zoom out any further. */
 	private final int MAX_SIDELENGTH = 60;
 	/** How much each scroll tick zooms the hex grid by. */
@@ -381,7 +381,7 @@ public class WorldMap {
 	 * @return An {@code int} array containing the (r, c) coordinates of the closest
 	 *         hex.
 	 */
-	private int[] closestHex(double xCoordinate, double yCoordinate) {
+	public int[] closestHex(double xCoordinate, double yCoordinate) {
 		// determines the possible hexes that the point could be in
 		int possibleColumnOne = (int) Math.ceil(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
 		int possibleColumnTwo = (int) Math.floor(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
@@ -399,7 +399,7 @@ public class WorldMap {
 		double distanceSquared = Integer.MAX_VALUE;
 		int returnIndex = 0;
 		for (int i = 0; i < 4; i++) {
-			System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
+			//System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
 			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
 			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2)
 					+ Math.pow(yCoordinate - tempArray[1], 2);
@@ -408,8 +408,8 @@ public class WorldMap {
 				returnIndex = i;
 			}
 		}
-		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
-		System.out.println("\n");
+		//System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
+		//System.out.println("\n");
 		return possibleCoordinates[returnIndex];
 	}
 

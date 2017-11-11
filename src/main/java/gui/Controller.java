@@ -2,6 +2,7 @@ package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import ast.Program;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -19,9 +19,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -29,6 +26,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -36,7 +34,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
-import simulation.Hex;
 import simulation.SimpleCritter;
 
 /**
@@ -111,21 +108,23 @@ public class Controller {
 	private Label stepsTaken;
 
 	private Timeline timeline;
+	/** The model that contains the world state. */
 	private WorldModel model;
+	/** Controls the hex grid. */
 	private WorldMap map;
 
 	private double mousePanPressedX;
 	private double mousePanPressedY;
-
-	private boolean isRunning;
+	
+	/** The rate at which the simulation is run. */
 	private long simulationRate;
+	/** The executor that is used to step the world periodically. */
 	private ScheduledExecutorService executor;
 
 	@FXML
 	public void initialize() {
 		model = new WorldModel();
 		simulationRate = 30;
-		isRunning = false;
 		
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -145,6 +144,12 @@ public class Controller {
 
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
+		
+		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                        simulationRate = new_val.longValue();
+                }
+            });
 	}
 
 	@FXML
@@ -153,10 +158,8 @@ public class Controller {
 		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		// loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
-		// numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
 		reset.setDisable(false);
@@ -184,10 +187,8 @@ public class Controller {
 
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		// loadCritterFile.setDisable(false);
 		chkRand.setDisable(false);
 		chkSpecify.setDisable(false);
-		// numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
 		reset.setDisable(false);
@@ -232,12 +233,34 @@ public class Controller {
 				return;
 			}
 		}
-		else if(choice == chkSpecify)
-		{
+		else
+		{	
+			TextInputDialog dialog = new TextInputDialog();
+			dialog.setTitle("Choose Hex");
+			dialog.setHeaderText("Enter \"[columns] [rows]\".");
+			Optional<String> result = dialog.showAndWait();
 			
+			try
+			{
+				result.ifPresent(location -> 
+				{
+					String col = result.get().split(" ")[0];
+					String row = result.get().split(" ")[1];
+					int c = Integer.parseInt(col);
+					int r = Integer.parseInt(row);
+					model.loadCritterAtLocation(critterFile, c, r);
+				});
+			}
+			catch (Exception e)
+			{
+				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid location");
+				a.setTitle("Invalid Location");
+				a.showAndWait();
+				return;
+			}
 		}
 		
-		//map.draw();
+		map.draw();
 	}
 
 	@FXML
@@ -250,32 +273,15 @@ public class Controller {
 
 	@FXML
 	private void handleRunPressed(MouseEvent me) {
-//		timeline = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent ae) {
-//				Thread simulationHandler = new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						model.advanceTime();
-//					}
-//				});
-//				simulationHandler.setDaemon(true);
-//				simulationHandler.start();
-//				Platform.runLater(() -> {
-//					map.draw();
-//					crittersAlive.setText("Critters Alive: " + model.numCritters);
-//					stepsTaken.setText("Time: " + model.time);
-//				});
-//			}
-//		}));
-
+		if(simulationRate == 0)
+			return;
+		
 		Thread worldUpdateThread = new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				model.advanceTime();
-				System.out.println(model.time);//TODO REMOVE
 			}
 		});
 		worldUpdateThread.setDaemon(true);
@@ -326,7 +332,6 @@ public class Controller {
 		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 
-		// isRunning = false;
 		timeline.stop();
 		pause.setDisable(true);
 	}
@@ -422,8 +427,8 @@ public class Controller {
 			Program critterProgram = critter.getProgram();
 			String critterProgramString = critterProgram.toString();
 			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+			alert.setHeaderText("Critter Program");
 			alert.showAndWait();
 		}
-		
 	}
 }
