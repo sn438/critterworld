@@ -413,10 +413,15 @@ public class WorldMap {
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
-		if (y_position_marker < 0)
-			y_position_marker = Math.sqrt(3) * (sideLength / 2);
-		if (x_position_marker - sideLength < 0)
-			x_position_marker = sideLength;
+		if (x_position_marker - sideLength > width)
+			x_position_marker = width - sideLength;
+		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker)< 0){
+			x_position_marker = (2*sideLength) - (((3 * sideLength) / 2) * column_drawing_marker);
+		}
+		if (y_position_marker > height)
+			y_position_marker = height - Math.sqrt(3)*sideLength;
+		if ((y_position_marker + Math.sqrt(3)*sideLength*row_drawing_marker) < 0)
+			y_position_marker = Math.sqrt(3)*sideLength-Math.sqrt(3)*sideLength*row_drawing_marker;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
