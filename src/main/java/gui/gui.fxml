@@ -79,7 +79,7 @@
                               <Text fx:id="tagText" layoutX="39.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="42.0" />
                               <Text fx:id="postureText" layoutX="164.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.0" />
                               <Label layoutX="176.0" layoutY="16.0" text="Size" />
-                              <Text fx:id="sizeText" layoutX="198.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="40.0" />
+                              <Text fx:id="sizeText" layoutX="208.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="40.0" />
                            </children></AnchorPane>
                     </content>
                   </ScrollPane>
@@ -127,9 +127,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="250.0">
                      <children>
-                        <Slider fx:id="simulationSpeed" layoutX="69.0" layoutY="41.0" prefWidth="110.0" />
-                        <Label layoutX="61.0" layoutY="39.0" text="0" />
-                        <Label layoutX="179.0" layoutY="39.0" text="100" />
+                        <Slider fx:id="simulationSpeed" layoutX="24.0" layoutY="22.0" prefHeight="80.0" prefWidth="200.0" showTickLabels="true" showTickMarks="true" value="30.0" />
                      </children>
                   </AnchorPane>
                </content>

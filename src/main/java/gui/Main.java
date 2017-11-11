@@ -23,13 +23,12 @@ public class Main extends Application {
 			if (r == null)
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
-			stage.setTitle("Critters IN SPACE!");
+			stage.setTitle("CRITTERWORLD!");
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			
 		}
 	}
 

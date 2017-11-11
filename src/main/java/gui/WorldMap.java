@@ -25,7 +25,7 @@ public class WorldMap {
 	 * The minimum acceptable hex sidelength (zoom will not allow the user to zoom
 	 * in any further.
 	 */
-	private final int MIN_SIDELENGTH = 30;
+	private final int MIN_SIDELENGTH = 20;
 
 	/**
 	 * The maximum acceptable hex sidelength (zoom will not allow the user to zoom
@@ -295,10 +295,9 @@ public class WorldMap {
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 
-		Image obj = null;
 		if (wo instanceof Rock) {
 			double size = 0.9 * sideLength;
-			gc.setFill(Color.TAN);
+			gc.setFill(Color.BROWN);
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
@@ -311,7 +310,6 @@ public class WorldMap {
 			gc.setFont(new Font(8));
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 		}
-
 	}
 
 	/**
@@ -353,10 +351,9 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param c
+	 * highlightHex highlights the hex that is currently selected 
+	 * @param x xCoordinate of the spot that the user clicks
+	 * @param y yCooridnate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -373,6 +370,11 @@ public class WorldMap {
 		gc.fillPolygon(xPoints, yPoints, 6);
 	}
 
+	/**
+	 * drag implements panning
+	 * @param deltaX 
+	 * @param deltaY
+	 */
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
@@ -415,7 +417,7 @@ public class WorldMap {
 	 * @return An {@code int} array containing the (r, c) coordinates of the closest
 	 *         hex.
 	 */
-	private int[] closestHex(double xCoordinate, double yCoordinate) {
+	public int[] closestHex(double xCoordinate, double yCoordinate) {
 		// determines the possible hexes that the point could be in
 		int possibleColumnOne = (int) Math.ceil(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
 		int possibleColumnTwo = (int) Math.floor(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
@@ -433,7 +435,7 @@ public class WorldMap {
 		double distanceSquared = Integer.MAX_VALUE;
 		int returnIndex = 0;
 		for (int i = 0; i < 4; i++) {
-			System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
+			//System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
 			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
 			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2)
 					+ Math.pow(yCoordinate - tempArray[1], 2);
@@ -442,8 +444,8 @@ public class WorldMap {
 				returnIndex = i;
 			}
 		}
-		System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
-		System.out.println("\n");
+		//System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
+		//System.out.println("\n");
 		return possibleCoordinates[returnIndex];
 	}
 

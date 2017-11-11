@@ -28,6 +28,7 @@ public class InterpreterImpl implements Interpreter
 	{
 		Action a = interpret(c.getProgram());
 		executeAction(a);
+		//System.out.println("AS");
 	}
 	
 	/**
