@@ -255,14 +255,44 @@ public class WorldMap {
 			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		case 1:
+			xPoints[0] = cartX + 0;
+			xPoints[1] = cartX - size / 2;
+			xPoints[2] = cartX + size / 2;
+			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
+			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
+			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		case 2:
+			xPoints[0] = cartX + 0;
+			xPoints[1] = cartX - size / 2;
+			xPoints[2] = cartX + size / 2;
+			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
+			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
+			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		case 3:
+			xPoints[0] = cartX + 0;
+			xPoints[1] = cartX - size / 2;
+			xPoints[2] = cartX + size / 2;
+			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
+			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
+			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		case 4:
+			xPoints[0] = cartX + 0;
+			xPoints[1] = cartX - size / 2;
+			xPoints[2] = cartX + size / 2;
+			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
+			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
+			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		case 5:
+			xPoints[0] = cartX + 0;
+			xPoints[1] = cartX - size / 2;
+			xPoints[2] = cartX + size / 2;
+			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
+			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
+			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
 			break;
 		default:
 			return;
