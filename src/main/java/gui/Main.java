@@ -33,14 +33,3 @@ public class Main extends Application {
 	}
 
 }
-
-// TODO fix zooming + panning position
-// TODO fix hex selection upon zoom
-// TODO fix weird lagginess in panning
-// TODO black universe, grey hex grid, grey fully filled hexes as rocks, neon
-// circles for food (maybe yellow), neon isosceles triangles for critters (maybe
-// green + species variation so different shades)
-// TODO tableview for hexinfo
-// TODO when unselecting a hex, kill the critter info in corner
-// TODO figure out what to do when selecting a rock or food
-// TODO change title of critter program message box

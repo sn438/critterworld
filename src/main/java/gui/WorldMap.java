@@ -276,7 +276,7 @@ public class WorldMap {
 		System.out.println(hash);
 
 		// draw critter
-		gc.setStroke(Color.LIME);
+		gc.setStroke(color);
 		gc.strokePolygon(xPoints, yPoints, 3);
 	}
 

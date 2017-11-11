@@ -1,0 +1,21 @@
+species: Hi!!!!
+memsize: 12
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+
+//ensures that the critter has enough energy, and will eat food in its way
+ENERGY <= SIZE * 3 --> wait;
+ahead[1] < -1 --> eat;
+
+mem[9] = 0 --> mem[8] := mem[8] + 1 mem[9] := 1 forward;
+
+mem[9] = 1 and mem[10] = 0 --> mem[10] := mem[10] + 1 right;
+mem[10] = 1 and mem[11] < mem[8] - 1 --> mem[11] := mem[11] + 1 forward;
+mem[10] = 1 and mem[11] = mem[8] - 1 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
+
+mem[11] < mem[8] --> mem[11] := mem[11] + 1 forward;
+mem[11] = mem[8] and mem[10] < 6 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
+mem[10] = 6 and mem[9] = 1 --> mem[9] := 0 mem[10] := 0 mem[11] := 0;
