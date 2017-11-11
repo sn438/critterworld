@@ -310,7 +310,10 @@ public class WorldMap {
 		}
 
 		// get critter color
-		
+		String species = sc.getName();
+		int hash = species.hashCode();
+		Color color = new Color(0, 1, 0, 1);
+		System.out.println(hash);
 		
 		// draw critter
 		gc.setStroke(Color.LIME);
