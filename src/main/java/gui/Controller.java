@@ -315,9 +315,11 @@ public class Controller {
 			map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
 			System.out.println(hexCoordinatesSelected[0]);
+			
 			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
 			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
-			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null){
+			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null)
+			{
 				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
 				memSizeText.setText(String.valueOf(critter.getMemLength()));
 				speciesText.setText(critter.getName());

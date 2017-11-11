@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,9 +33,12 @@ public class WorldMap {
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
 	
+	/** The background color of the canvas. */
 	private final Color BACKGROUND_COLOR = Color.DIMGRAY;
+	/** The outline color of hexagons. */
 	private final Color HEX_COLOR = Color.LIGHTGRAY;
-	private final Color HIGHLIGHT_COLOR = Color.POWDERBLUE;
+	/** The color of a highlighted hex. */
+	private final Color HIGHLIGHT_COLOR = Color.rgb(176, 224, 230, 0.3);
 
 	private double height;
 	private double width;
@@ -137,12 +141,14 @@ public class WorldMap {
 
 	/** Redraws the world grid. */
 	public void draw() {
+		//resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 		gc.clearRect(0, 0, width, height);
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
 		
+		//draws the hexagons and sets the origin
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < columns; i++) {
@@ -170,7 +176,15 @@ public class WorldMap {
 		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
 		if (columns % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
+		
+		//draws the world objects in
 		drawObjects();
+		
+		if(selectedHex != null)
+		{
+			double[] highlightCoordinates = hexToCartesian(selectedHex);
+			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
+		}
 	}
 
 	/** Used to update the grid and draw updates after each time step. */
@@ -310,7 +324,7 @@ public class WorldMap {
 	 * @param y
 	 * @param c
 	 */
-	public void highlightHex(double x, double y, Color c) {
+	public void highlightHex(double x, double y) {
 		double a = (double) sideLength; // for visual clarity in the calculations
 		double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
@@ -322,7 +336,7 @@ public class WorldMap {
 			yPoints[i] -= m;
 		}
 
-		gc.setFill(c);
+		gc.setFill(HIGHLIGHT_COLOR);
 		gc.fillPolygon(xPoints, yPoints, 6);
 	}
 
@@ -337,18 +351,17 @@ public class WorldMap {
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate) {
+	public void select(double xCoordinate, double yCoordinate) {		
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
-		double[] highlightCoordinates = null;
-		if (selectedHex != null && (!selectedHex.equals(closestHexCoordinates))) {
-			highlightCoordinates = hexToCartesian(selectedHex);
-			highlightHex(highlightCoordinates[0], highlightCoordinates[1], BACKGROUND_COLOR);
+		if(selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates))
+			selectedHex = null;
+		else
 			selectedHex = closestHexCoordinates;
-		} else {
-			selectedHex = closestHexCoordinates;
-		}
-		highlightCoordinates = hexToCartesian(closestHexCoordinates);
-		highlightHex(highlightCoordinates[0], highlightCoordinates[1], HIGHLIGHT_COLOR);
+		
+		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
+		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
+		
+		draw();
 	}
 
 	/**
