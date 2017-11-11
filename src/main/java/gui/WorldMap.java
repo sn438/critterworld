@@ -1,8 +1,6 @@
 package gui;
 
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
@@ -69,8 +67,6 @@ public class WorldMap {
 	 */
 	private double origin_y;
 
-	private HashMap<String, Image> pictures;
-
 	/**
 	 * Creates a new world map.
 	 * 
@@ -100,42 +96,6 @@ public class WorldMap {
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 
-		initializeImages();
-	}
-
-	/**
-	 * Reads the images needed to display world objects and stores them in a
-	 * hashmap.
-	 */
-	private void initializeImages() {
-		pictures = new HashMap<String, Image>();
-		InputStream is1 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
-		InputStream is2 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_60.png");
-		InputStream is3 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_120.png");
-		InputStream is4 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_180.png");
-		InputStream is5 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_240.png");
-		InputStream is6 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_300.png");
-		InputStream is7 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/rock.png");
-		InputStream is8 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/apple.png");
-		// TODO add general critter image
-
-		Image i1 = new Image(is1);
-		Image i2 = new Image(is2);
-		Image i3 = new Image(is3);
-		Image i4 = new Image(is4);
-		Image i5 = new Image(is5);
-		Image i6 = new Image(is6);
-		Image i7 = new Image(is7);
-		Image i8 = new Image(is8);
-
-		pictures.put("CRITTER_NORTH", i1);
-		pictures.put("CRITTER_NORTHEAST", i2);
-		pictures.put("CRITTER_SOUTHEAST", i3);
-		pictures.put("CRITTER_SOUTH", i4);
-		pictures.put("CRITTER_SOUTHWEST", i5);
-		pictures.put("CRITTER_NORTHWEST", i6);
-		pictures.put("ROCK", i7);
-		pictures.put("FOOD", i8);
 	}
 
 	/**
@@ -241,7 +201,7 @@ public class WorldMap {
 		}
 
 		int critterSize = sc.size();
-		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100; // TODO this should vary based on critterSize
+		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100;
 
 		double[] xPoints = new double[3];
 		double[] yPoints = new double[3];
@@ -312,9 +272,9 @@ public class WorldMap {
 		// get critter color
 		String species = sc.getName();
 		int hash = species.hashCode();
-		Color color = new Color(0, 1, 0, 1);
+		Color color = new Color(0, 1, (Math.abs(hash) % 10) / 10.0, 1);
 		System.out.println(hash);
-		
+
 		// draw critter
 		gc.setStroke(Color.LIME);
 		gc.strokePolygon(xPoints, yPoints, 3);
@@ -418,13 +378,13 @@ public class WorldMap {
 		y_position_marker += deltaY * 0.05;
 		if (x_position_marker - sideLength > width)
 			x_position_marker = width - sideLength;
-		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker)< 0){
-			x_position_marker = (2*sideLength) - (((3 * sideLength) / 2) * column_drawing_marker);
+		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker) < 0) {
+			x_position_marker = (2 * sideLength) - (((3 * sideLength) / 2) * column_drawing_marker);
 		}
 		if (y_position_marker > height)
-			y_position_marker = height - Math.sqrt(3)*sideLength;
-		if ((y_position_marker + Math.sqrt(3)*sideLength*row_drawing_marker) < 0)
-			y_position_marker = Math.sqrt(3)*sideLength-Math.sqrt(3)*sideLength*row_drawing_marker;
+			y_position_marker = height - Math.sqrt(3) * sideLength;
+		if ((y_position_marker + Math.sqrt(3) * sideLength * row_drawing_marker) < 0)
+			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
