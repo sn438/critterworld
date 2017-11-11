@@ -3,17 +3,14 @@ package gui;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
@@ -26,13 +23,21 @@ public class WorldMap {
 	private Canvas canvas;
 	private int[] selectedHex;
 
-	/** The minimum acceptable hex sidelength (zoom will not allow the user to zoom in any further. */
+	/**
+	 * The minimum acceptable hex sidelength (zoom will not allow the user to zoom
+	 * in any further.
+	 */
 	private final int MIN_SIDELENGTH = 20;
-	/** The maximum acceptable hex sidelength (zoom will not allow the user to zoom out any further. */
+
+	/**
+	 * The maximum acceptable hex sidelength (zoom will not allow the user to zoom
+	 * out any further.
+	 */
 	private final int MAX_SIDELENGTH = 60;
+
 	/** How much each scroll tick zooms the hex grid by. */
 	private final double ZOOM_FACTOR = 3.0;
-	
+
 	/** The background color of the canvas. */
 	private final Color BACKGROUND_COLOR = Color.DIMGRAY;
 	/** The outline color of hexagons. */
@@ -42,34 +47,37 @@ public class WorldMap {
 
 	private double height;
 	private double width;
-	private int columns;
 	private int rows;
-
-	private int worldRows;
-	private int worldColumns;
+	private int columns;
 
 	/** The sideLength of a hexagon. Used as a measure of scale. */
-	private int sideLength;
-	// TODO have sujith tell us what position markers are
-	// x_position and y_position are just used as the left markers from which the
-	// rest of the canvas
-	// is drawn, it is only used during drawing of the map
+	private double sideLength;
+
+	// these four variables are used to help drawing methods
+	private int column_drawing_marker;
+	private int row_drawing_marker;
 	private double x_position_marker;
 	private double y_position_marker;
 
-	/** Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate). */
+	/**
+	 * Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate).
+	 */
 	private double origin_x;
-	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
+
+	/**
+	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
+	 */
 	private double origin_y;
 
 	private HashMap<String, Image> pictures;
-	// distance between hex centers is sideLength * sqrt(3)
 
 	/**
 	 * Creates a new world map.
 	 * 
-	 * @param can The Canvas to draw on
-	 * @param wm The WorldModel to work off of
+	 * @param can
+	 *            The Canvas to draw on
+	 * @param wm
+	 *            The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
 		gc = can.getGraphicsContext2D();
@@ -78,22 +86,27 @@ public class WorldMap {
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 
-		worldColumns = wm.getColumns();
-		worldRows = wm.getRows();
+		columns = wm.getColumns();
+		rows = wm.getRows();
 
-		columns = worldColumns;
-		rows = worldRows;
-		rows -= columns / 2;
+		column_drawing_marker = columns;
+		row_drawing_marker = rows;
+		row_drawing_marker -= column_drawing_marker / 2;
 		sideLength = 30;
 
-		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
+		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+				+ (sideLength / 2);
+		y_position_marker = (((double) height / 2)
+				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 
 		initializeImages();
 	}
 
-	/** Reads the images needed to display world objects and stores them in a hashmap. */
+	/**
+	 * Reads the images needed to display world objects and stores them in a
+	 * hashmap.
+	 */
 	private void initializeImages() {
 		pictures = new HashMap<String, Image>();
 		InputStream is1 = WorldMap.class.getClassLoader().getResourceAsStream("gui/images/critter_0.png");
@@ -132,56 +145,56 @@ public class WorldMap {
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
 			return false;
-		else if (c >= worldColumns || r >= worldRows)
+		else if (c >= columns || r >= rows)
 			return false;
-		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * worldRows - worldColumns))
+		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * rows - columns))
 			return false;
 		return true;
 	}
 
 	/** Redraws the world grid. */
 	public void draw() {
-		//resets the world grid
+		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 		gc.clearRect(0, 0, width, height);
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
-		
-		//draws the hexagons and sets the origin
+
+		// draws the hexagons and sets the origin
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
-		for (int i = 0; i < columns; i++) {
-			if (i % 2 == 0 && columns % 2 == 0) {
+		for (int i = 0; i < column_drawing_marker; i++) {
+			if (i % 2 == 0 && column_drawing_marker % 2 == 0) {
 				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
 			}
-			if (i % 2 == 1 && columns % 2 == 1) {
+			if (i % 2 == 1 && column_drawing_marker % 2 == 1) {
 				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
-				rows--;
+				row_drawing_marker--;
 			}
 
-			for (int j = 0; j < rows; j++) {
+			for (int j = 0; j < row_drawing_marker; j++) {
 				drawHex(hexMarkerX, hexMarkerY);
 				hexMarkerY += (Math.sqrt(3) * (sideLength));
 			}
 
 			hexMarkerX += sideLength + (sideLength / 2);
 			hexMarkerY = y_position_marker;
-			if (i % 2 == 1 && columns % 2 == 1) {
-				rows++;
+			if (i % 2 == 1 && column_drawing_marker % 2 == 1) {
+				row_drawing_marker++;
 			}
 		}
 		hexMarkerX = x_position_marker;
 		origin_x = hexMarkerX;
-		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * rows) - (Math.sqrt(3) * (sideLength / 2));
-		if (columns % 2 == 0)
+		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * row_drawing_marker) - (Math.sqrt(3) * (sideLength / 2));
+		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
-		
-		//draws the world objects in
+		origin_y -= sideLength / 2 * Math.sqrt(3); // manual override of sujith's calculations
+
+		// draws the world objects in
 		drawObjects();
-		
-		if(selectedHex != null)
-		{
+
+		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
 			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		}
@@ -218,40 +231,93 @@ public class WorldMap {
 		if (!isValidHex(c, r))
 			return;
 
+		// convert to Cartesian coordinates
 		int hexCoordinates[] = new int[] { c, r };
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 
-		if (sc == null)
+		if (sc == null) {
 			return;
-		int size = sc.size();
+		}
+
+		int critterSize = sc.size();
+		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100; // TODO this should vary based on critterSize
+
+		double[] xPoints = new double[3];
+		double[] yPoints = new double[3];
+
+		// determine critter orientation
 		int dir = sc.getOrientation();
-		String imageKey;
 		switch (dir) {
 		case 0:
-			imageKey = "CRITTER_NORTH";
+			xPoints[0] = 0;
+			xPoints[1] = -size / 2;
+			xPoints[2] = size / 2;
+			yPoints[0] = -size / 2 * Math.sqrt(3);
+			yPoints[1] = size / 2 * Math.sqrt(3);
+			yPoints[2] = size / 2 * Math.sqrt(3);
 			break;
 		case 1:
-			imageKey = "CRITTER_NORTHEAST";
+			xPoints[0] = 3 * size / 4;
+			xPoints[1] = -size;
+			xPoints[2] = -size / 2;
+			yPoints[0] = -size * Math.sqrt(3) / 4;
+			yPoints[1] = 0;
+			yPoints[2] = size * Math.sqrt(3) / 2;
 			break;
 		case 2:
-			imageKey = "CRITTER_SOUTHEAST";
+			xPoints[0] = 3 * size / 4;
+			xPoints[1] = -size / 2;
+			xPoints[2] = -size;
+			yPoints[0] = size * Math.sqrt(3) / 4;
+			yPoints[1] = -size * Math.sqrt(3) / 2;
+			yPoints[2] = 0;
 			break;
 		case 3:
-			imageKey = "CRITTER_SOUTH";
+			xPoints[0] = 0;
+			xPoints[1] = size / 2;
+			xPoints[2] = -size / 2;
+			yPoints[0] = size / 2 * Math.sqrt(3);
+			yPoints[1] = -size / 2 * Math.sqrt(3);
+			yPoints[2] = -size / 2 * Math.sqrt(3);
 			break;
 		case 4:
-			imageKey = "CRITTER_SOUTHWEST";
+			xPoints[0] = -3 * size / 4;
+			xPoints[1] = size;
+			xPoints[2] = size / 2;
+			yPoints[0] = size * Math.sqrt(3) / 4;
+			yPoints[1] = 0;
+			yPoints[2] = -size * Math.sqrt(3) / 2;
 			break;
 		case 5:
-			imageKey = "CRITTER_NORTHWEST";
+			xPoints[0] = -3 * size / 4;
+			xPoints[1] = size / 2;
+			xPoints[2] = size;
+			yPoints[0] = -size * Math.sqrt(3) / 4;
+			yPoints[1] = size * Math.sqrt(3) / 2;
+			yPoints[2] = 0;
 			break;
 		default:
 			return;
 		}
-		Image critter = pictures.get(imageKey);
-		gc.drawImage(critter, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))), sideLength,
-				sideLength * Math.sqrt(3));
+
+		// translate points to current hex
+		for (int i = 0; i < 3; i++) {
+			xPoints[i] += cartX;
+		}
+		for (int i = 0; i < 3; i++) {
+			yPoints[i] += cartY;
+		}
+
+		// get critter color
+		String species = sc.getName();
+		int hash = species.hashCode();
+		Color color = new Color(0, 1, 0, 1);
+		System.out.println(hash);
+		
+		// draw critter
+		gc.setStroke(Color.LIME);
+		gc.strokePolygon(xPoints, yPoints, 3);
 	}
 
 	/**
@@ -269,16 +335,21 @@ public class WorldMap {
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 
-		Image obj = null;
-		if (wo instanceof Rock)
-			obj = pictures.get("ROCK");
-		else if (wo instanceof Food) {
-			int calories = ((Food) wo).getCalories();
-			obj = pictures.get("FOOD");
+		if (wo instanceof Rock) {
+			double size = 0.9 * sideLength;
+			gc.setFill(Color.BROWN);
+			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
-		gc.drawImage(obj, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))), sideLength,
-				sideLength * Math.sqrt(3));
+		else if (wo instanceof Food) {
+			int calories = ((Food) wo).getCalories();
+			double size = 0.9 * sideLength;
+			gc.setStroke(Color.RED);
+			gc.strokeOval(cartX - size / 2, cartY - size / 2, size, size);
+			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setFont(new Font(8));
+			gc.strokeText(String.valueOf(calories), cartX, cartY);
+		}
 	}
 
 	/**
@@ -311,17 +382,18 @@ public class WorldMap {
 			if (sideLength <= MIN_SIDELENGTH)
 				sideLength = MIN_SIDELENGTH;
 		}
-		x_position_marker = ((double) width / 2) - ((((double) columns / 2) / 2) * 3 * sideLength) + (sideLength / 2);
-		y_position_marker = (((double) height / 2) - (((double) rows / 2) * (Math.sqrt(3) * (sideLength))))
+		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+				+ (sideLength / 2);
+		y_position_marker = (((double) height / 2)
+				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 		draw();
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param c
+	 * highlightHex highlights the hex that is currently selected 
+	 * @param x xCoordinate of the spot that the user clicks
+	 * @param y yCooridnate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -334,40 +406,44 @@ public class WorldMap {
 		double[] xPoints = { x + a, x + a / 2, x - a / 2, x - a, x - a / 2, x + a / 2 };
 		double[] yPoints = { y, y - m, y - m, y, y + m, y + m };
 
-		// this for loop somehow fixes off by one errors
-		for (int i = 0; i < 6; i++) {
-			yPoints[i] -= m;
-		}
-
 		gc.setFill(HIGHLIGHT_COLOR);
 		gc.fillPolygon(xPoints, yPoints, 6);
 	}
 
+	/**
+	 * drag implements panning
+	 * @param deltaX 
+	 * @param deltaY
+	 */
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
-		if (y_position_marker < 0)
-			y_position_marker = Math.sqrt(3) * (sideLength / 2);
-		if (x_position_marker - sideLength < 0)
-			x_position_marker = sideLength;
+		if (x_position_marker - sideLength > width)
+			x_position_marker = width - sideLength;
+		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker)< 0){
+			x_position_marker = (2*sideLength) - (((3 * sideLength) / 2) * column_drawing_marker);
+		}
+		if (y_position_marker > height)
+			y_position_marker = height - Math.sqrt(3)*sideLength;
+		if ((y_position_marker + Math.sqrt(3)*sideLength*row_drawing_marker) < 0)
+			y_position_marker = Math.sqrt(3)*sideLength-Math.sqrt(3)*sideLength*row_drawing_marker;
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
 
-	public boolean select(double xCoordinate, double yCoordinate) {		
+	public boolean select(double xCoordinate, double yCoordinate) {
 		boolean returnValue;
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
-		if(selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates)) {
+		if (selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates)) {
 			selectedHex = null;
 			returnValue = false;
-		}
-		else {
+		} else {
 			selectedHex = closestHexCoordinates;
 			returnValue = true;
 		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
-		
+
 		draw();
 		return returnValue;
 	}
