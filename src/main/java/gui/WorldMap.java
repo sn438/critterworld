@@ -3,17 +3,14 @@ package gui;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
@@ -234,111 +231,90 @@ public class WorldMap {
 		if (!isValidHex(c, r))
 			return;
 
+		// convert to Cartesian coordinates
 		int hexCoordinates[] = new int[] { c, r };
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 
-		if (sc == null)
+		if (sc == null) {
 			return;
+		}
+
 		int critterSize = sc.size();
-		double size = 0.9 * sideLength; // TODO this should vary based on critterSize
-		int dir = sc.getOrientation();
+		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100; // TODO this should vary based on critterSize
+
 		double[] xPoints = new double[3];
 		double[] yPoints = new double[3];
-		switch (dir) {
-		case 0:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		case 1:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		case 2:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		case 3:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		case 4:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		case 5:
-			xPoints[0] = cartX + 0;
-			xPoints[1] = cartX - size / 2;
-			xPoints[2] = cartX + size / 2;
-			yPoints[0] = cartY - size / 4 * Math.sqrt(3);
-			yPoints[1] = cartY + size / 4 * Math.sqrt(3);
-			yPoints[2] = cartY + size / 4 * Math.sqrt(3);
-			break;
-		default:
-			return;
-		}
-		gc.setStroke(Color.WHITE);
-		gc.strokePolygon(xPoints, yPoints, 3);
-	}
 
-	private void drawCritterFAKE(SimpleCritter sc, int c, int r) { // TODO REMOVE
-		if (!isValidHex(c, r))
-			return;
-
-		int hexCoordinates[] = new int[] { c, r };
-		double cartX = hexToCartesian(hexCoordinates)[0];
-		double cartY = hexToCartesian(hexCoordinates)[1];
-
-		if (sc == null)
-			return;
-		int size = sc.size();
+		// determine critter orientation
 		int dir = sc.getOrientation();
-		String imageKey;
 		switch (dir) {
 		case 0:
-			imageKey = "CRITTER_NORTH";
+			xPoints[0] = 0;
+			xPoints[1] = -size / 2;
+			xPoints[2] = size / 2;
+			yPoints[0] = -size / 2 * Math.sqrt(3);
+			yPoints[1] = size / 2 * Math.sqrt(3);
+			yPoints[2] = size / 2 * Math.sqrt(3);
 			break;
 		case 1:
-			imageKey = "CRITTER_NORTHEAST";
+			xPoints[0] = 3 * size / 4;
+			xPoints[1] = -size;
+			xPoints[2] = -size / 2;
+			yPoints[0] = -size * Math.sqrt(3) / 4;
+			yPoints[1] = 0;
+			yPoints[2] = size * Math.sqrt(3) / 2;
 			break;
 		case 2:
-			imageKey = "CRITTER_SOUTHEAST";
+			xPoints[0] = 3 * size / 4;
+			xPoints[1] = -size / 2;
+			xPoints[2] = -size;
+			yPoints[0] = size * Math.sqrt(3) / 4;
+			yPoints[1] = -size * Math.sqrt(3) / 2;
+			yPoints[2] = 0;
 			break;
 		case 3:
-			imageKey = "CRITTER_SOUTH";
+			xPoints[0] = 0;
+			xPoints[1] = size / 2;
+			xPoints[2] = -size / 2;
+			yPoints[0] = size / 2 * Math.sqrt(3);
+			yPoints[1] = -size / 2 * Math.sqrt(3);
+			yPoints[2] = -size / 2 * Math.sqrt(3);
 			break;
 		case 4:
-			imageKey = "CRITTER_SOUTHWEST";
+			xPoints[0] = -3 * size / 4;
+			xPoints[1] = size;
+			xPoints[2] = size / 2;
+			yPoints[0] = size * Math.sqrt(3) / 4;
+			yPoints[1] = 0;
+			yPoints[2] = -size * Math.sqrt(3) / 2;
 			break;
 		case 5:
-			imageKey = "CRITTER_NORTHWEST";
+			xPoints[0] = -3 * size / 4;
+			xPoints[1] = size / 2;
+			xPoints[2] = size;
+			yPoints[0] = -size * Math.sqrt(3) / 4;
+			yPoints[1] = size * Math.sqrt(3) / 2;
+			yPoints[2] = 0;
 			break;
 		default:
 			return;
 		}
-		Image critter = pictures.get(imageKey);
-		gc.drawImage(critter, cartX - (sideLength / 2), cartY - ((sideLength * Math.sqrt(3))), sideLength,
-				sideLength * Math.sqrt(3));
+
+		// translate points to current hex
+		for (int i = 0; i < 3; i++) {
+			xPoints[i] += cartX;
+		}
+		for (int i = 0; i < 3; i++) {
+			yPoints[i] += cartY;
+		}
+
+		// get critter color
+		
+		
+		// draw critter
+		gc.setStroke(Color.LIME);
+		gc.strokePolygon(xPoints, yPoints, 3);
 	}
 
 	/**
@@ -358,13 +334,19 @@ public class WorldMap {
 
 		Image obj = null;
 		if (wo instanceof Rock) {
-			double side = sideLength;
-			gc.strokeRect(cartX - side / 2, cartY - side / 2, side, side);
+			double size = 0.9 * sideLength;
+			gc.setFill(Color.TAN);
+			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
 		else if (wo instanceof Food) {
-			double side = 0.9 * sideLength; // TODO this should be adjusted for amount of food
-			gc.strokeOval(cartX - side / 2, cartY - side / 2, side, side);
+			int calories = ((Food) wo).getCalories();
+			double size = 0.9 * sideLength;
+			gc.setStroke(Color.RED);
+			gc.strokeOval(cartX - size / 2, cartY - size / 2, size, size);
+			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setFont(new Font(8));
+			gc.strokeText(String.valueOf(calories), cartX, cartY);
 		}
 
 	}
