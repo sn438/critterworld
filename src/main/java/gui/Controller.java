@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import ast.Program;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -18,6 +19,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -312,10 +316,9 @@ public class Controller {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
 			int[] hexCoordinatesSelected = new int[2];
-			map.select(xCoordinateSelected, yCoordinateSelected);
+			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
-			System.out.println(hexCoordinatesSelected[0]);
-			
+			if(shouldUpdateRowColumn) {
 			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
 			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
 			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null)
@@ -332,9 +335,22 @@ public class Controller {
 				passText.setText(String.valueOf(critterMemoryCopy[5]));
 				tagText.setText(String.valueOf(critterMemoryCopy[6]));
 				postureText.setText(String.valueOf(critterMemoryCopy[7]));
+				lastRuleDisplay.setText(critter.getLastRule());
+			}
+			else {
+				memSizeText.setText("");
+				speciesText.setText("");
+				defenseText.setText("");
+				offenseText.setText("");
+				sizeText.setText("");
+				energyText.setText("");
+				passText.setText("");
+				tagText.setText("");
+				postureText.setText("");
+				
 			}
 			
-			
+			}
 			
 		}
 	}
@@ -374,6 +390,15 @@ public class Controller {
 	
 	@FXML
 	private void handleDisplayProgram(MouseEvent me) {
+		int[] hexCoordinates = new int[2];
+		hexCoordinates = map.getSelectedHex();
+		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
+			Program critterProgram = critter.getProgram();
+			String critterProgramString = critterProgram.toString();
+			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+			alert.showAndWait();
+		}
 		
 	}
 }

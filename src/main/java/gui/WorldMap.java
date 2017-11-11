@@ -325,6 +325,10 @@ public class WorldMap {
 	 * @param c
 	 */
 	public void highlightHex(double x, double y) {
+		int[] hexCoordinates = closestHex(x, y);
+		if (!isValidHex(hexCoordinates[0], hexCoordinates[1])) {
+			return;
+		}
 		double a = (double) sideLength; // for visual clarity in the calculations
 		double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
@@ -351,17 +355,22 @@ public class WorldMap {
 		draw();
 	}
 
-	public void select(double xCoordinate, double yCoordinate) {		
+	public boolean select(double xCoordinate, double yCoordinate) {		
+		boolean returnValue;
 		int[] closestHexCoordinates = closestHex(xCoordinate, yCoordinate);
-		if(selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates))
+		if(selectedHex != null && Arrays.equals(selectedHex, closestHexCoordinates)) {
 			selectedHex = null;
-		else
+			returnValue = false;
+		}
+		else {
 			selectedHex = closestHexCoordinates;
-		
+			returnValue = true;
+		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		
 		draw();
+		return returnValue;
 	}
 
 	/**
