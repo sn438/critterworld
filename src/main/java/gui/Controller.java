@@ -26,6 +26,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -130,8 +131,11 @@ public class Controller {
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
+		chkRandom.setSelected(false);
 		chkRandom.setDisable(true);
+		chkSpecify.setSelected(false);
 		chkSpecify.setDisable(true);
+		numCritters.clear();
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
 		run.setDisable(true);
@@ -146,6 +150,41 @@ public class Controller {
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
 
+		//listeners that dynamically redraw the canvas in response to window resizing
+		c.heightProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
+		});
+		c.widthProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
+		});
+		
+		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT)
+			{
+				if(newT == null)
+				{
+					numCritters.setDisable(true);
+					loadCritterFile.setDisable(true);
+				}
+				else if(newT == (Toggle) chkRandom)
+				{
+					numCritters.setDisable(false);
+					loadCritterFile.setDisable(false);
+				}
+				else if(newT == (Toggle) chkSpecify)
+				{
+					numCritters.setDisable(true);
+					loadCritterFile.setDisable(false);
+				}
+			}
+		});
+		
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                         simulationRate = new_val.longValue();
@@ -201,18 +240,6 @@ public class Controller {
 		c.setVisible(true);
 
 		map.draw();
-	}
-
-	@FXML
-	private void handleChkRandom(ActionEvent ae) {
-		numCritters.setDisable(false);
-		loadCritterFile.setDisable(false);
-	}
-
-	@FXML
-	private void handleChkSpecify(ActionEvent ae) {
-		numCritters.setDisable(true);
-		loadCritterFile.setDisable(false);
 	}
 
 	@FXML

@@ -266,10 +266,8 @@ public class WorldMap {
 
 		// get critter color
 		String species = sc.getName();
-		int hashRed = species.hashCode() % 256;
-		int hashGreen = species.hashCode() % 256;
-		int hashBlue = species.hashCode() % 256;
-		Color color = Color.rgb(hashRed, hashGreen, hashBlue);
+		int hash = species.hashCode();
+		Color color = new Color(0, 1, (Math.abs(hash) % 10) / 10.0, 1);
 
 		// draw critter
 		gc.setStroke(color);
@@ -293,7 +291,7 @@ public class WorldMap {
 
 		if (wo instanceof Rock) {
 			double size = 0.9 * sideLength;
-			gc.setFill(Color.BROWN);
+			gc.setStroke(Color.GOLDENROD);
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
