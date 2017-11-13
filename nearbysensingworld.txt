@@ -1,0 +1,2 @@
+name nearby world
+size 2 3

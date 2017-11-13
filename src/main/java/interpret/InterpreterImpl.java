@@ -6,6 +6,7 @@ import ast.Node.NodeType;
 import simulation.AbstractWorld;
 import simulation.SimpleCritter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /** Interprets and executes the AST of a critter. */
@@ -28,7 +29,6 @@ public class InterpreterImpl implements Interpreter
 	{
 		Action a = interpret(c.getProgram());
 		executeAction(a);
-		//System.out.println("AS");
 	}
 	
 	/**
@@ -69,6 +69,7 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			a = new Action(ActType.WAIT);
+		System.out.println(a.toString());
 		return a;
 	}
 	

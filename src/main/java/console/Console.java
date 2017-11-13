@@ -88,7 +88,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world before you advance time in it.");
+			System.err.println("You must first create a world before you advance time in it.\n");
 			printHelp();
 			return;
 		}
@@ -102,7 +102,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world before you can view its information.");
+			System.err.println("You must first create a world before you can view its information\n");
 			printHelp();
 			return;
 		}
@@ -130,7 +130,7 @@ public class Console
 		//This method can't do anything if no world has been created yet.
 		if(world == null)
 		{
-			System.err.println("You must first create a world before you can view its information.");
+			System.err.println("You must first create a world before you can view its information.\n");
 			printHelp();
 			return;
 		}

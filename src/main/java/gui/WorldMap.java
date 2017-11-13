@@ -160,11 +160,6 @@ public class WorldMap {
 		}
 	}
 
-	/** Used to update the grid and draw updates after each time step. */
-	public void updateGrid() {
-
-	}
-
 	/** Draws the world objects onto the grid. */
 	private void drawObjects() {
 		for (Map.Entry<SimpleCritter, Hex> entry : model.getCritterMap()) {
@@ -271,9 +266,10 @@ public class WorldMap {
 
 		// get critter color
 		String species = sc.getName();
-		int hash = species.hashCode();
-		Color color = new Color(0, 1, (Math.abs(hash) % 10) / 10.0, 1);
-		System.out.println(hash);
+		int hashRed = species.hashCode() % 256;
+		int hashGreen = species.hashCode() % 256;
+		int hashBlue = species.hashCode() % 256;
+		Color color = Color.rgb(hashRed, hashGreen, hashBlue);
 
 		// draw critter
 		gc.setStroke(color);

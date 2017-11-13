@@ -1,5 +1,5 @@
 name a5 world
-size 7 8
+size 17 18
 rock 0 4
 rock 6 6
 rock 0 1

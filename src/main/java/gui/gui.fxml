@@ -6,13 +6,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -100,15 +100,6 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="249.0">
                      <children>
                         <Button fx:id="loadCritterFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMousePressed="#handleLoadCritters" text="Load Critter File" />
-                        <RadioButton fx:id="chkRand" layoutX="24.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleChkRandom" text="Random hex">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="LoadChoice" />
-                           </toggleGroup>
-                        </RadioButton>
-                        <RadioButton fx:id="chkSpecify" layoutX="143.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleChkSpecify" text="Specify hex">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="HexChoice" />
-                           </toggleGroup></RadioButton>
                         <TextField fx:id="numCritters" layoutX="201.0" layoutY="15.0" prefHeight="23.0" prefWidth="30.0">
                            <font>
                               <Font size="10.0" />
@@ -119,6 +110,12 @@
                         <Button fx:id="run" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handleRunPressed" text=" Run " />
                         <Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handlePauseClicked" text="Pause" />
                         <Button fx:id="reset" layoutX="104.0" layoutY="190.0" mnemonicParsing="false" onMousePressed="#handleResetClicked" text="Reset" />
+                        <ToggleButton fx:id="chkRandom" layoutX="27.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleChkRandom" text="Random hex">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="LoadChoice" />
+                           </toggleGroup>
+                        </ToggleButton>
+                        <ToggleButton fx:id="chkSpecify" layoutX="146.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleChkSpecify" text="Specify hex" toggleGroup="$LoadChoice" />
                      </children>
                   </AnchorPane>
                </content>
@@ -136,7 +133,7 @@
       </AnchorPane>
       <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="25.0" prefHeight="775.0" prefWidth="750.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0">
          <content>
-            <Canvas fx:id="c" height="775.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="750.0" />
+            <Canvas fx:id="c" height="775.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="1350.0" />
          </content>
       </ScrollPane>
    </children>
