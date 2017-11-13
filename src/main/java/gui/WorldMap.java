@@ -332,21 +332,29 @@ public class WorldMap {
 	 * 
 	 * @param zoomIn
 	 */
-	public void zoom(boolean zoomIn) {
+	public void zoom(boolean zoomIn, double x, double y) {
+		System.out.println(x + " " + y);
+		double previousSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
 			if (sideLength >= MAX_SIDELENGTH)
 				sideLength = MAX_SIDELENGTH;
+			x_position_marker -= sideLength-previousSideLength;
+			y_position_marker -= ((sideLength/2)*Math.sqrt(3)) - ((previousSideLength/2)*Math.sqrt(3));
 		} else {
 			sideLength -= ZOOM_FACTOR;
 			if (sideLength <= MIN_SIDELENGTH)
 				sideLength = MIN_SIDELENGTH;
+			x_position_marker += sideLength-previousSideLength;
+			y_position_marker += ((sideLength/2)*Math.sqrt(3)) - ((previousSideLength/2)*Math.sqrt(3));
 		}
+		/*
 		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
 				+ (sideLength / 2);
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
+		*/
 		draw();
 	}
 
