@@ -63,6 +63,7 @@ public class WorldModel {
 	}
 
 	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
+		//System.out.println("WORLDNOW " + world.getCritterMap().toString());
 		return world.getCritterMap();
 	}
 

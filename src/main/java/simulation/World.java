@@ -313,12 +313,10 @@ public class World extends AbstractWorld
 	{
 		try
 		{
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
-
 			for (int i = 0; i < n; i++)
 			{
-
+				BufferedReader br = new BufferedReader(new FileReader(filename));
+				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
 				while (!isValidHex(randc, randr))
@@ -343,11 +341,9 @@ public class World extends AbstractWorld
 	{
 		try
 		{
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			//SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
-
 			for (int i = 0; i < n; i++)
 			{
+				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);

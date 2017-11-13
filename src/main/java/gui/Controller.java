@@ -21,12 +21,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -83,9 +84,9 @@ public class Controller {
 	@FXML
 	private ToggleGroup LoadChoice;
 	@FXML
-	private RadioButton chkRand;
+	private ToggleButton chkRandom;
 	@FXML
-	private RadioButton chkSpecify;
+	private ToggleButton chkSpecify;
 	@FXML
 	private TextField numCritters;
 	@FXML
@@ -130,8 +131,11 @@ public class Controller {
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
-		chkRand.setDisable(true);
+		chkRandom.setSelected(false);
+		chkRandom.setDisable(true);
+		chkSpecify.setSelected(false);
 		chkSpecify.setDisable(true);
+		numCritters.clear();
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
 		run.setDisable(true);
@@ -146,6 +150,41 @@ public class Controller {
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
 
+		//listeners that dynamically redraw the canvas in response to window resizing
+		c.heightProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
+		});
+		c.widthProperty().addListener(update -> 
+		{
+			if(map != null)
+				map.draw();
+		});
+		
+		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT)
+			{
+				if(newT == null)
+				{
+					numCritters.setDisable(true);
+					loadCritterFile.setDisable(true);
+				}
+				else if(newT == (Toggle) chkRandom)
+				{
+					numCritters.setDisable(false);
+					loadCritterFile.setDisable(false);
+				}
+				else if(newT == (Toggle) chkSpecify)
+				{
+					numCritters.setDisable(true);
+					loadCritterFile.setDisable(false);
+				}
+			}
+		});
+		
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                         simulationRate = new_val.longValue();
@@ -159,7 +198,7 @@ public class Controller {
 		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		chkRand.setDisable(false);
+		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
@@ -176,6 +215,9 @@ public class Controller {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File worldFile = fc.showOpenDialog(new Popup());
+		if(worldFile == null)
+			return;
+		
 		try {
 			model.loadWorld(worldFile);
 		} catch (FileNotFoundException f) {
@@ -188,7 +230,7 @@ public class Controller {
 
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
-		chkRand.setDisable(false);
+		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
@@ -201,25 +243,15 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleChkRandom(ActionEvent ae) {
-		numCritters.setDisable(false);
-		loadCritterFile.setDisable(false);
-	}
-
-	@FXML
-	private void handleChkSpecify(ActionEvent ae) {
-		numCritters.setDisable(true);
-		loadCritterFile.setDisable(false);
-	}
-
-	@FXML
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
 		File critterFile = fc.showOpenDialog(new Popup());
-
-		RadioButton choice = (RadioButton) LoadChoice.getSelectedToggle();
-		if(choice == chkRand)
+		if(critterFile == null)
+			return;
+		
+		ToggleButton choice = (ToggleButton) LoadChoice.getSelectedToggle();
+		if(choice == chkRandom)
 		{
 			try
 			{
@@ -307,7 +339,7 @@ public class Controller {
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(true);
-		chkRand.setDisable(true);
+		chkRandom.setDisable(true);
 		chkSpecify.setDisable(true);
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
@@ -325,7 +357,7 @@ public class Controller {
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(false);
-		chkRand.setDisable(false);
+		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		numCritters.setDisable(false);
 		stepForward.setDisable(false);
