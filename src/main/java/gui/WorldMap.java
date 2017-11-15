@@ -267,8 +267,8 @@ public class WorldMap {
 		// get critter color
 		String species = sc.getName();
 		int hash = species.hashCode();
-		Color color = new Color(0, 1, (Math.abs(hash) % 10) / 10.0, 1);
-
+		Color color = new Color(1, (Math.abs(hash) % 100) / 100.0, 1, 1);
+		
 		// draw critter
 		gc.setStroke(color);
 		gc.strokePolygon(xPoints, yPoints, 3);

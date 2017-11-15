@@ -32,3 +32,7 @@ public class GUI extends Application {
 		}
 	}
 }
+
+// TODO change font size to be based on how far ur zoomed in
+// TODO make hashing based on red and blue
+// TODO finish A6!!!!!!! (the command line thing we forgot about)
