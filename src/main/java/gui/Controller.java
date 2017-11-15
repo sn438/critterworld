@@ -55,7 +55,7 @@ import simulation.SimpleCritter;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
-//test
+// test
 public class Controller {
 	@FXML
 	private MenuItem help;
@@ -136,7 +136,7 @@ public class Controller {
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
 	private ScheduledExecutorService executor;
-	
+
 	private LoginInfo loginInfo;
 
 	@FXML
@@ -166,46 +166,37 @@ public class Controller {
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
 
-		//listeners that dynamically redraw the canvas in response to window resizing
-		c.heightProperty().addListener(update -> 
-		{
-			if(map != null)
+		// listeners that dynamically redraw the canvas in response to window resizing
+		c.heightProperty().addListener(update -> {
+			if (map != null)
 				map.draw();
 		});
-		c.widthProperty().addListener(update -> 
-		{
-			if(map != null)
+		c.widthProperty().addListener(update -> {
+			if (map != null)
 				map.draw();
 		});
-		
-		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
-		{
+
+		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
-			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT)
-			{
-				if(newT == null)
-				{
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT) {
+				if (newT == null) {
 					numCritters.setDisable(true);
 					loadCritterFile.setDisable(true);
-				}
-				else if(newT == (Toggle) chkRandom)
-				{
+				} else if (newT == (Toggle) chkRandom) {
 					numCritters.setDisable(false);
 					loadCritterFile.setDisable(false);
-				}
-				else if(newT == (Toggle) chkSpecify)
-				{
+				} else if (newT == (Toggle) chkSpecify) {
 					numCritters.setDisable(true);
 					loadCritterFile.setDisable(false);
 				}
 			}
 		});
-		
+
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-                        simulationRate = new_val.longValue();
-                }
-            });
+			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+				simulationRate = new_val.longValue();
+			}
+		});
 	}
 
 	@FXML
@@ -231,9 +222,9 @@ public class Controller {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File worldFile = fc.showOpenDialog(new Popup());
-		if(worldFile == null)
+		if (worldFile == null)
 			return;
-		
+
 		try {
 			model.loadWorld(worldFile);
 		} catch (FileNotFoundException f) {
@@ -263,45 +254,35 @@ public class Controller {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
 		File critterFile = fc.showOpenDialog(new Popup());
-		if(critterFile == null)
+		if (critterFile == null)
 			return;
-		
+
 		ToggleButton choice = (ToggleButton) LoadChoice.getSelectedToggle();
-		if(choice == chkRandom)
-		{
-			try
-			{
+		if (choice == chkRandom) {
+			try {
 				int n = Integer.parseInt(numCritters.getText());
 				model.loadRandomCritters(critterFile, n);
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
 				a.setTitle("Invalid Number");
 				a.showAndWait();
 				return;
 			}
-		}
-		else
-		{
+		} else {
 			TextInputDialog dialog = new TextInputDialog();
 			dialog.setTitle("Choose Hex");
 			dialog.setHeaderText("Enter \"[columns] [rows]\".");
 			Optional<String> result = dialog.showAndWait();
 
-			try
-			{
-				result.ifPresent(location ->
-				{
+			try {
+				result.ifPresent(location -> {
 					String col = result.get().split(" ")[0];
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
 					model.loadCritterAtLocation(critterFile, c, r);
 				});
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid location");
 				a.setTitle("Invalid Location");
 				a.showAndWait();
@@ -311,7 +292,6 @@ public class Controller {
 
 		map.draw();
 	}
-	
 
 	@FXML
 	private void handleStep(MouseEvent me) {
@@ -323,14 +303,12 @@ public class Controller {
 
 	@FXML
 	private void handleRunPressed(MouseEvent me) {
-		if(simulationRate == 0)
+		if (simulationRate == 0)
 			return;
 
-		Thread worldUpdateThread = new Thread(new Runnable()
-		{
+		Thread worldUpdateThread = new Thread(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				model.advanceTime();
 			}
 		});
@@ -342,8 +320,7 @@ public class Controller {
 		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent ae)
-			{
+			public void handle(ActionEvent ae) {
 				map.draw();
 				crittersAlive.setText("Critters Alive: " + model.numCritters);
 				stepsTaken.setText("Time: " + model.time);
@@ -391,20 +368,16 @@ public class Controller {
 		if (!me.isPrimaryButtonDown()) {
 			mousePanPressedX = me.getScreenX();
 			mousePanPressedY = me.getScreenY();
-		}
-		else
-		{
+		} else {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY();
 			int[] hexCoordinatesSelected = new int[2];
 			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
-			if(shouldUpdateRowColumn)
-			{
+			if (shouldUpdateRowColumn) {
 				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
 				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
-				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null)
-				{
+				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
 					SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
 					memSizeText.setText(String.valueOf(critter.getMemLength()));
 					speciesText.setText(critter.getName());
@@ -418,9 +391,7 @@ public class Controller {
 					tagText.setText(String.valueOf(critterMemoryCopy[6]));
 					postureText.setText(String.valueOf(critterMemoryCopy[7]));
 					lastRuleDisplay.setText(critter.getLastRule());
-				}
-				else
-				{
+				} else {
 					memSizeText.setText("");
 					speciesText.setText("");
 					defenseText.setText("");
@@ -481,48 +452,45 @@ public class Controller {
 			alert.showAndWait();
 		}
 	}
-	
+
 	private void login() {
 		LoginInfo login = null;
 		Dialog<LoginInfo> dialog = new Dialog<>();
-        dialog.setTitle("Login Info");
-        dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
-        DialogPane dialogPane = dialog.getDialogPane();
-        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField readPasswordTextField = new TextField("Read Password");
-        TextField writePasswordTextField = new TextField("Write Password");
-        TextField adminPasswordTextField = new TextField("Admin Password");
-        dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
-        Platform.runLater(readPasswordTextField::requestFocus);
-        dialog.setResultConverter((ButtonType button) -> {
-           
-        	if (button == ButtonType.OK) {
-                return new LoginInfo(readPasswordTextField.getText(),
-                		writePasswordTextField.getText(), adminPasswordTextField.getText());
-            }
-            return null;
-        });
-        
-        Optional<LoginInfo> optionalResult = dialog.showAndWait();
-        optionalResult.ifPresent((LoginInfo results) -> {
-           loginInfo = new LoginInfo(results.readPassword, results.writePassword, results.adminPassword);
-        });
+		dialog.setTitle("Login Info");
+		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
+		DialogPane dialogPane = dialog.getDialogPane();
+		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		TextField readPasswordTextField = new TextField("Read Password");
+		TextField writePasswordTextField = new TextField("Write Password");
+		TextField adminPasswordTextField = new TextField("Admin Password");
+		dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
+		Platform.runLater(readPasswordTextField::requestFocus);
+		dialog.setResultConverter((ButtonType button) -> {
+
+			if (button == ButtonType.OK) {
+				return new LoginInfo(readPasswordTextField.getText(), writePasswordTextField.getText(),
+						adminPasswordTextField.getText());
+			}
+			return null;
+		});
+
+		Optional<LoginInfo> optionalResult = dialog.showAndWait();
+		optionalResult.ifPresent((LoginInfo results) -> {
+			loginInfo = new LoginInfo(results.readPassword, results.writePassword, results.adminPassword);
+		});
 	}
-	
+
 	class LoginInfo {
 
-        String readPassword;
-        String writePassword;
-        String adminPassword;
+		String readPassword;
+		String writePassword;
+		String adminPassword;
 
-        private LoginInfo(String readPassword, String writePassword, String adminPassword) {
-            this.readPassword = readPassword;
-            this.writePassword = writePassword;
-            this.adminPassword = adminPassword;
-        }
-    }
-
-	    
+		private LoginInfo(String readPassword, String writePassword, String adminPassword) {
+			this.readPassword = readPassword;
+			this.writePassword = writePassword;
+			this.adminPassword = adminPassword;
+		}
 	}
 
-
+}
