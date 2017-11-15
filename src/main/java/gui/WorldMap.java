@@ -329,7 +329,7 @@ public class WorldMap {
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn, double x, double y) {
-		System.out.println(x + " " + y);
+		System.out.println(x + " " + y); //TODO remove
 		double previousSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
