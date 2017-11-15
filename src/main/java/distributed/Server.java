@@ -4,6 +4,8 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import com.google.gson.Gson;
+
+//import Server.QueryInfo;
 /**
  * Server responds to HTTP requests.
  *
@@ -25,10 +27,19 @@ public class Server {
 		this.adminPassword = adminPassword;
 	}
 	public void run() {
+		Gson gson;
 		port(portNumber);
 		
-		get("/hello", (request, response) -> "Hello World");
+		get("/login", (request, response) -> "Hello World");
 		
+		post("/login2",
+	            (request, response)
+	                -> {
+	                    response.header("Content-Type", "application/json");
+	                    // Shows how to read information encoded in the URL
+	                    return "Hello World";
+	                });
+	            //gson::toJson);
 		
 	}
 }
