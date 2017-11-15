@@ -7,8 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.sun.org.apache.xml.internal.utils.Trie;
-
 import ast.Program;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,19 +16,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -39,16 +33,13 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
-import javafx.util.Pair;
 import simulation.SimpleCritter;
 
 /**
@@ -483,7 +474,6 @@ public class Controller {
 	}
 	
 	private void login() {
-		LoginInfo login = null;
 		Dialog<LoginInfo> dialog = new Dialog<>();
         dialog.setTitle("Login Info");
         dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
@@ -493,6 +483,7 @@ public class Controller {
         TextField writePasswordTextField = new TextField("Write Password");
         TextField adminPasswordTextField = new TextField("Admin Password");
         dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
+        
         Platform.runLater(readPasswordTextField::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
            
@@ -520,9 +511,5 @@ public class Controller {
             this.writePassword = writePassword;
             this.adminPassword = adminPassword;
         }
-    }
-
-	    
-	}
-
-
+    }  
+}
