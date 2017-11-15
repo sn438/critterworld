@@ -137,10 +137,22 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
-	public void incrementPass()
+	public void setTag(int newVal)
 	{
-		if(memory[5] < 999)
+		if(newVal >= 0 && newVal <= 99)
+			memory[6] = newVal;
+	}
+	@Override
+	public void incrementPass(int maxRules)
+	{
+		if(memory[5] < maxRules)
 			memory[5]++;
+	}
+	
+	@Override
+	public void resetPass()
+	{
+		memory[5] = 0;
 	}
 	
 	@Override

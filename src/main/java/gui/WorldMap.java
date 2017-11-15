@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -195,6 +194,7 @@ public class WorldMap {
 			return;
 		}
 
+		gc.setLineWidth(1.75);
 		int critterSize = sc.size();
 		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100;
 
@@ -285,13 +285,14 @@ public class WorldMap {
 		if (!isValidHex(c, r))
 			return;
 
+		gc.setLineWidth(1.75);
 		int hexCoordinates[] = new int[] { c, r };
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 
 		if (wo instanceof Rock) {
 			double size = 0.9 * sideLength;
-			gc.setStroke(Color.GOLDENROD);
+			gc.setStroke(Color.ORANGE);
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
@@ -313,6 +314,7 @@ public class WorldMap {
 	 */
 	private void drawHex(double centerX, double centerY) {
 		gc.setStroke(HEX_COLOR);
+		gc.setLineWidth(1.0);
 		gc.strokePolygon(
 				new double[] { centerX + sideLength, centerX + (sideLength / 2), centerX - (sideLength / 2),
 						centerX - sideLength, centerX - (sideLength / 2), centerX + (sideLength / 2) },
@@ -327,7 +329,7 @@ public class WorldMap {
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn, double x, double y) {
-		System.out.println(x + " " + y);
+		System.out.println(x + " " + y); //TODO remove
 		double previousSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
