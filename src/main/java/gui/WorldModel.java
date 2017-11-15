@@ -56,14 +56,13 @@ public class WorldModel {
 
 	public synchronized int hexContent(int c, int r) {
 		return world.analyzeHex(c, r);
-	}
+	}                                         
 
 	public synchronized SimpleCritter getCritter(int c, int r) {
 		return world.analyzeCritter(c, r);
 	}
 
 	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
-		//System.out.println("WORLDNOW " + world.getCritterMap().toString());
 		return world.getCritterMap();
 	}
 
