@@ -22,6 +22,15 @@ public interface SimpleCritter extends WorldObject
 	/** Updates the critter's energy by the amount specified. */
 	public void updateEnergy(int amount, int maxEnergyPerSize);
 	
+	/** Updates the critter's tag number to the value specified, if that value is in [0, 99]. */
+	public void setTag(int newVal);
+	
+	/** Increments the pass number of this critter (memory index 5) by one, if it is less than {@code maxRules}. */
+	public void incrementPass(int maxRules);
+	
+	/** Resets the pass number of this critter (memory index 5) to zero. */
+	public void resetPass();
+	
 	/** 
 	 * Returns the value of {@code memory[index]}.
 	 * @param index
@@ -52,9 +61,6 @@ public interface SimpleCritter extends WorldObject
 	
 	/** Sets the last rule executed. */
 	public void setLastRule(String s);
-	
-	/** Increments the pass number of this critter (memory index 5) by one, if it is less than 999. */
-	public void incrementPass();
 	
 	/**
 	 * Turns this critter in the direction specified.

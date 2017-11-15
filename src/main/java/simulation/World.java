@@ -897,7 +897,7 @@ public class World extends AbstractWorld
 		{
 			SimpleCritter taggee = (SimpleCritter) (directlyInFront.getContent());
 			if (!(val < 0 || val > 99))
-				taggee.setMemory(val, 6);
+				taggee.setTag(val);
 		}
 
 		if (tagger.getEnergy() == 0)

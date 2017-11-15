@@ -63,13 +63,12 @@ public class InterpreterImpl implements Interpreter
 					break;
 				}
 			}
-			c.incrementPass();
+			c.incrementPass(world.getMaxRules());
 		}
-		c.setMemory(0, 5);
+		c.resetPass();
 		
 		if(a == null)
 			a = new Action(ActType.WAIT);
-		System.out.println(a.toString() + " " + c.getEnergy());
 		return a;
 	}
 	
