@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
-	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -27,9 +26,9 @@ public class GUI extends Application {
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
-			
+
 		} catch (Exception e) {
-			
+
 		}
 	}
 }
