@@ -5,7 +5,6 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import com.google.gson.Gson;
 
-//import Server.QueryInfo;
 /**
  * Server responds to HTTP requests.
  *
@@ -19,16 +18,18 @@ public class Server {
 	private String readPassword;
 	private String writePassword;
 	private String adminPassword;
-	
-	public Server(int portNumber, String readPassword, String writePassword, String adminPassword) {
-		this.portNumber = portNumber;
-		this.readPassword = readPassword;
-		this.writePassword = writePassword;
-		this.adminPassword = adminPassword;
+
+	public Server(int portNum, String readPass, String writePass, String adminPass) {
+		portNumber = portNum;
+		readPassword = readPass;
+		writePassword = writePass;
+		adminPassword = adminPass;
 	}
+
 	public void run() {
 		Gson gson;
 		port(portNumber);
+
 		
 		get("/login", (request, response) -> "Hello World");
 		
@@ -40,6 +41,8 @@ public class Server {
 	                    return "Hello World";
 	                });
 	            //gson::toJson);
-		
+
+		get("/hello", (request, response) -> "Hello World");
+
 	}
 }

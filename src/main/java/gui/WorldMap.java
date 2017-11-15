@@ -327,31 +327,39 @@ public class WorldMap {
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn, double x, double y) {
+
 		System.out.println(x + " " + y);
+
+		System.out.println(x + " " + y); // TODO remove
+
 		double previousSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
 			if (sideLength >= MAX_SIDELENGTH)
 				sideLength = MAX_SIDELENGTH;
-					} else {
+
+		} else {
 			sideLength -= ZOOM_FACTOR;
 			if (sideLength <= MIN_SIDELENGTH)
 				sideLength = MIN_SIDELENGTH;
-			}
-		
+		}
+
 		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
 				+ (sideLength / 2);
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
-		
+
 		draw();
 	}
 
 	/**
-	 * highlightHex highlights the hex that is currently selected 
-	 * @param x xCoordinate of the spot that the user clicks
-	 * @param y yCooridnate of the spot that the user clicks
+	 * highlightHex highlights the hex that is currently selected
+	 * 
+	 * @param x
+	 *            xCoordinate of the spot that the user clicks
+	 * @param y
+	 *            yCooridnate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -370,7 +378,8 @@ public class WorldMap {
 
 	/**
 	 * drag implements panning
-	 * @param deltaX 
+	 * 
+	 * @param deltaX
 	 * @param deltaY
 	 */
 	public void drag(double deltaX, double deltaY) {
@@ -433,7 +442,8 @@ public class WorldMap {
 		double distanceSquared = Integer.MAX_VALUE;
 		int returnIndex = 0;
 		for (int i = 0; i < 4; i++) {
-			//System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " + possibleCoordinates[i][1]);
+			// System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " +
+			// possibleCoordinates[i][1]);
 			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
 			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2)
 					+ Math.pow(yCoordinate - tempArray[1], 2);
@@ -442,8 +452,9 @@ public class WorldMap {
 				returnIndex = i;
 			}
 		}
-		//System.out.println(possibleCoordinates[returnIndex][0] + " " + possibleCoordinates[returnIndex][1]);
-		//System.out.println("\n");
+		// System.out.println(possibleCoordinates[returnIndex][0] + " " +
+		// possibleCoordinates[returnIndex][1]);
+		// System.out.println("\n");
 		return possibleCoordinates[returnIndex];
 	}
 
