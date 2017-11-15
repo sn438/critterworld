@@ -34,5 +34,10 @@ public class GUI extends Application {
 }
 
 // TODO change font size to be based on how far ur zoomed in
-// TODO make hashing based on red and blue
 // TODO finish A6!!!!!!! (the command line thing we forgot about)
+// TODO correct number of critters not added
+// TODO when displaying critter info, strings that are too long need to resize nicely so they don't overlap with other stuff
+// TODO critter program box should not be editable
+// TODO critter program should not display only first line of program (i think this is what it's doing right now)
+// TODO create some smarter critter programs for better testing (and as prep for critter tournament :))
+// TODO make critters solid instead of outlines? try solid out and see how it looks.

@@ -2,10 +2,10 @@ package gui;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -20,6 +20,7 @@ public class WorldMap {
 	private GraphicsContext gc;
 	private Canvas canvas;
 	private int[] selectedHex;
+	private Random rand = new Random();
 
 	/**
 	 * The minimum acceptable hex sidelength (zoom will not allow the user to zoom
@@ -121,7 +122,8 @@ public class WorldMap {
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
 
-		// draws the hexagons and sets the origin
+		// draws grid and sets the origin
+		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
 		double hexMarkerY = y_position_marker;
 		for (int i = 0; i < column_drawing_marker; i++) {
@@ -151,7 +153,8 @@ public class WorldMap {
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3); // manual override of sujith's calculations
 
-		// draws the world objects in
+		// draws world objects
+		gc.setLineWidth(3);
 		drawObjects();
 
 		if (selectedHex != null) {
@@ -264,13 +267,40 @@ public class WorldMap {
 			yPoints[i] += cartY;
 		}
 
-		// get critter color
+		// set critter color
 		String species = sc.getName();
-		int hash = species.hashCode();
-		Color color = new Color(1, (Math.abs(hash) % 100) / 100.0, 1, 1);
-		
-		// draw critter
+		int randomizer = (int) (Math.sqrt(Math.abs(species.hashCode())) * 100);
+		int blendType = randomizer % 3;
+		double blendLevel = (randomizer % 100) / 100.0;
+		// System.out.println(randomizer + " " + blendType + " " + blendLevel);
+		double red;
+		double green;
+		double blue;
+		switch (blendType) {
+		case 0:
+			red = 0;
+			green = blendLevel;
+			blue = 1 - blendLevel;
+			break;
+		case 1:
+			red = 1 - blendLevel;
+			green = 0;
+			blue = blendLevel;
+			break;
+		case 2:
+			red = blendLevel;
+			green = 1 - blendLevel;
+			blue = 0;
+			break;
+		default:
+			red = 0;
+			green = 0;
+			blue = 0;
+		}
+		Color color = new Color(red, green, blue, 1);
 		gc.setStroke(color);
+
+		// draw critter
 		gc.strokePolygon(xPoints, yPoints, 3);
 	}
 
@@ -291,18 +321,20 @@ public class WorldMap {
 
 		if (wo instanceof Rock) {
 			double size = 0.9 * sideLength;
-			gc.setStroke(Color.GOLDENROD);
+			gc.setStroke(Color.BROWN);// GOLDENROD
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 
 		else if (wo instanceof Food) {
 			int calories = ((Food) wo).getCalories();
 			double size = 0.9 * sideLength;
-			gc.setStroke(Color.RED);
+			gc.setStroke(Color.WHITE);// RED
 			gc.strokeOval(cartX - size / 2, cartY - size / 2, size, size);
 			gc.setTextAlign(TextAlignment.CENTER);
-			gc.setFont(new Font(8));
+			gc.setFont(new Font(8 * sideLength / 30));
+			gc.setLineWidth(1);
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
+			gc.setLineWidth(3);
 		}
 	}
 
