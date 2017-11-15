@@ -430,9 +430,9 @@ public class Controller {
 	@FXML
 	private void handleMapScroll(ScrollEvent se) {
 		if (se.getDeltaY() > 0)
-			map.zoom(true);
+			map.zoom(true, se.getDeltaX(), se.getDeltaY());
 		else
-			map.zoom(false);
+			map.zoom(false, se.getDeltaX(), se.getDeltaY());
 	}
 
 	@FXML
