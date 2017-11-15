@@ -27,8 +27,22 @@ public class Server {
 	}
 
 	public void run() {
+		Gson gson;
 		port(portNumber);
 
+		
+		get("/login", (request, response) -> "Hello World");
+		
+		post("/login2",
+	            (request, response)
+	                -> {
+	                    response.header("Content-Type", "application/json");
+	                    // Shows how to read information encoded in the URL
+	                    return "Hello World";
+	                });
+	            //gson::toJson);
+
 		get("/hello", (request, response) -> "Hello World");
+
 	}
 }
