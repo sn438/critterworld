@@ -1,13 +1,24 @@
 package gui;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+
+
 import ast.Program;
+import distributed.Server;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -129,9 +140,13 @@ public class Controller {
 	private ScheduledExecutorService executor;
 
 	private LoginInfo loginInfo;
+	
+	private Server server;
 
 	@FXML
-	public void initialize() {
+	public void initialize() { 
+		server = Server.getInstance();
+		System.out.println(server.getPortNum());
 		login();
 		model = new WorldModel();
 		simulationRate = 30;
@@ -445,42 +460,70 @@ public class Controller {
 	}
 
 	private void login() {
+		Gson gson = new Gson();
 		Dialog<LoginInfo> dialog = new Dialog<>();
         dialog.setTitle("Login Info");
         dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField readPasswordTextField = new TextField("Read Password");
-        TextField writePasswordTextField = new TextField("Write Password");
-        TextField adminPasswordTextField = new TextField("Admin Password");
-        dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
+        TextField levelTextField = new TextField("Level");
+        TextField passwordTextField = new TextField("Password");
+        dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
         
-        Platform.runLater(readPasswordTextField::requestFocus);
+        Platform.runLater(levelTextField::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
            
         	if (button == ButtonType.OK) {
-                return new LoginInfo(readPasswordTextField.getText(),
-                		writePasswordTextField.getText(), adminPasswordTextField.getText());
+                return new LoginInfo(levelTextField.getText(),
+                		passwordTextField.getText());
             }
             return null;
         });
         
         Optional<LoginInfo> optionalResult = dialog.showAndWait();
         optionalResult.ifPresent((LoginInfo results) -> {
-           loginInfo = new LoginInfo(results.readPassword, results.writePassword, results.adminPassword);
+           loginInfo = new LoginInfo(results.level, results.password);
+           System.out.println(loginInfo.level + " " + loginInfo.password) ;
         });
+        URL url = null;
+		try {
+			if (loginInfo == null) {
+				System.out.println(true);
+			}
+			else {
+				System.out.println(false);
+			}
+			url = new URL("http://localhost:" + 8080 +"/login");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			System.out.println(url.toString());
+			connection.setDoOutput(true); // send a POST message
+            connection.setRequestMethod("POST");
+            
+            PrintWriter w = new PrintWriter(connection.getOutputStream());
+            w.println(gson.toJson(loginInfo, LoginInfo.class));
+            w.flush();
+            
+            BufferedReader r =
+                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        	System.out.println(r.readLine());
+        	
+        	
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+		}
+	
 	}
 
 	class LoginInfo {
 
-		String readPassword;
-		String writePassword;
-		String adminPassword;
+		String level;
+		String password;
 
-		private LoginInfo(String readPass, String writePass, String adminPass) {
-			this.readPassword = readPass;
-			this.writePassword = writePass;
-			this.adminPassword = adminPass;
+		private LoginInfo(String level, String password) {
+			this.level = level;
+			this.password = password;
 		}
 	}
 }

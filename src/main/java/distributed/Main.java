@@ -21,7 +21,8 @@ public class Main {
 				writePassword = args[2];
 				adminPassword = args[3];
 				serverLoaded = true;
-				server = new Server(portNumber, readPassword, writePassword, adminPassword);
+				Server.singletonConstructor(portNumber, readPassword, writePassword, adminPassword);
+				server = Server.getInstance();
 				server.run();
 			}
 		} catch (Exception e) {
