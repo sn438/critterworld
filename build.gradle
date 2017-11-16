@@ -17,7 +17,9 @@ dependencies {
     compile 'com.sparkjava:spark-core:2.3'
     // GSON, for parsing and generating JSON
     compile group: 'com.google.code.gson', name: 'gson', version: '2.4'
-
+	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+	
     // Specifies that you want to run your tests with junit
     testCompile 'junit:junit:4.12'
 }
