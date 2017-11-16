@@ -425,6 +425,7 @@ public class Controller {
 	private void handleMapDrag(KeyEvent ke) {
 		// if (ke.getCode().equals(KeyCode.UP)) {
 		map.drag(-5, -5);
+		System.out.println("sujith");
 		// }
 	}
 

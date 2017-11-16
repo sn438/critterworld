@@ -133,7 +133,7 @@
       </AnchorPane>
       <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="25.0" prefHeight="775.0" prefWidth="750.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="25.0">
          <content>
-            <Canvas fx:id="c" height="775.0" onMouseDragged="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="1350.0" />
+            <Canvas fx:id="c" height="775.0" onKeyPressed="#handleMapDrag" onMousePressed="#handleMapClicked" onScroll="#handleMapScroll" width="1350.0" />
          </content>
       </ScrollPane>
    </children>
