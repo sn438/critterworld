@@ -113,5 +113,7 @@ public class Server {
 			this.level = level;
 			this.password = password;
 		}
+		
+		
 	}
 }

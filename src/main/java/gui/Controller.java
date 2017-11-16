@@ -44,6 +44,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
@@ -57,7 +58,6 @@ import simulation.SimpleCritter;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
-// test
 public class Controller {
 	@FXML
 	private MenuItem help;
@@ -376,7 +376,7 @@ public class Controller {
 			mousePanPressedY = me.getScreenY();
 		} else {
 			double xCoordinateSelected = me.getSceneX();
-			double yCoordinateSelected = me.getSceneY();
+			double yCoordinateSelected = me.getSceneY() - 25;
 			int[] hexCoordinatesSelected = new int[2];
 			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
@@ -430,10 +430,17 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapDrag(MouseEvent me) {
+	private void handleMapDrag1(MouseEvent me) {
 		if (!me.isPrimaryButtonDown()) {
 			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
 		}
+	}
+
+	@FXML
+	private void handleMapDrag2(KeyEvent ke) {
+		// if (ke.getCode().equals(KeyCode.UP)) {
+		map.drag(-5, -5);
+		// }
 	}
 
 	@FXML
@@ -513,7 +520,6 @@ public class Controller {
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
 		}
-	
 	}
 
 	class LoginInfo {

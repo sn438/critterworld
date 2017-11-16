@@ -260,7 +260,7 @@ public class World extends AbstractWorld
 		{
 			c = (int) (Math.random() * columns);
 			r = (int) (Math.random() * rows);
-			if (isValidHex(c, r))
+			if (isValidHex(c, r) && grid[c][r].isEmpty())
 			{
 				addNonCritterObject(new Rock(), c, r);
 				n++;
@@ -319,7 +319,7 @@ public class World extends AbstractWorld
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
-				while (!isValidHex(randc, randr))
+				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty())
 				{
 					randc = (int) (Math.random() * columns);
 					randr = (int) (Math.random() * rows);
@@ -347,7 +347,7 @@ public class World extends AbstractWorld
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
-				while (!isValidHex(randc, randr))
+				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty())
 				{
 					randc = (int) (Math.random() * columns);
 					randr = (int) (Math.random() * rows);

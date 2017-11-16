@@ -15,6 +15,7 @@ public class Main {
 		try {
 			if (args.length == 0) {
 				GUI.main(null);
+				
 			} else if (args.length == 4) {
 				portNumber = Integer.valueOf(args[0]);
 				readPassword = args[1];

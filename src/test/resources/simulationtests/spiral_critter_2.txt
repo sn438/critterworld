@@ -1,4 +1,4 @@
-species: Hi!!!!
+species: SUJITHWORLD
 memsize: 12
 defense: 2
 offense: 3
