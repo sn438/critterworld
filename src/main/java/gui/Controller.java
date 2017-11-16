@@ -244,8 +244,8 @@ public class Controller {
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("/");
-		fc.setInitialDirectory(f);
+		File f = new File("."); //TODO remove
+		fc.setInitialDirectory(f); //TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
 			return;
