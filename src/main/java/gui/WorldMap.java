@@ -359,11 +359,6 @@ public class WorldMap {
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn, double x, double y) {
-
-		System.out.println(x + " " + y);
-
-		System.out.println(x + " " + y); // TODO remove
-
 		double previousSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
@@ -426,6 +421,7 @@ public class WorldMap {
 			y_position_marker = height - Math.sqrt(3) * sideLength;
 		if ((y_position_marker + Math.sqrt(3) * sideLength * row_drawing_marker) < 0)
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
+
 		gc.clearRect(0, 0, width, height);
 		draw();
 	}
@@ -442,7 +438,9 @@ public class WorldMap {
 		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
-
+		// System.out.println(closestHexCoordinates[0] + " " +
+		// closestHexCoordinates[1]); // TODO remove
+		// System.out.println(highlightCoordinates[0] + " " + highlightCoordinates[1]); // TODO remove
 		draw();
 		return returnValue;
 	}
@@ -459,10 +457,10 @@ public class WorldMap {
 	public int[] closestHex(double xCoordinate, double yCoordinate) {
 		// determines the possible hexes that the point could be in
 		int possibleColumnOne = (int) Math.ceil(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
-		int possibleColumnTwo = (int) Math.floor(2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
+		int possibleColumnTwo = (int) (2.0 * (xCoordinate - origin_x) / (3.0 * sideLength));
 		int possibleRowOne = (int) Math.ceil((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
 				+ ((xCoordinate - origin_x) / (3.0 * sideLength)));
-		int possibleRowTwo = (int) Math.floor((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
+		int possibleRowTwo = (int) ((-yCoordinate + origin_y) / (Math.sqrt(3.0) * sideLength)
 				+ ((xCoordinate - origin_x) / (3.0 * sideLength)));
 
 		int[][] possibleCoordinates = new int[4][2];
