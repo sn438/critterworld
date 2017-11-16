@@ -412,6 +412,7 @@ public class WorldMap {
 	public void drag(double deltaX, double deltaY) {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
+
 		if (x_position_marker - sideLength > width)
 			x_position_marker = width - sideLength;
 		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker) < 0) {
@@ -440,7 +441,8 @@ public class WorldMap {
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		// System.out.println(closestHexCoordinates[0] + " " +
 		// closestHexCoordinates[1]); // TODO remove
-		// System.out.println(highlightCoordinates[0] + " " + highlightCoordinates[1]); // TODO remove
+		// System.out.println(highlightCoordinates[0] + " " + highlightCoordinates[1]);
+		// // TODO remove
 		draw();
 		return returnValue;
 	}

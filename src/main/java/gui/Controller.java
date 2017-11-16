@@ -33,7 +33,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -383,8 +382,7 @@ public class Controller {
 					tagText.setText(String.valueOf(critterMemoryCopy[6]));
 					postureText.setText(String.valueOf(critterMemoryCopy[7]));
 					lastRuleDisplay.setText(critter.getLastRule());
-				}
-				else {
+				} else {
 					memSizeText.setText("");
 					speciesText.setText("");
 					defenseText.setText("");
@@ -425,9 +423,9 @@ public class Controller {
 
 	@FXML
 	private void handleMapDrag2(KeyEvent ke) {
-		//if (ke.getCode().equals(KeyCode.UP)) {
-			map.drag(5, 5);
-		//}
+		// if (ke.getCode().equals(KeyCode.UP)) {
+		map.drag(-5, -5);
+		// }
 	}
 
 	@FXML
