@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 
-
 import ast.Program;
 import distributed.Server;
 import javafx.animation.KeyFrame;
@@ -44,7 +43,9 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
@@ -131,8 +132,10 @@ public class Controller {
 	/** Controls the hex grid. */
 	private WorldMap map;
 
-	private double mousePanPressedX;
-	private double mousePanPressedY;
+	private double panMarkerX;
+	private double panMarkerY;
+
+	private boolean hexSelectionMood = true;
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -140,11 +143,11 @@ public class Controller {
 	private ScheduledExecutorService executor;
 
 	private LoginInfo loginInfo;
-	
+
 	private Server server;
 
 	@FXML
-	public void initialize() { 
+	public void initialize() {
 		server = Server.getInstance();
 		System.out.println(server.getPortNum());
 		login();
@@ -168,6 +171,7 @@ public class Controller {
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 		c.setDisable(true);
 		c.setVisible(false);
+		c.addEventFilter(MouseEvent.ANY, (e) -> c.requestFocus());
 
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
@@ -259,8 +263,8 @@ public class Controller {
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("."); //TODO remove
-		fc.setInitialDirectory(f); //TODO remove
+		File f = new File("."); // TODO remove
+		fc.setInitialDirectory(f); // TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
 			return;
@@ -373,10 +377,7 @@ public class Controller {
 
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
-		if (!me.isPrimaryButtonDown()) {
-			mousePanPressedX = me.getScreenX();
-			mousePanPressedY = me.getScreenY();
-		} else {
+		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			int[] hexCoordinatesSelected = new int[2];
@@ -412,6 +413,7 @@ public class Controller {
 				}
 			}
 		}
+		hexSelectionMood = true;
 	}
 
 	@FXML
@@ -432,18 +434,44 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapDrag2(MouseEvent me) {
-		if (!me.isPrimaryButtonDown()) {
-			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
+	private void handleMapDrag(MouseEvent me) {
+		if (me.isPrimaryButtonDown()) {
+			if (hexSelectionMood) {
+				// TODO should all these references to getScreen be getScene instead?
+				panMarkerX = me.getScreenX();
+				panMarkerY = me.getScreenY();
+			}
+			hexSelectionMood = false;
+
+			// double x = (me.getScreenX()) - map.getWidth() / 2;
+			// double y = (me.getScreenY() - 25) - map.getHeight() / 2;
+			// double denom = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+			// map.drag(-x / denom * 100, -y / denom * 100);
+
+			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
+			
+			panMarkerX = me.getScreenX();
+			panMarkerY = me.getScreenY();
 		}
 	}
 
 	@FXML
-	private void handleMapDrag(KeyEvent ke) {
-		// if (ke.getCode().equals(KeyCode.UP)) {
-		map.drag(-5, -5);
-		System.out.println("sujith");
-		// }
+	private void handleMapPan(KeyEvent ke) {
+		// TODO make it possible to press multiple keys at once for panning? seems to be
+		// difficult.
+		if (ke.getCode().equals(KeyCode.UP)) {
+			map.drag(0, 400);
+		}
+		if (ke.getCode().equals(KeyCode.LEFT)) {
+			map.drag(400, 0);
+		}
+		if (ke.getCode().equals(KeyCode.DOWN)) {
+			map.drag(0, -400);
+		}
+		if (ke.getCode().equals(KeyCode.RIGHT)) {
+			map.drag(-400, 0);
+		}
+
 	}
 
 	@FXML
@@ -472,52 +500,48 @@ public class Controller {
 	private void login() {
 		Gson gson = new Gson();
 		Dialog<LoginInfo> dialog = new Dialog<>();
-        dialog.setTitle("Login Info");
-        dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
-        DialogPane dialogPane = dialog.getDialogPane();
-        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField levelTextField = new TextField("Level");
-        TextField passwordTextField = new TextField("Password");
-        dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
-        
-        Platform.runLater(levelTextField::requestFocus);
-        dialog.setResultConverter((ButtonType button) -> {
-           
-        	if (button == ButtonType.OK) {
-                return new LoginInfo(levelTextField.getText(),
-                		passwordTextField.getText());
-            }
-            return null;
-        });
-        
-        Optional<LoginInfo> optionalResult = dialog.showAndWait();
-        optionalResult.ifPresent((LoginInfo results) -> {
-           loginInfo = new LoginInfo(results.level, results.password);
-           System.out.println(loginInfo.level + " " + loginInfo.password) ;
-        });
-        URL url = null;
+		dialog.setTitle("Login Info");
+		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
+		DialogPane dialogPane = dialog.getDialogPane();
+		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		TextField levelTextField = new TextField("Level");
+		TextField passwordTextField = new TextField("Password");
+		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
+
+		Platform.runLater(levelTextField::requestFocus);
+		dialog.setResultConverter((ButtonType button) -> {
+
+			if (button == ButtonType.OK) {
+				return new LoginInfo(levelTextField.getText(), passwordTextField.getText());
+			}
+			return null;
+		});
+
+		Optional<LoginInfo> optionalResult = dialog.showAndWait();
+		optionalResult.ifPresent((LoginInfo results) -> {
+			loginInfo = new LoginInfo(results.level, results.password);
+			System.out.println(loginInfo.level + " " + loginInfo.password);
+		});
+		URL url = null;
 		try {
 			if (loginInfo == null) {
 				System.out.println(true);
-			}
-			else {
+			} else {
 				System.out.println(false);
 			}
-			url = new URL("http://localhost:" + 8080 +"/login");
+			url = new URL("http://localhost:" + 8080 + "/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
-            connection.setRequestMethod("POST");
-            
-            PrintWriter w = new PrintWriter(connection.getOutputStream());
-            w.println(gson.toJson(loginInfo, LoginInfo.class));
-            w.flush();
-            
-            BufferedReader r =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        	System.out.println(r.readLine());
-        	
-        	
+			connection.setRequestMethod("POST");
+
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(loginInfo, LoginInfo.class));
+			w.flush();
+
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			System.out.println(r.readLine());
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

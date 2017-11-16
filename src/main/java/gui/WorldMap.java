@@ -80,8 +80,8 @@ public class WorldMap {
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
-		height = canvas.getHeight();
-		width = canvas.getWidth();
+		setHeight(canvas.getHeight());
+		setWidth(canvas.getWidth());
 
 		columns = wm.getColumns();
 		rows = wm.getRows();
@@ -91,9 +91,9 @@ public class WorldMap {
 		row_drawing_marker -= column_drawing_marker / 2;
 		sideLength = 30;
 
-		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+		x_position_marker = ((double) getWidth() / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
 				+ (sideLength / 2);
-		y_position_marker = (((double) height / 2)
+		y_position_marker = (((double) getHeight() / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 
@@ -116,11 +116,11 @@ public class WorldMap {
 	/** Redraws the world grid. */
 	public void draw() {
 		// resets the world grid
-		height = canvas.getHeight();
-		width = canvas.getWidth();
-		gc.clearRect(0, 0, width, height);
+		setHeight(canvas.getHeight());
+		setWidth(canvas.getWidth());
+		gc.clearRect(0, 0, getWidth(), getHeight());
 		gc.setFill(BACKGROUND_COLOR);
-		gc.fillRect(0, 0, width, height);
+		gc.fillRect(0, 0, getWidth(), getHeight());
 
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
@@ -371,9 +371,9 @@ public class WorldMap {
 				sideLength = MIN_SIDELENGTH;
 		}
 
-		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+		x_position_marker = ((double) getWidth() / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
 				+ (sideLength / 2);
-		y_position_marker = (((double) height / 2)
+		y_position_marker = (((double) getHeight() / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
 
@@ -413,17 +413,17 @@ public class WorldMap {
 		x_position_marker += deltaX * 0.05;
 		y_position_marker += deltaY * 0.05;
 
-		if (x_position_marker - sideLength > width)
-			x_position_marker = width - sideLength;
+		if (x_position_marker - sideLength > getWidth())
+			x_position_marker = getWidth() - sideLength;
 		if ((((3 * sideLength) / 2) * column_drawing_marker + x_position_marker) < 0) {
 			x_position_marker = (2 * sideLength) - (((3 * sideLength) / 2) * column_drawing_marker);
 		}
-		if (y_position_marker > height)
-			y_position_marker = height - Math.sqrt(3) * sideLength;
+		if (y_position_marker > getHeight())
+			y_position_marker = getHeight() - Math.sqrt(3) * sideLength;
 		if ((y_position_marker + Math.sqrt(3) * sideLength * row_drawing_marker) < 0)
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
-		gc.clearRect(0, 0, width, height);
+		gc.clearRect(0, 0, getWidth(), getHeight());
 		draw();
 	}
 
@@ -506,4 +506,21 @@ public class WorldMap {
 	public int[] getSelectedHex() {
 		return selectedHex;
 	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	// TODO is it ok that i created getters and setters for these?
 }

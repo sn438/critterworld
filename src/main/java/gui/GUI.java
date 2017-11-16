@@ -22,7 +22,7 @@ public class GUI extends Application {
 			if (r == null)
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
-			stage.setTitle("CRITTERWORLD!");
+			stage.setTitle("SUJITHWORLD!");
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -50,7 +50,6 @@ public class GUI extends Application {
 // looks.
 
 // Andy:
-// TOOD FILE EXPLORER
 // TODO make new world the default instead of blank, and make reset button do
 // new world (TODO #2)
 // TODO remove new world button because reset button makes it redundant once
