@@ -46,7 +46,6 @@ import simulation.SimpleCritter;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
-// test
 public class Controller {
 	@FXML
 	private MenuItem help;
@@ -361,7 +360,9 @@ public class Controller {
 			mousePanPressedY = me.getScreenY();
 		} else {
 			double xCoordinateSelected = me.getSceneX();
-			double yCoordinateSelected = me.getSceneY();
+			double yCoordinateSelected = me.getSceneY() - 25;
+			System.out.println(xCoordinateSelected);
+			System.out.println(yCoordinateSelected);
 			int[] hexCoordinatesSelected = new int[2];
 			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
@@ -382,7 +383,8 @@ public class Controller {
 					tagText.setText(String.valueOf(critterMemoryCopy[6]));
 					postureText.setText(String.valueOf(critterMemoryCopy[7]));
 					lastRuleDisplay.setText(critter.getLastRule());
-				} else {
+				}
+				else {
 					memSizeText.setText("");
 					speciesText.setText("");
 					defenseText.setText("");

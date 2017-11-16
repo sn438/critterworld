@@ -33,7 +33,6 @@ public class GUI extends Application {
 	}
 }
 
-// TODO change font size to be based on how far ur zoomed in
 // TODO finish A6!!!!!!! (the command line thing we forgot about)
 // TODO correct number of critters not added
 // TODO when displaying critter info, strings that are too long need to resize nicely so they don't overlap with other stuff

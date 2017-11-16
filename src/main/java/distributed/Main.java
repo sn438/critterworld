@@ -6,7 +6,6 @@ public class Main {
 	private static Server server;
 
 	public static void main(String[] args) {
-		GUI gui = null;
 		String readPassword = null;
 		String writePassword = null;
 		String adminPassword = null;
