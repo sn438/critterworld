@@ -449,7 +449,7 @@ public class Controller {
 			// map.drag(-x / denom * 100, -y / denom * 100);
 
 			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
-			
+
 			panMarkerX = me.getScreenX();
 			panMarkerY = me.getScreenY();
 		}

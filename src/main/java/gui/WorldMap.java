@@ -359,7 +359,7 @@ public class WorldMap {
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn, double x, double y) {
-		double previousSideLength = sideLength;
+		double oldSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;
 			if (sideLength >= MAX_SIDELENGTH)
@@ -370,12 +370,10 @@ public class WorldMap {
 			if (sideLength <= MIN_SIDELENGTH)
 				sideLength = MIN_SIDELENGTH;
 		}
+		double factor = sideLength / (oldSideLength);
 
-		x_position_marker = ((double) getWidth() / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
-				+ (sideLength / 2);
-		y_position_marker = (((double) getHeight() / 2)
-				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
-				+ (Math.sqrt(3) * (sideLength / 2));
+		x_position_marker = getWidth() / 2 - (getWidth() / 2 - x_position_marker) * factor;
+		y_position_marker = getHeight() / 2 - (getHeight() / 2 - y_position_marker) * factor;
 
 		draw();
 	}

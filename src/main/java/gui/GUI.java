@@ -37,7 +37,6 @@ public class GUI extends Application {
 // TODO make it so if args != 0 or 4, say bad input
 
 // Rishi:
-// TODO fix drag
 // TODO when displaying critter info, strings that are too long need to resize
 // nicely so they don't overlap with other stuff
 // TODO critter program box should not be editable
@@ -48,6 +47,7 @@ public class GUI extends Application {
 // critter tournament :))
 // TODO make critters solid instead of outlines? try solid out and see how it
 // looks.
+// TODO make ctrl + arrow keys zooming if wants and has time
 
 // Andy:
 // TODO make new world the default instead of blank, and make reset button do
