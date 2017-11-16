@@ -415,14 +415,14 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapDrag1(MouseEvent me) {
+	private void handleMapDrag2(MouseEvent me) {
 		if (!me.isPrimaryButtonDown()) {
 			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
 		}
 	}
 
 	@FXML
-	private void handleMapDrag2(KeyEvent ke) {
+	private void handleMapDrag(KeyEvent ke) {
 		// if (ke.getCode().equals(KeyCode.UP)) {
 		map.drag(-5, -5);
 		// }
