@@ -33,6 +33,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
@@ -361,8 +363,6 @@ public class Controller {
 		} else {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
-			System.out.println(xCoordinateSelected);
-			System.out.println(yCoordinateSelected);
 			int[] hexCoordinatesSelected = new int[2];
 			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
@@ -417,10 +417,17 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapDrag(MouseEvent me) {
+	private void handleMapDrag1(MouseEvent me) {
 		if (!me.isPrimaryButtonDown()) {
 			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
 		}
+	}
+
+	@FXML
+	private void handleMapDrag2(KeyEvent ke) {
+		//if (ke.getCode().equals(KeyCode.UP)) {
+			map.drag(5, 5);
+		//}
 	}
 
 	@FXML
@@ -448,29 +455,29 @@ public class Controller {
 
 	private void login() {
 		Dialog<LoginInfo> dialog = new Dialog<>();
-        dialog.setTitle("Login Info");
-        dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
-        DialogPane dialogPane = dialog.getDialogPane();
-        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField readPasswordTextField = new TextField("Read Password");
-        TextField writePasswordTextField = new TextField("Write Password");
-        TextField adminPasswordTextField = new TextField("Admin Password");
-        dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
-        
-        Platform.runLater(readPasswordTextField::requestFocus);
-        dialog.setResultConverter((ButtonType button) -> {
-           
-        	if (button == ButtonType.OK) {
-                return new LoginInfo(readPasswordTextField.getText(),
-                		writePasswordTextField.getText(), adminPasswordTextField.getText());
-            }
-            return null;
-        });
-        
-        Optional<LoginInfo> optionalResult = dialog.showAndWait();
-        optionalResult.ifPresent((LoginInfo results) -> {
-           loginInfo = new LoginInfo(results.readPassword, results.writePassword, results.adminPassword);
-        });
+		dialog.setTitle("Login Info");
+		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
+		DialogPane dialogPane = dialog.getDialogPane();
+		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		TextField readPasswordTextField = new TextField("Read Password");
+		TextField writePasswordTextField = new TextField("Write Password");
+		TextField adminPasswordTextField = new TextField("Admin Password");
+		dialogPane.setContent(new VBox(8, readPasswordTextField, writePasswordTextField, adminPasswordTextField));
+
+		Platform.runLater(readPasswordTextField::requestFocus);
+		dialog.setResultConverter((ButtonType button) -> {
+
+			if (button == ButtonType.OK) {
+				return new LoginInfo(readPasswordTextField.getText(), writePasswordTextField.getText(),
+						adminPasswordTextField.getText());
+			}
+			return null;
+		});
+
+		Optional<LoginInfo> optionalResult = dialog.showAndWait();
+		optionalResult.ifPresent((LoginInfo results) -> {
+			loginInfo = new LoginInfo(results.readPassword, results.writePassword, results.adminPassword);
+		});
 	}
 
 	class LoginInfo {
