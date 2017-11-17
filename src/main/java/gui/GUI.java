@@ -35,6 +35,7 @@ public class GUI extends Application {
 
 // Sujith:
 // TODO make it so if args != 0 or 4, say bad input
+// TODO work on server stuff
 
 // Rishi:
 // TODO when displaying critter info, strings that are too long need to resize
@@ -48,6 +49,8 @@ public class GUI extends Application {
 // TODO make critters solid instead of outlines? try solid out and see how it
 // looks.
 // TODO make ctrl + arrow keys zooming if wants and has time
+// TODO implement smell
+// TODO do written problems
 
 // Andy:
 // TODO make new world the default instead of blank, and make reset button do
