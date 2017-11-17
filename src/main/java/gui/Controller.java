@@ -27,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -231,13 +232,15 @@ public class Controller {
 	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove
+		fc.setInitialDirectory(f); // TODO remove
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
 
 		try {
 			model.loadWorld(worldFile);
-		} catch (FileNotFoundException f) {
+		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
 			a.showAndWait();
@@ -263,7 +266,7 @@ public class Controller {
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("."); // TODO remove
+		File f = new File(".\\\\src\\\\test\\\\resources\\\\simulationtests"); // TODO remove
 		fc.setInitialDirectory(f); // TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
@@ -474,6 +477,12 @@ public class Controller {
 
 	}
 
+	@FXML
+	private void help(ActionEvent ae) {
+		GraphicsContext gc = c.getGraphicsContext2D();
+		gc.strokeText("SUJITH", 100, 100);
+	}
+	
 	@FXML
 	private void close(ActionEvent ae) {
 		if (executor != null)
