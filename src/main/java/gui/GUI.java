@@ -38,6 +38,7 @@ public class GUI extends Application {
 // TODO work on server stuff
 
 // Rishi:
+// TODO figure out exactly how hexSelectionMood works and if it's really doing what it's supposing to be doing
 // TODO make critters solid instead of outlines? try solid out and see how it
 // looks.
 // TODO implement smell
@@ -46,6 +47,7 @@ public class GUI extends Application {
 // critter tournament :))
 // TODO make ctrl + arrow keys zooming if wants and has time
 // TODO why doesn't critter info box passively update when GUI is in run mode instead of step by step mode?
+// TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
 // TODO make new world the default instead of blank, and make reset button do
