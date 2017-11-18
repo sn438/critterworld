@@ -38,7 +38,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
@@ -89,7 +88,7 @@ public class Controller {
 	@FXML
 	private Text sizeText;
 	@FXML
-	private TextArea lastRuleDisplay;
+	private Label lastRuleDisplay;
 	@FXML
 	private Button displayProgram;
 
@@ -311,6 +310,7 @@ public class Controller {
 	@FXML
 	private void handleStep(MouseEvent me) {
 		model.advanceTime();
+		updateInfoBox();
 		map.draw();
 		crittersAlive.setText("Critters Alive: " + model.numCritters);
 		stepsTaken.setText("Time: " + model.time);
@@ -383,10 +383,56 @@ public class Controller {
 		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
+			map.select(xCoordinateSelected, yCoordinateSelected);
+		}
+		hexSelectionMood = true;
+	}
+
+	private void updateInfoBox() {
+		if (map.getSelectedHex() != null) {
+			int[] hexCoordinatesSelected = map.getSelectedHex();
+			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
+			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+				memSizeText.setText(String.valueOf(critter.getMemLength()));
+				speciesText.setText(critter.getName());
+				int[] critterMemoryCopy = new int[critter.getMemLength()];
+				critterMemoryCopy = critter.getMemoryCopy();
+				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+				energyText.setText(String.valueOf(critterMemoryCopy[4]));
+				passText.setText(String.valueOf(critterMemoryCopy[5]));
+				tagText.setText(String.valueOf(critterMemoryCopy[6]));
+				postureText.setText(String.valueOf(critterMemoryCopy[7]));
+				lastRuleDisplay.setText(critter.getLastRule());
+			} else {
+				memSizeText.setText("");
+				speciesText.setText("");
+				defenseText.setText("");
+				offenseText.setText("");
+				sizeText.setText("");
+				energyText.setText("");
+				passText.setText("");
+				tagText.setText("");
+				postureText.setText("");
+			}
+		}
+
+	}
+
+	// TODO delete upon confirming that new version works
+	@Deprecated
+	@FXML
+	private void handleMapClickedFAKE(MouseEvent me) {
+		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
+			double xCoordinateSelected = me.getSceneX();
+			double yCoordinateSelected = me.getSceneY() - 25;
 			int[] hexCoordinatesSelected = new int[2];
-			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
+			boolean shouldUpdateHex = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
-			if (shouldUpdateRowColumn) {
+			if (shouldUpdateHex) {
 				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
 				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
 				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
@@ -446,11 +492,6 @@ public class Controller {
 			}
 			hexSelectionMood = false;
 
-			// double x = (me.getScreenX()) - map.getWidth() / 2;
-			// double y = (me.getScreenY() - 25) - map.getHeight() / 2;
-			// double denom = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-			// map.drag(-x / denom * 100, -y / denom * 100);
-
 			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
 
 			panMarkerX = me.getScreenX();
@@ -482,7 +523,7 @@ public class Controller {
 		GraphicsContext gc = c.getGraphicsContext2D();
 		gc.strokeText("SUJITH", 100, 100);
 	}
-	
+
 	@FXML
 	private void close(ActionEvent ae) {
 		if (executor != null)

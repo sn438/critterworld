@@ -28,7 +28,8 @@
 			<menus>
 				<Menu mnemonicParsing="false" text="File">
 					<items>
-						<MenuItem fx:id="help" mnemonicParsing="false" onAction="#help" text="Help" />
+						<MenuItem fx:id="help" mnemonicParsing="false" onAction="#help"
+							text="Help" />
 						<MenuItem fx:id="close" mnemonicParsing="false" onAction="#close"
 							text="Close" />
 					</items>
@@ -92,8 +93,10 @@
 										<Label layoutX="135.0" layoutY="100.0" prefHeight="10.0"
 											prefWidth="54.0" text="Posture" />
 
-										<TextArea fx:id="lastRuleDisplay" layoutX="41.0"
-											layoutY="120.0" prefHeight="150.0" prefWidth="167.0" />
+										<Label fx:id="lastRuleTitle" layoutX="41.0" layoutY="100.0"
+											prefHeight="150.0" prefWidth="167.0" text="Last rule:"/>
+										<Label fx:id="lastRuleDisplay" layoutX="41.0" layoutY="120.0"
+											prefHeight="150.0" prefWidth="167.0" />
 										<Button fx:id="displayProgram" layoutX="60.0" layoutY="277.0"
 											mnemonicParsing="false" onMouseClicked="#handleDisplayProgram"
 											text="Display Program" />

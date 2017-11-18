@@ -437,10 +437,6 @@ public class WorldMap {
 		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
-		// System.out.println(closestHexCoordinates[0] + " " +
-		// closestHexCoordinates[1]); // TODO remove
-		// System.out.println(highlightCoordinates[0] + " " + highlightCoordinates[1]);
-		// // TODO remove
 		draw();
 		return returnValue;
 	}
