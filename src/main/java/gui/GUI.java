@@ -42,7 +42,6 @@ public class GUI extends Application {
 // TODO work on server stuff
 
 // Rishi:
-// TODO figure out exactly how hexSelectionMood works and if it's really doing what it's supposing to be doing
 // TODO make critters solid instead of outlines? try solid out and see how it
 // looks.
 // TODO implement smell
