@@ -181,6 +181,8 @@ public class Controller {
 		passText.setText("");
 		tagText.setText("");
 		postureText.setText("");
+		lastRuleDisplay.setText("");
+		lastRuleDisplay.setWrapText(true);
 
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 		c.setDisable(true);
@@ -406,8 +408,8 @@ public class Controller {
 	private void updateInfoBox() {
 		if (map.getSelectedHex() != null) {
 			int[] hexCoordinatesSelected = map.getSelectedHex();
-			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
-			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
 			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
 				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
 				memSizeText.setText(String.valueOf(critter.getMemLength()));
@@ -421,7 +423,7 @@ public class Controller {
 				passText.setText(String.valueOf(critterMemoryCopy[5]));
 				tagText.setText(String.valueOf(critterMemoryCopy[6]));
 				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-				lastRuleDisplay.setText(critter.getLastRule());
+				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRule());
 			} else {
 				memSizeText.setText("");
 				speciesText.setText("");
