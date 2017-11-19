@@ -135,7 +135,8 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	private boolean hexSelectionMood = true; // TODO what is this?
+	private boolean hexSelectionMood = true;
+
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -177,6 +178,8 @@ public class Controller {
 		passText.setText("");
 		tagText.setText("");
 		postureText.setText("");
+		lastRuleDisplay.setText("");
+		lastRuleDisplay.setWrapText(true);
 
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 		c.setDisable(true);
@@ -236,6 +239,15 @@ public class Controller {
 		c.setVisible(true);
 
 		map.draw();
+	}
+	
+	@FXML
+	private void handleResetClicked(MouseEvent me) {
+		if (executor != null)
+			executor.shutdownNow();
+		if (timeline != null)
+			timeline.stop();
+		initialize();
 	}
 
 	@FXML
@@ -402,8 +414,8 @@ public class Controller {
 	private void updateInfoBox() {
 		if (map.getSelectedHex() != null) {
 			int[] hexCoordinatesSelected = map.getSelectedHex();
-			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
-			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
 			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
 				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
 				memSizeText.setText(String.valueOf(critter.getMemLength()));
@@ -417,7 +429,7 @@ public class Controller {
 				passText.setText(String.valueOf(critterMemoryCopy[5]));
 				tagText.setText(String.valueOf(critterMemoryCopy[6]));
 				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-				lastRuleDisplay.setText(critter.getLastRule());
+				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRule());
 			} else {
 				memSizeText.setText("");
 				speciesText.setText("");
@@ -431,58 +443,6 @@ public class Controller {
 			}
 		}
 
-	}
-
-	// TODO delete upon confirming that new version works
-	@Deprecated
-	@FXML
-	private void handleMapClickedFAKE(MouseEvent me) {
-		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
-			double xCoordinateSelected = me.getSceneX();
-			double yCoordinateSelected = me.getSceneY() - 25;
-			int[] hexCoordinatesSelected = new int[2];
-			boolean shouldUpdateHex = map.select(xCoordinateSelected, yCoordinateSelected);
-			hexCoordinatesSelected = map.getSelectedHex();
-			if (shouldUpdateHex) {
-				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
-				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
-				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-					SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-					memSizeText.setText(String.valueOf(critter.getMemLength()));
-					speciesText.setText(critter.getName());
-					int[] critterMemoryCopy = new int[critter.getMemLength()];
-					critterMemoryCopy = critter.getMemoryCopy();
-					defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-					offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-					sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-					energyText.setText(String.valueOf(critterMemoryCopy[4]));
-					passText.setText(String.valueOf(critterMemoryCopy[5]));
-					tagText.setText(String.valueOf(critterMemoryCopy[6]));
-					postureText.setText(String.valueOf(critterMemoryCopy[7]));
-					lastRuleDisplay.setText(critter.getLastRule());
-				} else {
-					memSizeText.setText("");
-					speciesText.setText("");
-					defenseText.setText("");
-					offenseText.setText("");
-					sizeText.setText("");
-					energyText.setText("");
-					passText.setText("");
-					tagText.setText("");
-					postureText.setText("");
-				}
-			}
-		}
-		hexSelectionMood = true;
-	}
-
-	@FXML
-	private void handleResetClicked(MouseEvent me) {
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-		initialize();
 	}
 
 	@FXML
