@@ -135,7 +135,7 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	private boolean hexSelectionMood = true; //TODO what is this?
+	private boolean hexSelectionMood = true;
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -242,6 +242,15 @@ public class Controller {
 		c.setVisible(true);
 
 		map.draw();
+	}
+	
+	@FXML
+	private void handleResetClicked(MouseEvent me) {
+		if (executor != null)
+			executor.shutdownNow();
+		if (timeline != null)
+			timeline.stop();
+		initialize();
 	}
 
 	@FXML
@@ -437,15 +446,6 @@ public class Controller {
 			}
 		}
 
-	}
-
-	@FXML
-	private void handleResetClicked(MouseEvent me) {
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-		initialize();
 	}
 
 	@FXML
