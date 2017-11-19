@@ -141,12 +141,10 @@ public class Controller {
 
 	private LoginInfo loginInfo;
 	
-	private Server server;
+	
 
 	@FXML
 	public void initialize() { 
-		server = Server.getInstance();
-		System.out.println(server.getPortNum());
 		login();
 		model = new WorldModel();
 		simulationRate = 30;
@@ -514,7 +512,7 @@ public class Controller {
             
             BufferedReader r =
                 new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        	System.out.println(r.readLine());
+        	
         	
         	
 		} catch (MalformedURLException e) {
