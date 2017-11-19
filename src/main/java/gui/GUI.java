@@ -23,7 +23,7 @@ public class GUI extends Application {
 			if (r == null)
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
-			stage.setTitle("SUJITHWORLD!");
+			stage.setTitle("CRITTERWORLD");
 			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("critterworld_favicon.png"));
 			stage.getIcons().add(icon);
 			stage.setScene(scene);
@@ -41,14 +41,13 @@ public class GUI extends Application {
 // TODO work on server stuff
 
 // Rishi:
-// TODO make critters solid instead of outlines? try solid out and see how it
-// looks.
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
-// TODO make ctrl + arrow keys zooming if wants and has time
-// TODO why doesn't critter info box passively update when GUI is in run mode instead of step by step mode?
+// TODO make ctrl + arrow keys zooming if wants and has time (or qw or -+)
+// TODO why doesn't critter info box passively update when GUI is in run mode
+// instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
