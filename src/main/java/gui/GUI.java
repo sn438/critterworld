@@ -61,3 +61,14 @@ public class GUI extends Application {
 // TODO remove new world button because reset button makes it redundant once
 // TODO #2 is finished
 // TODO make critter info box blank when hex is unselected
+// TODO fix loading critters so that it won't allow loading in more critters than there are available hexes
+// Bug: new world,
+// reset,
+// loadworld,
+// spiralcritterworld
+// loaded 20 noenergybudcritters
+// ConcurrencyModificationException: probably because things inside the map are being modified??
+// iterating through list of critters and objects
+// critter species names?
+// do we just remove all the non-server stuff
+ 
