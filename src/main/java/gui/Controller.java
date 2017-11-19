@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
-import distributed.Server;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -135,9 +134,11 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	/** True when the user is in the process of dragging, so that upon release, hex selection is NOT performed on the hex currently under the mouse pointer.  */
+	/**
+	 * True when the user is in the process of dragging, so that upon release, hex
+	 * selection is NOT performed on the hex currently under the mouse pointer.
+	 */
 	private boolean isCurrentlyDragging = false;
-
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -241,7 +242,7 @@ public class Controller {
 
 		map.draw();
 	}
-	
+
 	@FXML
 	private void handleResetClicked(MouseEvent me) {
 		if (executor != null)
@@ -255,8 +256,8 @@ public class Controller {
 	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove
-		fc.setInitialDirectory(f); // TODO remove
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
+		fc.setInitialDirectory(f); // TODO remove before submitting?
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
@@ -458,18 +459,16 @@ public class Controller {
 	private void handleMapDrag(MouseEvent me) {
 		if (me.isPrimaryButtonDown()) {
 			if (!isCurrentlyDragging) {
-				// TODO should all these references to getScreen be getScene instead?
-				
 				// sets initial coordinates for the drag
-				panMarkerX = me.getScreenX();
-				panMarkerY = me.getScreenY();
+				panMarkerX = me.getSceneX();
+				panMarkerY = me.getSceneY();
 			}
 			isCurrentlyDragging = true;
 
-			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
+			map.drag((me.getSceneX() - panMarkerX) / 0.05, (me.getSceneY() - panMarkerY) / 0.05);
 
-			panMarkerX = me.getScreenX();
-			panMarkerY = me.getScreenY();
+			panMarkerX = me.getSceneX();
+			panMarkerY = me.getSceneY();
 		}
 	}
 
