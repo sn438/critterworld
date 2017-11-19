@@ -135,7 +135,8 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	private boolean hexSelectionMood = true;
+	/** True when the user is in the process of dragging, so that upon release, hex selection is NOT performed on the hex currently under the mouse pointer.  */
+	private boolean isCurrentlyDragging = false;
 
 
 	/** The rate at which the simulation is run. */
@@ -402,13 +403,13 @@ public class Controller {
 
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
-		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
+		if (me.getButton() == MouseButton.PRIMARY && !isCurrentlyDragging) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			map.select(xCoordinateSelected, yCoordinateSelected);
 			updateInfoBox();
 		}
-		hexSelectionMood = true;
+		isCurrentlyDragging = false;
 	}
 
 	private void updateInfoBox() {
@@ -456,12 +457,14 @@ public class Controller {
 	@FXML
 	private void handleMapDrag(MouseEvent me) {
 		if (me.isPrimaryButtonDown()) {
-			if (hexSelectionMood) {
+			if (!isCurrentlyDragging) {
 				// TODO should all these references to getScreen be getScene instead?
+				
+				// sets initial coordinates for the drag
 				panMarkerX = me.getScreenX();
 				panMarkerY = me.getScreenY();
 			}
-			hexSelectionMood = false;
+			isCurrentlyDragging = true;
 
 			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
 
