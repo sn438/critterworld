@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 
-
 import ast.Program;
 import distributed.Server;
 import javafx.animation.KeyFrame;
@@ -28,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -38,13 +38,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
@@ -87,7 +88,7 @@ public class Controller {
 	@FXML
 	private Text sizeText;
 	@FXML
-	private TextArea lastRuleDisplay;
+	private Label lastRuleDisplay;
 	@FXML
 	private Button displayProgram;
 
@@ -131,21 +132,26 @@ public class Controller {
 	/** Controls the hex grid. */
 	private WorldMap map;
 
-	private double mousePanPressedX;
-	private double mousePanPressedY;
+	private double panMarkerX;
+	private double panMarkerY;
+
+	private boolean hexSelectionMood = true; // TODO what is this?
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
 	private ScheduledExecutorService executor;
 
+	private boolean startup = true;
 	private LoginInfo loginInfo;
-	
-	
 
 	@FXML
-	public void initialize() { 
-		login();
+	public void initialize() {
+		// this code only runs on startup
+		if (startup) {
+			login();
+			startup = false;
+		}
 		model = new WorldModel();
 		simulationRate = 30;
 		newWorld.setDisable(false);
@@ -162,10 +168,20 @@ public class Controller {
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
+		memSizeText.setText("");
+		speciesText.setText("");
+		defenseText.setText("");
+		offenseText.setText("");
+		sizeText.setText("");
+		energyText.setText("");
+		passText.setText("");
+		tagText.setText("");
+		postureText.setText("");
 
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 		c.setDisable(true);
 		c.setVisible(false);
+		c.addEventFilter(MouseEvent.ANY, (e) -> c.requestFocus());
 
 		c.heightProperty().bind(scroll.heightProperty());
 		c.widthProperty().bind(scroll.widthProperty());
@@ -196,6 +212,7 @@ public class Controller {
 			}
 		});
 
+		// adds a listener to the slider to adjust world speed as the slider is changed
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 				simulationRate = new_val.longValue();
@@ -225,13 +242,15 @@ public class Controller {
 	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove
+		fc.setInitialDirectory(f); // TODO remove
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
 
 		try {
 			model.loadWorld(worldFile);
-		} catch (FileNotFoundException f) {
+		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
 			a.showAndWait();
@@ -257,8 +276,8 @@ public class Controller {
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("/");
-		fc.setInitialDirectory(f);
+		File f = new File(".\\\\src\\\\test\\\\resources\\\\simulationtests"); // TODO remove
+		fc.setInitialDirectory(f); // TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
 			return;
@@ -295,13 +314,13 @@ public class Controller {
 				return;
 			}
 		}
-
 		map.draw();
 	}
 
 	@FXML
 	private void handleStep(MouseEvent me) {
 		model.advanceTime();
+		updateInfoBox();
 		map.draw();
 		crittersAlive.setText("Critters Alive: " + model.numCritters);
 		stepsTaken.setText("Time: " + model.time);
@@ -371,16 +390,60 @@ public class Controller {
 
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
-		if (!me.isPrimaryButtonDown()) {
-			mousePanPressedX = me.getScreenX();
-			mousePanPressedY = me.getScreenY();
-		} else {
+		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
+			double xCoordinateSelected = me.getSceneX();
+			double yCoordinateSelected = me.getSceneY() - 25;
+			map.select(xCoordinateSelected, yCoordinateSelected);
+			updateInfoBox();
+		}
+		hexSelectionMood = true;
+	}
+
+	private void updateInfoBox() {
+		if (map.getSelectedHex() != null) {
+			int[] hexCoordinatesSelected = map.getSelectedHex();
+			rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
+			columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
+			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+				memSizeText.setText(String.valueOf(critter.getMemLength()));
+				speciesText.setText(critter.getName());
+				int[] critterMemoryCopy = new int[critter.getMemLength()];
+				critterMemoryCopy = critter.getMemoryCopy();
+				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+				energyText.setText(String.valueOf(critterMemoryCopy[4]));
+				passText.setText(String.valueOf(critterMemoryCopy[5]));
+				tagText.setText(String.valueOf(critterMemoryCopy[6]));
+				postureText.setText(String.valueOf(critterMemoryCopy[7]));
+				lastRuleDisplay.setText(critter.getLastRule());
+			} else {
+				memSizeText.setText("");
+				speciesText.setText("");
+				defenseText.setText("");
+				offenseText.setText("");
+				sizeText.setText("");
+				energyText.setText("");
+				passText.setText("");
+				tagText.setText("");
+				postureText.setText("");
+			}
+		}
+
+	}
+
+	// TODO delete upon confirming that new version works
+	@Deprecated
+	@FXML
+	private void handleMapClickedFAKE(MouseEvent me) {
+		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			int[] hexCoordinatesSelected = new int[2];
-			boolean shouldUpdateRowColumn = map.select(xCoordinateSelected, yCoordinateSelected);
+			boolean shouldUpdateHex = map.select(xCoordinateSelected, yCoordinateSelected);
 			hexCoordinatesSelected = map.getSelectedHex();
-			if (shouldUpdateRowColumn) {
+			if (shouldUpdateHex) {
 				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
 				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
 				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
@@ -410,6 +473,7 @@ public class Controller {
 				}
 			}
 		}
+		hexSelectionMood = true;
 	}
 
 	@FXML
@@ -430,17 +494,45 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapDrag2(MouseEvent me) {
-		if (!me.isPrimaryButtonDown()) {
-			map.drag(me.getScreenX() - mousePanPressedX, me.getScreenY() - mousePanPressedY);
+	private void handleMapDrag(MouseEvent me) {
+		if (me.isPrimaryButtonDown()) {
+			if (hexSelectionMood) {
+				// TODO should all these references to getScreen be getScene instead?
+				panMarkerX = me.getScreenX();
+				panMarkerY = me.getScreenY();
+			}
+			hexSelectionMood = false;
+
+			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
+
+			panMarkerX = me.getScreenX();
+			panMarkerY = me.getScreenY();
 		}
 	}
 
 	@FXML
-	private void handleMapDrag(KeyEvent ke) {
-		// if (ke.getCode().equals(KeyCode.UP)) {
-		map.drag(-5, -5);
-		// }
+	private void handleMapPan(KeyEvent ke) {
+		// TODO make it possible to press multiple keys at once for panning? seems to be
+		// difficult.
+		if (ke.getCode().equals(KeyCode.UP)) {
+			map.drag(0, 400);
+		}
+		if (ke.getCode().equals(KeyCode.LEFT)) {
+			map.drag(400, 0);
+		}
+		if (ke.getCode().equals(KeyCode.DOWN)) {
+			map.drag(0, -400);
+		}
+		if (ke.getCode().equals(KeyCode.RIGHT)) {
+			map.drag(-400, 0);
+		}
+
+	}
+
+	@FXML
+	private void help(ActionEvent ae) {
+		GraphicsContext gc = c.getGraphicsContext2D();
+		gc.strokeText("SUJITH", 100, 100);
 	}
 
 	@FXML
@@ -469,52 +561,47 @@ public class Controller {
 	private void login() {
 		Gson gson = new Gson();
 		Dialog<LoginInfo> dialog = new Dialog<>();
-        dialog.setTitle("Login Info");
-        dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
-        DialogPane dialogPane = dialog.getDialogPane();
-        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField levelTextField = new TextField("Level");
-        TextField passwordTextField = new TextField("Password");
-        dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
-        
-        Platform.runLater(levelTextField::requestFocus);
-        dialog.setResultConverter((ButtonType button) -> {
-           
-        	if (button == ButtonType.OK) {
-                return new LoginInfo(levelTextField.getText(),
-                		passwordTextField.getText());
-            }
-            return null;
-        });
-        
-        Optional<LoginInfo> optionalResult = dialog.showAndWait();
-        optionalResult.ifPresent((LoginInfo results) -> {
-           loginInfo = new LoginInfo(results.level, results.password);
-           System.out.println(loginInfo.level + " " + loginInfo.password) ;
-        });
-        URL url = null;
+		dialog.setTitle("Login Info");
+		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
+		DialogPane dialogPane = dialog.getDialogPane();
+		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		TextField levelTextField = new TextField("Level");
+		TextField passwordTextField = new TextField("Password");
+		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
+
+		Platform.runLater(levelTextField::requestFocus);
+		dialog.setResultConverter((ButtonType button) -> {
+
+			if (button == ButtonType.OK) {
+				return new LoginInfo(levelTextField.getText(), passwordTextField.getText());
+			}
+			return null;
+		});
+
+		Optional<LoginInfo> optionalResult = dialog.showAndWait();
+		optionalResult.ifPresent((LoginInfo results) -> {
+			loginInfo = new LoginInfo(results.level, results.password);
+			System.out.println(loginInfo.level + " " + loginInfo.password);
+		});
+		URL url = null;
 		try {
 			if (loginInfo == null) {
 				System.out.println(true);
-			}
-			else {
+			} else {
 				System.out.println(false);
 			}
-			url = new URL("http://localhost:" + 8080 +"/login");
+			url = new URL("http://localhost:" + 8080 + "/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
-            connection.setRequestMethod("POST");
-            
-            PrintWriter w = new PrintWriter(connection.getOutputStream());
-            w.println(gson.toJson(loginInfo, LoginInfo.class));
-            w.flush();
-            
-            BufferedReader r =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        	
-        	
-        	
+			connection.setRequestMethod("POST");
+
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(loginInfo, LoginInfo.class));
+			w.flush();
+
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			System.out.println(r.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
