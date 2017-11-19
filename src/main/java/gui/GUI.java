@@ -56,3 +56,4 @@ public class GUI extends Application {
 // TODO #2 is finished
 // TODO make critter info box blank when hex is unselected
 // TODO critter info box should reset upon world reset
+// TODO revert back to TextArea for critter last rule

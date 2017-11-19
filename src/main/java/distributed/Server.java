@@ -19,8 +19,8 @@ public class Server {
 	/**
 	 * port on which the server will be run.
 	 */
-	private static Server serverInstance;
-	private static int portNumber;
+	private static Server serverInstance; // why are these static??
+	private static int portNumber; 
 	private final String readPassword;
 	private final String writePassword;
 	private final String adminPassword;
@@ -43,6 +43,10 @@ public class Server {
 		return serverInstance;
 	}
 
+	@SuppressWarnings("unchecked")
+	/**
+	 * 
+	 */
 	public void run() {
 		Gson gson = new Gson();
 		port(portNumber);

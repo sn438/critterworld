@@ -135,22 +135,27 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	private boolean hexSelectionMood = true;
+	private boolean hexSelectionMood = true; //TODO what is this?
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
 	private ScheduledExecutorService executor;
 
+	private boolean startup = true;
 	private LoginInfo loginInfo;
-
 	private Server server;
 
 	@FXML
 	public void initialize() {
-		server = Server.getInstance();
-		System.out.println(server.getPortNum());
-		login();
+		// this code only runs on startup
+		if(startup) {
+			server = Server.getInstance();
+			System.out.println(server.getPortNum()); //why is this static method accessed statically?
+			login();
+			startup = false;
+		}
+		
 		model = new WorldModel();
 		simulationRate = 30;
 		newWorld.setDisable(false);
@@ -167,6 +172,15 @@ public class Controller {
 		pause.setDisable(true);
 		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
+		memSizeText.setText("");
+		speciesText.setText("");
+		defenseText.setText("");
+		offenseText.setText("");
+		sizeText.setText("");
+		energyText.setText("");
+		passText.setText("");
+		tagText.setText("");
+		postureText.setText("");
 
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 		c.setDisable(true);
@@ -202,6 +216,7 @@ public class Controller {
 			}
 		});
 
+		// adds a listener to the slider to adjust world speed as the slider is changed
 		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 				simulationRate = new_val.longValue();
@@ -303,7 +318,6 @@ public class Controller {
 				return;
 			}
 		}
-
 		map.draw();
 	}
 
@@ -384,6 +398,7 @@ public class Controller {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			map.select(xCoordinateSelected, yCoordinateSelected);
+			updateInfoBox();
 		}
 		hexSelectionMood = true;
 	}

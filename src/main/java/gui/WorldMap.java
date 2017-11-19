@@ -2,7 +2,6 @@ package gui;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Random;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,7 +19,6 @@ public class WorldMap {
 	private GraphicsContext gc;
 	private Canvas canvas;
 	private int[] selectedHex;
-	private Random rand = new Random();
 
 	/**
 	 * The minimum acceptable hex sidelength (zoom will not allow the user to zoom
