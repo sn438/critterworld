@@ -437,49 +437,6 @@ public class Controller {
 
 	}
 
-	// TODO delete upon confirming that new version works
-	@Deprecated
-	@FXML
-	private void handleMapClickedFAKE(MouseEvent me) {
-		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
-			double xCoordinateSelected = me.getSceneX();
-			double yCoordinateSelected = me.getSceneY() - 25;
-			int[] hexCoordinatesSelected = new int[2];
-			boolean shouldUpdateHex = map.select(xCoordinateSelected, yCoordinateSelected);
-			hexCoordinatesSelected = map.getSelectedHex();
-			if (shouldUpdateHex) {
-				rowText.setText(String.valueOf(hexCoordinatesSelected[0]));
-				columnText.setText(String.valueOf(hexCoordinatesSelected[1]));
-				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-					SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-					memSizeText.setText(String.valueOf(critter.getMemLength()));
-					speciesText.setText(critter.getName());
-					int[] critterMemoryCopy = new int[critter.getMemLength()];
-					critterMemoryCopy = critter.getMemoryCopy();
-					defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-					offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-					sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-					energyText.setText(String.valueOf(critterMemoryCopy[4]));
-					passText.setText(String.valueOf(critterMemoryCopy[5]));
-					tagText.setText(String.valueOf(critterMemoryCopy[6]));
-					postureText.setText(String.valueOf(critterMemoryCopy[7]));
-					lastRuleDisplay.setText(critter.getLastRule());
-				} else {
-					memSizeText.setText("");
-					speciesText.setText("");
-					defenseText.setText("");
-					offenseText.setText("");
-					sizeText.setText("");
-					energyText.setText("");
-					passText.setText("");
-					tagText.setText("");
-					postureText.setText("");
-				}
-			}
-		}
-		hexSelectionMood = true;
-	}
-
 	@FXML
 	private void handleResetClicked(MouseEvent me) {
 		if (executor != null)
