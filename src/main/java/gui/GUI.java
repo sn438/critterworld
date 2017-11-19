@@ -36,11 +36,16 @@ public class GUI extends Application {
 	}
 }
 
+// TODO add SOUNDS!
+// TODO add SKINS!
+// TODO add MICROTRANSACTIONS!
+
 // Sujith:
 // TODO make it so if args != 0 or 4, say bad input
 // TODO work on server stuff
 
 // Rishi:
+// TODO check to make sure favicon is square and pretty looking
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
