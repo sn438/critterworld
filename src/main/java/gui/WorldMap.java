@@ -502,6 +502,4 @@ public class WorldMap {
 	public int[] getSelectedHex() {
 		return selectedHex;
 	}
-	// TODO is it ok that i created getters and setters for these?
-	// TODO why?
 }

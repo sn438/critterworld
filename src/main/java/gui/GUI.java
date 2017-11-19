@@ -5,6 +5,7 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
@@ -23,6 +24,8 @@ public class GUI extends Application {
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
 			stage.setTitle("CRITTERWORLD");
+			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("critterworld_favicon.png"));
+			stage.getIcons().add(icon);
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -43,7 +46,8 @@ public class GUI extends Application {
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
 // TODO make ctrl + arrow keys zooming if wants and has time (or qw or -+)
-// TODO why doesn't critter info box passively update when GUI is in run mode instead of step by step mode?
+// TODO why doesn't critter info box passively update when GUI is in run mode
+// instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
@@ -52,5 +56,3 @@ public class GUI extends Application {
 // TODO remove new world button because reset button makes it redundant once
 // TODO #2 is finished
 // TODO make critter info box blank when hex is unselected
-// TODO critter info box should reset upon world reset
-// TODO revert back to TextArea for critter last rule
