@@ -54,10 +54,10 @@ public class GUI extends Application {
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
-// TODO display program should be disabled before a world is created
 // TODO make critter info box blank when hex is unselected
 // TODO fix loading critters so that it won't allow loading in more critters
 // than there are available hexes
+// TODO why is first new world created not centered?
 
 // Bug: new world,
 // reset,

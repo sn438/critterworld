@@ -111,7 +111,6 @@
 								<Button fx:id="stepForward" layoutX="83.0" layoutY="102.0" mnemonicParsing="false" onMousePressed="#handleStep" text="Step Forward" />
 								<Button fx:id="run" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handleRunPressed" text=" Run " />
 								<Button fx:id="pause" layoutX="166.0" layoutY="149.0" mnemonicParsing="false" onMousePressed="#handlePauseClicked" text="Pause" />
-								<Button fx:id="reset" layoutX="104.0" layoutY="190.0" mnemonicParsing="false" onMousePressed="#handleResetClicked" text="Reset" />
 								<ToggleButton fx:id="chkRandom" layoutX="27.0" layoutY="51.0" mnemonicParsing="false" text="Random hex">
 									<toggleGroup>
 										<ToggleGroup fx:id="LoadChoice" />

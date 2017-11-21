@@ -112,8 +112,6 @@ public class Controller {
 	@FXML
 	private Button pause;
 	@FXML
-	private Button reset;
-	@FXML
 	private Slider simulationSpeed;
 
 	@FXML
@@ -169,8 +167,6 @@ public class Controller {
 		
 		model = new WorldModel();
 		simulationRate = 30;
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
 		chkRandom.setSelected(false);
 		chkRandom.setDisable(true);
@@ -181,7 +177,6 @@ public class Controller {
 		stepForward.setDisable(true);
 		run.setDisable(true);
 		pause.setDisable(true);
-		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 		memSizeText.setText("");
 		speciesText.setText("");
@@ -246,23 +241,15 @@ public class Controller {
 	private void doNewWorld() {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
 
 		map.draw();
-	}
-
-	@FXML
-	private void handleResetClicked(MouseEvent me) {
-		doInitialize();
 	}
 
 	@FXML
@@ -290,13 +277,10 @@ public class Controller {
 		}
 		map = new WorldMap(c, model);
 
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
@@ -387,15 +371,14 @@ public class Controller {
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
 
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
+		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even while the current one is still running?
+		loadWorld.setDisable(true); // TODO refer to above
 		loadCritterFile.setDisable(true);
 		chkRandom.setDisable(true);
 		chkSpecify.setDisable(true);
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
 		run.setDisable(true);
-		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 
 		pause.setDisable(false);
@@ -405,15 +388,14 @@ public class Controller {
 	private void handlePauseClicked(MouseEvent me) {
 		executor.shutdownNow();
 
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
+		newWorld.setDisable(false); // TODO refer to above
+		loadWorld.setDisable(false); // TODO refer to above
 		loadCritterFile.setDisable(false);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 
 		timeline.stop();
@@ -528,6 +510,9 @@ public class Controller {
 	private void handleDisplayProgram(MouseEvent me) {
 		int[] hexCoordinates = new int[2];
 		hexCoordinates = map.getSelectedHex();
+		if (hexCoordinates == null) {
+			return;
+		}
 		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
 			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
