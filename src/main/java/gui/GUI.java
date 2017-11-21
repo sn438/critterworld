@@ -24,8 +24,8 @@ public class GUI extends Application {
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
 			stage.setTitle("CRITTERWORLD");
-			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("critterworld_favicon.png"));
-			stage.getIcons().add(icon);
+			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
+			stage.getIcons().add(icon); // TODO make icon have filled in critter before submission if sticking with this art style
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -41,11 +41,9 @@ public class GUI extends Application {
 // TODO add MICROTRANSACTIONS!
 
 // Sujith:
-// TODO make it so if args != 0 or 4, say bad input
 // TODO work on server stuff
 
 // Rishi:
-// TODO check to make sure favicon is square and pretty looking
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
@@ -57,18 +55,20 @@ public class GUI extends Application {
 
 // Andy:
 // TODO make new world the default instead of blank, and make reset button do
-// new world (TODO #2)
+// new world (#2)
 // TODO remove new world button because reset button makes it redundant once
 // TODO #2 is finished
 // TODO make critter info box blank when hex is unselected
-// TODO fix loading critters so that it won't allow loading in more critters than there are available hexes
+// TODO fix loading critters so that it won't allow loading in more critters
+// than there are available hexes
+
 // Bug: new world,
 // reset,
 // loadworld,
 // spiralcritterworld
 // loaded 20 noenergybudcritters
-// ConcurrencyModificationException: probably because things inside the map are being modified??
+// ConcurrencyModificationException: probably because things inside the map are
+// being modified??
 // iterating through list of critters and objects
 // critter species names?
 // do we just remove all the non-server stuff
- 

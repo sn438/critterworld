@@ -25,6 +25,8 @@ public class Main {
 				Server.singletonConstructor(portNumber, readPassword, writePassword, adminPassword);
 				server = Server.getInstance();
 				server.run();
+			} else {
+				System.out.println("Bad input."); // TODO what to do in the case of bad input?
 			}
 		} catch (Exception e) {
 			System.out.println("Server was not started. Please start server first.");
