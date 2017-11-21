@@ -54,10 +54,7 @@ public class GUI extends Application {
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
-// TODO make new world the default instead of blank, and make reset button do
-// new world (#2)
-// TODO remove new world button because reset button makes it redundant once
-// TODO #2 is finished
+// TODO display program should be disabled before a world is created
 // TODO make critter info box blank when hex is unselected
 // TODO fix loading critters so that it won't allow loading in more critters
 // than there are available hexes

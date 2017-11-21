@@ -150,11 +150,23 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
-		// this code only runs on startup
+		doInitialize();
+		doNewWorld();
+	}
+	
+	private void doInitialize() {
+		// TODO confirm that nothing happens upon initial initializing of the world with the below code
+		if (executor != null)
+			executor.shutdownNow();
+		if (timeline != null)
+			timeline.stop();
+		
+		// this part of the method runs only on startup
 		if (startup) {
 			login();
 			startup = false;
 		}
+		
 		model = new WorldModel();
 		simulationRate = 30;
 		newWorld.setDisable(false);
@@ -227,6 +239,11 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
+		doInitialize();
+		doNewWorld();
+	}
+
+	private void doNewWorld() {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
 		newWorld.setDisable(true);
@@ -245,15 +262,16 @@ public class Controller {
 
 	@FXML
 	private void handleResetClicked(MouseEvent me) {
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-		initialize();
+		doInitialize();
 	}
 
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
+	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
+		doInitialize();
+		doLoadWorld();
+	}
+
+	private void doLoadWorld() {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
