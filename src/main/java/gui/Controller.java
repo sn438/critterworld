@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
-import distributed.Server;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -113,8 +112,6 @@ public class Controller {
 	@FXML
 	private Button pause;
 	@FXML
-	private Button reset;
-	@FXML
 	private Slider simulationSpeed;
 
 	@FXML
@@ -135,8 +132,11 @@ public class Controller {
 	private double panMarkerX;
 	private double panMarkerY;
 
-	private boolean hexSelectionMood = true;
-
+	/**
+	 * True when the user is in the process of dragging, so that upon release, hex
+	 * selection is NOT performed on the hex currently under the mouse pointer.
+	 */
+	private boolean isCurrentlyDragging = false;
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -148,15 +148,25 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
-		// this code only runs on startup
+		doInitialize();
+		doNewWorld();
+	}
+	
+	private void doInitialize() {
+		// TODO confirm that nothing happens upon initial initializing of the world with the below code
+		if (executor != null)
+			executor.shutdownNow();
+		if (timeline != null)
+			timeline.stop();
+		
+		// this part of the method runs only on startup
 		if (startup) {
 			login();
 			startup = false;
 		}
+		
 		model = new WorldModel();
 		simulationRate = 30;
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
 		chkRandom.setSelected(false);
 		chkRandom.setDisable(true);
@@ -167,7 +177,6 @@ public class Controller {
 		stepForward.setDisable(true);
 		run.setDisable(true);
 		pause.setDisable(true);
-		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 		memSizeText.setText("");
 		speciesText.setText("");
@@ -225,37 +234,35 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
+		doInitialize();
+		doNewWorld();
+	}
+
+	private void doNewWorld() {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
 
 		map.draw();
 	}
-	
-	@FXML
-	private void handleResetClicked(MouseEvent me) {
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-		initialize();
-	}
 
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
+	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
+		doInitialize();
+		doLoadWorld();
+	}
+
+	private void doLoadWorld() {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove
-		fc.setInitialDirectory(f); // TODO remove
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
+		fc.setInitialDirectory(f); // TODO remove before submitting?
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
@@ -270,13 +277,10 @@ public class Controller {
 		}
 		map = new WorldMap(c, model);
 
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
@@ -367,15 +371,14 @@ public class Controller {
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
 
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
+		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even while the current one is still running?
+		loadWorld.setDisable(true); // TODO refer to above
 		loadCritterFile.setDisable(true);
 		chkRandom.setDisable(true);
 		chkSpecify.setDisable(true);
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
 		run.setDisable(true);
-		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 
 		pause.setDisable(false);
@@ -385,15 +388,14 @@ public class Controller {
 	private void handlePauseClicked(MouseEvent me) {
 		executor.shutdownNow();
 
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
+		newWorld.setDisable(false); // TODO refer to above
+		loadWorld.setDisable(false); // TODO refer to above
 		loadCritterFile.setDisable(false);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
-		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 
 		timeline.stop();
@@ -402,13 +404,13 @@ public class Controller {
 
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
-		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
+		if (me.getButton() == MouseButton.PRIMARY && !isCurrentlyDragging) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			map.select(xCoordinateSelected, yCoordinateSelected);
 			updateInfoBox();
 		}
-		hexSelectionMood = true;
+		isCurrentlyDragging = false;
 	}
 
 	private void updateInfoBox() {
@@ -456,17 +458,17 @@ public class Controller {
 	@FXML
 	private void handleMapDrag(MouseEvent me) {
 		if (me.isPrimaryButtonDown()) {
-			if (hexSelectionMood) {
-				// TODO should all these references to getScreen be getScene instead?
-				panMarkerX = me.getScreenX();
-				panMarkerY = me.getScreenY();
+			if (!isCurrentlyDragging) {
+				// sets initial coordinates for the drag
+				panMarkerX = me.getSceneX();
+				panMarkerY = me.getSceneY();
 			}
-			hexSelectionMood = false;
+			isCurrentlyDragging = true;
 
-			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
+			map.drag((me.getSceneX() - panMarkerX) / 0.05, (me.getSceneY() - panMarkerY) / 0.05);
 
-			panMarkerX = me.getScreenX();
-			panMarkerY = me.getScreenY();
+			panMarkerX = me.getSceneX();
+			panMarkerY = me.getSceneY();
 		}
 	}
 
@@ -508,6 +510,9 @@ public class Controller {
 	private void handleDisplayProgram(MouseEvent me) {
 		int[] hexCoordinates = new int[2];
 		hexCoordinates = map.getSelectedHex();
+		if (hexCoordinates == null) {
+			return;
+		}
 		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
 			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
