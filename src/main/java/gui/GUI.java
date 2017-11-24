@@ -5,7 +5,6 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
@@ -23,9 +22,7 @@ public class GUI extends Application {
 			if (r == null)
 				throw new Exception("No FXML resource found.");
 			Scene scene = new Scene(FXMLLoader.load(r));
-			stage.setTitle("CRITTERWORLD");
-			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
-			stage.getIcons().add(icon); // TODO make icon have filled in critter before submission if sticking with this art style
+			stage.setTitle("SUJITHWORLD!");
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -36,38 +33,27 @@ public class GUI extends Application {
 	}
 }
 
-// TODO add SOUNDS!
-// TODO add SKINS!
-// TODO add MICROTRANSACTIONS!
-
 // Sujith:
+// TODO make it so if args != 0 or 4, say bad input
 // TODO work on server stuff
 
 // Rishi:
+// TODO figure out exactly how hexSelectionMood works and if it's really doing what it's supposing to be doing
+// TODO make critters solid instead of outlines? try solid out and see how it
+// looks.
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
-// TODO make ctrl + arrow keys zooming if wants and has time (or qw or -+)
-// TODO why doesn't critter info box passively update when GUI is in run mode
-// instead of step by step mode?
+// TODO make ctrl + arrow keys zooming if wants and has time
+// TODO why doesn't critter info box passively update when GUI is in run mode instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
-// TODO change run and pause buttons to the standard icons for play and pause?
-// TODO move run and pause buttons closer to each other to account for the new lack of a reset button
+// TODO make new world the default instead of blank, and make reset button do
+// new world (TODO #2)
+// TODO remove new world button because reset button makes it redundant once
+// TODO #2 is finished
 // TODO make critter info box blank when hex is unselected
-// TODO fix loading critters so that it won't allow loading in more critters
-// than there are available hexes
-// TODO why is first new world created not centered?
-
-// Bug: new world,
-// reset,
-// loadworld,
-// spiralcritterworld
-// loaded 20 noenergybudcritters
-// ConcurrencyModificationException: probably because things inside the map are
-// being modified??
-// iterating through list of critters and objects
-// critter species names?
-// do we just remove all the non-server stuff
+// TODO critter info box should reset upon world reset
+// TODO revert back to TextArea for critter last rule
