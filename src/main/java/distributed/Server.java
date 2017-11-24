@@ -58,7 +58,7 @@ public class Server {
 			LoginInfo loginInfo = gson.fromJson(json, LoginInfo.class);
 			String level = loginInfo.level;
 			String password = loginInfo.password;
-			System.out.println("sjfdh" + level + password);
+			System.out.println(request.body());
 			if (level.equals("read") && password.equals(readPassword)) {
 				System.out.println("hello");
 				session_id++;
