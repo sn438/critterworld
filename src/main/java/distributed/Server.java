@@ -24,7 +24,7 @@ public class Server {
 	private final String readPassword;
 	private final String writePassword;
 	private final String adminPassword;
-	private int session_id;
+	private int sessionId;
 	private Map<Integer, String> sessionIdMap;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
@@ -58,25 +58,24 @@ public class Server {
 			LoginInfo loginInfo = gson.fromJson(json, LoginInfo.class);
 			String level = loginInfo.level;
 			String password = loginInfo.password;
-			System.out.println("sjfdh" + level + password);
 			if (level.equals("read") && password.equals(readPassword)) {
 				System.out.println("hello");
-				session_id++;
+				sessionId++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "read");
+				responseValue.put("sessionId", new Integer(sessionId));
+				sessionIdMap.put(sessionId, "read");
 				return responseValue;
 			} else if (level.equals("write") && password.equals(writePassword)) {
-				session_id++;
+				sessionId++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "write");
+				responseValue.put("sessionId", new Integer(sessionId));
+				sessionIdMap.put(sessionId, "write");
 				return responseValue;
 			} else if (level.equals("admin") && password.equals(adminPassword)) {
-				session_id++;
+				sessionId++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "admin");
+				responseValue.put("sessionId", new Integer(sessionId));
+				sessionIdMap.put(sessionId, "admin");
 				return responseValue;
 			} else {
 				response.status(401);

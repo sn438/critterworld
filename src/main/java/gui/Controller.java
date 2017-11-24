@@ -145,6 +145,8 @@ public class Controller {
 
 	private boolean startup = true;
 	private LoginInfo loginInfo;
+	private SessionId sessionId;
+	private boolean localMode;
 
 	@FXML
 	public void initialize() {
@@ -559,9 +561,24 @@ public class Controller {
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loginInfo, LoginInfo.class));
 			w.flush();
-
+			if (connection.getResponseCode() == 401) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Login Error");
+				alert.setHeaderText("Login Information Was False");
+				alert.setContentText("The login credendtials you entered was false. Click "
+						+ "OK to continue in local mode or Cancel to exit the Program.");
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					localMode = true;
+				    return;
+				} else {
+				    System.exit(0);
+				}
+			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r.readLine());
+			localMode = false;
+			String sessionIdString = r.readLine();
+			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -577,6 +594,15 @@ public class Controller {
 		private LoginInfo(String level, String password) {
 			this.level = level;
 			this.password = password;
+		}
+	}
+	
+	class SessionId {
+		
+		int sessionId;
+		
+		private SessionId(int sessionId) {
+			this.sessionId = sessionId;
 		}
 	}
 }
