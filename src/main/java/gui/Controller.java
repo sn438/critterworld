@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
+import distributed.ClientHandler;
 import distributed.Server;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -132,6 +133,7 @@ public class Controller {
 	/** Controls the hex grid. */
 	private WorldMap map;
 
+	private ClientHandler handler;
 	private double panMarkerX;
 	private double panMarkerY;
 
@@ -155,7 +157,10 @@ public class Controller {
 			login();
 			startup = false;
 		}
-		model = new WorldModel();
+		if (localMode = true)
+			model = new WorldModel();
+		else 
+			handler = new ClientHandler();
 		simulationRate = 30;
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -227,8 +232,14 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		model.createNewWorld();
-		map = new WorldMap(c, model);
+		if (localMode) {
+			model.createNewWorld();
+			map = new WorldMap(c, model, false);
+		}
+		else {
+			handler.createNewWorld(sessionId.sessionId);
+			map = new WorldMap(c, handler, true); 
+		}
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
@@ -270,7 +281,7 @@ public class Controller {
 			a.showAndWait();
 			return;
 		}
-		map = new WorldMap(c, model);
+		map = new WorldMap(c, model, false);
 
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
@@ -547,11 +558,6 @@ public class Controller {
 		});
 		URL url = null;
 		try {
-			if (loginInfo == null) {
-				System.out.println(true);
-			} else {
-				System.out.println(false);
-			}
 			url = new URL("http://localhost:" + 8080 + "/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());

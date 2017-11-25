@@ -1,5 +1,6 @@
 package distributed;
 
+import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 
@@ -9,6 +10,9 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
+
+import simulation.SimpleWorld;
+import simulation.World;
 
 /**
  * Server responds to HTTP requests.
@@ -26,6 +30,7 @@ public class Server {
 	private final String adminPassword;
 	private int sessionId;
 	private Map<Integer, String> sessionIdMap;
+	private SimpleWorld world;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
@@ -51,7 +56,9 @@ public class Server {
 		Gson gson = new Gson();
 		port(portNumber);
 
+		
 		post("/login", (request, response) -> {
+			
 			response.header("Content-Type", "application/json");
 			JSONObject responseValue = null;
 			String json = request.body();
@@ -83,6 +90,19 @@ public class Server {
 			}
 
 		}, gson::toJson);
+		
+		 post("/world/generic", (request, response) -> {
+			 response.header("Content-Type", "application/json");
+			 int session_id = Integer.parseInt(request.attribute("session_id"));
+			 System.out.println(session_id);
+			 if (!sessionIdMap.get(session_id).equals("admin")) {
+				 response.status(401);
+				return "User does not have admin access.";
+			 } else {
+				 world = new World(); 
+			 return "Ok";
+			 }
+		 }, gson::toJson);
 	}
 
 	public static int getPortNum() {

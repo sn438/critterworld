@@ -3,6 +3,7 @@ package gui;
 import java.util.Arrays;
 import java.util.Map;
 
+import distributed.ClientHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -65,6 +66,9 @@ public class WorldMap {
 	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
 	 */
 	private double origin_y;
+	
+	private boolean localMode;
+	private ClientHandler handler;
 
 	/**
 	 * Creates a new world map.
@@ -74,7 +78,8 @@ public class WorldMap {
 	 * @param wm
 	 *            The WorldModel to work off of
 	 */
-	public WorldMap(Canvas can, WorldModel wm) {
+	public WorldMap(Canvas can, WorldModel wm, boolean localMode) {
+		this.localMode = localMode;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -83,6 +88,30 @@ public class WorldMap {
 
 		columns = wm.getColumns();
 		rows = wm.getRows();
+
+		column_drawing_marker = columns;
+		row_drawing_marker = rows;
+		row_drawing_marker -= column_drawing_marker / 2;
+		sideLength = 30;
+
+		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+				+ (sideLength / 2);
+		y_position_marker = (((double) height / 2)
+				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
+				+ (Math.sqrt(3) * (sideLength / 2));
+
+	}
+	
+	public WorldMap(Canvas can, ClientHandler handler, boolean localMode) {
+		this.localMode = localMode;
+		gc = can.getGraphicsContext2D();
+		canvas = can;
+		this.handler = handler;
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+
+		columns = handler.getColumns();
+		rows = handler.getRows();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
