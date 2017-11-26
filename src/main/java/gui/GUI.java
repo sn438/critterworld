@@ -51,12 +51,12 @@ public class GUI extends Application {
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
 
 // Andy:
-// TODO change run and pause buttons to the standard icons for play and pause?
-// TODO move run and pause buttons closer to each other to account for the new
-// lack of a reset button
+// TODO merge run and pause buttons?
 // TODO fix loading critters so that it won't allow loading in more critters
 // than there are available hexes
 // TODO why is first new world created not centered?
+// TODO fix a5 and a4 grader bugs
+// TODO start worldmodel updates and stuff
 
 // Bug: new world,
 // reset,
@@ -68,10 +68,5 @@ public class GUI extends Application {
 // iterating through list of critters and objects
 // critter species names?
 // do we just remove all the non-server stuff
-
-// TODO make new world the default instead of blank, and make reset button do
-// new world (TODO #2)
-// TODO remove new world button because reset button makes it redundant once
-// TODO #2 is finished
 
 // TODO critter info box should reset upon world reset

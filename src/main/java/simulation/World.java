@@ -614,7 +614,7 @@ public class World extends AbstractWorld
 			int baseDamage = CONSTANTS.get("BASE_DAMAGE").intValue();
 			double dmgMultiplier = CONSTANTS.get("DAMAGE_INC").doubleValue();
 			int dmgBeforeScaling = (attacker.size() * attacker.readMemory(2)) - (target.size() * target.readMemory(1));
-			int damage = baseDamage * attacker.size() * logisticFunction(dmgMultiplier * (double)dmgBeforeScaling);
+			int damage = (int) (baseDamage * attacker.size() * logisticFunction(dmgMultiplier * (double)dmgBeforeScaling));
 
 			// kills the target if it took damage greater than or equal to its current energy
 			target.updateEnergy(-1 * damage, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
@@ -626,11 +626,11 @@ public class World extends AbstractWorld
 			kill(attacker);
 	}
 
-	/** Performs the logistic function 1 / (1 + e^-x), floored to an integer value. */
-	private int logisticFunction(double x)
+	/** Performs the logistic function 1 / (1 + e^-x). */
+	private double logisticFunction(double x)
 	{
 		double exponent = -1 * x;
-		return (int) (1 / (1 + Math.exp(exponent)));
+		return (1 / (1 + Math.exp(exponent)));
 	}
 
 	@Override

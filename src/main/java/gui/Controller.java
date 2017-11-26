@@ -139,7 +139,6 @@ public class Controller {
 
 	private boolean hexSelectionMood = true;
 
-
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
@@ -157,10 +156,12 @@ public class Controller {
 			login();
 			startup = false;
 		}
+
 		if (localMode = true)
 			model = new WorldModel();
-		else 
+		else
 			handler = new ClientHandler();
+		
 		simulationRate = 30;
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -235,10 +236,9 @@ public class Controller {
 		if (localMode) {
 			model.createNewWorld();
 			map = new WorldMap(c, model, false);
-		}
-		else {
+		} else {
 			handler.createNewWorld(sessionId.sessionId);
-			map = new WorldMap(c, handler, true); 
+			map = new WorldMap(c, handler, true);
 		}
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
@@ -253,7 +253,7 @@ public class Controller {
 
 		map.draw();
 	}
-	
+
 	@FXML
 	private void handleResetClicked(MouseEvent me) {
 		if (executor != null)
@@ -454,8 +454,7 @@ public class Controller {
 				tagText.setText("");
 				postureText.setText("");
 			}
-		}
-		else {
+		} else {
 			columnText.setText("");
 			rowText.setText("");
 		}
@@ -507,6 +506,7 @@ public class Controller {
 
 	@FXML
 	private void help(ActionEvent ae) {
+		// TODO actually make this helpful
 		GraphicsContext gc = c.getGraphicsContext2D();
 		gc.strokeText("SUJITH", 100, 100);
 	}
@@ -577,11 +577,11 @@ public class Controller {
 				alert.setContentText("The login credendtials you entered was false. Click "
 						+ "OK to continue in local mode or Cancel to exit the Program.");
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK){
+				if (result.get() == ButtonType.OK) {
 					localMode = true;
-				    return;
+					return;
 				} else {
-				    System.exit(0);
+					System.exit(0);
 				}
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -605,11 +605,11 @@ public class Controller {
 			this.password = password;
 		}
 	}
-	
+
 	class SessionId {
-		
+
 		int sessionId;
-		
+
 		private SessionId(int sessionId) {
 			this.sessionId = sessionId;
 		}
