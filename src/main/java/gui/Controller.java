@@ -157,15 +157,6 @@ public class Controller {
 			login();
 			startup = false;
 		}
-<<<<<<< HEAD
-=======
-
-		if (localMode = true)
-			model = new WorldModel();
-		else
-			handler = new ClientHandler();
-		
->>>>>>> 10604fa8471e6d55b798c05768ee7599a68fc5a3
 		simulationRate = 30;
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -239,7 +230,6 @@ public class Controller {
 	private void handleNewWorldPressed(MouseEvent me) {
 		if (this.localMode) {
 			model.createNewWorld();
-<<<<<<< HEAD
 			map = new WorldMap(c, model);
 		} else {
 			System.out.println("ok");
@@ -247,12 +237,7 @@ public class Controller {
 				map = new WorldMap(c, handler, sessionId.getSessionId());
 			else
 				return;
-=======
-			map = new WorldMap(c, model, false);
-		} else {
-			handler.createNewWorld(sessionId.sessionId);
-			map = new WorldMap(c, handler, true);
->>>>>>> 10604fa8471e6d55b798c05768ee7599a68fc5a3
+
 		}
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
@@ -592,10 +577,8 @@ public class Controller {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
-<<<<<<< HEAD
 					model = new WorldModel();
-=======
->>>>>>> 10604fa8471e6d55b798c05768ee7599a68fc5a3
+
 					return;
 				} else {
 					System.exit(0);
@@ -626,17 +609,5 @@ public class Controller {
 			this.password = password;
 		}
 	}
-
-<<<<<<< HEAD
-	
-=======
-	class SessionId {
-
-		int sessionId;
-
-		private SessionId(int sessionId) {
-			this.sessionId = sessionId;
-		}
-	}
->>>>>>> 10604fa8471e6d55b798c05768ee7599a68fc5a3
 }
+
