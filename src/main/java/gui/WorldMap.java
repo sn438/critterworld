@@ -66,7 +66,7 @@ public class WorldMap {
 	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
 	 */
 	private double origin_y;
-	
+
 	private boolean localMode;
 	private ClientHandler handler;
 
@@ -101,7 +101,7 @@ public class WorldMap {
 				+ (Math.sqrt(3) * (sideLength / 2));
 
 	}
-	
+
 	public WorldMap(Canvas can, ClientHandler handler, int sessionId) {
 		this.localMode = false;
 		gc = can.getGraphicsContext2D();
@@ -329,7 +329,7 @@ public class WorldMap {
 		// draw critter (outlines only)
 		// gc.setStroke(color);
 		// gc.strokePolygon(xPoints, yPoints, 3);
-		
+
 		// draw critter (filled in)
 		gc.setFill(color);
 		gc.fillPolygon(xPoints, yPoints, 3);

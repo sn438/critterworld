@@ -1,7 +1,6 @@
 package distributed;
 
 import static spark.Spark.get;
-
 import static spark.Spark.port;
 import static spark.Spark.post;
 
@@ -94,7 +93,7 @@ public class Server {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
 				response.status(401);
 				return "User does not have admin access.";
@@ -110,7 +109,7 @@ public class Server {
 		get("/rowNum", (request, response) -> {
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			if (sessionIdMap.get(session_id) == null) {
 				response.status(401);
 				return "User does not have read access";
@@ -121,7 +120,7 @@ public class Server {
 		get("/colNum", (request, response) -> {
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			if (sessionIdMap.get(session_id) == null) {
 				response.status(401);
 				return "User does not have read access";
