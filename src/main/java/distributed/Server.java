@@ -1,6 +1,7 @@
 package distributed;
 
 import static spark.Spark.get;
+
 import static spark.Spark.port;
 import static spark.Spark.post;
 
@@ -24,11 +25,11 @@ public class Server {
 	 * port on which the server will be run.
 	 */
 	private static Server serverInstance; // why are these static??
-	private static int portNumber; 
+	private static int portNumber;
 	private final String readPassword;
 	private final String writePassword;
 	private final String adminPassword;
-	private int sessionId;
+	private int session_id;
 	private Map<Integer, String> sessionIdMap;
 	private SimpleWorld world;
 
@@ -56,9 +57,8 @@ public class Server {
 		Gson gson = new Gson();
 		port(portNumber);
 
-		
 		post("/login", (request, response) -> {
-			
+
 			response.header("Content-Type", "application/json");
 			JSONObject responseValue = null;
 			String json = request.body();
@@ -66,23 +66,22 @@ public class Server {
 			String level = loginInfo.level;
 			String password = loginInfo.password;
 			if (level.equals("read") && password.equals(readPassword)) {
-				System.out.println("hello");
-				sessionId++;
+				session_id++;
 				responseValue = new JSONObject();
-				responseValue.put("sessionId", new Integer(sessionId));
-				sessionIdMap.put(sessionId, "read");
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "read");
 				return responseValue;
 			} else if (level.equals("write") && password.equals(writePassword)) {
-				sessionId++;
+				session_id++;
 				responseValue = new JSONObject();
-				responseValue.put("sessionId", new Integer(sessionId));
-				sessionIdMap.put(sessionId, "write");
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "write");
 				return responseValue;
 			} else if (level.equals("admin") && password.equals(adminPassword)) {
-				sessionId++;
+				session_id++;
 				responseValue = new JSONObject();
-				responseValue.put("sessionId", new Integer(sessionId));
-				sessionIdMap.put(sessionId, "admin");
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "admin");
 				return responseValue;
 			} else {
 				response.status(401);
@@ -90,19 +89,45 @@ public class Server {
 			}
 
 		}, gson::toJson);
-		
-		 post("/world/generic", (request, response) -> {
-			 response.header("Content-Type", "application/json");
-			 int session_id = Integer.parseInt(request.attribute("session_id"));
-			 System.out.println(session_id);
-			 if (!sessionIdMap.get(session_id).equals("admin")) {
-				 response.status(401);
+
+		get("/world/generic", (request, response) -> {
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
+				response.status(401);
 				return "User does not have admin access.";
-			 } else {
-				 world = new World(); 
-			 return "Ok";
-			 }
-		 }, gson::toJson);
+			} else {
+				if (world != null) {
+					world.getCritterMap();
+				}
+				world = new World();
+				return "Ok";
+			}
+		}, gson::toJson);
+
+		get("/rowNum", (request, response) -> {
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			if (sessionIdMap.get(session_id) == null) {
+				response.status(401);
+				return "User does not have read access";
+			} else
+				return world.getRows();
+		}, gson::toJson);
+
+		get("/colNum", (request, response) -> {
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id =  Integer.parseInt(queryString.substring(indexOfSessionId+1, queryString.length()));
+			if (sessionIdMap.get(session_id) == null) {
+				response.status(401);
+				return "User does not have read access";
+			} else
+				return world.getColumns();
+		}, gson::toJson);
 	}
 
 	public static int getPortNum() {

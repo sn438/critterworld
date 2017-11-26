@@ -78,8 +78,8 @@ public class WorldMap {
 	 * @param wm
 	 *            The WorldModel to work off of
 	 */
-	public WorldMap(Canvas can, WorldModel wm, boolean localMode) {
-		this.localMode = localMode;
+	public WorldMap(Canvas can, WorldModel wm) {
+		this.localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -102,16 +102,16 @@ public class WorldMap {
 
 	}
 	
-	public WorldMap(Canvas can, ClientHandler handler, boolean localMode) {
-		this.localMode = localMode;
+	public WorldMap(Canvas can, ClientHandler handler, int sessionId) {
+		this.localMode = false;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		this.handler = handler;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 
-		columns = handler.getColumns();
-		rows = handler.getRows();
+		columns = handler.getColumns(sessionId);
+		rows = handler.getRows(sessionId);
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;

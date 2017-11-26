@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import ast.Program;
 import distributed.ClientHandler;
 import distributed.Server;
+import distributed.SessionId;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -139,7 +140,6 @@ public class Controller {
 
 	private boolean hexSelectionMood = true;
 
-
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
 	/** The executor that is used to step the world periodically. */
@@ -157,10 +157,6 @@ public class Controller {
 			login();
 			startup = false;
 		}
-		if (localMode = true)
-			model = new WorldModel();
-		else 
-			handler = new ClientHandler();
 		simulationRate = 30;
 		newWorld.setDisable(false);
 		loadWorld.setDisable(false);
@@ -232,13 +228,15 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		if (localMode) {
+		if (this.localMode) {
 			model.createNewWorld();
-			map = new WorldMap(c, model, false);
-		}
-		else {
-			handler.createNewWorld(sessionId.sessionId);
-			map = new WorldMap(c, handler, true); 
+			map = new WorldMap(c, model);
+		} else {
+			System.out.println("ok");
+			if (handler.createNewWorld(sessionId.getSessionId()))
+				map = new WorldMap(c, handler, sessionId.getSessionId());
+			else
+				return;
 		}
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
@@ -253,7 +251,7 @@ public class Controller {
 
 		map.draw();
 	}
-	
+
 	@FXML
 	private void handleResetClicked(MouseEvent me) {
 		if (executor != null)
@@ -281,7 +279,7 @@ public class Controller {
 			a.showAndWait();
 			return;
 		}
-		map = new WorldMap(c, model, false);
+		map = new WorldMap(c, model);
 
 		newWorld.setDisable(true);
 		loadWorld.setDisable(true);
@@ -554,7 +552,6 @@ public class Controller {
 		Optional<LoginInfo> optionalResult = dialog.showAndWait();
 		optionalResult.ifPresent((LoginInfo results) -> {
 			loginInfo = new LoginInfo(results.level, results.password);
-			System.out.println(loginInfo.level + " " + loginInfo.password);
 		});
 		URL url = null;
 		try {
@@ -574,15 +571,15 @@ public class Controller {
 				alert.setContentText("The login credendtials you entered was false. Click "
 						+ "OK to continue in local mode or Cancel to exit the Program.");
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.get() == ButtonType.OK){
+				if (result.get() == ButtonType.OK) {
 					localMode = true;
-				    return;
+					model = new WorldModel();
+					return;
 				} else {
-				    System.exit(0);
+					System.exit(0);
 				}
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			localMode = false;
 			String sessionIdString = r.readLine();
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
@@ -590,6 +587,11 @@ public class Controller {
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
 		}
+		localMode = false;
+		System.out.println(localMode);
+		System.out.println(localMode);
+		handler = new ClientHandler();
+		System.out.println(handler);
 	}
 
 	class LoginInfo {
@@ -602,13 +604,6 @@ public class Controller {
 			this.password = password;
 		}
 	}
+
 	
-	class SessionId {
-		
-		int sessionId;
-		
-		private SessionId(int sessionId) {
-			this.sessionId = sessionId;
-		}
-	}
 }
