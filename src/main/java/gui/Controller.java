@@ -444,7 +444,10 @@ public class Controller {
 				postureText.setText("");
 			}
 		}
-
+		else {
+			columnText.setText("");
+			rowText.setText("");
+		}
 	}
 
 	@FXML
