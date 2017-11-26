@@ -61,6 +61,14 @@ public class GUI extends Application {
 // TODO critter info box should reset upon world reset (even if new world isn't
 // called in the code like it's setup right now)
 
+// TODO change run and pause buttons to the standard icons for play and pause?
+// TODO move run and pause buttons closer to each other to account for the new
+// lack of a reset button
+// TODO make critter info box blank when hex is unselected
+// TODO fix loading critters so that it won't allow loading in more critters
+// than there are available hexes
+// TODO why is first new world created not centered?
+
 // Bug: new world,
 // reset,
 // loadworld,

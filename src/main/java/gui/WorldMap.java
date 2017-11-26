@@ -325,10 +325,14 @@ public class WorldMap {
 			blue = 0;
 		}
 		Color color = new Color(red, green, blue, 1);
-		gc.setStroke(color);
 
-		// draw critter
-		gc.strokePolygon(xPoints, yPoints, 3);
+		// draw critter (outlines only)
+		// gc.setStroke(color);
+		// gc.strokePolygon(xPoints, yPoints, 3);
+		
+		// draw critter (filled in)
+		gc.setFill(color);
+		gc.fillPolygon(xPoints, yPoints, 3);
 	}
 
 	/**
@@ -527,6 +531,4 @@ public class WorldMap {
 	public int[] getSelectedHex() {
 		return selectedHex;
 	}
-	// TODO is it ok that i created getters and setters for these?
-	// TODO why?
 }
