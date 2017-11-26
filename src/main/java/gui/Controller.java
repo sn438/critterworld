@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
+import distributed.ClientHandler;
+import distributed.Server;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -112,6 +114,8 @@ public class Controller {
 	@FXML
 	private Button pause;
 	@FXML
+	private Button reset;
+	@FXML
 	private Slider simulationSpeed;
 
 	@FXML
@@ -129,14 +133,12 @@ public class Controller {
 	/** Controls the hex grid. */
 	private WorldMap map;
 
+	private ClientHandler handler;
 	private double panMarkerX;
 	private double panMarkerY;
 
-	/**
-	 * True when the user is in the process of dragging, so that upon release, hex
-	 * selection is NOT performed on the hex currently under the mouse pointer.
-	 */
-	private boolean isCurrentlyDragging = false;
+	private boolean hexSelectionMood = true;
+
 
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
@@ -145,28 +147,23 @@ public class Controller {
 
 	private boolean startup = true;
 	private LoginInfo loginInfo;
+	private SessionId sessionId;
+	private boolean localMode;
 
 	@FXML
 	public void initialize() {
-		doInitialize();
-		doNewWorld();
-	}
-	
-	private void doInitialize() {
-		// TODO confirm that nothing happens upon initial initializing of the world with the below code
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-		
-		// this part of the method runs only on startup
+		// this code only runs on startup
 		if (startup) {
 			login();
 			startup = false;
 		}
-		
-		model = new WorldModel();
+		if (localMode = true)
+			model = new WorldModel();
+		else 
+			handler = new ClientHandler();
 		simulationRate = 30;
+		newWorld.setDisable(false);
+		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(true);
 		chkRandom.setSelected(false);
 		chkRandom.setDisable(true);
@@ -177,6 +174,7 @@ public class Controller {
 		stepForward.setDisable(true);
 		run.setDisable(true);
 		pause.setDisable(true);
+		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 		memSizeText.setText("");
 		speciesText.setText("");
@@ -234,35 +232,43 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		doInitialize();
-		doNewWorld();
-	}
-
-	private void doNewWorld() {
-		model.createNewWorld();
-		map = new WorldMap(c, model);
+		if (localMode) {
+			model.createNewWorld();
+			map = new WorldMap(c, model, false);
+		}
+		else {
+			handler.createNewWorld(sessionId.sessionId);
+			map = new WorldMap(c, handler, true); 
+		}
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
+		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
 
 		map.draw();
 	}
-
+	
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
-		doInitialize();
-		doLoadWorld();
+	private void handleResetClicked(MouseEvent me) {
+		if (executor != null)
+			executor.shutdownNow();
+		if (timeline != null)
+			timeline.stop();
+		initialize();
 	}
 
-	private void doLoadWorld() {
+	@FXML
+	private void handleLoadWorldPressed(MouseEvent me) throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
-		fc.setInitialDirectory(f); // TODO remove before submitting?
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove
+		fc.setInitialDirectory(f); // TODO remove
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
@@ -275,12 +281,15 @@ public class Controller {
 			a.showAndWait();
 			return;
 		}
-		map = new WorldMap(c, model);
+		map = new WorldMap(c, model, false);
 
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
+		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
@@ -371,14 +380,15 @@ public class Controller {
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
 
-		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even while the current one is still running?
-		loadWorld.setDisable(true); // TODO refer to above
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(true);
 		chkRandom.setDisable(true);
 		chkSpecify.setDisable(true);
 		numCritters.setDisable(true);
 		stepForward.setDisable(true);
 		run.setDisable(true);
+		reset.setDisable(true);
 		simulationSpeed.setDisable(true);
 
 		pause.setDisable(false);
@@ -388,14 +398,15 @@ public class Controller {
 	private void handlePauseClicked(MouseEvent me) {
 		executor.shutdownNow();
 
-		newWorld.setDisable(false); // TODO refer to above
-		loadWorld.setDisable(false); // TODO refer to above
+		newWorld.setDisable(false);
+		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(false);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
+		reset.setDisable(false);
 		simulationSpeed.setDisable(false);
 
 		timeline.stop();
@@ -404,13 +415,13 @@ public class Controller {
 
 	@FXML
 	private void handleMapClicked(MouseEvent me) {
-		if (me.getButton() == MouseButton.PRIMARY && !isCurrentlyDragging) {
+		if (me.getButton() == MouseButton.PRIMARY && hexSelectionMood) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
 			map.select(xCoordinateSelected, yCoordinateSelected);
 			updateInfoBox();
 		}
-		isCurrentlyDragging = false;
+		hexSelectionMood = true;
 	}
 
 	private void updateInfoBox() {
@@ -461,17 +472,17 @@ public class Controller {
 	@FXML
 	private void handleMapDrag(MouseEvent me) {
 		if (me.isPrimaryButtonDown()) {
-			if (!isCurrentlyDragging) {
-				// sets initial coordinates for the drag
-				panMarkerX = me.getSceneX();
-				panMarkerY = me.getSceneY();
+			if (hexSelectionMood) {
+				// TODO should all these references to getScreen be getScene instead?
+				panMarkerX = me.getScreenX();
+				panMarkerY = me.getScreenY();
 			}
-			isCurrentlyDragging = true;
+			hexSelectionMood = false;
 
-			map.drag((me.getSceneX() - panMarkerX) / 0.05, (me.getSceneY() - panMarkerY) / 0.05);
+			map.drag((me.getScreenX() - panMarkerX) / 0.05, (me.getScreenY() - panMarkerY) / 0.05);
 
-			panMarkerX = me.getSceneX();
-			panMarkerY = me.getSceneY();
+			panMarkerX = me.getScreenX();
+			panMarkerY = me.getScreenY();
 		}
 	}
 
@@ -513,9 +524,6 @@ public class Controller {
 	private void handleDisplayProgram(MouseEvent me) {
 		int[] hexCoordinates = new int[2];
 		hexCoordinates = map.getSelectedHex();
-		if (hexCoordinates == null) {
-			return;
-		}
 		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
 			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
@@ -553,11 +561,6 @@ public class Controller {
 		});
 		URL url = null;
 		try {
-			if (loginInfo == null) {
-				System.out.println(true);
-			} else {
-				System.out.println(false);
-			}
 			url = new URL("http://localhost:" + 8080 + "/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
@@ -567,9 +570,24 @@ public class Controller {
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loginInfo, LoginInfo.class));
 			w.flush();
-
+			if (connection.getResponseCode() == 401) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Login Error");
+				alert.setHeaderText("Login Information Was False");
+				alert.setContentText("The login credendtials you entered was false. Click "
+						+ "OK to continue in local mode or Cancel to exit the Program.");
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					localMode = true;
+				    return;
+				} else {
+				    System.exit(0);
+				}
+			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r.readLine());
+			localMode = false;
+			String sessionIdString = r.readLine();
+			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -585,6 +603,15 @@ public class Controller {
 		private LoginInfo(String level, String password) {
 			this.level = level;
 			this.password = password;
+		}
+	}
+	
+	class SessionId {
+		
+		int sessionId;
+		
+		private SessionId(int sessionId) {
+			this.sessionId = sessionId;
 		}
 	}
 }
