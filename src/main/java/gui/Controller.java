@@ -125,13 +125,17 @@ public class Controller {
 	@FXML
 	private Label stepsTaken;
 
+	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
 	/** The model that contains the world state. */
 	private WorldModel model;
 	/** Controls the hex grid. */
 	private WorldMap map;
-
-	private ClientHandler handler;
+	/** The rate at which the simulation is run. */
+	private long simulationRate;
+	/** The executor that is used to step the world periodically. */
+	private ScheduledExecutorService executor;
+	
 	private double panMarkerX;
 	private double panMarkerY;
 
@@ -141,20 +145,16 @@ public class Controller {
 	 */
 	private boolean isCurrentlyDragging = false;
 
-	/** The rate at which the simulation is run. */
-	private long simulationRate;
-	/** The executor that is used to step the world periodically. */
-	private ScheduledExecutorService executor;
-
-	private boolean startup = true;
 	private LoginInfo loginInfo;
 	private SessionId sessionId;
 	private boolean localMode;
+	private ClientHandler handler;
 
 	@FXML
 	public void initialize() {
+		login();
 		doInitialize();
-		doNewWorld();
+		newWorld();
 	}
 
 	private void doInitialize() {
@@ -164,12 +164,6 @@ public class Controller {
 			executor.shutdownNow();
 		if (timeline != null)
 			timeline.stop();
-
-		// this part of the method runs only on startup
-		if (startup) {
-			login();
-			startup = false;
-		}
 
 		model = new WorldModel();
 		simulationRate = 30;
@@ -257,10 +251,10 @@ public class Controller {
 		// loadWorld.setDisable(true);
 		// =======
 		doInitialize();
-		doNewWorld();
+		newWorld();
 	}
 
-	private void doNewWorld() {
+	private void newWorld() {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
 		chkRandom.setDisable(false);
@@ -277,10 +271,10 @@ public class Controller {
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
 		doInitialize();
-		doLoadWorld();
+		loadWorld();
 	}
 
-	private void doLoadWorld() {
+	private void loadWorld() {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?

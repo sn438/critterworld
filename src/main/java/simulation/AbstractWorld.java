@@ -12,6 +12,8 @@ public abstract class AbstractWorld implements SimpleWorld
 	protected HashMap<String, Double> CONSTANTS;
 	/** Stores all the critters present in the world, in the order in which they were created. */
 	protected LinkedList<SimpleCritter> critterList;
+	/** Stores all critters that have died or have been removed. */
+	protected LinkedList<SimpleCritter> deadCritters;
 	/** The number of time steps passed since this world's genesis. */
 	protected int timePassed;
 	
