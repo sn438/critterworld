@@ -16,7 +16,7 @@ class ParserImpl implements Parser {
 
 	@Override
 	public Program parse(Reader r) {
-		this.tokens = new Tokenizer(r);
+		tokens = new Tokenizer(r);
 		try {
 			programAST = parseProgram(tokens);
 		}
@@ -24,8 +24,7 @@ class ParserImpl implements Parser {
 			programAST = null;
 		}
 
-		return this.programAST;
-
+		return programAST;
 	}
 
 	/**

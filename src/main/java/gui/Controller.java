@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 
 import ast.Program;
 import distributed.ClientHandler;
-import distributed.Server;
 import distributed.SessionId;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -228,11 +227,12 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		if (this.localMode) {
+		if (localMode) {
 			model.createNewWorld();
 			map = new WorldMap(c, model);
 		} else {
 			System.out.println("ok");
+			
 			if (handler.createNewWorld(sessionId.getSessionId()))
 				map = new WorldMap(c, handler, sessionId.getSessionId());
 			else

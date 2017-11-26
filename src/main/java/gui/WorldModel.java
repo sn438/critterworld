@@ -76,7 +76,6 @@ public class WorldModel {
 		world.advanceOneTimeStep();
 		time++;
 		numCritters = world.numRemainingCritters();
-		// System.out.println(world.printGrid());
 	}
 
 	public synchronized void loadRandomCritters(File f, int n) {
