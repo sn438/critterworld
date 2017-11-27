@@ -24,9 +24,11 @@ import simulation.Hex;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
+/** A class to handle client requests to the server. */
 public class ClientHandler {
 
 	public boolean createNewWorld(int sessionId) {
+		// We can probably refactor this into one class handling this block
 		Gson gson = new Gson();
 		URL url = null;
 		try {
@@ -148,5 +150,4 @@ public class ClientHandler {
 		// TODO Auto-generated method stub
 
 	}
-
 }

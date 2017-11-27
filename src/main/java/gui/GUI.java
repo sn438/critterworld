@@ -15,8 +15,8 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		stage.setMinHeight(800);
-		stage.setMinWidth(1000);
+		stage.setMinHeight(900);
+		stage.setMinWidth(1600);
 
 		try {
 			URL r = getClass().getResource("gui.fxml");

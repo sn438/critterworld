@@ -670,7 +670,7 @@ public class World extends AbstractWorld
 		for (int i = 5; i < babymem.length; i++)
 			babymem[i] = 0;
 
-		String name = sc.getName() + " Jr.";
+		String name = sc.getName();
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
 		for (int i = 0; i < numMutations; i++)
@@ -851,7 +851,7 @@ public class World extends AbstractWorld
 		int numMutations = numberMutations();
 		for (int i = 0; i < numMutations; i++)
 			prog = prog.mutate();
-		String name = sc1.getName() + sc2.getName() + " Jr.";
+		String name = random.nextBoolean() ? sc1.getName() : sc2.getName();
 		SimpleCritter baby = new Critter(prog, babymem, name, 0);
 		loadOneCritter(baby, babyColumn, babyRow);
 
@@ -958,6 +958,7 @@ public class World extends AbstractWorld
 		location.removeContent();
 		critterMap.remove(sc);
 		critterList.remove(sc);
+		deadCritters.add(sc);
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		nonCritterObjectMap.put(remnant, location);
