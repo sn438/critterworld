@@ -144,7 +144,6 @@ public class Controller {
 	 * selection is NOT performed on the hex currently under the mouse pointer.
 	 */
 	private boolean isCurrentlyDragging = false;
-
 	private LoginInfo loginInfo;
 	private SessionId sessionId;
 	private boolean localMode;
@@ -152,12 +151,12 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
-
 //		if (startup) {
 //			// System.out.println("yes");
 //			login();
 //			startup = false;
 //		}
+
 		login();
 		doInitialize();
 
@@ -264,16 +263,13 @@ public class Controller {
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
-
 		map.draw();
 	}
 
 	private void doNewWorldServer() {
 		if (handler.createNewWorld(sessionId.getSessionId())) {
-			System.out.println(handler.createNewWorld(sessionId.getSessionId()));
 			map = new WorldMap(c, handler, sessionId.getSessionId());
 			map.draw();
-			// map.draw();
 		} else
 			return;
 		chkRandom.setDisable(false);
@@ -283,8 +279,6 @@ public class Controller {
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
-		System.out.println(map);
-		// map.draw();
 	}
 
 	@FXML
@@ -618,6 +612,8 @@ public class Controller {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
+			localMode = true;
+			return;
 		}
 		localMode = false;
 		System.out.println(localMode);
