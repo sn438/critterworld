@@ -35,10 +35,15 @@ public class GUI extends Application {
 	}
 }
 
+// TODO add SOUNDS!
+// TODO add SKINS!
+// TODO add MICROTRANSACTIONS!
+
 // Sujith:
 // TODO work on server stuff
 
 // Rishi:
+// TODO stop automatically creating new world??
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
@@ -47,7 +52,7 @@ public class GUI extends Application {
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
-//TODO make icon solid critter before submission if keeping this art style
+// TODO make icon solid critter before submission if keeping this art style
 
 // Andy:
 // TODO merge run and pause buttons?
@@ -56,7 +61,6 @@ public class GUI extends Application {
 // TODO why is first new world created not centered?
 // TODO critter info box should reset upon world reset (even if new world isn't
 // called in the code like it's setup right now)
-// TODO stop automatically creating new world
 // TODO locks in world model
 
 // Bug: new world,
