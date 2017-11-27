@@ -5,15 +5,10 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
-
 import com.google.gson.Gson;
-
 import gui.WorldModel;
-import simulation.SimpleWorld;
-import simulation.World;
 
 /** A server that responds to HTTP requests. */
 public class Server {
@@ -25,7 +20,7 @@ public class Server {
 	private final String writePassword;
 	private final String adminPassword;
 	private int session_id;
-	private Map<Integer, String> sessionIdMap;
+	private HashMap<Integer, String> sessionIdMap;
 	private WorldModel world;
 
 	
