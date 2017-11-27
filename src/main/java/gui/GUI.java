@@ -35,10 +35,15 @@ public class GUI extends Application {
 	}
 }
 
+// TODO add SOUNDS!
+// TODO add SKINS!
+// TODO add MICROTRANSACTIONS!
+
 // Sujith:
 // TODO work on server stuff
 
 // Rishi:
+// TODO stop automatically creating new world??
 // TODO implement smell
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
