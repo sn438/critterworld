@@ -35,10 +35,6 @@ public class GUI extends Application {
 	}
 }
 
-// TODO add SOUNDS!
-// TODO add SKINS!
-// TODO add MICROTRANSACTIONS!
-
 // Sujith:
 // TODO work on server stuff
 
@@ -60,11 +56,8 @@ public class GUI extends Application {
 // TODO why is first new world created not centered?
 // TODO critter info box should reset upon world reset (even if new world isn't
 // called in the code like it's setup right now)
-// TODO change run and pause buttons to the standard icons for play and pause?
-// TODO move run and pause buttons closer to each other to account for the new
-// lack of a reset button
-// TODO fix loading critters so that it won't allow loading in more critters
-// than there are available hexes
+// TODO stop automatically creating new world
+// TODO locks in world model
 
 // Bug: new world,
 // reset,

@@ -14,22 +14,19 @@ import com.google.gson.Gson;
 import simulation.SimpleWorld;
 import simulation.World;
 
-/**
- * Server responds to HTTP requests.
- *
- */
+/** Server responds to HTTP requests. */
 public class Server {
 
 	/**
 	 * port on which the server will be run.
 	 */
-	private static Server serverInstance; // why are these static??
+	private static Server serverInstance;
 	private static int portNumber;
 	private final String readPassword;
 	private final String writePassword;
 	private final String adminPassword;
 	private int session_id;
-	private Map<Integer, String> sessionIdMap;
+	private Map<Integer, String> sessionIdMap; // why is this a thing?
 	private SimpleWorld world;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
@@ -84,7 +81,7 @@ public class Server {
 				return responseValue;
 			} else {
 				response.status(401);
-				return "Please enter in proper password.";
+				return "Please enter in a proper password.";
 			}
 
 		}, gson::toJson);
@@ -142,6 +139,5 @@ public class Server {
 			this.level = level;
 			this.password = password;
 		}
-
 	}
 }

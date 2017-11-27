@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
-import distributed.ClientHandler;
+import distributed.ClientRequestHandler;
 import distributed.SessionId;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -148,13 +148,13 @@ public class Controller {
 	private LoginInfo loginInfo;
 	private SessionId sessionId;
 	private boolean localMode;
-	private ClientHandler handler;
+	private ClientRequestHandler handler;
 
 	@FXML
 	public void initialize() {
 		login();
 		doInitialize();
-		newWorld();
+		//newWorld();
 	}
 
 	private void doInitialize() {
@@ -234,22 +234,21 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		// <<<<<<< HEAD
-		// if (localMode) {
-		// model.createNewWorld();
-		// map = new WorldMap(c, model);
-		// } else {
-		// System.out.println("ok");
-		//
-		// if (handler.createNewWorld(sessionId.getSessionId()))
-		// map = new WorldMap(c, handler, sessionId.getSessionId());
-		// else
-		// return;
-		//
-		// }
-		// newWorld.setDisable(true);
-		// loadWorld.setDisable(true);
-		// =======
+		 if (localMode) {
+			 model.createNewWorld();
+			 map = new WorldMap(c, model);
+		 } else {
+		 System.out.println("ok");
+		
+		 if (handler.createNewWorld(sessionId.getSessionId()))
+			 map = new WorldMap(c, handler, sessionId.getSessionId());
+		 else
+			 return;
+		
+		 }
+		 newWorld.setDisable(true);
+		 loadWorld.setDisable(true);
+
 		doInitialize();
 		newWorld();
 	}
@@ -507,7 +506,6 @@ public class Controller {
 		if (ke.getCode().equals(KeyCode.RIGHT)) {
 			map.drag(-400, 0);
 		}
-
 	}
 
 	@FXML
@@ -582,8 +580,8 @@ public class Controller {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Login Information Was False");
-				alert.setContentText("The login credendtials you entered was false. Click "
-						+ "OK to continue in local mode or Cancel to exit the Program.");
+				alert.setContentText("The login credentials you entered were invalid. Click "
+						+ "OK to continue in local mode or Cancel to exit the program.");
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
@@ -604,8 +602,7 @@ public class Controller {
 		}
 		localMode = false;
 		System.out.println(localMode);
-		System.out.println(localMode);
-		handler = new ClientHandler();
+		handler = new ClientRequestHandler();
 		System.out.println(handler);
 	}
 

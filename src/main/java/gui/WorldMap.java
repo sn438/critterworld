@@ -3,7 +3,7 @@ package gui;
 import java.util.Arrays;
 import java.util.Map;
 
-import distributed.ClientHandler;
+import distributed.ClientRequestHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -68,7 +68,7 @@ public class WorldMap {
 	private double origin_y;
 
 	private boolean localMode;
-	private ClientHandler handler;
+	private ClientRequestHandler handler;
 
 	/**
 	 * Creates a new world map.
@@ -79,7 +79,7 @@ public class WorldMap {
 	 *            The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
-		this.localMode = true;
+		localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -102,7 +102,7 @@ public class WorldMap {
 
 	}
 
-	public WorldMap(Canvas can, ClientHandler handler, int sessionId) {
+	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
 		this.localMode = false;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
@@ -178,7 +178,7 @@ public class WorldMap {
 		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * row_drawing_marker) - (Math.sqrt(3) * (sideLength / 2));
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
-		origin_y -= sideLength / 2 * Math.sqrt(3); // manual override of sujith's calculations
+		origin_y -= sideLength / 2 * Math.sqrt(3);
 
 		// draws world objects
 		gc.setLineWidth(3);

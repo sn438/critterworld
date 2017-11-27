@@ -25,7 +25,7 @@ import simulation.SimpleCritter;
 import simulation.WorldObject;
 
 /** A class to handle client requests to the server. */
-public class ClientHandler {
+public class ClientRequestHandler {
 
 	public boolean createNewWorld(int sessionId) {
 		// We can probably refactor this into one class handling this block
@@ -39,7 +39,7 @@ public class ClientHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was False");
+				alert.setHeaderText("Login Information Was Invalid");
 				alert.setContentText("User is not an admin so a New World cannot be created.");
 				return false;
 			}
@@ -75,7 +75,7 @@ public class ClientHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was False");
+				alert.setHeaderText("Login Information Was Invalid");
 				alert.setContentText("User is not an admin so a New World cannot be created.");
 				return 0;
 			}

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import simulation.SimpleCritter;
 import simulation.SimpleWorld;
@@ -16,16 +17,29 @@ public class WorldModel {
 	private SimpleWorld world;
 	int numCritters;
 	int time;
+	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
 	/** Creates a new blank world model. */
 	public WorldModel() {
-		numCritters = 0;
-		time = 0;
+		try {
+			rwl.writeLock().lock();
+			numCritters = 0;
+			time = 0;
+		}
+		finally {
+			rwl.writeLock().unlock();
+		}
 	}
 
 	/** Creates a new random world. */
 	public void createNewWorld() {
-		world = new World();
+		try {
+			rwl.writeLock().lock();
+			world = new World();
+		}
+		finally {
+			rwl.writeLock().unlock();
+		}
 	}
 
 	/**
@@ -38,7 +52,13 @@ public class WorldModel {
 	 *             if the constants.txt file could not be read
 	 */
 	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException {
-		world = new World(worldfile);
+		try {
+			rwl.writeLock().lock();
+			world = new World(worldfile);
+		}
+		finally {
+			rwl.writeLock().unlock();
+		}
 	}
 
 	public boolean isReady() {
@@ -47,44 +67,103 @@ public class WorldModel {
 
 	/** Returns the number of columns in the world. */
 	public int getColumns() {
-		return world.getColumns();
+		try {
+			rwl.readLock().lock();
+			return world.getColumns();
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	/** Returns the number of rows in the world. */
 	public int getRows() {
-		return world.getRows();
+		try {
+			rwl.readLock().lock();
+			return world.getRows();
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized int hexContent(int c, int r) {
-		return world.analyzeHex(c, r);
+		try {
+			rwl.readLock().lock();
+			return world.analyzeHex(c, r);
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized SimpleCritter getCritter(int c, int r) {
-		return world.analyzeCritter(c, r);
+		try {
+			rwl.readLock().lock();
+			return world.analyzeCritter(c, r);
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
-		return world.getCritterMap();
+		try {
+			rwl.readLock().lock();
+			return world.getCritterMap();
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
-		return world.getObjectMap();
+		try {
+			rwl.readLock().lock();
+			return world.getObjectMap();
+		}
+		finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	/** Advances one time step. */
 	public synchronized void advanceTime() {
-		world.advanceOneTimeStep();
-		time++;
-		numCritters = world.numRemainingCritters();
+		try {
+			rwl.writeLock().lock();
+			world.advanceOneTimeStep();
+			time++;
+			rwl.writeLock().unlock();
+			rwl.readLock().lock();
+			numCritters = world.numRemainingCritters();
+		} finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized void loadRandomCritters(File f, int n) {
-		world.loadCritters(f, n, -1);
-		numCritters = world.numRemainingCritters();
+		try {
+			rwl.writeLock().lock();
+			world.loadCritters(f, n, -1);
+			time++;
+			rwl.writeLock().unlock();
+			rwl.readLock().lock();
+			numCritters = world.numRemainingCritters();
+		} finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	public synchronized void loadCritterAtLocation(File f, int c, int r) {
-		world.loadCritterAtLocation(f, c, r);
-		numCritters = world.numRemainingCritters();
+		try {
+			rwl.writeLock().lock();
+			world.loadCritterAtLocation(f, c, r);
+			time++;
+			rwl.writeLock().unlock();
+			rwl.readLock().lock();
+			numCritters = world.numRemainingCritters();
+		} finally {
+			rwl.readLock().unlock();
+		}
 	}
 }
