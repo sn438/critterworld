@@ -610,6 +610,8 @@ public class Controller {
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
+			localMode = true;
+			return;
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
 			localMode = true;
