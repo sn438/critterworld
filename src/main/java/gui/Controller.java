@@ -173,6 +173,7 @@ public class Controller {
 			executor.shutdownNow();
 		if (timeline != null)
 			timeline.stop();
+		
 		model = new WorldModel();
 		simulationRate = 30;
 		loadCritterFile.setDisable(true);
@@ -593,7 +594,7 @@ public class Controller {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was False");
+				alert.setHeaderText("Credentials Not Recognized");
 				alert.setContentText("The login credentials you entered were invalid. Click "
 						+ "OK to continue in local mode or Cancel to exit the program.");
 				Optional<ButtonType> result = alert.showAndWait();

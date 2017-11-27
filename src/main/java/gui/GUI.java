@@ -43,8 +43,7 @@ public class GUI extends Application {
 // TODO work on server stuff
 
 // Rishi:
-// TODO stop automatically creating new world??
-// TODO implement smell
+// TODO implement smell - dijkstra
 // TODO do written problems
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
@@ -59,8 +58,6 @@ public class GUI extends Application {
 // TODO fix a5 and a4 grader bugs
 // TODO start worldmodel updates and stuff
 // TODO why is first new world created not centered?
-// TODO critter info box should reset upon world reset (even if new world isn't
-// called in the code like it's setup right now)
 // TODO locks in world model
 // TODO list of changed hexes
 
