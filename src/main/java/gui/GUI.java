@@ -25,7 +25,7 @@ public class GUI extends Application {
 			Scene scene = new Scene(FXMLLoader.load(r));
 			stage.setTitle("CRITTERWORLD");
 			Image icon = new Image(GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
-			stage.getIcons().add(icon); // TODO make icon solid critter before submission if keeping this art style
+			stage.getIcons().add(icon);
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.show();
@@ -51,6 +51,7 @@ public class GUI extends Application {
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
+//TODO make icon solid critter before submission if keeping this art style
 
 // Andy:
 // TODO merge run and pause buttons?
