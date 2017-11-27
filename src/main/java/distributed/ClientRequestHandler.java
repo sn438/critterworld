@@ -39,8 +39,8 @@ public class ClientRequestHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was Invalid");
-				alert.setContentText("User is not an admin so a New World cannot be created.");
+				alert.setHeaderText("Access Denied");
+				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 				return false;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -48,7 +48,7 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			System.out.println("Could not connect to the server");
+			System.out.println("Could not connect to the server.");
 		}
 		return true;
 	}
@@ -63,6 +63,10 @@ public class ClientRequestHandler {
 		return false;
 	}
 
+	/**
+	 * Returns the number of columns in the world.
+	 * @return The number of columns, or -1 if the user does not have permission
+	 */
 	public int getColumns(int sessionId) {
 		Gson gson = new Gson();
 		URL url = null;
@@ -75,8 +79,8 @@ public class ClientRequestHandler {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Login Information Was Invalid");
-				alert.setContentText("User is not an admin so a New World cannot be created.");
-				return 0;
+				alert.setContentText("User is not an admin so a New World cannot be created."); 
+				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			returnValue = Integer.parseInt(r.readLine());

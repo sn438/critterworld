@@ -15,13 +15,11 @@ import gui.WorldModel;
 import simulation.SimpleWorld;
 import simulation.World;
 
-/** Server responds to HTTP requests. */
+/** A server that responds to HTTP requests. */
 public class Server {
-
-	/**
-	 * port on which the server will be run.
-	 */
+	/** The single instance of the server. */
 	private static Server serverInstance;
+	/** The port on which the server is run. */
 	private static int portNumber;
 	private final String readPassword;
 	private final String writePassword;
@@ -30,6 +28,7 @@ public class Server {
 	private Map<Integer, String> sessionIdMap;
 	private WorldModel world;
 
+	
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
 		readPassword = readPass;
@@ -47,9 +46,7 @@ public class Server {
 	}
 
 	@SuppressWarnings("unchecked")
-	/**
-	 * 
-	 */
+	/** Runs the server by receiving requests from the client and responding appropriately. */
 	public void run() {
 		Gson gson = new Gson();
 		port(portNumber);
@@ -98,7 +95,7 @@ public class Server {
 				return "User does not have admin access.";
 			} else {
 				if (world != null) {
-					world.getCritterMap();
+					world.getCritterMap(); // TODO why?
 				}
 				world = new WorldModel();
 				return "Ok";
@@ -128,6 +125,7 @@ public class Server {
 		}, gson::toJson);
 	}
 
+	/** Returns the port number of the server. */
 	public static int getPortNum() {
 		return portNumber;
 	}

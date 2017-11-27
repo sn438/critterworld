@@ -309,7 +309,7 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public synchronized void loadCritters(String filename, int n, int direction)
+	public void loadCritters(String filename, int n, int direction)
 	{
 		try
 		{
@@ -388,17 +388,19 @@ public class World extends AbstractWorld
 	 * @param sc the critter to add
 	 * @param c the column index of the hex where the critter will be added
 	 * @param r the row index of the hex where the critter will be added
+	 * @return whether the critter was successfully added
 	 */
-	private void loadOneCritter(SimpleCritter sc, int c, int r)
+	private boolean loadOneCritter(SimpleCritter sc, int c, int r)
 	{
 		if (!isValidHex(c, r))
-			return;
+			return false;
 		boolean added = grid[c][r].addContent(sc);
 		if (added)
 		{
 			critterList.add(sc);
 			critterMap.put(sc, grid[c][r]);
 		}
+		return added;
 	}
 
 	/**

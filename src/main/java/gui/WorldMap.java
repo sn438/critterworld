@@ -15,6 +15,7 @@ import simulation.Rock;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
+/** A class that draws the hex grid for the user interface. */
 public class WorldMap {
 	private WorldModel model;
 	private GraphicsContext gc;
@@ -57,14 +58,10 @@ public class WorldMap {
 	private double x_position_marker;
 	private double y_position_marker;
 
-	/**
-	 * Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate).
-	 */
+	/** Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_x;
 
-	/**
-	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
-	 */
+	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
 
 	private boolean localMode;
@@ -73,10 +70,8 @@ public class WorldMap {
 	/**
 	 * Creates a new world map.
 	 * 
-	 * @param can
-	 *            The Canvas to draw on
-	 * @param wm
-	 *            The WorldModel to work off of
+	 * @param can The Canvas to draw on
+	 * @param wm The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
 		localMode = true;
@@ -102,6 +97,12 @@ public class WorldMap {
 
 	}
 
+	/**
+	 * 
+	 * @param can
+	 * @param handler
+	 * @param sessionId
+	 */
 	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
 		this.localMode = false;
 		gc = can.getGraphicsContext2D();
@@ -126,10 +127,7 @@ public class WorldMap {
 
 	}
 
-	/**
-	 * Determines whether or not a hex with column index {@code c} and row index
-	 * {@code r} is on the world grid.
-	 */
+	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
 			return false;
@@ -369,11 +367,7 @@ public class WorldMap {
 		}
 	}
 
-	/**
-	 * 
-	 * @param centerX
-	 * @param centerY
-	 */
+	/** Draws a hexagon centered at the rectangular coordinates specified by {@code centerX} and {@code centerY}. */
 	private void drawHex(double centerX, double centerY) {
 		gc.setStroke(HEX_COLOR);
 		gc.strokePolygon(
@@ -412,10 +406,8 @@ public class WorldMap {
 	/**
 	 * highlightHex highlights the hex that is currently selected
 	 * 
-	 * @param x
-	 *            xCoordinate of the spot that the user clicks
-	 * @param y
-	 *            yCooridnate of the spot that the user clicks
+	 * @param x x-coordinate of the spot that the user clicks
+	 * @param y y-coordinate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -516,10 +508,10 @@ public class WorldMap {
 	}
 
 	/**
-	 * A method that converts a hex coordinate pair and gives the hex coordinates of
+	 * A method that converts a hex coordinate pair converts it to cartesian coordinates.
 	 * 
 	 * @param hexCoordinates
-	 * @return
+	 * @return 
 	 */
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;

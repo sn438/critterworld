@@ -21,23 +21,21 @@ public class WorldModel {
 
 	/** Creates a new blank world model. */
 	public WorldModel() {
+		rwl.writeLock().lock();
 		try {
-			rwl.writeLock().lock();
 			numCritters = 0;
 			time = 0;
-		}
-		finally {
+		} finally {
 			rwl.writeLock().unlock();
 		}
 	}
 
 	/** Creates a new random world. */
 	public void createNewWorld() {
+		rwl.writeLock().lock();
 		try {
-			rwl.writeLock().lock();
 			world = new World();
-		}
-		finally {
+		} finally {
 			rwl.writeLock().unlock();
 		}
 	}
@@ -52,11 +50,10 @@ public class WorldModel {
 	 *             if the constants.txt file could not be read
 	 */
 	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException {
+		rwl.writeLock().lock();
 		try {
-			rwl.writeLock().lock();
 			world = new World(worldfile);
-		}
-		finally {
+		} finally {
 			rwl.writeLock().unlock();
 		}
 	}
@@ -67,62 +64,56 @@ public class WorldModel {
 
 	/** Returns the number of columns in the world. */
 	public int getColumns() {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.getColumns();
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}
 
 	/** Returns the number of rows in the world. */
 	public int getRows() {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.getRows();
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}
 
 	public synchronized int hexContent(int c, int r) {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.analyzeHex(c, r);
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}
 
 	public synchronized SimpleCritter getCritter(int c, int r) {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.analyzeCritter(c, r);
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}
 
 	public synchronized Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.getCritterMap();
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}
 
 	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
+		rwl.readLock().lock();
 		try {
-			rwl.readLock().lock();
 			return world.getObjectMap();
-		}
-		finally {
+		} finally {
 			rwl.readLock().unlock();
 		}
 	}

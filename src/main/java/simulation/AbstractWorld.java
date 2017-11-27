@@ -46,13 +46,11 @@ public abstract class AbstractWorld implements SimpleWorld
 	public void advanceOneTimeStep()
 	{
 		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
-		//System.out.println(clone.toString());
 		for(int i = 0; i < clone.size(); i++)
 		{
 			SimpleCritter sc = clone.get(i);
 			Interpreter im = new InterpreterImpl(sc, this);
 			im.simulateCritterTurn();
-			//System.out.println("AH");
 		}
 		
 		for(int i = 0; i < clone.size(); i++)
@@ -160,7 +158,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	
 	/**
 	 * One critter severs a part of its soul (its energy) and places it on the hex in front of it in the form of food. It is
-	 * possible for the critter to serve all of its remaining energy, killing it in the process
+	 * possible for the critter to serve all of its remaining energy, killing it in the process.
 	 * @param sc : the overly generous critter
 	 * @param index : the amount of food to serve
 	 */
