@@ -62,7 +62,6 @@ public class ClientHandler {
 	}
 
 	public int getColumns(int sessionId) {
-		System.out.println("yes");
 		Gson gson = new Gson();
 		URL url = null;
 		int returnValue = 0;

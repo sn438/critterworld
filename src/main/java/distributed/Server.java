@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
 
+import gui.WorldModel;
 import simulation.SimpleWorld;
 import simulation.World;
 
@@ -30,7 +31,7 @@ public class Server {
 	private final String adminPassword;
 	private int session_id;
 	private Map<Integer, String> sessionIdMap;
-	private SimpleWorld world;
+	private WorldModel world;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
@@ -57,7 +58,8 @@ public class Server {
 		port(portNumber);
 
 		post("/login", (request, response) -> {
-
+			System.out.println("oksjdfhdfkjghdfkjghfdkjgh");
+			System.out.println(request.body());
 			response.header("Content-Type", "application/json");
 			JSONObject responseValue = null;
 			String json = request.body();
@@ -101,7 +103,7 @@ public class Server {
 				if (world != null) {
 					world.getCritterMap();
 				}
-				world = new World();
+				world = new WorldModel();
 				return "Ok";
 			}
 		}, gson::toJson);

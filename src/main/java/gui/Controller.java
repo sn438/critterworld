@@ -153,8 +153,17 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
+		if (startup) {
+			// System.out.println("yes");
+			login();
+			startup = false;
+		}
 		doInitialize();
-		doNewWorld();
+		if (localMode) {
+			doNewWorld();
+		} else
+			doNewWorldServer();
+
 	}
 
 	private void doInitialize() {
@@ -166,10 +175,6 @@ public class Controller {
 			timeline.stop();
 
 		// this part of the method runs only on startup
-		if (startup) {
-			login();
-			startup = false;
-		}
 
 		model = new WorldModel();
 		simulationRate = 30;
@@ -240,24 +245,15 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		// <<<<<<< HEAD
-		// if (localMode) {
-		// model.createNewWorld();
-		// map = new WorldMap(c, model);
-		// } else {
-		// System.out.println("ok");
-		//
-		// if (handler.createNewWorld(sessionId.getSessionId()))
-		// map = new WorldMap(c, handler, sessionId.getSessionId());
-		// else
-		// return;
-		//
-		// }
-		// newWorld.setDisable(true);
-		// loadWorld.setDisable(true);
-		// =======
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		doInitialize();
-		doNewWorld();
+		if (localMode) {
+			doNewWorld();
+		} else {
+			doNewWorldServer();
+		}
+
 	}
 
 	private void doNewWorld() {
@@ -272,6 +268,25 @@ public class Controller {
 		c.setVisible(true);
 
 		map.draw();
+	}
+
+	private void doNewWorldServer() {
+		if (handler.createNewWorld(sessionId.getSessionId())) {
+			System.out.println(handler.createNewWorld(sessionId.getSessionId()));
+			map = new WorldMap(c, handler, sessionId.getSessionId());
+			map.draw();
+			// map.draw();
+		} else
+			return;
+		chkRandom.setDisable(false);
+		chkSpecify.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		simulationSpeed.setDisable(false);
+		c.setDisable(false);
+		c.setVisible(true);
+		System.out.println(map);
+		// map.draw();
 	}
 
 	@FXML
@@ -594,7 +609,6 @@ public class Controller {
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
 					model = new WorldModel();
-
 					return;
 				} else {
 					System.exit(0);
@@ -609,8 +623,6 @@ public class Controller {
 			System.out.println("Could not connect to the server");
 		}
 		localMode = false;
-		System.out.println(localMode);
-		System.out.println(localMode);
 		handler = new ClientHandler();
 		System.out.println(handler);
 	}
