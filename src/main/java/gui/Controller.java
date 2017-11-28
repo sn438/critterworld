@@ -160,10 +160,10 @@ public class Controller {
 		login();
 		doInitialize();
 
-		if (localMode) {
-			newWorld();
-		} else
-			doNewWorldServer();
+//		if (localMode) {
+//			newWorld();
+//		} else
+//			doNewWorldServer();
 	}
 
 	private void doInitialize() {
@@ -243,8 +243,6 @@ public class Controller {
 
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
 		doInitialize();
 		if (localMode) {
 			newWorld();
@@ -284,7 +282,6 @@ public class Controller {
 
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
-		doInitialize();
 		loadWorld();
 	}
 
@@ -296,7 +293,9 @@ public class Controller {
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null)
 			return;
-
+		
+		doInitialize();
+		
 		try {
 			model.loadWorld(worldFile);
 		} catch (FileNotFoundException e) {
