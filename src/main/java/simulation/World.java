@@ -50,6 +50,7 @@ public class World extends AbstractWorld
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
@@ -145,6 +146,7 @@ public class World extends AbstractWorld
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		BufferedReader bf = new BufferedReader(new FileReader(file));
@@ -237,6 +239,7 @@ public class World extends AbstractWorld
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		columns = CONSTANTS.get("COLUMNS").intValue();

@@ -264,6 +264,9 @@ public class Controller {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
 		setGUIReady(true);
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
+
 		map.draw();
 	}
 
@@ -274,6 +277,8 @@ public class Controller {
 		} else
 			return;
 		setGUIReady(true);
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
 	}
 
 	@FXML
@@ -301,7 +306,8 @@ public class Controller {
 			return;
 		}
 		map = new WorldMap(c, model);
-
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
 		setGUIReady(true);
 		map.draw();
 	}
