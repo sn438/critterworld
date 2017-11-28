@@ -38,6 +38,7 @@ public class GUI extends Application {
 // TODO add SOUNDS!
 // TODO add SKINS!
 // TODO add MICROTRANSACTIONS!
+// TODO optimize zooming so that it only redraws visible portion and not whole entire hex grid?
 
 // Sujith:
 // TODO work on server stuff
