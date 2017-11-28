@@ -152,11 +152,11 @@ public class Controller {
 	@FXML
 	public void initialize() {
 		login();
-		
+
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
-		
+
 		setupCanvas();
 		setGUIReady(false);
 	}
@@ -278,19 +278,20 @@ public class Controller {
 
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
-		doReset();
-		loadWorld();
-	}
 
-	private void loadWorld() {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File f = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
-		fc.setInitialDirectory(f); // TODO remove before submitting?
+		File initDirectory = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
+		fc.setInitialDirectory(initDirectory); // TODO remove before submitting?
 		File worldFile = fc.showOpenDialog(new Popup());
-		if (worldFile == null)
+		if (worldFile == null) {
 			return;
+		}
+		doReset();
+		loadWorld(worldFile);
+	}
 
+	private void loadWorld(File worldFile) {
 		try {
 			model.loadWorld(worldFile);
 		} catch (FileNotFoundException e) {

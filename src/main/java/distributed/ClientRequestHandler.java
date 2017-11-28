@@ -78,7 +78,7 @@ public class ClientRequestHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was Invalid");
+				alert.setHeaderText("Access Denied");
 				alert.setContentText("User is not an admin so a New World cannot be created."); 
 				return -1;
 			}

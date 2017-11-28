@@ -1,6 +1,7 @@
 package simulation;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,6 +49,9 @@ public interface SimpleWorld
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();
 	
+	/** Retrieves the list of updated hexes from the most recent time steps, and then empties the list. */ 
+	LinkedList<Hex> getAndResetUpdatedHexes();
+	
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	boolean isValidHex(int c, int r);
 	
@@ -72,6 +76,14 @@ public interface SimpleWorld
 	 * @return
 	 */
 	SimpleCritter analyzeCritter(int c, int r);
+	
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @return
+	 */
+	WorldObject getHexContent(int c, int r);
 
 	/** Returns a StringBuilder containing the printed version of the world grid. */
 	StringBuilder printGrid();
