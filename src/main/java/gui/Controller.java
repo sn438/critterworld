@@ -151,24 +151,14 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
-		// if (startup) {
-		// // System.out.println("yes");
-		// login();
-		// startup = false;
-		// }
-
 		login();
+		
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
-		setGUIReady(false);
+		
 		setupCanvas();
-
-		// if (localMode) {
-		// newWorld();
-		// } else {
-		// doNewWorldServer();
-		// }
+		setGUIReady(false);
 	}
 
 	private void doReset() {
