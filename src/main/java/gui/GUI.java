@@ -54,7 +54,6 @@ public class GUI extends Application {
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
-// TODO make icon solid critter before submission if keeping this art style
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed

@@ -325,12 +325,12 @@ public class WorldMap {
 		Color color = new Color(red, green, blue, 1);
 
 		// draw critter (outlines only)
-		// gc.setStroke(color);
-		// gc.strokePolygon(xPoints, yPoints, 3);
+		 gc.setStroke(color);
+		 gc.strokePolygon(xPoints, yPoints, 3);
 
 		// draw critter (filled in)
-		gc.setFill(color);
-		gc.fillPolygon(xPoints, yPoints, 3);
+		// gc.setFill(color);
+		// gc.fillPolygon(xPoints, yPoints, 3);
 	}
 
 	/**
