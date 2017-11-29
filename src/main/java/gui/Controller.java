@@ -152,7 +152,6 @@ public class Controller {
 	@FXML
 	public void initialize() {
 		login();
-
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
@@ -255,7 +254,7 @@ public class Controller {
 		if (localMode) {
 			newWorld();
 		} else {
-			doNewWorldServer();
+			newWorldServer();
 		}
 
 	}
@@ -270,7 +269,7 @@ public class Controller {
 		map.draw();
 	}
 
-	private void doNewWorldServer() {
+	private void newWorldServer() {
 		if (handler.createNewWorld(sessionId.getSessionId())) {
 			map = new WorldMap(c, handler, sessionId.getSessionId());
 			map.draw();
@@ -299,23 +298,30 @@ public class Controller {
 	private void loadWorld(File worldFile) {
 		try {
 			model.loadWorld(worldFile);
+			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
 			a.showAndWait();
 			return;
-		} catch (UnsupportedOperationException i) {
-			Alert a = new Alert(AlertType.ERROR, "Your constants.txt file could not be found. "
-									+ "Please make sure it exists and is properly formatted.");
-			a.setTitle("Invalid Constants File");
+		} catch (IllegalArgumentException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IOException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
 			a.showAndWait();
 			return;
 		}
-		map = new WorldMap(c, model);
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
-		stepsTaken.setText("Time: " + model.time);
-		setGUIReady(true);
-		map.draw();
+		chkRandom.setDisable(false);
+		chkSpecify.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		simulationSpeed.setDisable(false);
+		c.setDisable(false);
+		c.setVisible(true);
 	}
 
 	@FXML
@@ -360,8 +366,6 @@ public class Controller {
 				return;
 			}
 		}
-		numCritters.clear();
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
 		map.draw();
 	}
 

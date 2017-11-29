@@ -21,7 +21,7 @@ public class Server {
 	private final String adminPassword;
 	private int session_id;
 	private HashMap<Integer, String> sessionIdMap;
-	private WorldModel world;
+	private WorldModel model;
 
 	
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
@@ -77,6 +77,58 @@ public class Server {
 
 		}, gson::toJson);
 
+		post("/login", (request, response) -> {
+			System.out.println("oksjdfhdfkjghdfkjghfdkjgh");
+			System.out.println(request.body());
+			response.header("Content-Type", "application/json");
+			JSONObject responseValue = null;
+			String json = request.body();
+			LoginInfo loginInfo = gson.fromJson(json, LoginInfo.class);
+			String level = loginInfo.level;
+			String password = loginInfo.password;
+			if (level.equals("read") && password.equals(readPassword)) {
+				session_id++;
+				responseValue = new JSONObject();
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "read");
+				return responseValue;
+			} else if (level.equals("write") && password.equals(writePassword)) {
+				session_id++;
+				responseValue = new JSONObject();
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "write");
+				return responseValue;
+			} else if (level.equals("admin") && password.equals(adminPassword)) {
+				session_id++;
+				responseValue = new JSONObject();
+				responseValue.put("session_id", new Integer(session_id));
+				sessionIdMap.put(session_id, "admin");
+				return responseValue;
+			} else {
+				response.status(401);
+				return "Please enter in a proper password.";
+			}
+
+		}, gson::toJson);
+		
+		post("/world", (request, response) -> {
+			response.header("Content-Type", "text/plain");
+			String json = request.body();
+			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
+			String description = loadWorldInfo.getDescription();
+			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
+				response.status(401);
+				return "User does not have admin access.";
+			} else {
+				if (model != null) {
+					model.getCritterMap(); // TODO why?
+				}
+				model = new WorldModel();
+				model.loadNewWorld(description);
+				return "Ok";
+			} 
+		});
+
 		get("/world/generic", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
@@ -86,10 +138,11 @@ public class Server {
 				response.status(401);
 				return "User does not have admin access.";
 			} else {
-				if (world != null) {
-					world.getCritterMap(); // TODO why?
+				if (model != null) {
+					model.getCritterMap(); // TODO why?
 				}
-				world = new WorldModel();
+				model = new WorldModel();
+				model.createNewWorld();
 				return "Ok";
 			}
 		}, gson::toJson);
@@ -102,7 +155,7 @@ public class Server {
 				response.status(401);
 				return "User does not have read access";
 			} else
-				return world.getRows();
+				return model.getRows();
 		}, gson::toJson);
 
 		get("/colNum", (request, response) -> {
@@ -113,7 +166,7 @@ public class Server {
 				response.status(401);
 				return "User does not have read access";
 			} else
-				return world.getColumns();
+				return model.getColumns();
 		}, gson::toJson);
 	}
 

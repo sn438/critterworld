@@ -3,6 +3,7 @@ package distributed;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 
+import gui.WorldModel;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -53,8 +55,45 @@ public class ClientRequestHandler {
 		return true;
 	}
 
-	public void loadWorld(File worldfile, int sessionId) throws FileNotFoundException, IllegalArgumentException {
-		// TODO Auto-generated method stub
+	public boolean loadWorld(File worldfile, int sessionId) throws IllegalArgumentException, IOException {
+		Gson gson = new Gson();
+		BufferedReader br = new BufferedReader(new FileReader(worldfile));
+		String description = "";
+		String currentLine = br.readLine();
+		while (currentLine != null) {
+			description += currentLine;
+			description += "\n";
+			currentLine = br.readLine();
+		}
+		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
+		URL url = null;
+		try {
+			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=36435389");
+			url = new URL("http://localhost:" + 8080 + "/world");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			System.out.println(url.toString());
+			connection.setDoOutput(true); // send a POST message
+			connection.setRequestMethod("POST");
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(loadWorldInfo, LoadWorldInfoJSON.class));
+			w.flush();
+			if (connection.getResponseCode() == 401) {
+				System.out.println("yes");
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Login Error");
+				alert.setHeaderText("Access Denied");
+				alert.setContentText("The user cannot create a new world because the user is not an admin.");
+				return false;
+			}
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String sessionIdString = r.readLine();
+			System.out.println(sessionIdString);
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+		}
+		return true;
 
 	}
 
@@ -65,6 +104,7 @@ public class ClientRequestHandler {
 
 	/**
 	 * Returns the number of columns in the world.
+	 * 
 	 * @return The number of columns, or -1 if the user does not have permission
 	 */
 	public int getColumns(int sessionId) {
@@ -78,13 +118,18 @@ public class ClientRequestHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
+<<<<<<< HEAD
+				alert.setHeaderText("Login Information Was Invalid");
+				alert.setContentText("User is not an admin so a New World cannot be created.");
+=======
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("User is not an admin so a New World cannot be created."); 
+>>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			returnValue = Integer.parseInt(r.readLine());
-			
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
