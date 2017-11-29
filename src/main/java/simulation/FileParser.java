@@ -57,8 +57,8 @@ public class FileParser
 	 * trimming out a specified substring {@code substringToCut}. If {@code substringToCut} is not present in the line or the end
 	 * of the file is reached, returns an empty string.
 	 * 
-	 * @param b : the BufferedReader to read lines from
-	 * @param : substringToCut the substring to trim
+	 * @param b The BufferedReader to read lines from
+	 * @param substringToCut The substring to trim out
 	 * @return A string containing only the attribute given on the line
 	 */
 	public static String parseAttributeFromLine(BufferedReader b, String substringToCut)
@@ -75,6 +75,24 @@ public class FileParser
 		{
 			return "";
 		}
+		return result;
+	}
+	
+	/**
+	 * Given a plaintext string, returns a string with the specified substring {@code substringToCut} trimmed out. If
+	 * {@code substringToCut} is not present, returns an empty string.
+	 * 
+	 * @param initial The plaintext string
+	 * @param substringToCut The substring to trim out
+	 * @return A string containing only the attribute given on the line
+	 */
+	public static String parseAttributeFromLine(String initial, String substringToCut)
+	{
+		String result = "";
+		int len = substringToCut.length();
+		if(initial != null && initial.startsWith(substringToCut) && len < initial.length())
+			result = initial.substring(len);
+		
 		return result;
 	}
 	

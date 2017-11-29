@@ -49,30 +49,57 @@ public class WorldModel {
 		}
 	}
 
-	/** Creates a new random world. */
-	public void createNewWorld() {
+	/**
+	 * Creates a new random world.
+	 * @throws UnsupportedOperationException
+	 *             if the constants.txt file could not be read
+	 */
+	public void createNewWorld() throws UnsupportedOperationException {
 		//rwl.writeLock().lock();
 		try {
 			world = new World();
 			time = 0;
+			numCritters = world.numRemainingCritters();
 		} finally {
 			//rwl.writeLock().unlock();
 		}
 	}
 
 	/**
+	 * Loads in a world based on a description.
+	 * 
+	 * @param desc
+	 * @throws IllegalArgumentException
+	 *             if the description is invalid
+	 * @throws UnsupportedOperationException
+	 *             if the constants.txt file could not be read
+	 */
+	public void loadWorld(String desc) throws IllegalArgumentException, UnsupportedOperationException {
+		//rwl.writeLock().lock();
+		try {
+			world = new World(desc);
+			time = 0;
+			numCritters = world.numRemainingCritters();
+		} finally {
+			//rwl.writeLock().unlock();
+		}
+	}
+	
+	/**
 	 * Loads in a world file.
 	 * 
 	 * @param worldfile
 	 * @throws FileNotFoundException
 	 *             if the file could not be found or is somehow invalid
-	 * @throws IllegalArgumentException
+	 * @throws UnsupportedOperationException
 	 *             if the constants.txt file could not be read
 	 */
-	public void loadWorld(File worldfile) throws FileNotFoundException, IllegalArgumentException {
+	public void loadWorld(File worldfile) throws FileNotFoundException, UnsupportedOperationException {
 		//rwl.writeLock().lock();
 		try {
 			world = new World(worldfile);
+			time = 0;
+			numCritters = world.numRemainingCritters();
 		} finally {
 			//rwl.writeLock().unlock();
 		}
@@ -98,7 +125,7 @@ public class WorldModel {
 		try {
 			return world.getRows();
 		} finally {
-		//	rwl.readLock().unlock();
+			//rwl.readLock().unlock();
 		}
 	}
 
@@ -150,7 +177,7 @@ public class WorldModel {
 			//rwl.writeLock().lock();
 			world.advanceOneTimeStep();
 			time++;
-			//diffLog.add(world.getAndResetUpdatedHexes());
+			diffLog.add(world.getAndResetUpdatedHexes());
 			//rwl.writeLock().unlock();
 			
 			//rwl.readLock().lock();

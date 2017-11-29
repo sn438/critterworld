@@ -58,7 +58,7 @@ public class GUI extends Application {
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
 // TODO start worldmodel updates and stuff
-// TODO FIX CONCURRENCY BUGS
+// TODO FIX CONCURRENCY BUGS - go to when critterList is being altered and synchronize on the list
 // TODO locks in world model
 // TODO list of changed hexes
 // TODO is there a way to have the program stop automatically when the GUI is

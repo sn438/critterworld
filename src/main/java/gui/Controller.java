@@ -304,6 +304,12 @@ public class Controller {
 			a.setTitle("Invalid File");
 			a.showAndWait();
 			return;
+		} catch (UnsupportedOperationException i) {
+			Alert a = new Alert(AlertType.ERROR, "Your constants.txt file could not be found. "
+									+ "Please make sure it exists and is properly formatted.");
+			a.setTitle("Invalid Constants File");
+			a.showAndWait();
+			return;
 		}
 		map = new WorldMap(c, model);
 		crittersAlive.setText("Critters Alive: " + model.numCritters);
@@ -354,6 +360,8 @@ public class Controller {
 				return;
 			}
 		}
+		numCritters.clear();
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
 		map.draw();
 	}
 
