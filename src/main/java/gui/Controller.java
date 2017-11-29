@@ -151,19 +151,12 @@ public class Controller {
 
 	@FXML
 	public void initialize() {
-//		if (startup) {
-//			// System.out.println("yes");
-//			login();
-//			startup = false;
-//		}
-
 		login();
 		doInitialize();
-
 		if (localMode) {
 			newWorld();
 		} else
-			doNewWorldServer();
+			newWorldServer();
 	}
 
 	private void doInitialize() {
@@ -249,7 +242,7 @@ public class Controller {
 		if (localMode) {
 			newWorld();
 		} else {
-			doNewWorldServer();
+			newWorldServer();
 		}
 
 	}
@@ -267,7 +260,7 @@ public class Controller {
 		map.draw();
 	}
 
-	private void doNewWorldServer() {
+	private void newWorldServer() {
 		if (handler.createNewWorld(sessionId.getSessionId())) {
 			map = new WorldMap(c, handler, sessionId.getSessionId());
 			map.draw();
@@ -285,7 +278,55 @@ public class Controller {
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
 		doInitialize();
-		loadWorld();
+		if (localMode) {
+			loadWorld();
+		} else {
+			loadWorldServer();
+		}
+	}
+
+	private void loadWorldServer() {
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose World File");
+		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
+		fc.setInitialDirectory(f); // TODO remove before submitting?
+		File worldFile = fc.showOpenDialog(new Popup());
+		if (worldFile == null)
+			return;
+
+		try {
+			if (handler.loadWorld(worldFile, sessionId.getSessionId())) {
+				//map = new WorldMap(c, handler, sessionId.getSessionId());
+				//map.draw();
+			} else
+				return;
+		} catch (FileNotFoundException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IllegalArgumentException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IOException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		}
+		
+
+		chkRandom.setDisable(false);
+		chkSpecify.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		simulationSpeed.setDisable(false);
+		c.setDisable(false);
+		c.setVisible(true);
+
+		
 	}
 
 	private void loadWorld() {
@@ -299,13 +340,24 @@ public class Controller {
 
 		try {
 			model.loadWorld(worldFile);
+			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
 			a.showAndWait();
 			return;
+		} catch (IllegalArgumentException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IOException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
 		}
-		map = new WorldMap(c, model);
+		
 
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
@@ -314,8 +366,6 @@ public class Controller {
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
-
-		map.draw();
 	}
 
 	@FXML
