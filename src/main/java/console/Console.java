@@ -29,7 +29,7 @@ public class Console
 		{
 			world = new World();
 		}
-		catch (IllegalArgumentException i)
+		catch (UnsupportedOperationException i)
 		{
 			System.err.println("The constants.txt file could not be read. Please check if it exists or is formatted properly.");
 		}
@@ -39,18 +39,18 @@ public class Console
 	 * Starts new simulation with world specified in filename.
 	 * @param filename
 	 */
-	public void loadWorld(String filename)
+	public void loadWorld(String worlddesc)
 	{
 		try
 		{
-			world = new World(filename);
+			world = new World(worlddesc);
 		}
-		catch (FileNotFoundException f)
+		catch (IllegalArgumentException f)
 		{
-			System.err.println("World file not found. Loading defaultly generated world...");
+			System.err.println("World description invalid. Loading defaultly generated world...");
 			world = new World();
 		}
-		catch (IllegalArgumentException i)
+		catch (UnsupportedOperationException i)
 		{
 			System.err.println("The constants.txt file could not be read. Please check if it is formatted properly.");
 			System.exit(0);

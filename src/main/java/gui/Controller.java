@@ -152,21 +152,12 @@ public class Controller {
 	@FXML
 	public void initialize() {
 		login();
-<<<<<<< HEAD
-		doInitialize();
-		if (localMode) {
-			newWorld();
-		} else
-			newWorldServer();
-=======
-
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
 
 		setupCanvas();
 		setGUIReady(false);
->>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 	}
 
 	private void doReset() {
@@ -291,60 +282,6 @@ public class Controller {
 
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
-<<<<<<< HEAD
-		doInitialize();
-		if (localMode) {
-			loadWorld();
-		} else {
-			loadWorldServer();
-		}
-	}
-
-	private void loadWorldServer() {
-		FileChooser fc = new FileChooser();
-		fc.setTitle("Choose World File");
-		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
-		fc.setInitialDirectory(f); // TODO remove before submitting?
-		File worldFile = fc.showOpenDialog(new Popup());
-		if (worldFile == null)
-			return;
-
-		try {
-			if (handler.loadWorld(worldFile, sessionId.getSessionId())) {
-				//map = new WorldMap(c, handler, sessionId.getSessionId());
-				//map.draw();
-			} else
-				return;
-		} catch (FileNotFoundException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
-		} catch (IllegalArgumentException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
-		} catch (IOException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
-		}
-		
-
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
-
-		
-	}
-=======
->>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
@@ -378,9 +315,6 @@ public class Controller {
 			a.showAndWait();
 			return;
 		}
-<<<<<<< HEAD
-		
-
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
 		stepForward.setDisable(false);
@@ -388,13 +322,6 @@ public class Controller {
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
-=======
-		map = new WorldMap(c, model);
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
-		stepsTaken.setText("Time: " + model.time);
-		setGUIReady(true);
-		map.draw();
->>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 	}
 
 	@FXML
