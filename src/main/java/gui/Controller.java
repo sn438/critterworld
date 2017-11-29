@@ -383,9 +383,10 @@ public class Controller {
 			@Override
 			public void run() {
 				model.advanceTime();
+				//System.out.println("ASFAS");
 			}
 		});
-		worldUpdateThread.setDaemon(true);
+		worldUpdateThread.setDaemon(false);
 
 		executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
