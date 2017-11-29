@@ -54,11 +54,16 @@ public class World extends AbstractWorld
 		super.timePassed = 0;
 		
 		String[] lines = worlddesc.split("\r\n");
+		System.out.println(lines.length);
+		for (String line: lines) {
+			System.out.println(line);
+		}
 		if (lines.length < 2)
 			throw new IllegalArgumentException(); 
 		
 		// parses the world name, and if no valid one is parsed, supplies a default one
 		worldname = FileParser.parseAttributeFromLine(lines[0], "name ");
+	
 		if (worldname.equals(""))
 			worldname = "Arrakis";
 		
@@ -68,7 +73,9 @@ public class World extends AbstractWorld
 			String worldDimensions = FileParser.parseAttributeFromLine(lines[1], "size ");
 			String[] dim = worldDimensions.split(" ");
 			columns = Integer.parseInt(dim[0]);
+			System.out.println("columns: " + columns);
 			rows = Integer.parseInt(dim[1]);
+			System.out.println("rows: " + rows);
 			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0))
 			{
 				columns = CONSTANTS.get("COLUMNS").intValue();
