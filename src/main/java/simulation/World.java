@@ -92,7 +92,7 @@ public class World extends AbstractWorld
 				{
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
-					updatedHexes.add(grid[i][j]);
+					//updatedHexes.add(grid[i][j]);
 				}
 		
 		// loads in food and rock objects from description (ignores critter additions)
@@ -176,7 +176,7 @@ public class World extends AbstractWorld
 				{
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
-					updatedHexes.add(grid[i][j]);
+					//updatedHexes.add(grid[i][j]);
 				}
 
 		try
@@ -394,7 +394,7 @@ public class World extends AbstractWorld
 		{
 			critterList.add(sc);
 			critterMap.put(sc, grid[c][r]);
-			updatedHexes.add(grid[c][r]);
+			//updatedHexes.add(grid[c][r]);
 		}
 		return added;
 	}
@@ -417,7 +417,7 @@ public class World extends AbstractWorld
 			return;
 		nonCritterObjectMap.put(wo, grid[c][r]);
 		grid[c][r].addContent(wo);
-		updatedHexes.add(grid[c][r]);
+		//updatedHexes.add(grid[c][r]);
 	}
 
 	/* ========================================= */
@@ -465,6 +465,13 @@ public class World extends AbstractWorld
 		Hex nearby = grid[aheadc][aheadr];
 		return nearby.hexAppearance();
 	}
+	
+	@Override
+	public int smell(SimpleCritter sc)
+	{
+		//TODO implement
+		return 0;
+	}
 
 	/* ========================================= */
 	/* ----------- Critter Actions ------------- */
@@ -499,10 +506,10 @@ public class World extends AbstractWorld
 		}
 		grid[c][r].removeContent();
 		critterMap.remove(sc);
-		updatedHexes.add(grid[c][r]);
+		//updatedHexes.add(grid[c][r]);
 		grid[newc][newr].addContent(sc);
 		critterMap.put(sc, grid[newc][newr]);
-		updatedHexes.add(grid[newc][newr]);
+		//updatedHexes.add(grid[newc][newr]);
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
@@ -521,7 +528,7 @@ public class World extends AbstractWorld
 		}
 
 		sc.turn(clockwise);
-		updatedHexes.add(critterMap.get(sc));
+		//updatedHexes.add(critterMap.get(sc));
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
@@ -559,7 +566,7 @@ public class World extends AbstractWorld
 			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			nonCritterObjectMap.remove(nourishment);
 			directlyInFront.removeContent();
-			updatedHexes.add(directlyInFront);
+			//updatedHexes.add(directlyInFront);
 		}
 		if (sc.getEnergy() == 0)
 			kill(sc);
@@ -581,7 +588,7 @@ public class World extends AbstractWorld
 
 		int currentSize = sc.readMemory(3);
 		sc.setMemory(currentSize + 1, 3);
-		updatedHexes.add(critterMap.get(sc));
+		//updatedHexes.add(critterMap.get(sc));
 	}
 
 	@Override
@@ -678,7 +685,11 @@ public class World extends AbstractWorld
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
 		for (int i = 0; i < numMutations; i++)
+		{
+			//System.out.println("mutate");
 			prog = prog.mutate();
+		}
+			
 
 		SimpleCritter baby = new Critter(prog, babymem, name, sc.getOrientation());
 		loadOneCritter(baby, newc, newr);
@@ -944,7 +955,7 @@ public class World extends AbstractWorld
 			Food f = new Food(index);
 			nonCritterObjectMap.put(f, directlyInFront);
 			directlyInFront.addContent(f);
-			updatedHexes.add(directlyInFront);
+			//updatedHexes.add(directlyInFront);
 		}
 		if (donator.getEnergy() == 0)
 			kill(donator);
@@ -963,7 +974,7 @@ public class World extends AbstractWorld
 		location.removeContent();
 		critterMap.remove(sc);
 		critterList.remove(sc);
-		updatedHexes.add(location);
+		//updatedHexes.add(location);
 		deadCritters.add(sc);
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());

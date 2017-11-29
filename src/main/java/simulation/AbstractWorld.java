@@ -103,6 +103,11 @@ public abstract class AbstractWorld implements SimpleWorld
 	 * @return an integer value based on the contents of the observed hex, following the same scheme as {@code searchNearby}.
 	 */
 	public abstract int searchAhead(SimpleCritter sc, int index);
+	
+	/**
+	 * 
+	 */
+	public abstract int smell(SimpleCritter sc);
 
 	/* ========================================= */
 	/* ----------- Critter Actions ------------- */
