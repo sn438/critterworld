@@ -259,7 +259,7 @@ public class InterpreterImpl implements Interpreter
 				else
 					result = (int) (Math.random() * index);
 			case SMELL:
-				result = 0;
+				result = world.smell(c);
 		}
 		return result;
 	}
