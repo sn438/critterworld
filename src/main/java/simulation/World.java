@@ -48,7 +48,9 @@ public class World extends AbstractWorld
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		BufferedReader bf = new BufferedReader(new FileReader(filename));
@@ -87,6 +89,7 @@ public class World extends AbstractWorld
 				{
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
+					updatedHexes.add(grid[i][j]);
 				}
 
 		try
@@ -141,7 +144,9 @@ public class World extends AbstractWorld
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		BufferedReader bf = new BufferedReader(new FileReader(file));
@@ -180,6 +185,7 @@ public class World extends AbstractWorld
 				{
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
+					updatedHexes.add(grid[i][j]);
 				}
 
 		try
@@ -231,10 +237,9 @@ public class World extends AbstractWorld
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
-		critterList = new LinkedList<SimpleCritter>();
-		timePassed = 0;
-
+		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
 
 		columns = CONSTANTS.get("COLUMNS").intValue();
@@ -249,6 +254,7 @@ public class World extends AbstractWorld
 				{
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
+					updatedHexes.add(grid[i][j]);
 				}
 			}
 
@@ -276,9 +282,7 @@ public class World extends AbstractWorld
 	{
 		InputStream in = World.class.getClassLoader().getResourceAsStream("simulation/constants.txt");
 		if(in == null)
-		{ 
 			throw new IllegalArgumentException();
-		}
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
 		CONSTANTS = FileParser.parseConstants(bf);
@@ -399,6 +403,7 @@ public class World extends AbstractWorld
 		{
 			critterList.add(sc);
 			critterMap.put(sc, grid[c][r]);
+			updatedHexes.add(grid[c][r]);
 		}
 		return added;
 	}
@@ -421,6 +426,7 @@ public class World extends AbstractWorld
 			return;
 		nonCritterObjectMap.put(wo, grid[c][r]);
 		grid[c][r].addContent(wo);
+		updatedHexes.add(grid[c][r]);
 	}
 
 	/* ========================================= */
@@ -502,8 +508,10 @@ public class World extends AbstractWorld
 		}
 		grid[c][r].removeContent();
 		critterMap.remove(sc);
+		updatedHexes.add(grid[c][r]);
 		grid[newc][newr].addContent(sc);
 		critterMap.put(sc, grid[newc][newr]);
+		updatedHexes.add(grid[newc][newr]);
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
@@ -522,6 +530,7 @@ public class World extends AbstractWorld
 		}
 
 		sc.turn(clockwise);
+		updatedHexes.add(critterMap.get(sc));
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
@@ -559,6 +568,7 @@ public class World extends AbstractWorld
 			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			nonCritterObjectMap.remove(nourishment);
 			directlyInFront.removeContent();
+			updatedHexes.add(directlyInFront);
 		}
 		if (sc.getEnergy() == 0)
 			kill(sc);
@@ -580,6 +590,7 @@ public class World extends AbstractWorld
 
 		int currentSize = sc.readMemory(3);
 		sc.setMemory(currentSize + 1, 3);
+		updatedHexes.add(critterMap.get(sc));
 	}
 
 	@Override
@@ -942,6 +953,7 @@ public class World extends AbstractWorld
 			Food f = new Food(index);
 			nonCritterObjectMap.put(f, directlyInFront);
 			directlyInFront.addContent(f);
+			updatedHexes.add(directlyInFront);
 		}
 		if (donator.getEnergy() == 0)
 			kill(donator);
@@ -960,6 +972,7 @@ public class World extends AbstractWorld
 		location.removeContent();
 		critterMap.remove(sc);
 		critterList.remove(sc);
+		updatedHexes.add(location);
 		deadCritters.add(sc);
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
@@ -1013,5 +1026,13 @@ public class World extends AbstractWorld
 		if(!isValidHex(c, r) || !(grid[c][r].getContent() instanceof SimpleCritter))
 			return null;
 		return (SimpleCritter) (grid[c][r].getContent());
+	}
+	
+	@Override
+	public WorldObject getHexContent(int c, int r)
+	{
+		if(!isValidHex(c, r))
+			return null;
+		return grid[c][r].getContent();
 	}
 }

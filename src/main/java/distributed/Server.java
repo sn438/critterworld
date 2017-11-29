@@ -32,11 +32,8 @@ public class Server {
 		sessionIdMap = new HashMap<Integer, String>();
 	}
 
-	public static void singletonConstructor(int portNum, String readPass, String writePass, String adminPass) {
+	public static Server getInstance(int portNum, String readPass, String writePass, String adminPass) {
 		serverInstance = new Server(portNum, readPass, writePass, adminPass);
-	}
-
-	public static Server getInstance() {
 		return serverInstance;
 	}
 

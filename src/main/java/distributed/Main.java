@@ -22,8 +22,7 @@ public class Main {
 				writePassword = args[2];
 				adminPassword = args[3];
 				serverLoaded = true;
-				Server.singletonConstructor(portNumber, readPassword, writePassword, adminPassword);
-				server = Server.getInstance();
+				server = Server.getInstance(portNumber, readPassword, writePassword, adminPassword);
 				server.run();
 			} else {
 				System.out.println("Bad input."); // TODO what to do in the case of bad input?

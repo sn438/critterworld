@@ -14,6 +14,8 @@ public abstract class AbstractWorld implements SimpleWorld
 	protected LinkedList<SimpleCritter> critterList;
 	/** Stores all critters that have died or have been removed. */
 	protected LinkedList<SimpleCritter> deadCritters;
+	/** A list of all the hexes that have changed during one critter turn. Is reset at the end of each turn. */
+	protected LinkedList<Hex> updatedHexes;
 	/** The number of time steps passed since this world's genesis. */
 	protected int timePassed;
 	
@@ -60,6 +62,19 @@ public abstract class AbstractWorld implements SimpleWorld
 		}
 		
 		timePassed++;
+	}
+	
+	@Override
+	public LinkedList<Hex> getAndResetUpdatedHexes()
+	{
+		try
+		{
+			return updatedHexes;
+		}
+		finally
+		{
+			updatedHexes = new LinkedList<Hex>();
+		}
 	}
 
 	@Override

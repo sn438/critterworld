@@ -152,63 +152,39 @@ public class Controller {
 	@FXML
 	public void initialize() {
 		login();
+<<<<<<< HEAD
 		doInitialize();
 		if (localMode) {
 			newWorld();
 		} else
 			newWorldServer();
+=======
+
+		loadCritterFile.setDisable(true);
+		numCritters.setDisable(true);
+		pause.setDisable(true);
+
+		setupCanvas();
+		setGUIReady(false);
+>>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 	}
 
-	private void doInitialize() {
-		// TODO confirm that nothing happens upon initial initializing of the world with
-		// the below code
+	private void doReset() {
 		if (executor != null)
 			executor.shutdownNow();
 		if (timeline != null)
 			timeline.stop();
-		
+
 		model = new WorldModel();
 		simulationRate = 30;
+
 		loadCritterFile.setDisable(true);
-		chkRandom.setSelected(false);
-		chkRandom.setDisable(true);
-		chkSpecify.setSelected(false);
-		chkSpecify.setDisable(true);
-		numCritters.clear();
 		numCritters.setDisable(true);
-		stepForward.setDisable(true);
-		run.setDisable(true);
 		pause.setDisable(true);
-		simulationSpeed.setDisable(true);
-		memSizeText.setText("");
-		speciesText.setText("");
-		defenseText.setText("");
-		offenseText.setText("");
-		sizeText.setText("");
-		energyText.setText("");
-		passText.setText("");
-		tagText.setText("");
-		postureText.setText("");
-		lastRuleDisplay.setText("");
-		lastRuleDisplay.setWrapText(true);
+		setGUIReady(false);
+		resetInfo();
 
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
-		c.setDisable(true);
-		c.setVisible(false);
-		c.addEventFilter(MouseEvent.ANY, (e) -> c.requestFocus());
-
-		c.heightProperty().bind(scroll.heightProperty());
-		c.widthProperty().bind(scroll.widthProperty());
-
-		// listeners that dynamically redraw the canvas in response to window resizing
-		c.heightProperty().addListener(update -> {
-			if (map != null)
-				map.draw();
-		});
-		c.widthProperty().addListener(update -> {
-			if (map != null)
-				map.draw();
-		});
 
 		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
@@ -234,11 +210,56 @@ public class Controller {
 		});
 	}
 
+	private void setupCanvas() {
+		c.addEventFilter(MouseEvent.ANY, (e) -> c.requestFocus());
+
+		c.heightProperty().bind(scroll.heightProperty());
+		c.widthProperty().bind(scroll.widthProperty());
+
+		// listeners that dynamically redraw the canvas in response to window resizing
+		c.heightProperty().addListener(update -> {
+			if (map != null)
+				map.draw();
+		});
+		c.widthProperty().addListener(update -> {
+			if (map != null)
+				map.draw();
+		});
+	}
+
+	private void setGUIReady(boolean isReady) {
+		chkRandom.setDisable(!isReady);
+		chkSpecify.setDisable(!isReady);
+		stepForward.setDisable(!isReady);
+		run.setDisable(!isReady);
+		simulationSpeed.setDisable(!isReady);
+		displayProgram.setDisable(!isReady);
+		c.setDisable(!isReady);
+		c.setVisible(isReady);
+	}
+
+	private void resetInfo() {
+		numCritters.clear();
+
+		memSizeText.setText("");
+		speciesText.setText("");
+		defenseText.setText("");
+		offenseText.setText("");
+		sizeText.setText("");
+		energyText.setText("");
+		passText.setText("");
+		tagText.setText("");
+		postureText.setText("");
+		lastRuleDisplay.setText("");
+		lastRuleDisplay.setWrapText(true);
+
+		chkRandom.setSelected(false);
+		chkSpecify.setSelected(false);
+	}
+
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
-		doInitialize();
+		doReset();
 		if (localMode) {
 			newWorld();
 		} else {
@@ -250,13 +271,10 @@ public class Controller {
 	private void newWorld() {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
+		setGUIReady(true);
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
+
 		map.draw();
 	}
 
@@ -266,17 +284,14 @@ public class Controller {
 			map.draw();
 		} else
 			return;
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
+		setGUIReady(true);
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
 	}
 
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
+<<<<<<< HEAD
 		doInitialize();
 		if (localMode) {
 			loadWorld();
@@ -328,16 +343,22 @@ public class Controller {
 
 		
 	}
+=======
+>>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 
-	private void loadWorld() {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File f = new File(".\\src\\test\\resources\\simulationtests"); // TODO remove before submitting?
-		fc.setInitialDirectory(f); // TODO remove before submitting?
+		File initDirectory = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
+		fc.setInitialDirectory(initDirectory); // TODO remove before submitting?
 		File worldFile = fc.showOpenDialog(new Popup());
-		if (worldFile == null)
+		if (worldFile == null) {
 			return;
+		}
+		doReset();
+		loadWorld(worldFile);
+	}
 
+	private void loadWorld(File worldFile) {
 		try {
 			model.loadWorld(worldFile);
 			map.draw();
@@ -357,6 +378,7 @@ public class Controller {
 			a.showAndWait();
 			return;
 		}
+<<<<<<< HEAD
 		
 
 		chkRandom.setDisable(false);
@@ -366,13 +388,20 @@ public class Controller {
 		simulationSpeed.setDisable(false);
 		c.setDisable(false);
 		c.setVisible(true);
+=======
+		map = new WorldMap(c, model);
+		crittersAlive.setText("Critters Alive: " + model.numCritters);
+		stepsTaken.setText("Time: " + model.time);
+		setGUIReady(true);
+		map.draw();
+>>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 	}
 
 	@FXML
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File(".\\\\src\\\\test\\\\resources\\\\simulationtests"); // TODO remove
+		File f = new File("./src/test/resources/simulationtests"); // TODO remove
 		fc.setInitialDirectory(f); // TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
@@ -474,7 +503,6 @@ public class Controller {
 		loadCritterFile.setDisable(false);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
-		numCritters.setDisable(false);
 		stepForward.setDisable(false);
 		run.setDisable(false);
 		simulationSpeed.setDisable(false);

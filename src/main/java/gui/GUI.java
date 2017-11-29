@@ -38,6 +38,8 @@ public class GUI extends Application {
 // TODO add SOUNDS!
 // TODO add SKINS!
 // TODO add MICROTRANSACTIONS!
+// TODO optimize zooming so that it only redraws visible portion and not whole
+// entire hex grid?
 
 // Sujith:
 // TODO work on server stuff
@@ -45,21 +47,23 @@ public class GUI extends Application {
 // Rishi:
 // TODO implement smell - dijkstra
 // TODO do written problems
+// TODO merge run and pause buttons?
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
 // TODO make ctrl + arrow keys zooming if wants and has time (or qw or -+)
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
-// TODO make icon solid critter before submission if keeping this art style
 
 // Andy:
-// TODO merge run and pause buttons?
-// TODO fix a5 and a4 grader bugs
+// TODO double check to make sure all A4 and A5 grader bugs have been fixed
 // TODO start worldmodel updates and stuff
-// TODO why is first new world created not centered?
+// TODO FIX CONCURRENCY BUGS
 // TODO locks in world model
 // TODO list of changed hexes
+// TODO is there a way to have the program stop automatically when the GUI is
+// closed while running?
+// TODO fix bug for non terminating threads
 
 // Bug: new world,
 // reset,

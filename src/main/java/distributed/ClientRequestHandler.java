@@ -118,8 +118,13 @@ public class ClientRequestHandler {
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
+<<<<<<< HEAD
 				alert.setHeaderText("Login Information Was Invalid");
 				alert.setContentText("User is not an admin so a New World cannot be created.");
+=======
+				alert.setHeaderText("Access Denied");
+				alert.setContentText("User is not an admin so a New World cannot be created."); 
+>>>>>>> 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
