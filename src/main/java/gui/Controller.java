@@ -622,6 +622,7 @@ public class Controller {
 		URL url = null;
 		try {
 			url = new URL("http://localhost:" + 8080 + "/login");
+			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
@@ -631,6 +632,7 @@ public class Controller {
 			w.println(gson.toJson(loginInfo, LoginInfo.class));
 			w.flush();
 			if (connection.getResponseCode() == 401) {
+				
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Credentials Not Recognized");
@@ -645,8 +647,14 @@ public class Controller {
 					System.exit(0);
 				}
 			}
+			System.out.println("yesfjhfkjgjfjfhgjkfdg");
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = r.readLine();
+			/*
+			System.out.println(sessionIdString);
+			System.out.println(r.readLine());
+			System.out.println(r.readLine());
+			*/
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
@@ -658,9 +666,7 @@ public class Controller {
 			return;
 		}
 		localMode = false;
-		System.out.println(localMode);
 		handler = new ClientRequestHandler();
-		System.out.println(handler);
 	}
 
 	class LoginInfo {
