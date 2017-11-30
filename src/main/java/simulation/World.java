@@ -655,10 +655,10 @@ public class World extends AbstractWorld {
 		String name = sc.getName();
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
-		//for (int i = 0; i < numMutations; i++)
+		for (int i = 0; i < numMutations; i++)
 		{
 			//System.out.println("mutate");
-			//prog = prog.mutate();
+			prog = prog.mutate();
 		}
 
 		SimpleCritter baby = new Critter(prog, babymem, name, sc.getOrientation());
@@ -818,8 +818,8 @@ public class World extends AbstractWorld {
 		}
 
 		int numMutations = numberMutations();
-		//for (int i = 0; i < numMutations; i++)
-			//prog = prog.mutate();
+		for (int i = 0; i < numMutations; i++)
+			prog = prog.mutate();
 		String name = random.nextBoolean() ? sc1.getName() : sc2.getName();
 		SimpleCritter baby = new Critter(prog, babymem, name, 0);
 		loadOneCritter(baby, babyColumn, babyRow);

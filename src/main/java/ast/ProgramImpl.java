@@ -69,7 +69,6 @@ public class ProgramImpl extends AbstractNode implements Program
 	{
 		for(int i = 0; i < RulesList.size(); i++)
 		{
-			System.out.println("ahhhhh");
 			if(RulesList.size() == 1)
 				return false;
 			if(child == RulesList.get(i))
@@ -107,27 +106,27 @@ public class ProgramImpl extends AbstractNode implements Program
 			{
 				case 0:
 					m = MutationFactory.getRemove(false);
-					System.out.println("remove");
+					//System.out.println("remove");
 					break;
 				case 1:
 					m = MutationFactory.getSwap(false);
-					System.out.println("swap");
+					//System.out.println("swap");
 					break;
 				case 2:
 					m = MutationFactory.getReplace(false);
-					System.out.println("replace");
+					//System.out.println("replace");
 					break;
 				case 3:
 					m = MutationFactory.getTransform(false);
-					System.out.println("transform");
+					//System.out.println("transform");
 					break;
 				case 4:
 					m = MutationFactory.getInsert(false);
-					System.out.println("insert");
+					//System.out.println("insert");
 					break;
 				case 5:
 					m = MutationFactory.getDuplicate(false);
-					System.out.println("duplicate");
+					//System.out.println("duplicate");
 					break;
 			}
 			valid = mutate(randIndex, m);
@@ -139,8 +138,8 @@ public class ProgramImpl extends AbstractNode implements Program
 	public Program mutate(int index, Mutation m)
 	{
 		ProgramImpl copy = this.clone();
-		System.out.println("" + index);
-		System.out.println(copy.nodeAt(index));
+		//System.out.println("" + index);
+		//System.out.println(copy.nodeAt(index));
 		if(copy.nodeAt(index).acceptMutation(m))
 			return copy;
 		return null;
