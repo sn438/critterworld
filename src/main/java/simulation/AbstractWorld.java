@@ -106,7 +106,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract int searchAhead(SimpleCritter sc, int index);
 	
 	/**
-	 * 
+	 * TODO write
 	 */
 	public abstract int smell(SimpleCritter sc);
 
