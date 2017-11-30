@@ -68,6 +68,10 @@ public class ProgramImpl extends AbstractNode implements Program
 	public boolean replaceChild(Node child, Node replacement)
 	{
 		for(int i = 0; i < RulesList.size(); i++)
+		{
+			System.out.println("ahhhhh");
+			if(RulesList.size() == 1)
+				return false;
 			if(child == RulesList.get(i))
 			{
 				if(replacement == null)
@@ -79,6 +83,7 @@ public class ProgramImpl extends AbstractNode implements Program
 				}
 				return true;
 			}
+		}
 		return false;
 	}
 	

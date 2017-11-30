@@ -69,6 +69,7 @@ public class InterpreterImpl implements Interpreter
 		
 		if(a == null)
 			a = new Action(ActType.WAIT);
+		System.out.println(a.toString());
 		return a;
 	}
 	

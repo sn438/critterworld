@@ -58,7 +58,7 @@ public class GUI extends Application {
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
 // TODO start worldmodel updates and stuff
-// TODO FIX CONCURRENCY BUGS - go to when critterList is being altered and synchronize on the list
+// TODO FIX CONCURRENCY BUGS
 // TODO locks in world model
 // TODO list of changed hexes
 // TODO is there a way to have the program stop automatically when the GUI is
@@ -74,4 +74,3 @@ public class GUI extends Application {
 // being modified??
 // iterating through list of critters and objects
 // critter species names?
-// do we just remove all the non-server stuff

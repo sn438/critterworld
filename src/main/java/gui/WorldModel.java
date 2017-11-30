@@ -177,7 +177,7 @@ public class WorldModel {
 			//rwl.writeLock().lock();
 			world.advanceOneTimeStep();
 			time++;
-			diffLog.add(world.getAndResetUpdatedHexes());
+			//diffLog.add(world.getAndResetUpdatedHexes());
 			//rwl.writeLock().unlock();
 			
 			//rwl.readLock().lock();
