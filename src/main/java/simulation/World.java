@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 
@@ -17,8 +18,7 @@ import ast.ProgramImpl;
 import ast.Rule;
 
 /** A class to simulate the world state. */
-public class World extends AbstractWorld
-{
+public class World extends AbstractWorld {
 	/** The name of this world. */
 	private String worldname;
 	/** Contains the hex grid of the world. */
@@ -37,12 +37,14 @@ public class World extends AbstractWorld
 	/**
 	 * Loads a world from a description.
 	 * 
-	 * @param worlddesc A String description of the world.
-	 * @throws UnsupportedOperationException if the world constants file could not be found or was improperly formatted
-	 * 		   IllegalArgumentException if the {@code worlddesc} is invalid
+	 * @param worlddesc
+	 *            A String description of the world.
+	 * @throws UnsupportedOperationException
+	 *             if the world constants file could not be found or was improperly
+	 *             formatted IllegalArgumentException if the {@code worlddesc} is
+	 *             invalid
 	 */
-	public World(String worlddesc) throws UnsupportedOperationException, IllegalArgumentException
-	{
+	public World(String worlddesc) throws UnsupportedOperationException, IllegalArgumentException {
 		// sets constants and initializes instance fields
 		super();
 		setConstants();
@@ -52,57 +54,50 @@ public class World extends AbstractWorld
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
-		
+
 		String[] lines = worlddesc.split("\r\n");
 		if (lines.length < 2)
-			throw new IllegalArgumentException(); 
-		
+			throw new IllegalArgumentException();
+
 		// parses the world name, and if no valid one is parsed, supplies a default one
 		worldname = FileParser.parseAttributeFromLine(lines[0], "name ");
 		if (worldname.equals(""))
 			worldname = "Arrakis";
-		
-		// parses world dimensions, and supplies default ones if no valid dimensions are parsed
-		try
-		{
+
+		// parses world dimensions, and supplies default ones if no valid dimensions are
+		// parsed
+		try {
 			String worldDimensions = FileParser.parseAttributeFromLine(lines[1], "size ");
 			String[] dim = worldDimensions.split(" ");
 			columns = Integer.parseInt(dim[0]);
 			rows = Integer.parseInt(dim[1]);
-			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0))
-			{
+			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0)) {
 				columns = CONSTANTS.get("COLUMNS").intValue();
 				rows = CONSTANTS.get("ROWS").intValue();
 				System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			columns = CONSTANTS.get("COLUMNS").intValue();
 			rows = CONSTANTS.get("ROWS").intValue();
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 		}
 		numValidHexes = 0;
-		
+
 		// initializes world grid
 		grid = new Hex[columns][rows];
 		for (int i = 0; i < grid.length; i++)
 			for (int j = 0; j < grid[0].length; j++)
-				if (isValidHex(i, j))
-				{
+				if (isValidHex(i, j)) {
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
-					//updatedHexes.add(grid[i][j]);
+					// updatedHexes.add(grid[i][j]);
 				}
-		
+
 		// loads in food and rock objects from description (ignores critter additions)
-		for (int i = 2; i < lines.length; i++)
-		{
+		for (int i = 2; i < lines.length; i++) {
 			String[] info = lines[i].split(" ");
-			try
-			{
-				switch (info[0])
-				{
+			try {
+				switch (info[0]) {
 				case "rock":
 					addNonCritterObject(new Rock(), Integer.parseInt(info[1]), Integer.parseInt(info[2]));
 					break;
@@ -111,23 +106,24 @@ public class World extends AbstractWorld
 					addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
 					break;
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				break;
 			}
 		}
 	}
 
 	/**
-	 * Loads a world from a world description file, in the form of a pre-determined file.
+	 * Loads a world from a world description file, in the form of a pre-determined
+	 * file.
 	 * 
-	 * @param file The file that contains world information.
-	 * @throws FileNotFoundException if the world file could not be found
-	 * 		   UnsupportedOperationException if the world constants file could not be found or was improperly formatted
+	 * @param file
+	 *            The file that contains world information.
+	 * @throws FileNotFoundException
+	 *             if the world file could not be found
+	 *             UnsupportedOperationException if the world constants file could
+	 *             not be found or was improperly formatted
 	 */
-	public World(File file) throws FileNotFoundException, IllegalArgumentException
-	{
+	public World(File file) throws FileNotFoundException, IllegalArgumentException {
 		// sets constants and initializes instance fields
 		super();
 		setConstants();
@@ -145,23 +141,20 @@ public class World extends AbstractWorld
 		if (worldname.equals(""))
 			worldname = "Arrakis";
 
-		// parses world dimensions, and supplies default ones if no valid dimensions are parsed
-		try
-		{
+		// parses world dimensions, and supplies default ones if no valid dimensions are
+		// parsed
+		try {
 			String worldDimensions = FileParser.parseAttributeFromLine(bf, "size ");
 			String[] dim = worldDimensions.split(" ");
 			columns = Integer.parseInt(dim[0]);
 			rows = Integer.parseInt(dim[1]);
 
-			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0))
-			{
+			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0)) {
 				columns = CONSTANTS.get("COLUMNS").intValue();
 				rows = CONSTANTS.get("ROWS").intValue();
 				System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			columns = CONSTANTS.get("COLUMNS").intValue();
 			rows = CONSTANTS.get("ROWS").intValue();
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
@@ -172,56 +165,53 @@ public class World extends AbstractWorld
 		grid = new Hex[columns][rows];
 		for (int i = 0; i < grid.length; i++)
 			for (int j = 0; j < grid[0].length; j++)
-				if (isValidHex(i, j))
-				{
+				if (isValidHex(i, j)) {
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
-					//updatedHexes.add(grid[i][j]);
+					// updatedHexes.add(grid[i][j]);
 				}
 
-		try
-		{
+		try {
 			// loads in world objects from file
 			String line = bf.readLine();
-			while (line != null)
-			{
+			while (line != null) {
 				String[] info = line.split(" ");
-				switch (info[0])
-				{
-					case "rock":
-						addNonCritterObject(new Rock(), Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+				switch (info[0]) {
+				case "rock":
+					addNonCritterObject(new Rock(), Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+					break;
+				case "food":
+					Food f = new Food(Integer.parseInt(info[3]));
+					addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
+					break;
+				case "critter":
+					BufferedReader critterreader = new BufferedReader(new FileReader(info[1]));
+					SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(),
+							Integer.parseInt(info[4]));
+					if (sc == null) {
+						System.err.println("The critter file " + file.toString()
+								+ " does not have the right syntax, so it was not loaded.");
 						break;
-					case "food":
-						Food f = new Food(Integer.parseInt(info[3]));
-						addNonCritterObject(f, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
-						break;
-					case "critter":
-						BufferedReader critterreader = new BufferedReader(new FileReader(info[1]));
-						SimpleCritter sc = FileParser.parseCritter(critterreader, getMinMemory(),
-								Integer.parseInt(info[4]));
-						if(sc == null)
-						{
-							System.err.println("The critter file " + file.toString() + " does not have the right syntax, so it was not loaded.");
-							break;
-						}
-							
-						loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
-						break;
+					}
+
+					loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
+					break;
 				}
 				line = bf.readLine();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			return;
 		}
 	}
+
 	/**
 	 * Generates a default size world containing nothing but randomly placed rocks.
-	 * @throws UnsupportedOperationException if the world constants file could not be found or was improperly formatted
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if the world constants file could not be found or was improperly
+	 *             formatted
 	 */
-	public World() throws UnsupportedOperationException
-	{
+	public World() throws UnsupportedOperationException {
 		// sets constants and initializes instance fields
 		super();
 		worldname = "Arrakis";
@@ -239,10 +229,8 @@ public class World extends AbstractWorld
 
 		grid = new Hex[columns][rows];
 		for (int i = 0; i < grid.length; i++)
-			for (int j = 0; j < grid[0].length; j++)
-			{
-				if (isValidHex(i, j))
-				{
+			for (int j = 0; j < grid[0].length; j++) {
+				if (isValidHex(i, j)) {
 					grid[i][j] = new Hex(i, j);
 					numValidHexes++;
 					updatedHexes.add(grid[i][j]);
@@ -253,12 +241,10 @@ public class World extends AbstractWorld
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
-		while (n < numValidHexes / 40)
-		{
+		while (n < numValidHexes / 40) {
 			c = (int) (Math.random() * columns);
 			r = (int) (Math.random() * rows);
-			if (isValidHex(c, r) && grid[c][r].isEmpty())
-			{
+			if (isValidHex(c, r) && grid[c][r].isEmpty()) {
 				addNonCritterObject(new Rock(), c, r);
 				n++;
 			}
@@ -266,34 +252,34 @@ public class World extends AbstractWorld
 	}
 
 	/**
-	 * Parses the constants file in the project directory and stores the constants in the CONSTANTS field.
-	 * @throws UnsupportedOperationException if the constants file couldn't be found or is improperly formatted
+	 * Parses the constants file in the project directory and stores the constants
+	 * in the CONSTANTS field.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if the constants file couldn't be found or is improperly
+	 *             formatted
 	 */
-	private void setConstants() throws UnsupportedOperationException
-	{
+	private void setConstants() throws UnsupportedOperationException {
 		InputStream in = World.class.getClassLoader().getResourceAsStream("simulation/constants.txt");
-		if(in == null)
+		if (in == null)
 			throw new UnsupportedOperationException();
-		
+
 		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
 		CONSTANTS = FileParser.parseConstants(bf);
 	}
 
 	@Override
-	public int getColumns()
-	{
+	public int getColumns() {
 		return columns;
 	}
-	
+
 	@Override
-	public int getRows()
-	{
+	public int getRows() {
 		return rows;
 	}
-	
+
 	@Override
-	public boolean isValidHex(int c, int r)
-	{
+	public boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
 			return false;
 		else if (c >= columns || r >= rows)
@@ -304,18 +290,14 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public void loadCritters(String filename, int n, int direction)
-	{
-		try
-		{
-			for (int i = 0; i < n; i++)
-			{
+	public void loadCritters(String filename, int n, int direction) {
+		try {
+			for (int i = 0; i < n; i++) {
 				BufferedReader br = new BufferedReader(new FileReader(filename));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
-				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty())
-				{
+				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty()) {
 					randc = (int) (Math.random() * columns);
 					randr = (int) (Math.random() * rows);
 				}
@@ -323,27 +305,21 @@ public class World extends AbstractWorld
 				if (isValidHex(randc, randr))
 					loadOneCritter(sc, randc, randr);
 			}
-		}
-		catch (FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
 			return;
 		}
 	}
 
 	@Override
-	public void loadCritters(File file, int n, int direction)
-	{
-		try
-		{
-			for (int i = 0; i < n; i++)
-			{
+	public void loadCritters(File file, int n, int direction) {
+		try {
+			for (int i = 0; i < n; i++) {
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
-				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty())
-				{
+				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty()) {
 					randc = (int) (Math.random() * columns);
 					randr = (int) (Math.random() * rows);
 				}
@@ -351,73 +327,72 @@ public class World extends AbstractWorld
 				if (isValidHex(randc, randr))
 					loadOneCritter(sc, randc, randr);
 			}
-		}
-		catch (FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
 			return;
 		}
 	}
-	
+
 	@Override
-	public void loadCritterAtLocation(File file, int c, int r)
-	{
-		try
-		{
+	public void loadCritterAtLocation(File file, int c, int r) {
+		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), -1);
-			if(isValidHex(c, r))
+			if (isValidHex(c, r))
 				loadOneCritter(sc, c, r);
-		}
-		catch (FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
 			return;
 		}
 	}
-	
+
 	/**
-	 * Loads a single critter into the world at the specified coordinates, if possible. Does nothing if
-	 * the hex is not within the world boundaries, or if there is something already present at the hex.
+	 * Loads a single critter into the world at the specified coordinates, if
+	 * possible. Does nothing if the hex is not within the world boundaries, or if
+	 * there is something already present at the hex.
 	 * 
-	 * @param sc the critter to add
-	 * @param c the column index of the hex where the critter will be added
-	 * @param r the row index of the hex where the critter will be added
+	 * @param sc
+	 *            the critter to add
+	 * @param c
+	 *            the column index of the hex where the critter will be added
+	 * @param r
+	 *            the row index of the hex where the critter will be added
 	 * @return whether the critter was successfully added
 	 */
-	private boolean loadOneCritter(SimpleCritter sc, int c, int r)
-	{
+	private boolean loadOneCritter(SimpleCritter sc, int c, int r) {
 		if (!isValidHex(c, r))
 			return false;
 		boolean added = grid[c][r].addContent(sc);
-		if (added)
-		{
+		if (added) {
 			critterList.add(sc);
 			critterMap.put(sc, grid[c][r]);
-			//updatedHexes.add(grid[c][r]);
+			// updatedHexes.add(grid[c][r]);
 		}
 		return added;
 	}
 
 	/**
-	 * Loads a single non-critter world object into the world at the specified coordinates, if possible.
-	 * Does nothing if the hex is not within the world boundaries or if there is something already present at
-	 * the hex. This method cannot be used to add critters into the world. Use the method
+	 * Loads a single non-critter world object into the world at the specified
+	 * coordinates, if possible. Does nothing if the hex is not within the world
+	 * boundaries or if there is something already present at the hex. This method
+	 * cannot be used to add critters into the world. Use the method
 	 * {@code loadCritter(SimpleCritter sc, int c, int r)} instead.
 	 * 
-	 * @param sc the object to add
-	 * @param c the column index of the hex where the object will be added
-	 * @param r the row index of the hex where the object will be added
+	 * @param sc
+	 *            the object to add
+	 * @param c
+	 *            the column index of the hex where the object will be added
+	 * @param r
+	 *            the row index of the hex where the object will be added
 	 */
-	private void addNonCritterObject(WorldObject wo, int c, int r)
-	{
+	private void addNonCritterObject(WorldObject wo, int c, int r) {
 		if (wo instanceof Critter)
 			return;
 		if (!isValidHex(c, r))
 			return;
 		nonCritterObjectMap.put(wo, grid[c][r]);
 		grid[c][r].addContent(wo);
-		//updatedHexes.add(grid[c][r]);
+		// updatedHexes.add(grid[c][r]);
 	}
 
 	/* ========================================= */
@@ -425,13 +400,12 @@ public class World extends AbstractWorld
 	/* ========================================= */
 
 	@Override
-	public int searchNearby(SimpleCritter sc, int dir)
-	{
-		//determines the row and column coordinates of the critter
+	public int searchNearby(SimpleCritter sc, int dir) {
+		// determines the row and column coordinates of the critter
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
-		
+
 		// finds the hex to look in, based on the value of dir
 		if (dir < 0)
 			dir = 0;
@@ -448,13 +422,12 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public int searchAhead(SimpleCritter sc, int index)
-	{
-		//determines the row and column coordinates of the critter
+	public int searchAhead(SimpleCritter sc, int index) {
+		// determines the row and column coordinates of the critter
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
-		
+
 		if (index < 0)
 			index = 0;
 		int aheadc = c + sc.changeInPosition(true, sc.getOrientation())[0] * index;
@@ -465,10 +438,11 @@ public class World extends AbstractWorld
 		Hex nearby = grid[aheadc][aheadr];
 		return nearby.hexAppearance();
 	}
-	
+
 	@Override
 	public int smell(SimpleCritter sc)
 	{
+		PriorityQueue<Object> p = new PriorityQueue<Object>();
 		//TODO implement
 		return 0;
 	}
@@ -478,8 +452,7 @@ public class World extends AbstractWorld
 	/* ========================================= */
 
 	@Override
-	public void moveCritter(SimpleCritter sc, boolean forward)
-	{
+	public void moveCritter(SimpleCritter sc, boolean forward) {
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
@@ -487,9 +460,9 @@ public class World extends AbstractWorld
 		int cost = CONSTANTS.get("MOVE_COST").intValue() * sc.size();
 		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the critter
-		if (sc.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
 		}
@@ -498,44 +471,41 @@ public class World extends AbstractWorld
 		int newc = c + changeInCoords[0];
 		int newr = r + changeInCoords[1];
 
-		if (!isValidHex(newc, newr) || !grid[newc][newr].isEmpty())
-		{
+		if (!isValidHex(newc, newr) || !grid[newc][newr].isEmpty()) {
 			if (sc.getEnergy() == 0)
 				kill(sc);
 			return;
 		}
 		grid[c][r].removeContent();
 		critterMap.remove(sc);
-		//updatedHexes.add(grid[c][r]);
+		// updatedHexes.add(grid[c][r]);
 		grid[newc][newr].addContent(sc);
 		critterMap.put(sc, grid[newc][newr]);
-		//updatedHexes.add(grid[newc][newr]);
+		// updatedHexes.add(grid[newc][newr]);
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
 
 	@Override
-	public void turnCritter(SimpleCritter sc, boolean clockwise)
-	{
+	public void turnCritter(SimpleCritter sc, boolean clockwise) {
 		int cost = sc.size();
 		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the critter
-		if (sc.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
 		}
 
 		sc.turn(clockwise);
-		//updatedHexes.add(critterMap.get(sc));
+		// updatedHexes.add(critterMap.get(sc));
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
 
 	@Override
-	public void critterEat(SimpleCritter sc)
-	{
+	public void critterEat(SimpleCritter sc) {
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
@@ -543,57 +513,53 @@ public class World extends AbstractWorld
 		int cost = sc.size();
 		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the critter
-		if (sc.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
 		}
 
 		int newc = c + sc.changeInPosition(true, sc.getOrientation())[0];
 		int newr = r + sc.changeInPosition(true, sc.getOrientation())[1];
-		if (!isValidHex(newc, newr))
-		{
+		if (!isValidHex(newc, newr)) {
 			if (sc.getEnergy() == 0)
 				kill(sc);
 			return;
 		}
 
 		Hex directlyInFront = grid[newc][newr];
-		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof Food)
-		{
+		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof Food) {
 			Food nourishment = (Food) directlyInFront.getContent();
 			sc.updateEnergy(nourishment.getCalories(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			nonCritterObjectMap.remove(nourishment);
 			directlyInFront.removeContent();
-			//updatedHexes.add(directlyInFront);
+			// updatedHexes.add(directlyInFront);
 		}
 		if (sc.getEnergy() == 0)
 			kill(sc);
 	}
 
 	@Override
-	public void growCritter(SimpleCritter sc)
-	{
+	public void growCritter(SimpleCritter sc) {
 		int cost = sc.size()
 				* sc.complexity(CONSTANTS.get("RULE_COST").intValue(), CONSTANTS.get("ABILITY_COST").intValue());
 		sc.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the critter
-		if (sc.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
 		}
 
 		int currentSize = sc.readMemory(3);
 		sc.setMemory(currentSize + 1, 3);
-		//updatedHexes.add(critterMap.get(sc));
+		// updatedHexes.add(critterMap.get(sc));
 	}
 
 	@Override
-	public void critterBattle(SimpleCritter attacker)
-	{
+	public void critterBattle(SimpleCritter attacker) {
 		Hex location = critterMap.get(attacker);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
@@ -601,33 +567,33 @@ public class World extends AbstractWorld
 		int cost = attacker.size() * CONSTANTS.get("ATTACK_COST").intValue();
 		attacker.updateEnergy(-1 * cost, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		//if the critter did not have enough energy to complete this action, kills the critter
-		if (attacker.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (attacker.getEnergy() < 0) {
 			kill(attacker);
 			return;
 		}
 
 		int newc = c + attacker.changeInPosition(true, attacker.getOrientation())[0];
 		int newr = r + attacker.changeInPosition(true, attacker.getOrientation())[1];
-		if (!isValidHex(newc, newr))
-		{
+		if (!isValidHex(newc, newr)) {
 			if (attacker.getEnergy() == 0)
 				kill(attacker);
 			return;
 		}
 
 		Hex directlyInFront = grid[newc][newr];
-		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
-		{
+		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter) {
 			// Calculates the damage dealt to the target critter
 			SimpleCritter target = (SimpleCritter) (directlyInFront.getContent());
 			int baseDamage = CONSTANTS.get("BASE_DAMAGE").intValue();
 			double dmgMultiplier = CONSTANTS.get("DAMAGE_INC").doubleValue();
 			int dmgBeforeScaling = (attacker.size() * attacker.readMemory(2)) - (target.size() * target.readMemory(1));
-			int damage = (int) (baseDamage * attacker.size() * logisticFunction(dmgMultiplier * (double)dmgBeforeScaling));
+			int damage = (int) (baseDamage * attacker.size()
+					* logisticFunction(dmgMultiplier * (double) dmgBeforeScaling));
 
-			// kills the target if it took damage greater than or equal to its current energy
+			// kills the target if it took damage greater than or equal to its current
+			// energy
 			target.updateEnergy(-1 * damage, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 			if (target.getEnergy() <= 0)
 				kill(target);
@@ -638,15 +604,13 @@ public class World extends AbstractWorld
 	}
 
 	/** Performs the logistic function 1 / (1 + e^-x). */
-	private double logisticFunction(double x)
-	{
+	private double logisticFunction(double x) {
 		double exponent = -1 * x;
 		return (1 / (1 + Math.exp(exponent)));
 	}
 
 	@Override
-	public void critterBud(SimpleCritter sc)
-	{
+	public void critterBud(SimpleCritter sc) {
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
@@ -655,23 +619,23 @@ public class World extends AbstractWorld
 		sc.updateEnergy(-1 * CONSTANTS.get("BUD_COST").intValue() * complexity,
 				CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		//if the critter did not have enough energy to complete this action, kills the critter
-		if (sc.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
 		}
 
 		int newc = c + sc.changeInPosition(false, sc.getOrientation())[0];
 		int newr = r + sc.changeInPosition(false, sc.getOrientation())[1];
-		if (!isValidHex(newc, newr) || !grid[newc][newr].isEmpty())
-		{
+		if (!isValidHex(newc, newr) || !grid[newc][newr].isEmpty()) {
 			if (sc.getEnergy() == 0)
 				kill(sc);
 			return;
 		}
 
-		//Constructs the baby critter's memory, copying memory length, offense, and defense from the parent
+		// Constructs the baby critter's memory, copying memory length, offense, and
+		// defense from the parent
 		int[] babymem = new int[sc.getMemLength()];
 		babymem[0] = sc.getMemLength();
 		babymem[1] = sc.readMemory(1);
@@ -684,12 +648,10 @@ public class World extends AbstractWorld
 		String name = sc.getName();
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
-		for (int i = 0; i < numMutations; i++)
-		{
-			//System.out.println("mutate");
+		for (int i = 0; i < numMutations; i++) {
+			// System.out.println("mutate");
 			prog = prog.mutate();
 		}
-			
 
 		SimpleCritter baby = new Critter(prog, babymem, name, sc.getOrientation());
 		loadOneCritter(baby, newc, newr);
@@ -699,38 +661,33 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public void critterMate(SimpleCritter sc)
-	{
+	public void critterMate(SimpleCritter sc) {
 		sc.toggleMatingPheromones(true);
 		Hex location = critterMap.get(sc);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 		int behindColumnParent1 = c + sc.changeInPosition(false, sc.getOrientation())[0];
 		int behindRowParent1 = r + sc.changeInPosition(false, sc.getOrientation())[1];
-		if (!isValidHex(behindColumnParent1, behindRowParent1))
-		{
+		if (!isValidHex(behindColumnParent1, behindRowParent1)) {
 			sc.toggleMatingPheromones(false);
 			return;
 		}
 		// coordinates of Parent 2
 		int columnParent2 = c + sc.changeInPosition(true, sc.getOrientation())[0];
 		int rowParent2 = r + sc.changeInPosition(true, sc.getOrientation())[1];
-		if (!isValidHex(columnParent2, rowParent2))
-		{
+		if (!isValidHex(columnParent2, rowParent2)) {
 			sc.toggleMatingPheromones(false);
 			return;
 		}
 		Hex directlyInFront = grid[columnParent2][rowParent2];
-		if (!(directlyInFront.getContent() instanceof SimpleCritter))
-		{
+		if (!(directlyInFront.getContent() instanceof SimpleCritter)) {
 			sc.toggleMatingPheromones(false);
 			return;
 		}
 		SimpleCritter parent2 = (SimpleCritter) (directlyInFront.getContent());
 		int behindColumnParent2 = columnParent2 + sc.changeInPosition(false, sc.getOrientation())[0];
 		int behindRowParent2 = rowParent2 + sc.changeInPosition(false, sc.getOrientation())[1];
-		if (!isValidHex(behindColumnParent2, behindRowParent2))
-		{
+		if (!isValidHex(behindColumnParent2, behindRowParent2)) {
 			sc.toggleMatingPheromones(false);
 			return;
 		}
@@ -741,8 +698,7 @@ public class World extends AbstractWorld
 		int parent2Direction = parent2.getOrientation();
 
 		// direction checking
-		if (!(Math.abs(parent1Direction - parent2Direction) == 3))
-		{
+		if (!(Math.abs(parent1Direction - parent2Direction) == 3)) {
 			sc.toggleMatingPheromones(false);
 			return;
 		}
@@ -750,8 +706,7 @@ public class World extends AbstractWorld
 		// energy calculation
 		sc.updateEnergy(-sc.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 		parent2.updateEnergy(-parent2.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
-		if (sc.getEnergy() < 0 || parent2.getEnergy() < 0)
-		{
+		if (sc.getEnergy() < 0 || parent2.getEnergy() < 0) {
 			if (sc.getEnergy() < 0)
 				kill(sc);
 			if (parent2.getEnergy() < 0)
@@ -761,15 +716,16 @@ public class World extends AbstractWorld
 		initiateMatingProcess(sc, parent2);
 	}
 
-	/** Randomly determines the number of mutations that will occur during mating or budding. */
-	private int numberMutations()
-	{
+	/**
+	 * Randomly determines the number of mutations that will occur during mating or
+	 * budding.
+	 */
+	private int numberMutations() {
 		double randomNumber = Math.random();
 		int returnValue = 0;
 		double temp = 0.25;
 
-		for (int i = 0; i < 10; i++)
-		{
+		for (int i = 0; i < 10; i++) {
 			if (randomNumber < temp)
 				returnValue++;
 			temp = Math.pow(0.25, i + 1);
@@ -777,9 +733,11 @@ public class World extends AbstractWorld
 		return returnValue;
 	}
 
-	/** Executes the mating process, as long as there is one empty hex around the two critters. */
-	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2)
-	{
+	/**
+	 * Executes the mating process, as long as there is one empty hex around the two
+	 * critters.
+	 */
+	private void initiateMatingProcess(SimpleCritter sc1, SimpleCritter sc2) {
 		Random random = new Random();
 		// energy calculation
 		int complexity1 = sc1.complexity(CONSTANTS.get("RULE_COST").intValue(),
@@ -788,8 +746,7 @@ public class World extends AbstractWorld
 				CONSTANTS.get("ABILITY_COST").intValue());
 		sc1.updateEnergy(-5 * complexity1, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 		sc2.updateEnergy(-5 * complexity2, CONSTANTS.get("ENERGY_PER_SIZE").intValue());
-		if (sc1.getEnergy() < 0 || sc2.getEnergy() < 0)
-		{
+		if (sc1.getEnergy() < 0 || sc2.getEnergy() < 0) {
 			if (sc1.getEnergy() < 0)
 				kill(sc1);
 			if (sc2.getEnergy() < 0)
@@ -804,17 +761,13 @@ public class World extends AbstractWorld
 			ruleSetSize = sc1.getProgram().getRulesList().size();
 		else
 			ruleSetSize = sc2.getProgram().getRulesList().size();
-		for (int i = 0; i < ruleSetSize; i++)
-		{
-			if (random.nextBoolean())
-			{
+		for (int i = 0; i < ruleSetSize; i++) {
+			if (random.nextBoolean()) {
 				if (i >= sc1.getProgram().getRulesList().size())
 					babyRules.add(sc2.getProgram().getRulesList().get(i));
 				else
 					babyRules.add(sc1.getProgram().getRulesList().get(i));
-			}
-			else
-			{
+			} else {
 				if (i >= sc2.getProgram().getRulesList().size())
 					babyRules.add(sc1.getProgram().getRulesList().get(i));
 				else
@@ -823,20 +776,16 @@ public class World extends AbstractWorld
 		}
 		Program prog = new ProgramImpl(babyRules);
 
-		//generating memory
+		// generating memory
 		int[] babymem = null;
-		if (random.nextBoolean())
-		{
+		if (random.nextBoolean()) {
 			babymem = new int[sc1.getMemLength()];
 			babymem[0] = sc1.getMemLength();
-		}
-		else
-		{
+		} else {
 			babymem = new int[sc2.getMemLength()];
 			babymem[0] = sc2.getMemLength();
 		}
-		for (int i = 1; i <= 2; i++)
-		{
+		for (int i = 1; i <= 2; i++) {
 			if (random.nextBoolean())
 				babymem[i] = sc1.readMemory(i);
 			else
@@ -850,14 +799,11 @@ public class World extends AbstractWorld
 		// coordinate Generation
 		int babyColumn = 0;
 		int babyRow = 0;
-		if (random.nextBoolean())
-		{
+		if (random.nextBoolean()) {
 			Hex location = critterMap.get(sc1);
 			babyColumn = location.getColumnIndex() + sc1.changeInPosition(false, sc1.getOrientation())[0];
 			babyRow = location.getRowIndex() + sc1.changeInPosition(false, sc1.getOrientation())[1];
-		}
-		else
-		{
+		} else {
 			Hex location = critterMap.get(sc2);
 			babyColumn = location.getColumnIndex() + sc2.changeInPosition(false, sc2.getOrientation())[0];
 			babyRow = location.getRowIndex() + sc2.changeInPosition(false, sc2.getOrientation())[1];
@@ -870,8 +816,7 @@ public class World extends AbstractWorld
 		SimpleCritter baby = new Critter(prog, babymem, name, 0);
 		loadOneCritter(baby, babyColumn, babyRow);
 
-		if (sc1.getEnergy() == 0 || sc2.getEnergy() == 0)
-		{
+		if (sc1.getEnergy() == 0 || sc2.getEnergy() == 0) {
 			if (sc1.getEnergy() == 0)
 				kill(sc1);
 			if (sc2.getEnergy() == 0)
@@ -883,33 +828,30 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public void critterTag(SimpleCritter tagger, int val)
-	{
+	public void critterTag(SimpleCritter tagger, int val) {
 		Hex location = critterMap.get(tagger);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 
 		tagger.updateEnergy(-1 * tagger.size(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		//if the critter did not have enough energy to complete this action, kills the critter
-		if (tagger.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (tagger.getEnergy() < 0) {
 			kill(tagger);
 			return;
 		}
 
 		int newc = c + tagger.changeInPosition(true, tagger.getOrientation())[0];
 		int newr = r + tagger.changeInPosition(true, tagger.getOrientation())[1];
-		if (!isValidHex(newc, newr))
-		{
+		if (!isValidHex(newc, newr)) {
 			if (tagger.getEnergy() == 0)
 				kill(tagger);
 			return;
 		}
 
 		Hex directlyInFront = grid[newc][newr];
-		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter)
-		{
+		if (!directlyInFront.isEmpty() && directlyInFront.getContent() instanceof SimpleCritter) {
 			SimpleCritter taggee = (SimpleCritter) (directlyInFront.getContent());
 			if (!(val < 0 || val > 99))
 				taggee.setTag(val);
@@ -920,61 +862,59 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public void critterServe(SimpleCritter donator, int index)
-	{
+	public void critterServe(SimpleCritter donator, int index) {
 		Hex location = critterMap.get(donator);
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
 
 		if (index < 0)
 			index = 0;
-		else if(index > donator.getEnergy() + donator.size())
+		else if (index > donator.getEnergy() + donator.size())
 			index = donator.getEnergy() + donator.size();
 
 		donator.updateEnergy(-1 * (donator.size() + index), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		//if the critter did not have enough energy to complete this action, kills the critter
-		if (donator.getEnergy() < 0)
-		{
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
+		if (donator.getEnergy() < 0) {
 			kill(donator);
 			return;
 		}
 
 		int newc = c + donator.changeInPosition(true, donator.getOrientation())[0];
 		int newr = r + donator.changeInPosition(true, donator.getOrientation())[1];
-		if (!isValidHex(newc, newr))
-		{
+		if (!isValidHex(newc, newr)) {
 			if (donator.getEnergy() == 0)
 				kill(donator);
 			return;
 		}
 
 		Hex directlyInFront = grid[newc][newr];
-		if (directlyInFront.isEmpty())
-		{
+		if (directlyInFront.isEmpty()) {
 			Food f = new Food(index);
 			nonCritterObjectMap.put(f, directlyInFront);
 			directlyInFront.addContent(f);
-			//updatedHexes.add(directlyInFront);
+			// updatedHexes.add(directlyInFront);
 		}
 		if (donator.getEnergy() == 0)
 			kill(donator);
 	}
 
 	@Override
-	public void critterSoakEnergy(SimpleCritter sc)
-	{
+	public void critterSoakEnergy(SimpleCritter sc) {
 		sc.updateEnergy(CONSTANTS.get("SOLAR_FLUX").intValue(), CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 	}
 
-	/** Kills a critter and removes it from any lists or mappings of critters. Rest in peace, buddy. */
-	private void kill(SimpleCritter sc)
-	{
+	/**
+	 * Kills a critter and removes it from any lists or mappings of critters. Rest
+	 * in peace, buddy.
+	 */
+	private void kill(SimpleCritter sc) {
 		Hex location = critterMap.get(sc);
 		location.removeContent();
 		critterMap.remove(sc);
 		critterList.remove(sc);
-		//updatedHexes.add(location);
+		// updatedHexes.add(location);
 		deadCritters.add(sc);
 
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
@@ -983,17 +923,14 @@ public class World extends AbstractWorld
 	}
 
 	@Override
-	public StringBuilder printGrid()
-	{	
+	public StringBuilder printGrid() {
 		StringBuilder result = new StringBuilder();
-		for(int i = 0; i < 2 * rows - columns; i++)
-		{
+		for (int i = 0; i < 2 * rows - columns; i++) {
 			StringBuilder sb = new StringBuilder();
-			if(i % 2 != 0)
+			if (i % 2 != 0)
 				sb.append("  ");
-			for(int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++)
-			{
-				if(isValidHex(c, r))
+			for (int c = i % 2, r = (int) Math.ceil(i / 2.0); c < columns && r < rows; c += 2, r++) {
+				if (isValidHex(c, r))
 					sb.append("" + grid[c][r].toString() + "   ");
 			}
 			result.insert(0, sb.toString() + "\n");
@@ -1001,43 +938,38 @@ public class World extends AbstractWorld
 		result.insert(0, "World name: " + worldname + "\n");
 		return result;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap()
-	{
+	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
 		HashMap<SimpleCritter, Hex> copy = (HashMap<SimpleCritter, Hex>) critterMap.clone();
 		return copy.entrySet();
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<Map.Entry<WorldObject, Hex>> getObjectMap()
-	{
+	public Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
 		HashMap<WorldObject, Hex> copy = (HashMap<WorldObject, Hex>) nonCritterObjectMap.clone();
 		return copy.entrySet();
 	}
-	
+
 	@Override
-	public int analyzeHex(int c, int r)
-	{
-		if(!isValidHex(c, r))
+	public int analyzeHex(int c, int r) {
+		if (!isValidHex(c, r))
 			return Integer.MIN_VALUE;
 		return grid[c][r].hexAppearance();
 	}
-	
+
 	@Override
-	public SimpleCritter analyzeCritter(int c, int r)
-	{
-		if(!isValidHex(c, r) || !(grid[c][r].getContent() instanceof SimpleCritter))
+	public SimpleCritter analyzeCritter(int c, int r) {
+		if (!isValidHex(c, r) || !(grid[c][r].getContent() instanceof SimpleCritter))
 			return null;
 		return (SimpleCritter) (grid[c][r].getContent());
 	}
-	
+
 	@Override
-	public WorldObject getHexContent(int c, int r)
-	{
-		if(!isValidHex(c, r))
+	public WorldObject getHexContent(int c, int r) {
+		if (!isValidHex(c, r))
 			return null;
 		return grid[c][r].getContent();
 	}
