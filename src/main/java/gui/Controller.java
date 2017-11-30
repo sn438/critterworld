@@ -292,12 +292,45 @@ public class Controller {
 			return;
 		}
 		doReset();
-		loadWorld(worldFile);
+		if (localMode)
+			loadWorld(worldFile);
+		else 
+			loadServerWorld(worldFile);
 	}
 
+	private void loadServerWorld(File worldFile) {
+		try {
+			handler.loadWorld(worldFile, sessionId.getSessionId());
+			map = new WorldMap(c, handler, sessionId.getSessionId());
+			map.draw();
+		} catch (FileNotFoundException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IllegalArgumentException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		} catch (IOException e) {
+			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+			a.setTitle("Invalid File");
+			a.showAndWait();
+			return;
+		}
+		chkRandom.setDisable(false);
+		chkSpecify.setDisable(false);
+		stepForward.setDisable(false);
+		run.setDisable(false);
+		simulationSpeed.setDisable(false);
+		c.setDisable(false);
+		c.setVisible(true);
+	}
 	private void loadWorld(File worldFile) {
 		try {
 			model.loadWorld(worldFile);
+			map = new WorldMap(c, model);
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");

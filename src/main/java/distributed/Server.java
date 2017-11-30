@@ -23,7 +23,6 @@ public class Server {
 	private HashMap<Integer, String> sessionIdMap;
 	private WorldModel model;
 
-	
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
 		readPassword = readPass;
@@ -38,7 +37,10 @@ public class Server {
 	}
 
 	@SuppressWarnings("unchecked")
-	/** Runs the server by receiving requests from the client and responding appropriately. */
+	/**
+	 * Runs the server by receiving requests from the client and responding
+	 * appropriately.
+	 */
 	public void run() {
 		Gson gson = new Gson();
 		port(portNumber);
@@ -77,42 +79,11 @@ public class Server {
 
 		}, gson::toJson);
 
-		post("/login", (request, response) -> {
-			System.out.println("oksjdfhdfkjghdfkjghfdkjgh");
-			System.out.println(request.body());
-			response.header("Content-Type", "application/json");
-			JSONObject responseValue = null;
-			String json = request.body();
-			LoginInfo loginInfo = gson.fromJson(json, LoginInfo.class);
-			String level = loginInfo.level;
-			String password = loginInfo.password;
-			if (level.equals("read") && password.equals(readPassword)) {
-				session_id++;
-				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "read");
-				return responseValue;
-			} else if (level.equals("write") && password.equals(writePassword)) {
-				session_id++;
-				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "write");
-				return responseValue;
-			} else if (level.equals("admin") && password.equals(adminPassword)) {
-				session_id++;
-				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "admin");
-				return responseValue;
-			} else {
-				response.status(401);
-				return "Please enter in a proper password.";
-			}
-
-		}, gson::toJson);
-		
 		post("/world", (request, response) -> {
 			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			String json = request.body();
 			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
 			String description = loadWorldInfo.getDescription();
@@ -124,9 +95,9 @@ public class Server {
 					model.getCritterMap(); // TODO why?
 				}
 				model = new WorldModel();
-				model.loadNewWorld(description);
+				model.loadWorld(description);
 				return "Ok";
-			} 
+			}
 		});
 
 		get("/world/generic", (request, response) -> {
