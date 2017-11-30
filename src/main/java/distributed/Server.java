@@ -5,10 +5,14 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 import gui.WorldModel;
+import simulation.Hex;
+import simulation.SimpleCritter;
 
 /** A server that responds to HTTP requests. */
 public class Server {
@@ -22,6 +26,7 @@ public class Server {
 	private int session_id;
 	private HashMap<Integer, String> sessionIdMap;
 	private WorldModel model;
+	private HashSet<SimpleCritter> deadCritterList;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
@@ -85,6 +90,7 @@ public class Server {
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
 			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			String json = request.body();
+			System.out.println(json);
 			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
 			String description = loadWorldInfo.getDescription();
 			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
@@ -92,7 +98,9 @@ public class Server {
 				return "User does not have admin access.";
 			} else {
 				if (model != null) {
-					model.getCritterMap(); // TODO why?
+					for (Entry<SimpleCritter, Hex> critter : model.getCritterMap()) {
+						deadCritterList.add(critter.getKey());
+					}
 				}
 				model = new WorldModel();
 				model.loadWorld(description);
@@ -110,7 +118,9 @@ public class Server {
 				return "User does not have admin access.";
 			} else {
 				if (model != null) {
-					model.getCritterMap(); // TODO why?
+					for (Entry<SimpleCritter, Hex> critter : model.getCritterMap()) {
+						deadCritterList.add(critter.getKey());
+					}
 				}
 				model = new WorldModel();
 				model.createNewWorld();

@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import simulation.Hex;
+import simulation.Rock;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
@@ -30,14 +31,53 @@ import simulation.WorldObject;
 public class ClientRequestHandler {
 
 	public boolean createNewWorld(int sessionId) {
-		// We can probably refactor this into one class handling this block
+		/*
+		 * // We can probably refactor this into one class handling this block Gson gson
+		 * = new Gson(); URL url = null; try { url = new URL("http://localhost:" + 8080
+		 * + "/world/generic?session_id=" + sessionId); HttpURLConnection connection =
+		 * (HttpURLConnection) url.openConnection(); System.out.println(url.toString());
+		 * connection.connect(); if (connection.getResponseCode() == 401) { Alert alert
+		 * = new Alert(AlertType.ERROR); alert.setTitle("Login Error");
+		 * alert.setHeaderText("Access Denied"); alert.
+		 * setContentText("The user cannot create a new world because the user is not an admin."
+		 * ); return false; } BufferedReader r = new BufferedReader(new
+		 * InputStreamReader(connection.getInputStream()));
+		 * System.out.println(r.readLine()); } catch (MalformedURLException e) {
+		 * System.out.println("The URL entered was not correct."); } catch (IOException
+		 * e) { System.out.println("Could not connect to the server."); } return true;
+		 */
+
 		Gson gson = new Gson();
+		String description = "name Arrakis\r\nsize 50 68\r\n";
+		Hex[][] grid = new Hex[50][68];
+		boolean [][] isNotValidSpace = new boolean[50][68];
+	
+		// randomly fills about 1/40 of the hexes in the world with rocks
+		int c = (int) (Math.random() * 50);
+		int r = (int) (Math.random() * 68);
+		int n = 0;
+		while (n < 2150 / 40)
+		{
+			c = (int) (Math.random() * 50);
+			r = (int) (Math.random() * 68);
+			if (isValidHex(c, r, 50, 68) && isNotValidSpace[c][r] == false)
+			{
+				isNotValidSpace[c][r] = true;
+				description += "rock " + c + " " + r + "\r\n";
+				n++;
+			}
+		}
+		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/world/generic?session_id=" + sessionId);
+			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=423956134");
+			 url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			System.out.println(url.toString());
-			connection.connect();
+			connection.setDoOutput(true); // send a POST message
+			connection.setRequestMethod("POST");
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(loadWorldInfo, LoadWorldInfoJSON.class));
+			w.flush();
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
@@ -45,14 +85,13 @@ public class ClientRequestHandler {
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 				return false;
 			}
-			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			System.out.println("Could not connect to the server.");
+			System.out.println("Could not connect to the server");
 		}
 		return true;
+
 	}
 
 	public boolean loadWorld(File worldfile, int sessionId) throws IllegalArgumentException, IOException {
@@ -61,34 +100,34 @@ public class ClientRequestHandler {
 		String description = "";
 		String currentLine = br.readLine();
 		while (currentLine != null) {
-			description += currentLine;
-			description += "\r\n";
-			currentLine = br.readLine();
+			if (currentLine.indexOf("critter") == -1) {
+				description += currentLine;
+				description += "\r\n";
+				currentLine = br.readLine();
+			} else {
+				currentLine = br.readLine();
+			}
 		}
-		System.out.println(description);
+		// System.out.println(description);
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=36435389");
+			// url = new
+			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=423956134");
 			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loadWorldInfo, LoadWorldInfoJSON.class));
 			w.flush();
 			if (connection.getResponseCode() == 401) {
-				System.out.println("yes");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 				return false;
 			}
-			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String sessionIdString = r.readLine();
-			System.out.println(sessionIdString);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -120,7 +159,7 @@ public class ClientRequestHandler {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Access Denied");
-				alert.setContentText("User is not an admin so a New World cannot be created."); 
+				alert.setContentText("User is not an admin so a New World cannot be created.");
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -193,5 +232,16 @@ public class ClientRequestHandler {
 	public void loadCritterAtLocation(File f, int c, int r) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private boolean isValidHex(int c, int r, int columns, int rows)
+	{
+		if (c < 0 || r < 0)
+			return false;
+		else if (c >= columns || r >= rows)
+			return false;
+		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * rows - columns))
+			return false;
+		return true;
 	}
 }

@@ -32,6 +32,8 @@ public class WorldModel {
 	private int versionNumber;
 	
 	
+	
+	
 	/** Supplies the locks for the models. */
 	//private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	/** A log of all the changes that have occurred to the world since version 0 (which is a blank world). */
