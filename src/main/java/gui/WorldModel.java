@@ -33,19 +33,19 @@ public class WorldModel {
 	
 	
 	/** Supplies the locks for the models. */
-	//private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	/** A log of all the changes that have occurred to the world since version 0 (which is a blank world). */
 	private ArrayList<LinkedList<Hex>> diffLog;
 
 	/** Creates a new blank world model. */
 	public WorldModel() {
-		//rwl.writeLock().lock();
+		rwl.writeLock().lock();
 		try {
 			numCritters = 0;
 			time = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
 		} finally {
-			//rwl.writeLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 
@@ -55,13 +55,13 @@ public class WorldModel {
 	 *             if the constants.txt file could not be read
 	 */
 	public void createNewWorld() throws UnsupportedOperationException {
-		//rwl.writeLock().lock();
+		rwl.writeLock().lock();
 		try {
 			world = new World();
 			time = 0;
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.writeLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 
@@ -75,13 +75,13 @@ public class WorldModel {
 	 *             if the constants.txt file could not be read
 	 */
 	public void loadWorld(String desc) throws IllegalArgumentException, UnsupportedOperationException {
-		//rwl.writeLock().lock();
+		rwl.writeLock().lock();
 		try {
 			world = new World(desc);
 			time = 0;
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.writeLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 	
@@ -95,13 +95,13 @@ public class WorldModel {
 	 *             if the constants.txt file could not be read
 	 */
 	public void loadWorld(File worldfile) throws FileNotFoundException, UnsupportedOperationException {
-		//rwl.writeLock().lock();
+		rwl.writeLock().lock();
 		try {
 			world = new World(worldfile);
 			time = 0;
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.writeLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 
@@ -111,21 +111,21 @@ public class WorldModel {
 
 	/** Returns the number of columns in the world. */
 	public int getColumns() {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.getColumns();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	/** Returns the number of rows in the world. */
 	public int getRows() {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.getRows();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
@@ -136,54 +136,54 @@ public class WorldModel {
 	 * @return
 	 */
 	public int hexContent(int c, int r) {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.analyzeHex(c, r);
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	public SimpleCritter getCritter(int c, int r) {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.analyzeCritter(c, r);
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.getCritterMap();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	public Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
-		//rwl.readLock().lock();
+		rwl.readLock().lock();
 		try {
 			return world.getObjectMap();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	/** Advances one time step. */
 	public void advanceTime() {
 		try {
-			//rwl.writeLock().lock();
+			rwl.writeLock().lock();
 			world.advanceOneTimeStep();
 			time++;
-			//diffLog.add(world.getAndResetUpdatedHexes());
-			//rwl.writeLock().unlock();
+			diffLog.add(world.getAndResetUpdatedHexes());
+			rwl.writeLock().unlock();
 			
-			//rwl.readLock().lock();
+			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 	
@@ -217,27 +217,27 @@ public class WorldModel {
 	 */
 	public void loadRandomCritters(File f, int n) {
 		try {
-			//rwl.writeLock().lock();
+			rwl.writeLock().lock();
 			world.loadCritters(f, n, -1);
 			time++;
-			//rwl.writeLock().unlock();
-			//rwl.readLock().lock();
+			rwl.writeLock().unlock();
+			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 
 	public void loadCritterAtLocation(File f, int c, int r) {
 		try {
-			//rwl.writeLock().lock();
+			rwl.writeLock().lock();
 			world.loadCritterAtLocation(f, c, r);
 			time++;
-			//rwl.writeLock().unlock();
-			//rwl.readLock().lock();
+			rwl.writeLock().unlock();
+			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
-			//rwl.readLock().unlock();
+			rwl.readLock().unlock();
 		}
 	}
 }

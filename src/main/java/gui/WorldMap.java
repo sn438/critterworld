@@ -63,7 +63,8 @@ public class WorldMap {
 
 	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
-
+	/** Holds the last drawn time step. */
+	private int currentTimeStep;
 	private boolean localMode;
 	private ClientRequestHandler handler;
 
