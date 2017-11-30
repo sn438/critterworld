@@ -50,9 +50,13 @@ public abstract class AbstractWorld implements SimpleWorld
 		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
 		for(int i = 0; i < clone.size(); i++)
 		{
+			//System.out.println(critterList.size());
 			SimpleCritter sc = clone.get(i);
-			Interpreter im = new InterpreterImpl(sc, this);
-			im.simulateCritterTurn();
+			if (critterList.contains(sc))
+			{
+				Interpreter im = new InterpreterImpl(sc, this);
+				im.simulateCritterTurn();
+			}
 		}
 		
 		for(int i = 0; i < clone.size(); i++)
@@ -105,7 +109,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	public abstract int searchAhead(SimpleCritter sc, int index);
 	
 	/**
-	 * 
+	 * TODO write
 	 */
 	public abstract int smell(SimpleCritter sc);
 
