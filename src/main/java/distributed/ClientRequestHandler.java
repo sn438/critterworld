@@ -30,21 +30,35 @@ import simulation.WorldObject;
 /** A class to handle client requests to the server. */
 public class ClientRequestHandler {
 
+	/**
+	 * 
+	 * @param sessionId
+	 * @return
+	 */
 	public boolean createNewWorld(int sessionId) {
 		/*
-		 * // We can probably refactor this into one class handling this block Gson gson
-		 * = new Gson(); URL url = null; try { url = new URL("http://localhost:" + 8080
-		 * + "/world/generic?session_id=" + sessionId); HttpURLConnection connection =
-		 * (HttpURLConnection) url.openConnection(); System.out.println(url.toString());
-		 * connection.connect(); if (connection.getResponseCode() == 401) { Alert alert
-		 * = new Alert(AlertType.ERROR); alert.setTitle("Login Error");
-		 * alert.setHeaderText("Access Denied"); alert.
-		 * setContentText("The user cannot create a new world because the user is not an admin."
-		 * ); return false; } BufferedReader r = new BufferedReader(new
-		 * InputStreamReader(connection.getInputStream()));
-		 * System.out.println(r.readLine()); } catch (MalformedURLException e) {
-		 * System.out.println("The URL entered was not correct."); } catch (IOException
-		 * e) { System.out.println("Could not connect to the server."); } return true;
+		 * Gson gson = new Gson();
+		 * URL url = null;
+		 * try {
+		 * 		url = new URL("http://localhost:" + 8080 + "/world/generic?session_id=" + sessionId);
+		 * 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		 * 		System.out.println(url.toString());
+		 * 		connection.connect();
+		 * 		if (connection.getResponseCode() == 401) {
+		 * 			Alert alert = new Alert(AlertType.ERROR);
+		 * 			alert.setTitle("Login Error");
+		 * 			alert.setHeaderText("Access Denied");
+		 * 			alert.setContentText("The user cannot create a new world because the user is not an admin.");
+		 * 			return false;
+		 * 		}
+		 * 		BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		 * 		System.out.println(r.readLine());
+		 * } catch (MalformedURLException e) {
+		 * 		System.out.println("The URL entered was not correct.");
+		 * } catch (IOException e) {
+		 * 		System.out.println("Could not connect to the server.");
+		 * }
+		 * return true;
 		 */
 
 		Gson gson = new Gson();
@@ -94,6 +108,14 @@ public class ClientRequestHandler {
 
 	}
 
+	/**
+	 * 
+	 * @param worldfile
+	 * @param sessionId
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
 	public boolean loadWorld(File worldfile, int sessionId) throws IllegalArgumentException, IOException {
 		Gson gson = new Gson();
 		BufferedReader br = new BufferedReader(new FileReader(worldfile));
@@ -132,6 +154,8 @@ public class ClientRequestHandler {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
+		} finally {
+			br.close();
 		}
 		return true;
 
@@ -144,7 +168,6 @@ public class ClientRequestHandler {
 
 	/**
 	 * Returns the number of columns in the world.
-	 * 
 	 * @return The number of columns, or -1 if the user does not have permission
 	 */
 	public int getColumns(int sessionId) {
