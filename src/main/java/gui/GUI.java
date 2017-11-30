@@ -58,12 +58,13 @@ public class GUI extends Application {
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
 // TODO start worldmodel updates and stuff
-// TODO FIX CONCURRENCY BUGS
-// TODO locks in world model
+// TODO find better way to loop through all critters???
+// TODO locks in world model - ask about those?
 // TODO list of changed hexes
 // TODO is there a way to have the program stop automatically when the GUI is
 // closed while running?
 // TODO fix bug for non terminating threads
+// TODO do dead critter list
 
 // Bug: new world,
 // reset,

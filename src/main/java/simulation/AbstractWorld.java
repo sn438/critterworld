@@ -44,6 +44,12 @@ public abstract class AbstractWorld implements SimpleWorld
 	}
 	
 	@Override
+	public LinkedList<SimpleCritter> collectCritterCorpses()
+	{
+		return deadCritters;
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void advanceOneTimeStep()
 	{

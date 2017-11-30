@@ -44,7 +44,16 @@ public interface SimpleWorld
 	 */
 	void loadCritters(File file, int n, int direction);
 	
+	/**
+	 * 
+	 * @param file
+	 * @param c
+	 * @param r
+	 */
 	void loadCritterAtLocation(File file, int c, int r);
+	
+	/** Retrieves a list of all critters that have died in this world. */
+	LinkedList<SimpleCritter> collectCritterCorpses();
 	
 	/** Advances the world state by a single time step. */
 	void advanceOneTimeStep();
@@ -71,17 +80,19 @@ public interface SimpleWorld
 	
 	/**
 	 * Returns the critter on a hex, for analysis.
-	 * @param c
-	 * @param r
-	 * @return
+	 * @param c The column index of the hex on which the critter is located
+	 * @param r The row index of the hex on which the critter is located
+	 * @return A pointer to the critter, or {@code null} if there is no critter there
+	 * 		   (or if the provided column-row pair is not on the world grid).
 	 */
 	SimpleCritter analyzeCritter(int c, int r);
 	
 	/**
-	 * 
-	 * @param c
-	 * @param r
-	 * @return
+	 * Retrieves the contents of a hex.
+	 * @param c The column index of the desired hex
+	 * @param r The row index of the desired hex
+	 * @return The world object at that hex, or {@code null} if it is empty.
+	 * 		   Also returns {@code null} if the provided column-row pair is not on the world grid.
 	 */
 	WorldObject getHexContent(int c, int r);
 

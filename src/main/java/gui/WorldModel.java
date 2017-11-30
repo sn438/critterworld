@@ -24,6 +24,8 @@ public class WorldModel {
 	
 	/** An instance of the world. */
 	private SimpleWorld world;
+	/** Maps unique critter IDs to critters. */
+	private HashMap<Integer, SimpleCritter> critterIDMap;
 	/** The number of critters. */
 	int numCritters;
 	/** The number of time steps taken. */
@@ -44,6 +46,7 @@ public class WorldModel {
 			numCritters = 0;
 			time = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
+			critterIDMap = new HashMap<Integer, SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -129,6 +132,18 @@ public class WorldModel {
 		}
 	}
 
+	/** Retrieves the current time step of the world. */
+	public int getCurrentTimeStep()
+	{
+		return time;
+	}
+	
+	/** Retrieves the current version number. */
+	public int getCurrentVersionNumber()
+	{
+		return versionNumber;
+	}
+	
 	/**
 	 * 
 	 * @param c
@@ -144,6 +159,12 @@ public class WorldModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @param c
+	 * @param r
+	 * @return
+	 */
 	public SimpleCritter getCritter(int c, int r) {
 		rwl.readLock().lock();
 		try {
