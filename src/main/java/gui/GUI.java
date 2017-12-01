@@ -64,7 +64,7 @@ public class GUI extends Application {
 // TODO is there a way to have the program stop automatically when the GUI is
 // closed while running?
 // TODO fix bug for non terminating threads
-// TODO do dead critter list
+// TODO provide way for server to provide list of IDs of dead critters
 
 // Bug: new world,
 // reset,

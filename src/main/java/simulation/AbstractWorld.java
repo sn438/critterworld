@@ -56,13 +56,13 @@ public abstract class AbstractWorld implements SimpleWorld
 		LinkedList<SimpleCritter> clone = (LinkedList<SimpleCritter>) critterList.clone();
 		for(int i = 0; i < clone.size(); i++)
 		{
-			//System.out.println(critterList.size());
 			SimpleCritter sc = clone.get(i);
 			if (critterList.contains(sc))
 			{
 				Interpreter im = new InterpreterImpl(sc, this);
 				im.simulateCritterTurn();
 			}
+			//System.out.println(getAndResetUpdatedHexes());
 		}
 		
 		for(int i = 0; i < clone.size(); i++)

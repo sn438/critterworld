@@ -24,18 +24,18 @@ public class WorldModel {
 	
 	/** An instance of the world. */
 	private SimpleWorld world;
-	/** Maps unique critter IDs to critters. */
-	private HashMap<Integer, SimpleCritter> critterIDMap;
 	/** The number of critters. */
-	int numCritters;
+	private int numCritters;
 	/** The number of time steps taken. */
-	int time;
+	private int time;
 	/** The current world version number. */
 	private int versionNumber;
-	
-	
-	
-	
+	/** Assigned as a critter ID. Is modified every time a critter is added to ensure uniqueness of IDs. */
+	private int IDAssignment;
+	/** Maps unique critter IDs to critters. */
+	private HashMap<Integer, SimpleCritter> critterIDMap;
+	/** A running list of all critters that have died across all worlds simulated in this session. */
+	private LinkedList<SimpleCritter> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	/** A log of all the changes that have occurred to the world since version 0 (which is a blank world). */
@@ -47,6 +47,8 @@ public class WorldModel {
 		try {
 			numCritters = 0;
 			time = 0;
+			versionNumber = 0;
+			IDAssignment = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
 			critterIDMap = new HashMap<Integer, SimpleCritter>();
 		} finally {
@@ -62,8 +64,14 @@ public class WorldModel {
 	public void createNewWorld() throws UnsupportedOperationException {
 		rwl.writeLock().lock();
 		try {
+			// if a world already exists, adds all its dead critters to the cumulative dead critter list
+			if (world != null)
+				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			world = new World();
+			//System.out.println(world.getAndResetUpdatedHexes());
+			//diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 		} finally {
 			rwl.writeLock().unlock();
@@ -82,8 +90,14 @@ public class WorldModel {
 	public void loadWorld(String desc) throws IllegalArgumentException, UnsupportedOperationException {
 		rwl.writeLock().lock();
 		try {
+			// if a world already exists, adds all its dead critters to the cumulative dead critter list
+			if (world != null)
+				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			world = new World(desc);
+			//System.out.println(world.getAndResetUpdatedHexes());
+			//diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 		} finally {
 			rwl.writeLock().unlock();
@@ -102,8 +116,14 @@ public class WorldModel {
 	public void loadWorld(File worldfile) throws FileNotFoundException, UnsupportedOperationException {
 		rwl.writeLock().lock();
 		try {
+			// if a world already exists, adds all its dead critters to the cumulative dead critter list
+			if (world != null)
+				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			world = new World(worldfile);
+			//System.out.println(world.getAndResetUpdatedHexes());
+			//diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 		} finally {
 			rwl.writeLock().unlock();
@@ -134,25 +154,43 @@ public class WorldModel {
 		}
 	}
 
-	/** Retrieves the current time step of the world. */
+	/** Returns the number of living critters in the world. */
+	public int getNumCritters()
+	{
+		return numCritters;
+	}
+	
+	/** Returns the current time step of the world. */
 	public int getCurrentTimeStep()
 	{
 		return time;
 	}
 	
-	/** Retrieves the current version number. */
+	/** Returns the current version number. */
 	public int getCurrentVersionNumber()
 	{
 		return versionNumber;
 	}
 	
+	/** Retrieves the running list of dead critters. */
+	public SimpleCritter[] getCumulativeDeadCritters()
+	{
+		SimpleCritter[] result = new SimpleCritter[cumulativeDeadCritters.size()];
+		return cumulativeDeadCritters.toArray(result);
+	}
+	
+	public LinkedList<Hex> getUpdatedHexes()
+	{
+		return world.getAndResetUpdatedHexes();
+	}
+	
 	/**
-	 * 
+	 * Returns a number giving information about a hex.
 	 * @param c
 	 * @param r
 	 * @return
 	 */
-	public int hexContent(int c, int r) {
+	public int hexInfo(int c, int r) {
 		rwl.readLock().lock();
 		try {
 			return world.analyzeHex(c, r);
@@ -200,7 +238,9 @@ public class WorldModel {
 			rwl.writeLock().lock();
 			world.advanceOneTimeStep();
 			time++;
-			diffLog.add(world.getAndResetUpdatedHexes());
+			versionNumber++;
+			//System.out.println(world.getAndResetUpdatedHexes());
+			//diffLog.add(world.getAndResetUpdatedHexes());
 			rwl.writeLock().unlock();
 			
 			rwl.readLock().lock();
@@ -242,7 +282,7 @@ public class WorldModel {
 		try {
 			rwl.writeLock().lock();
 			world.loadCritters(f, n, -1);
-			time++;
+			versionNumber++;
 			rwl.writeLock().unlock();
 			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
@@ -255,7 +295,7 @@ public class WorldModel {
 		try {
 			rwl.writeLock().lock();
 			world.loadCritterAtLocation(f, c, r);
-			time++;
+			versionNumber++;
 			rwl.writeLock().unlock();
 			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();

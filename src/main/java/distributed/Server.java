@@ -20,19 +20,22 @@ public class Server {
 	private static Server serverInstance;
 	/** The port on which the server is run. */
 	private static int portNumber;
+	/** The password for read access to the server. */
 	private final String readPassword;
+	/** The password for write access to the server. */
 	private final String writePassword;
+	/** The password for admin access to the server. */
 	private final String adminPassword;
-	private int session_id;
+	private int session_id_count;
 	private HashMap<Integer, String> sessionIdMap;
 	private WorldModel model;
-	private HashSet<SimpleCritter> deadCritterList;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
 		readPassword = readPass;
 		writePassword = writePass;
 		adminPassword = adminPass;
+		model = new WorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
 	}
 
@@ -60,22 +63,22 @@ public class Server {
 			String level = loginInfo.level;
 			String password = loginInfo.password;
 			if (level.equals("read") && password.equals(readPassword)) {
-				session_id++;
+				session_id_count++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "read");
+				responseValue.put("session_id", new Integer(session_id_count));
+				sessionIdMap.put(session_id_count, "read");
 				return responseValue;
 			} else if (level.equals("write") && password.equals(writePassword)) {
-				session_id++;
+				session_id_count++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "write");
+				responseValue.put("session_id", new Integer(session_id_count));
+				sessionIdMap.put(session_id_count, "write");
 				return responseValue;
 			} else if (level.equals("admin") && password.equals(adminPassword)) {
-				session_id++;
+				session_id_count++;
 				responseValue = new JSONObject();
-				responseValue.put("session_id", new Integer(session_id));
-				sessionIdMap.put(session_id, "admin");
+				responseValue.put("session_id", new Integer(session_id_count));
+				sessionIdMap.put(session_id_count, "admin");
 				return responseValue;
 			} else {
 				response.status(401);
@@ -97,12 +100,6 @@ public class Server {
 				response.status(401);
 				return "User does not have admin access.";
 			} else {
-				if (model != null) {
-					for (Entry<SimpleCritter, Hex> critter : model.getCritterMap()) {
-						deadCritterList.add(critter.getKey());
-					}
-				}
-				model = new WorldModel();
 				model.loadWorld(description);
 				return "Ok";
 			}
@@ -117,12 +114,6 @@ public class Server {
 				response.status(401);
 				return "User does not have admin access.";
 			} else {
-				if (model != null) {
-					for (Entry<SimpleCritter, Hex> critter : model.getCritterMap()) {
-						deadCritterList.add(critter.getKey());
-					}
-				}
-				model = new WorldModel();
 				model.createNewWorld();
 				return "Ok";
 			}
