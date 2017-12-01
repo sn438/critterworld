@@ -263,8 +263,8 @@ public class Controller {
 		model.createNewWorld();
 		map = new WorldMap(c, model);
 		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
-		stepsTaken.setText("Time: " + model.time);
+		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 
 		map.draw();
 	}
@@ -276,8 +276,8 @@ public class Controller {
 		} else
 			return;
 		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
-		stepsTaken.setText("Time: " + model.time);
+		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 	}
 
 	@FXML
@@ -342,11 +342,6 @@ public class Controller {
 			a.setTitle("Invalid File");
 			a.showAndWait();
 			return;
-		} catch (IOException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
 		}
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
@@ -407,8 +402,8 @@ public class Controller {
 		model.advanceTime();
 		updateInfoBox();
 		map.draw();
-		crittersAlive.setText("Critters Alive: " + model.numCritters);
-		stepsTaken.setText("Time: " + model.time);
+		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 	}
 
 	@FXML
@@ -433,8 +428,8 @@ public class Controller {
 			@Override
 			public void handle(ActionEvent ae) {
 				map.draw();
-				crittersAlive.setText("Critters Alive: " + model.numCritters);
-				stepsTaken.setText("Time: " + model.time);
+				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 			}
 		}));
 

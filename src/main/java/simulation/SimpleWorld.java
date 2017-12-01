@@ -70,6 +70,9 @@ public interface SimpleWorld
 	/** Returns an entry set mapping the world objects to hex locations. */
 	Set<Map.Entry<WorldObject, Hex>> getObjectMap();
 	
+	/** Removes a critter from the world. */
+	void removeCritter(SimpleCritter sc);
+	
 	/**
 	 * Returns information about a hex.
 	 * @param c

@@ -1,6 +1,7 @@
 package gui;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 
 import distributed.ClientRequestHandler;
@@ -202,6 +203,19 @@ public class WorldMap {
 			int r = entry.getValue().getRowIndex();
 			drawWorldObject(entry.getKey(), c, r);
 		}
+		
+		// this uses a list of updated hexes to draw objects. Still needs work to make it compatible with zoom
+//		LinkedList<Hex> hexesToDraw = model.getUpdatedHexes();
+//		for (Hex h : hexesToDraw)
+//		{
+//			WorldObject wo = h.getContent();
+//			int c = h.getColumnIndex();
+//			int r = h.getRowIndex();
+//			if(wo instanceof SimpleCritter)
+//				drawCritter((SimpleCritter) wo, c, r);
+//			else
+//				drawWorldObject(wo, c, r);
+//		}
 	}
 
 	/**

@@ -302,6 +302,8 @@ public class World extends AbstractWorld {
 	public void loadCritters(String filename, int n, int direction) {
 		try {
 			for (int i = 0; i < n; i++) {
+				if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+					break;
 				BufferedReader br = new BufferedReader(new FileReader(filename));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
@@ -324,6 +326,8 @@ public class World extends AbstractWorld {
 	public void loadCritters(File file, int n, int direction) {
 		try {
 			for (int i = 0; i < n; i++) {
+				if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+					break;
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
 				int randc = (int) (Math.random() * columns);
@@ -940,6 +944,16 @@ public class World extends AbstractWorld {
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		nonCritterObjectMap.put(remnant, location);
 		location.addContent(remnant);
+	}
+	
+	@Override
+	public void removeCritter(SimpleCritter sc) {
+		Hex location = critterMap.get(sc);
+		location.removeContent();
+		critterMap.remove(sc);
+		critterList.remove(sc);
+		updatedHexes.add(location);
+		deadCritters.add(sc);
 	}
 
 	@Override

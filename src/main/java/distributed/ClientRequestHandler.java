@@ -23,13 +23,13 @@ import java.util.Optional;
 import java.util.Set;
 
 import simulation.Hex;
-import simulation.Rock;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
 /** A class to handle client requests to the server. */
 public class ClientRequestHandler {
-
+	/** Stores the most recently retrieved version of the world. */
+	private int mostRecentVersion;
 	/**
 	 * 
 	 * @param sessionId
@@ -220,26 +220,6 @@ public class ClientRequestHandler {
 			System.out.println("Could not connect to the server");
 		}
 		return returnValue;
-	}
-
-	public int hexContent(int c, int r) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public SimpleCritter getCritter(int c, int r) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Set<Entry<SimpleCritter, Hex>> getCritterMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Set<Entry<WorldObject, Hex>> getObjectMap() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void advanceTime() {
