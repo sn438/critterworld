@@ -45,12 +45,35 @@ public interface SimpleWorld
 	void loadCritters(File file, int n, int direction);
 	
 	/**
+	 * Loads one critter species into the world at random locations.
+	 * @param sc
+	 * @param n
+	 * @return 
+	 */
+	boolean[] loadCritters(SimpleCritter sc, int n);
+	
+	/**
 	 * 
 	 * @param file
 	 * @param c
 	 * @param r
 	 */
 	void loadCritterAtLocation(File file, int c, int r);
+	
+	/**
+	 * Loads a single critter into the world at the specified coordinates, if
+	 * possible. Does nothing if the hex is not within the world boundaries, or if
+	 * there is something already present at the hex.
+	 * 
+	 * @param sc
+	 *            the critter to add
+	 * @param c
+	 *            the column index of the hex where the critter will be added
+	 * @param r
+	 *            the row index of the hex where the critter will be added
+	 * @return whether the critter was successfully added
+	 */
+	boolean loadOneCritter(SimpleCritter sc, int c, int r);
 	
 	/** Retrieves a list of all critters that have died in this world. */
 	LinkedList<SimpleCritter> collectCritterCorpses();

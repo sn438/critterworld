@@ -96,7 +96,6 @@ public class WorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
-
 	}
 
 	/**

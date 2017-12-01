@@ -347,6 +347,27 @@ public class World extends AbstractWorld {
 	}
 
 	@Override
+	public boolean[] loadCritters(SimpleCritter sc, int n) {
+		boolean[] result = new boolean[n];
+		for (int i = 0; i < n; i++) {
+			if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+				break;
+			int randc = (int) (Math.random() * columns);
+			int randr = (int) (Math.random() * rows);
+			while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty()) {
+				randc = (int) (Math.random() * columns);
+				randr = (int) (Math.random() * rows);
+			}
+
+			if (isValidHex(randc, randr)) {
+				boolean b = loadOneCritter(sc, randc, randr);
+				result[i] = b;
+			}
+		}
+		return result;
+	}
+	
+	@Override
 	public void loadCritterAtLocation(File file, int c, int r) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -359,20 +380,8 @@ public class World extends AbstractWorld {
 		}
 	}
 
-	/**
-	 * Loads a single critter into the world at the specified coordinates, if
-	 * possible. Does nothing if the hex is not within the world boundaries, or if
-	 * there is something already present at the hex.
-	 * 
-	 * @param sc
-	 *            the critter to add
-	 * @param c
-	 *            the column index of the hex where the critter will be added
-	 * @param r
-	 *            the row index of the hex where the critter will be added
-	 * @return whether the critter was successfully added
-	 */
-	private boolean loadOneCritter(SimpleCritter sc, int c, int r) {
+	@Override
+	public boolean loadOneCritter(SimpleCritter sc, int c, int r) {
 		if (!isValidHex(c, r))
 			return false;
 		boolean added = grid[c][r].addContent(sc);
@@ -948,6 +957,8 @@ public class World extends AbstractWorld {
 	
 	@Override
 	public void removeCritter(SimpleCritter sc) {
+		if(sc == null)
+			return;
 		Hex location = critterMap.get(sc);
 		location.removeContent();
 		critterMap.remove(sc);

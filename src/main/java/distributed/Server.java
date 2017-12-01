@@ -5,14 +5,11 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
+
 import gui.WorldModel;
-import simulation.Hex;
-import simulation.SimpleCritter;
 
 /** A server that responds to HTTP requests. */
 public class Server {
@@ -54,29 +51,25 @@ public class Server {
 		port(portNumber);
 
 		post("/login", (request, response) -> {
-			System.out.println("oksjdfhdfkjghdfkjghfdkjgh");
 			System.out.println(request.body());
 			response.header("Content-Type", "application/json");
-			JSONObject responseValue = null;
+			JSONObject responseValue = new JSONObject();
 			String json = request.body();
 			LoginInfo loginInfo = gson.fromJson(json, LoginInfo.class);
 			String level = loginInfo.level;
 			String password = loginInfo.password;
 			if (level.equals("read") && password.equals(readPassword)) {
 				session_id_count++;
-				responseValue = new JSONObject();
 				responseValue.put("session_id", new Integer(session_id_count));
 				sessionIdMap.put(session_id_count, "read");
 				return responseValue;
 			} else if (level.equals("write") && password.equals(writePassword)) {
 				session_id_count++;
-				responseValue = new JSONObject();
 				responseValue.put("session_id", new Integer(session_id_count));
 				sessionIdMap.put(session_id_count, "write");
 				return responseValue;
 			} else if (level.equals("admin") && password.equals(adminPassword)) {
 				session_id_count++;
-				responseValue = new JSONObject();
 				responseValue.put("session_id", new Integer(session_id_count));
 				sessionIdMap.put(session_id_count, "admin");
 				return responseValue;
