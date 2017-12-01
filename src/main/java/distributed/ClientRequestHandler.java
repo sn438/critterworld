@@ -84,11 +84,12 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=423956134");
+			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
 			 url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loadWorldInfo, LoadWorldInfoJSON.class));
 			w.flush();
@@ -99,6 +100,8 @@ public class ClientRequestHandler {
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 				return false;
 			}
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			System.out.println(r1.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -140,6 +143,7 @@ public class ClientRequestHandler {
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loadWorldInfo, LoadWorldInfoJSON.class));
 			w.flush();
@@ -148,6 +152,10 @@ public class ClientRequestHandler {
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
+				return false;
+			}
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			if (!r1.readLine().equals("Ok")) {
 				return false;
 			}
 		} catch (MalformedURLException e) {
