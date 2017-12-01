@@ -35,25 +35,23 @@ public class GUI extends Application {
 	}
 }
 
-// TODO add SOUNDS!
-// TODO add SKINS!
-// TODO add MICROTRANSACTIONS!
-// TODO optimize zooming so that it only redraws visible portion and not whole
-// entire hex grid?
-
 // Sujith:
 // TODO work on server stuff
 
 // Rishi:
-// TODO implement smell - dijkstra
+// TODO implement smell
 // TODO do written problems
-// TODO merge run and pause buttons?
-// TODO create some smarter critter programs for better testing (and as prep for
-// critter tournament :))
-// TODO make ctrl + arrow keys zooming if wants and has time (or qw or -+)
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
+// TODO merge run and pause buttons?
+// TODO create some smarter critter programs for better testing (and as prep for
+// critter tournament :))
+// TODO make +- keys zooming if time
+// TODO add SOUNDS!
+// TODO add SKINS!
+// TODO optimize zooming so that it only redraws visible portion and not whole
+// entire hex grid?
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
