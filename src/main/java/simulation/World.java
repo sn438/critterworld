@@ -9,13 +9,13 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 
 import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
+import cs2110.AdjustablePriorityQueue;
 
 /** A class to simulate the world state. */
 public class World extends AbstractWorld {
@@ -450,9 +450,21 @@ public class World extends AbstractWorld {
 
 	@Override
 	public int smell(SimpleCritter sc) {
-		PriorityQueue<Object> p = new PriorityQueue<Object>();
+		AdjustablePriorityQueue<Node> frontier = new AdjustablePriorityQueue<>();
+		int direction = 0;
+		int distance = 0;
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) { // TODO is grid always rectangular so i can make this 0 instead of i?
+				if (!isValidHex(i, j)) {
+					if (grid[i][j].hexAppearance() == 0) {
+						
+					}
+				}
+			}
+		}
+		
 		// TODO implement
-		return 0;
+		return distance * 1000 + direction;
 	}
 
 	/* ========================================= */
@@ -656,9 +668,8 @@ public class World extends AbstractWorld {
 		String name = sc.getName();
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
-		for (int i = 0; i < numMutations; i++)
-		{
-			//System.out.println("mutate");
+		for (int i = 0; i < numMutations; i++) {
+			// System.out.println("mutate");
 			prog = prog.mutate();
 		}
 
