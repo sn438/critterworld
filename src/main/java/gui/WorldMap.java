@@ -96,7 +96,6 @@ public class WorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
-
 	}
 
 	/**
@@ -182,7 +181,7 @@ public class WorldMap {
 
 		// draws world objects
 		gc.setLineWidth(3);
-		drawObjects();
+		//drawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
