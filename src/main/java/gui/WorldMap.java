@@ -397,7 +397,7 @@ public class WorldMap {
 	 * 
 	 * @param zoomIn
 	 */
-	public void zoom(boolean zoomIn, double x, double y) {
+	public void zoom(boolean zoomIn) {
 		double oldSideLength = sideLength;
 		if (zoomIn) {
 			sideLength += ZOOM_FACTOR;

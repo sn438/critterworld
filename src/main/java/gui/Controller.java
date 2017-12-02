@@ -282,7 +282,6 @@ public class Controller {
 
 	@FXML
 	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
-
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File initDirectory = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
@@ -294,7 +293,7 @@ public class Controller {
 		doReset();
 		if (localMode)
 			loadWorld(worldFile);
-		else 
+		else
 			loadServerWorld(worldFile);
 	}
 
@@ -327,6 +326,7 @@ public class Controller {
 		c.setDisable(false);
 		c.setVisible(true);
 	}
+
 	private void loadWorld(File worldFile) {
 		try {
 			model.loadWorld(worldFile);
@@ -415,7 +415,7 @@ public class Controller {
 			@Override
 			public void run() {
 				model.advanceTime();
-				//System.out.println("ASFAS");
+				// System.out.println("ASFAS");
 			}
 		});
 		worldUpdateThread.setDaemon(false);
@@ -427,6 +427,7 @@ public class Controller {
 
 			@Override
 			public void handle(ActionEvent ae) {
+				updateInfoBox();
 				map.draw();
 				updateInfoBox();
 				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
@@ -517,10 +518,11 @@ public class Controller {
 
 	@FXML
 	private void handleMapScroll(ScrollEvent se) {
-		if (se.getDeltaY() > 0)
-			map.zoom(true, se.getDeltaX(), se.getDeltaY());
-		else
-			map.zoom(false, se.getDeltaX(), se.getDeltaY());
+		if (se.getDeltaY() > 0) {
+			map.zoom(true);
+		} else {
+			map.zoom(false);
+		}
 	}
 
 	@FXML
@@ -541,7 +543,7 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleMapPan(KeyEvent ke) {
+	private void handleKeyEvents(KeyEvent ke) {
 		// TODO make it possible to press multiple keys at once for panning? seems to be
 		// difficult.
 		if (ke.getCode().equals(KeyCode.UP)) {
@@ -555,6 +557,11 @@ public class Controller {
 		}
 		if (ke.getCode().equals(KeyCode.RIGHT)) {
 			map.drag(-400, 0);
+		}
+		if (ke.getCode().equals(KeyCode.EQUALS)) {
+			map.zoom(true);
+		} else if (ke.getCode().equals(KeyCode.MINUS)) {
+			map.zoom(false);
 		}
 	}
 
@@ -619,7 +626,7 @@ public class Controller {
 		URL url = null;
 		try {
 			url = new URL("http://localhost:" + 8080 + "/login");
-			//url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
+			// url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
@@ -629,7 +636,7 @@ public class Controller {
 			w.println(gson.toJson(loginInfo, LoginInfo.class));
 			w.flush();
 			if (connection.getResponseCode() == 401) {
-				
+
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Login Error");
 				alert.setHeaderText("Credentials Not Recognized");
@@ -648,10 +655,9 @@ public class Controller {
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = r.readLine();
 			/*
-			System.out.println(sessionIdString);
-			System.out.println(r.readLine());
-			System.out.println(r.readLine());
-			*/
+			 * System.out.println(sessionIdString); System.out.println(r.readLine());
+			 * System.out.println(r.readLine());
+			 */
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");

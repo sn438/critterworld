@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public class Node {
 	public int orientation;
-	ArrayList<Node> adjacents = new ArrayList<Node>();
+	ArrayList<Node> neighbors = new ArrayList<Node>();
 }
