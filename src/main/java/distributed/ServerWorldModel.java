@@ -35,6 +35,8 @@ public class ServerWorldModel {
 	 * (which is a blank world).
 	 */
 	private ArrayList<LinkedList<Hex>> diffLog;
+	/** The rate at which the world is run. */
+	private float rate;
 
 	/** Creates a new blank world model. */
 	public ServerWorldModel() {
@@ -103,9 +105,15 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
-
-	public boolean isReady() {
-		return world != null;
+	
+	/** Returns the name of the world. */
+	public String getWorldName() {
+		try {
+			rwl.readLock().lock();
+			return world.getWorldName();
+		} finally {
+			rwl.readLock().unlock();
+		}
 	}
 
 	/** Returns the number of columns in the world. */
@@ -160,6 +168,16 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
+	
+	/** Returns the current simulation rate. */
+	public float getRate() {
+		try {
+			rwl.readLock().lock();
+			return rate;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
 
 	/** Retrieves the running list of dead critters. */
 	public int[] getCumulativeDeadCritters()
@@ -189,9 +207,9 @@ public class ServerWorldModel {
 	}
 	
 	/**
-	 * 
+	 * Gets critter's ID from a pointer to that critter.
 	 * @param sc
-	 * @return
+	 * @return The critter's ID, or 0 if no critter ID exists for that critter
 	 */
 	public int getID(SimpleCritter sc) {
 		try {
@@ -200,6 +218,19 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
+	}
+	
+	/** Determines whether a given sessionID has full permissions for a given critter */
+	public boolean hasCritterPermissions(SimpleCritter sc, int sessionID) {
+		try {
+			rwl.readLock().lock();
+			Integer creatorID = world.getCritterCreatorID(sc);
+			assert creatorID != null;
+			return creatorID == sessionID;
+		} finally {
+			rwl.readLock().unlock();
+		}
+		
 	}
 
 	/**
@@ -259,24 +290,40 @@ public class ServerWorldModel {
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
 	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber) {
-		// TODO implement locks
-		HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-		if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
-			return null;
-		for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
-			for (Hex h : diffLog.get(i)) {
-				int c = h.getColumnIndex();
-				int r = h.getRowIndex();
-				result.put(h, world.getHexContent(c, r));
+		try {
+			rwl.readLock().lock();
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
+				return null;
+			for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r))
+						result.put(h, world.getHexContent(c, r));
+				}
 			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
 		}
-		return result;
+	}
+	
+	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
+	private boolean isValidHex(int c, int r) {
+		if (c < 0 || r < 0)
+			return false;
+		else if (c >= world.getColumns() || r >= world.getRows())
+			return false;
+		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * world.getRows() - world.getColumns()))
+			return false;
+		return true;
 	}
 
 	/**
-	 * 
+	 * Returns a critter object based on its ID.
 	 * @param id
-	 * @return
+	 * @return The critter with the specified ID, or {@code null} if no such critter exists
 	 */
 	public SimpleCritter retrieveCritter(int id) {
 		try {
@@ -289,9 +336,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Removes a critter from the world, if it is there.
-	 * 
-	 * @param id
-	 *            The ID of the critter to remove
+	 * @param id The ID of the critter to remove
 	 */
 	public void removeCritter(int id) {
 		try {
@@ -340,10 +385,10 @@ public class ServerWorldModel {
 	}
 	
 	/**
-	 * 
-	 * @param wo
-	 * @param c
-	 * @param r
+	 * Loads a non-critter world object into the world. 
+	 * @param wo The object to load in (can be food or a rock)
+	 * @param c The column index at which to add the object
+	 * @param r The row index at which to add the object
 	 */
 	public void addWorldObject(WorldObject wo, int c, int r) {
 		try {

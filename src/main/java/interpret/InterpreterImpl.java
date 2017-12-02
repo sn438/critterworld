@@ -6,7 +6,6 @@ import ast.Node.NodeType;
 import simulation.AbstractWorld;
 import simulation.SimpleCritter;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /** Interprets and executes the AST of a critter. */
@@ -59,7 +58,8 @@ public class InterpreterImpl implements Interpreter
 					}
 					else
 						applyUpdate((Update) ruleCommand.getLast());
-					c.setLastRule(r.toString());
+					c.setLastRuleString(r.toString());
+					c.setLastRuleIndex(rl.indexOf(r));
 					break;
 				}
 			}

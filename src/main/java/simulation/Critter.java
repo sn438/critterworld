@@ -20,13 +20,15 @@ public class Critter implements SimpleCritter
 	private String name;
 	/** A string containing information about the last rule this critter completed. */
 	private String lastRuleCompleted;
+	/** the index of the last rule executed by this critter, or -1 if none have been executed yet. */
+	private int lastRuleIndex;
 	
 	/**
 	 * Creates a new Critter with a specified ruleset, memory, orientation, and name.
-	 * @param p
-	 * @param mem
-	 * @param dir
-	 * @param s
+	 * @param p The critter's program
+	 * @param mem The critter's memory
+	 * @param dir The critter's initial orientation
+	 * @param s The critter's species name
 	 */
 	public Critter(Program p, int[] mem, String s, int dir)
 	{
@@ -36,15 +38,16 @@ public class Critter implements SimpleCritter
 		name = s;
 		readyToMingle = false;
 		lastRuleCompleted = null;
+		lastRuleIndex = -1;
 		
 		orientation = Direction.constructDir(dir);
 	}
 	
 	/**
 	 * Creates a new Critter with a specified ruleset, memory, name, and a random orientation.
-	 * @param p
-	 * @param mem
-	 * @param s
+	 * @param p The critter's program
+	 * @param mem The critter's memory
+	 * @param s The critter's species name
 	 */
 	public Critter(Program p, int[] mem, String s)
 	{
@@ -54,6 +57,7 @@ public class Critter implements SimpleCritter
 		name = s;
 		readyToMingle = false;
 		lastRuleCompleted = null;
+		lastRuleIndex = -1;
 		
 		int rand = (int) (Math.random() * 6);
 		orientation = Direction.constructDir(rand);
@@ -84,14 +88,27 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
-	public String getLastRule()
+	public String getLastRuleString()
 	{
 		return lastRuleCompleted;
 	}
+	
 	@Override
-	public void setLastRule(String s)
+	public int getLastRuleIndex()
+	{
+		return lastRuleIndex;
+	}
+	
+	@Override
+	public void setLastRuleString(String s)
 	{
 		lastRuleCompleted = s;
+	}
+	
+	@Override
+	public void setLastRuleIndex(int i)
+	{
+		lastRuleIndex = i;
 	}
 	
 	@Override
