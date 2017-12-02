@@ -48,9 +48,10 @@ public interface SimpleWorld
 	 * Loads one critter species into the world at random locations.
 	 * @param sc
 	 * @param n
+	 * @param sessionID
 	 * @return 
 	 */
-	boolean[] loadCritters(SimpleCritter sc, int n);
+	int[] loadCritters(SimpleCritter sc, int n, int sessionID);
 	
 	/**
 	 * 
@@ -65,15 +66,28 @@ public interface SimpleWorld
 	 * possible. Does nothing if the hex is not within the world boundaries, or if
 	 * there is something already present at the hex.
 	 * 
-	 * @param sc
-	 *            the critter to add
-	 * @param c
-	 *            the column index of the hex where the critter will be added
-	 * @param r
-	 *            the row index of the hex where the critter will be added
-	 * @return whether the critter was successfully added
+	 * @param sc The critter to add
+	 * @param c The column index of the hex where the critter will be added
+	 * @param r The row index of the hex where the critter will be added
+	 * @return The ID of the newly created critter
 	 */
-	boolean loadOneCritter(SimpleCritter sc, int c, int r);
+	int loadOneCritter(SimpleCritter sc, int c, int r, int sessionID);
+	
+	/**
+	 * Loads a single non-critter world object into the world at the specified
+	 * coordinates, if possible. Does nothing if the hex is not within the world
+	 * boundaries or if there is something already present at the hex. This method
+	 * cannot be used to add critters into the world. Use the method
+	 * {@code loadCritter(SimpleCritter sc, int c, int r)} instead.
+	 * 
+	 * @param wo The object to add
+	 * @param c The column index of the hex where the object will be added
+	 * @param r The row index of the hex where the object will be added
+	 */
+	void addNonCritterObject(WorldObject wo, int c, int r);
+	
+	/** Gets a list of the living critters in the world. */
+	LinkedList<SimpleCritter> getCritterList();
 	
 	/** Retrieves a list of all critters that have died in this world. */
 	LinkedList<SimpleCritter> collectCritterCorpses();
@@ -112,6 +126,15 @@ public interface SimpleWorld
 	 * 		   (or if the provided column-row pair is not on the world grid).
 	 */
 	SimpleCritter analyzeCritter(int c, int r);
+	
+	/**
+	 * 
+	 * @param sc
+	 * @return
+	 */
+	int getCritterID(SimpleCritter sc);
+	
+	SimpleCritter getCritterFromID(int id);
 	
 	/**
 	 * Retrieves the contents of a hex.

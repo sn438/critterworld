@@ -27,6 +27,13 @@ public class Server {
 	private HashMap<Integer, String> sessionIdMap;
 	private WorldModel model;
 
+	/**
+	 * Creates a new server.
+	 * @param portNum
+	 * @param readPass
+	 * @param writePass
+	 * @param adminPass
+	 */
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
 		readPassword = readPass;

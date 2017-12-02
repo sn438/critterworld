@@ -428,6 +428,7 @@ public class Controller {
 			@Override
 			public void handle(ActionEvent ae) {
 				map.draw();
+				updateInfoBox();
 				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
 				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 			}
@@ -590,6 +591,7 @@ public class Controller {
 		}
 	}
 
+	/** Logs into the server. */
 	private void login() {
 		Gson gson = new Gson();
 		Dialog<LoginInfo> dialog = new Dialog<>();

@@ -181,7 +181,7 @@ public class WorldMap {
 
 		// draws world objects
 		gc.setLineWidth(3);
-		//drawObjects();
+		drawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);

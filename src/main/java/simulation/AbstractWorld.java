@@ -44,6 +44,12 @@ public abstract class AbstractWorld implements SimpleWorld
 	}
 	
 	@Override
+	public LinkedList<SimpleCritter> getCritterList()
+	{
+		return critterList;
+	}
+	
+	@Override
 	public LinkedList<SimpleCritter> collectCritterCorpses()
 	{
 		return deadCritters;
