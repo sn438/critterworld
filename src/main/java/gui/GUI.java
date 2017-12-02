@@ -40,7 +40,7 @@ public class GUI extends Application {
 
 // Rishi:
 // TODO implement smell
-// TODO do written problems
+// TODO draw written problem #3 in paint
 // TODO why doesn't critter info box passively update when GUI is in run mode
 // instead of step by step mode?
 // TODO why doesn't critter info box clear when critter leaves the selected hex?
