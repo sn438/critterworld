@@ -287,6 +287,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 		
@@ -304,6 +305,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
@@ -321,6 +323,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
