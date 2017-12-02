@@ -4,12 +4,23 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 
+import ast.Program;
 import gui.WorldModel;
+import parse.ParserImpl;
+import simulation.Critter;
+import simulation.FileParser;
+import simulation.SimpleCritter;
+
 
 /** A server that responds to HTTP requests. */
 public class Server {
@@ -25,14 +36,14 @@ public class Server {
 	private final String adminPassword;
 	private int session_id_count;
 	private HashMap<Integer, String> sessionIdMap;
-	private WorldModel model;
+	private ServerWorldModel model;
 
 	private Server(int portNum, String readPass, String writePass, String adminPass) {
 		portNumber = portNum;
 		readPassword = readPass;
 		writePassword = writePass;
 		adminPassword = adminPass;
-		model = new WorldModel();
+		model = new ServerWorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
 	}
 
@@ -79,7 +90,35 @@ public class Server {
 			}
 
 		}, gson::toJson);
+		
+		post("/critters", (request, response) -> {
+			System.out.println("We have reached critters");
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
+			String json = request.body();
+			System.out.println(json);
+			CritterJSON loadCritterInfo = gson.fromJson(json,CritterJSON.class);
+			ParserImpl parser = new ParserImpl();
+			
+			InputStream stream = new ByteArrayInputStream(loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+			Program program = parser.parse(reader);
+			int[] memory = loadCritterInfo.getMem();
+ 			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
+ 			model.loadCritterRandomLocations(critter, loadCritterInfo.getNum());
+ 			System.out.println(model.getNumCritters());
+			if (sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write"))) {
+				response.status(401);
+				return "User does not have admin access.";
+			} else {
+				
+				return "Ok";
+			}
+		}, gson::toJson);
 
+		
 		post("/world", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();
