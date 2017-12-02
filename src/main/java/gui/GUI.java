@@ -39,17 +39,11 @@ public class GUI extends Application {
 // TODO work on server stuff
 
 // Rishi:
+// TODO add food add rocks buttons = use addWorldObject()
 // TODO implement smell
 // TODO draw written problem #3 in paint
-// TODO why doesn't critter info box passively update when GUI is in run mode
-// instead of step by step mode?
-// TODO why doesn't critter info box clear when critter leaves the selected hex?
-// TODO merge run and pause buttons?
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
-// TODO make +- keys zooming if time
-// TODO add SOUNDS!
-// TODO add SKINS!
 // TODO optimize zooming so that it only redraws visible portion and not whole
 // entire hex grid?
 
