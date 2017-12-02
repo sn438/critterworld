@@ -21,7 +21,6 @@ import simulation.Critter;
 import simulation.FileParser;
 import simulation.SimpleCritter;
 
-
 /** A server that responds to HTTP requests. */
 public class Server {
 	/** The single instance of the server. */
@@ -40,6 +39,7 @@ public class Server {
 
 	/**
 	 * Creates a new server.
+	 * 
 	 * @param portNum
 	 * @param readPass
 	 * @param writePass
@@ -97,7 +97,7 @@ public class Server {
 			}
 
 		}, gson::toJson);
-		
+
 		post("/critters", (request, response) -> {
 			System.out.println("We have reached critters");
 			response.header("Content-Type", "application/json");
@@ -106,25 +106,35 @@ public class Server {
 			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
 			String json = request.body();
 			System.out.println(json);
-			CritterJSON loadCritterInfo = gson.fromJson(json,CritterJSON.class);
+			CritterJSON loadCritterInfo = gson.fromJson(json, CritterJSON.class);
 			ParserImpl parser = new ParserImpl();
-			InputStream stream = new ByteArrayInputStream(loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
+			InputStream stream = new ByteArrayInputStream(
+					loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 			Program program = parser.parse(reader);
 			int[] memory = loadCritterInfo.getMem();
- 			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
- 			model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
- 			System.out.println(model.getNumCritters());
-			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
+			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
+			if (loadCritterInfo.getPositions() == null)
+				model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
+			else {
+				PositionJSON[] positions = loadCritterInfo.getPositions();
+				for (PositionJSON positionHolder: positions) {
+					int c = positionHolder.getColumn();
+					int r = positionHolder.getRow();
+					model.loadCritterAtLocation(critter, c, r, session_id);
+				}
+			}	
+			System.out.println(model.getNumCritters());
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
+					|| sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
 				return "User does not have admin access.";
 			} else {
-				
+
 				return "Ok";
 			}
 		}, gson::toJson);
 
-		
 		post("/world", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();

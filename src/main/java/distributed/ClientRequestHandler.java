@@ -36,7 +36,11 @@ import simulation.WorldObject;
 public class ClientRequestHandler {
 	/** Stores the most recently retrieved version of the world. */
 	private int mostRecentVersion;
+	private String url;
 
+	public ClientRequestHandler(String url) {
+		this.url = url;
+	}
 	/**
 	 * 
 	 * @param sessionId
@@ -117,9 +121,9 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=423956134");
-			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			 url = new
+			 URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=1914893925");
+			//url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -231,9 +235,9 @@ public class ClientRequestHandler {
 		CritterJSON critterJSON = new CritterJSON(critter.getName(), programDescription, mem, num);
 		URL url;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
+		 url = new
+			 URL("http://hexworld.herokuapp.com:80/hexworld/critters?session_id=1914893925");
+			//url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
@@ -249,9 +253,12 @@ public class ClientRequestHandler {
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
 			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			// BufferedReader r1 = new BufferedReader(new
-			// InputStreamReader(connection.getInputStream()));
-			// System.out.println(r1.readLine());
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = r1.readLine();
+			while (line != null) {
+				System.out.println(line);
+				line = r1.readLine();
+			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -270,13 +277,13 @@ public class ClientRequestHandler {
 			programDescription += (rule.toString() + "\r\n");
 		}
 		int[] mem = critter.getMemoryCopy();
-		PositionJSON[] positions = new PositionJSON[] {new PositionJSON(c, r)};
+		PositionJSON[] positions = new PositionJSON[] { new PositionJSON(c, r) };
 		CritterJSON critterJSON = new CritterJSON(critter.getName(), programDescription, mem, positions);
 		URL url;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
+			url = new URL("http://hexworld.herokuapp.com:80/hexworld/critters?session_id=1914893925");
+			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
+			// sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
@@ -292,9 +299,12 @@ public class ClientRequestHandler {
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
 			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			// BufferedReader r1 = new BufferedReader(new
-			// InputStreamReader(connection.getInputStream()));
-			// System.out.println(r1.readLine());
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = r1.readLine();
+			while (line != null) {
+				System.out.println(line);
+				line = r1.readLine();
+			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

@@ -145,6 +145,7 @@ public class Controller {
 	 */
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
+	private String urlInitial;
 	private SessionId sessionId;
 	private boolean localMode;
 	private ClientRequestHandler handler;
@@ -370,7 +371,7 @@ public class Controller {
 					model.loadRandomCritters(critterFile, n);
 				else
 					handler.loadRandomCritters(critterFile, n, sessionId.getSessionId());
-				
+
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
 				a.setTitle("Invalid Number");
@@ -627,30 +628,30 @@ public class Controller {
 		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		TextField levelTextField = new TextField("Level");
 		TextField passwordTextField = new TextField("Password");
-		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField));
-
+		// TextField urlTextField = new TextField("http://localhost:8080");
+		TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
+		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
 		Platform.runLater(levelTextField::requestFocus);
 		dialog.setResultConverter((ButtonType button) -> {
-
 			if (button == ButtonType.OK) {
-				return new LoginInfo(levelTextField.getText(), passwordTextField.getText());
+				return new LoginInfo(levelTextField.getText(), passwordTextField.getText(), urlTextField.getText());
 			}
 			return null;
 		});
-
 		Optional<LoginInfo> optionalResult = dialog.showAndWait();
 		optionalResult.ifPresent((LoginInfo results) -> {
 			loginInfo = new LoginInfo(results.level, results.password);
+			this.urlInitial = results.url;
 		});
 		URL url = null;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/login");
+			url = new URL(this.urlInitial + "/login");
 			// url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
+			System.out.println(gson.toJson(loginInfo, LoginInfo.class));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
-
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
 			w.println(gson.toJson(loginInfo, LoginInfo.class));
 			w.flush();
@@ -662,6 +663,7 @@ public class Controller {
 				alert.setContentText("The login credentials you entered were invalid. Click "
 						+ "OK to continue in local mode or Cancel to exit the program.");
 				Optional<ButtonType> result = alert.showAndWait();
+
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
 					model = new WorldModel();
@@ -670,30 +672,73 @@ public class Controller {
 					System.exit(0);
 				}
 			}
+			
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String sessionIdString = r.readLine();
+			String sessionIdString = "";
+			String holder = r.readLine();
+			while(holder != null) {
+				sessionIdString += holder;
+				holder = r.readLine();
+			}
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
+			System.out.println(sessionId.getSessionId());
+			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 			localMode = true;
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Login Error");
+			alert.setHeaderText("Credentials Not Recognized");
+			alert.setContentText("The login credentials you entered were invalid. Click "
+					+ "OK to continue in local mode or Cancel to exit the program.");
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.get() == ButtonType.OK) {
+				localMode = true;
+				model = new WorldModel();
+				return;
+			} else {
+				System.exit(0);
+			}
 			return;
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
 			localMode = true;
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Login Error");
+			alert.setHeaderText("Credentials Not Recognized");
+			alert.setContentText("The login credentials you entered were invalid. Click "
+					+ "OK to continue in local mode or Cancel to exit the program.");
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.get() == ButtonType.OK) {
+				localMode = true;
+				model = new WorldModel();
+				return;
+			} else {
+				System.exit(0);
+			}
 			return;
 		}
 		localMode = false;
-		handler = new ClientRequestHandler();
+		handler = new ClientRequestHandler(this.urlInitial);
 	}
 
 	class LoginInfo {
 
 		String level;
 		String password;
+		String url;
 
 		private LoginInfo(String level, String password) {
 			this.level = level;
 			this.password = password;
+		}
+
+		private LoginInfo(String level, String password, String url) {
+			this.level = level;
+			this.password = password;
+			this.url = url;
 		}
 	}
 }
