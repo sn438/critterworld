@@ -44,6 +44,7 @@ public class ServerWorldModel {
 			time = 0;
 			versionNumber = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
+			critterIDMap = new HashMap<Integer, SimpleCritter>();
 			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
@@ -52,7 +53,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Creates a new random world.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             if the constants.txt file could not be read
 	 */
@@ -78,7 +79,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in a world based on a description.
-	 * 
+	 *
 	 * @param desc
 	 * @throws IllegalArgumentException
 	 *             if the description is invalid
@@ -174,8 +175,9 @@ public class ServerWorldModel {
 		} finally {
 			rwl.writeLock().unlock();
 		}
+
 	}
-	
+
 	/** Returns an array of all living critters. */
 	public SimpleCritter[] listCritters() {
 		try {
@@ -187,9 +189,9 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param sc
 	 * @return
 	 */
@@ -204,7 +206,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Returns a number giving information about a hex.
-	 * 
+	 *
 	 * @param c
 	 * @param r
 	 * @return
@@ -219,7 +221,7 @@ public class ServerWorldModel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @param r
 	 * @return
@@ -254,7 +256,7 @@ public class ServerWorldModel {
 	/**
 	 * Provides a map of everything that has changed in the world since the initial
 	 * version.
-	 * 
+	 *
 	 * @param initialVersionNumber
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
@@ -274,7 +276,7 @@ public class ServerWorldModel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -289,7 +291,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Removes a critter from the world, if it is there.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of the critter to remove
 	 */
@@ -298,10 +300,9 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
-			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
-		
+
 	}
 
 	/**
@@ -316,7 +317,6 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
-			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
@@ -334,13 +334,12 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
-			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param wo
 	 * @param c
 	 * @param r

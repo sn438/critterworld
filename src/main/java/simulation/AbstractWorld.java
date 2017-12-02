@@ -105,18 +105,18 @@ public abstract class AbstractWorld implements SimpleWorld
 	
 	/**
 	 * Looks at the contents of a hex adjacent to a critter.
-	 * @param sc : the critter who is observing its surroundings
-	 * @param dir : the direction in which to look
-	 * @return an integer value based on the contents of the observed hex, determined by the {@code WorldObject}
+	 * @param sc The critter who is observing its surroundings
+	 * @param dir The direction in which to look
+	 * @return An integer value based on the contents of the observed hex, determined by the {@code WorldObject}
 	 * 		   method {@code getAppearance()}.
 	 */
 	public abstract int searchNearby(SimpleCritter sc, int dir);
 
 	/**
 	 * Looks at the contents of a hex ahead of a critter.
-	 * @param sc : the critter who is observing its surroundings
-	 * @param index : how far ahead to look
-	 * @return an integer value based on the contents of the observed hex, following the same scheme as {@code searchNearby}.
+	 * @param sc The critter who is observing its surroundings
+	 * @param index How far ahead to look
+	 * @return An integer value based on the contents of the observed hex, following the same scheme as {@code searchNearby}.
 	 */
 	public abstract int searchAhead(SimpleCritter sc, int index);
 	
@@ -138,34 +138,34 @@ public abstract class AbstractWorld implements SimpleWorld
 	
 	/**
 	 * Moves a critter, if there is nothing in the way and critter will not move off the world bounds.
-	 * @param sc : the moving critter
-	 * @param forward : whether or not the critter is moving forward or backward
+	 * @param sc The moving critter
+	 * @param forward Whether or not the critter is moving forward or backward
 	 */
 	public abstract void moveCritter(SimpleCritter sc, boolean forward);
 	
 	/**
 	 * Turns a critter.
-	 * @param sc : the turning critter
-	 * @param forward : whether or not the critter is turning clockwise or counterclockwise
+	 * @param sc The turning critter
+	 * @param forward Whether or not the critter is turning clockwise or counterclockwise
 	 */
 	public abstract void turnCritter(SimpleCritter sc, boolean clockwise);
 
 	/**
 	 * Forces a critter to eat, if there is food in the hex directly in front of it. This action replenishes energy
 	 * equal to the caloric content of the food eaten.
-	 * @param sc : the feasting critter
+	 * @param sc The feasting critter
 	 */
 	public abstract void critterEat(SimpleCritter sc);
 
 	/**
 	 * Grows a critter by one size.
-	 * @param sc : the growing critter
+	 * @param sc The growing critter
 	 */
 	public abstract void growCritter(SimpleCritter sc);
 
 	/** 
 	 * Simulates the results of one critter attacking another.
-	 * @param attacker
+	 * @param attacker The critter who initiates the fight
 	 */
 	public abstract void critterBattle(SimpleCritter attacker);
 	
@@ -173,7 +173,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	/** 
 	 * Executes the result of one critter attempting to bud. The newly created offspring will appear directly behind
 	 * the parent critter, unless there is something already in that hex (in which case no reproduction will occur).
-	 * @param sc : the budding critter
+	 * @param sc The budding critter
 	 */
 	public abstract void critterBud(SimpleCritter sc);
 	
@@ -181,28 +181,28 @@ public abstract class AbstractWorld implements SimpleWorld
 	 * Executes the result of one critter attempting to mate with another critter. The other critter must be directly in
 	 * front of the first critter and facing the first critter. The newly created offspring will appear directly behind
 	 * one of the parent critters, unless there is something already in that hex (in which case no reproduction will occur).
-	 * @param sc
+	 * @param sc The critter who initiates the mating process
 	 */
 	public abstract void critterMate(SimpleCritter sc);
 	
 	/**
 	 * One critter "tags" another critter by setting its "tag" attribute in memory equal to the value of {@code index}.
-	 * @param sc
-	 * @param index
+	 * @param sc The tagging critter
+	 * @param index The value at which to tag
 	 */
 	public abstract void critterTag(SimpleCritter sc, int index);
 	
 	/**
 	 * One critter severs a part of its soul (its energy) and places it on the hex in front of it in the form of food. It is
 	 * possible for the critter to serve all of its remaining energy, killing it in the process.
-	 * @param sc : the overly generous critter
-	 * @param index : the amount of food to serve
+	 * @param sc The overly generous critter
+	 * @param index The amount of food to serve
 	 */
 	public abstract void critterServe(SimpleCritter sc, int index);
 	
 	/**
 	 * A critter does nothing but sit in the sun. It replenishes some energy in the process.
-	 * @param sc
+	 * @param sc The soaking critter
 	 */
 	public abstract void critterSoakEnergy(SimpleCritter sc);
 }

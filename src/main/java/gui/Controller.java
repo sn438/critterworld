@@ -282,7 +282,7 @@ public class Controller {
 	}
 
 	@FXML
-	private void handleLoadWorldPressed(MouseEvent me) { // TODO why did this throw illegal argument exception?
+	private void handleLoadWorldPressed(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
 		File initDirectory = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
@@ -518,7 +518,7 @@ public class Controller {
 				passText.setText(String.valueOf(critterMemoryCopy[5]));
 				tagText.setText(String.valueOf(critterMemoryCopy[6]));
 				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRule());
+				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
 			} else {
 				memSizeText.setText("");
 				speciesText.setText("");

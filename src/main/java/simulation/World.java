@@ -307,6 +307,11 @@ public class World extends AbstractWorld {
 	public int getRows() {
 		return rows;
 	}
+	
+	@Override
+	public String getWorldName() {
+		return worldname;
+	}
 
 	@Override
 	public boolean isValidHex(int c, int r) {
@@ -1036,7 +1041,7 @@ public class World extends AbstractWorld {
 	@Override
 	public int getCritterID(SimpleCritter sc) {
 		Integer ID = critterToIDMap.get(sc);
-		int result = ID == null ? 0 : ID;
+		int result = (ID == null) ? 0 : ID;
 		return result;
 	}
 	
@@ -1045,6 +1050,11 @@ public class World extends AbstractWorld {
 		return IDToCritterMap.get(id);
 	}
 
+	@Override
+	public int getCritterCreatorID(SimpleCritter sc) {
+		return critterCreatorMap.get(getCritterID(sc));
+	}
+	
 	@Override
 	public WorldObject getHexContent(int c, int r) {
 		if (!isValidHex(c, r))

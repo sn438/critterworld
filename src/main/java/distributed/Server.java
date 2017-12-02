@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
@@ -19,7 +20,9 @@ import gui.WorldModel;
 import parse.ParserImpl;
 import simulation.Critter;
 import simulation.FileParser;
+import simulation.Hex;
 import simulation.SimpleCritter;
+import simulation.WorldObject;
 
 /** A server that responds to HTTP requests. */
 public class Server {
@@ -39,7 +42,7 @@ public class Server {
 
 	/**
 	 * Creates a new server.
-	 * 
+	 *
 	 * @param portNum
 	 * @param readPass
 	 * @param writePass
@@ -104,6 +107,10 @@ public class Server {
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
 			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
+				response.status(401);
+				return "User does not have write access.";
+			}
 			String json = request.body();
 			System.out.println(json);
 			CritterJSON loadCritterInfo = gson.fromJson(json, CritterJSON.class);
@@ -112,34 +119,34 @@ public class Server {
 					loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 			Program program = parser.parse(reader);
+			reader.close();
 			int[] memory = loadCritterInfo.getMem();
+			int[] ids = null;
 			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
 			if (loadCritterInfo.getPositions() == null)
-				model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
+				ids = model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
 			else {
 				PositionJSON[] positions = loadCritterInfo.getPositions();
+				int counter = 0;
+				ids = new int[positions.length];
 				for (PositionJSON positionHolder: positions) {
 					int c = positionHolder.getColumn();
 					int r = positionHolder.getRow();
-					model.loadCritterAtLocation(critter, c, r, session_id);
+					int id = model.loadCritterAtLocation(critter, c, r, session_id);
+					ids[counter] = id;
+					counter++;
 				}
-			}	
-			System.out.println(model.getNumCritters());
-			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
-					|| sessionIdMap.get(session_id).equals("write")))) {
-				response.status(401);
-				return "User does not have admin access.";
-			} else {
-
-				return "Ok";
 			}
+ 			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
+ 			System.out.println(model.getNumCritters());
+			return lcr;
 		}, gson::toJson);
 
 		post("/world", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
 			String json = request.body();
 			System.out.println(json);
 			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
@@ -152,6 +159,52 @@ public class Server {
 				return "Ok";
 			}
 		});
+
+		get("/world", (request, response) -> {
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			int indexOfSessionID = queryString.indexOf("session_id=", 0) + 11;
+			int sessionID = -1;
+			int updateSince = 0;
+			if(queryString.contains("update_since")) {
+				int indexOfUpdateSince = queryString.indexOf("update_since=") + 13;
+				sessionID = Integer.parseInt(queryString.substring(indexOfSessionID , queryString.indexOf("update_since")));
+				updateSince = Integer.parseInt(queryString.substring(indexOfUpdateSince));
+			} else {
+				sessionID = Integer.parseInt(queryString.substring(indexOfSessionID + 1));
+			}
+
+			if(sessionIdMap.get(sessionID) == null) {
+				response.status(401);
+				return "User does not have permission to view the world.";
+			} else {
+				int time = model.getCurrentTimeStep();
+				int version = model.getCurrentVersionNumber();
+				float rate = model.getRate();
+				String name = model.getWorldName();
+				int population = model.getNumCritters();
+				int columns = model.getColumns();
+				int rows = model.getRows();
+				int[] deadList = model.getCumulativeDeadCritters();
+				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
+				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
+				for(Entry<Hex, WorldObject> entry : objects.entrySet()) {
+					int counter = 0;
+					int c = entry.getKey().getColumnIndex();
+					int r = entry.getKey().getRowIndex();
+					WorldObject wo = entry.getValue();
+					if(wo instanceof SimpleCritter) {
+						SimpleCritter sc = (SimpleCritter) wo;
+						int critterID = model.getID(sc);
+						boolean permissions = model.hasCritterPermissions(sc, sessionID);
+						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
+					} else {
+						state[counter] = new JSONWorldObject(wo, c, r);
+					}
+				}
+				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList, state);
+			}
+		}, gson::toJson);
 
 		get("/world/generic", (request, response) -> {
 			response.header("Content-Type", "application/json");

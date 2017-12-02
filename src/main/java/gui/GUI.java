@@ -52,11 +52,11 @@ public class GUI extends Application {
 // TODO start worldmodel updates and stuff
 // TODO find better way to loop through all critters???
 // TODO locks in world model - ask about those?
-// TODO list of changed hexes
 // TODO is there a way to have the program stop automatically when the GUI is
 // closed while running?
 // TODO fix bug for non terminating threads
-// TODO provide way for server to provide list of IDs of dead critters
+// TODO create loadCritterResponseJSON
+// TODO handle IllegalArgumentException in controller
 
 // Bug: new world,
 // reset,
