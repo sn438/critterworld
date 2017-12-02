@@ -19,6 +19,7 @@ public class JSONWorldObject {
 	private int[] mem;
 	private String program;
 	private Integer recently_executed_rule;
+
 	
 	
 	public JSONWorldObject(String typ, int c, int r) {
@@ -43,6 +44,7 @@ public class JSONWorldObject {
 		species_id = species;
 		mem = memory;
 		recently_executed_rule = ruleIndex;
+		
 	}
 	
 	public JSONWorldObject(String typ, int c, int r, int dir, int critterID, String species, int[] memory) {
@@ -53,6 +55,14 @@ public class JSONWorldObject {
 		id = critterID;
 		species_id = species;
 		mem = memory;
+	}
+	
+	public Integer getColumn() {
+		return this.col;
+	}
+	
+	public Integer getRow() {
+		return this.row;
 	}
 	
 	

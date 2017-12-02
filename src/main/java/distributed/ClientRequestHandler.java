@@ -41,6 +41,7 @@ public class ClientRequestHandler {
 	public ClientRequestHandler(String url) {
 		this.url = url;
 	}
+
 	/**
 	 * 
 	 * @param sessionId
@@ -68,9 +69,7 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -121,9 +120,8 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			 url = new
-			 URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=1914893925");
-			//url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId);
+			// url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -168,7 +166,8 @@ public class ClientRequestHandler {
 		URL url = null;
 		int returnValue = 0;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/colNum?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
+			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
@@ -179,8 +178,8 @@ public class ClientRequestHandler {
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			returnValue = Integer.parseInt(r.readLine());
-
+			JSONWorldObject worldState =  gson.fromJson(r, JSONWorldObject.class);
+			returnValue = worldState.getColumn();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -194,19 +193,19 @@ public class ClientRequestHandler {
 		URL url = null;
 		int returnValue = 0;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/rowNum?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Login Error");
-				alert.setHeaderText("Login Information Was False");
+				alert.setHeaderText("Access Denied");
 				alert.setContentText("User is not an admin so a New World cannot be created.");
-				return 0;
+				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			returnValue = Integer.parseInt(r.readLine());
-
+			JSONWorldObject worldState =  gson.fromJson(r, JSONWorldObject.class);
+			returnValue = worldState.getRow();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -235,9 +234,9 @@ public class ClientRequestHandler {
 		CritterJSON critterJSON = new CritterJSON(critter.getName(), programDescription, mem, num);
 		URL url;
 		try {
-		 url = new
-			 URL("http://hexworld.herokuapp.com:80/hexworld/critters?session_id=1914893925");
-			//url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
+			url = new URL("http://hexworld.herokuapp.com:80/hexworld/critters?session_id=1914893925");
+			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
+			// sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
