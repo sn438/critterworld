@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -33,6 +34,14 @@ public class World extends AbstractWorld {
 	private int rows;
 	/** The number of hexes that lie on the world grid. */
 	private int numValidHexes;
+	/** Assigned as a critter ID. Is modified every time a critter is added to ensure uniqueness of IDs. */
+	private int critterIDcount;
+	/** Maps unique critter IDs to critters. */
+	private HashMap<Integer, SimpleCritter> IDToCritterMap;
+	/** Maps critters to their unique IDs. */
+	private HashMap<SimpleCritter, Integer> critterToIDMap;
+	/** Maps critter IDs to the session IDs that created them. */
+	private HashMap<Integer, Integer> critterCreatorMap;
 
 	/**
 	 * Loads a world from a description.
@@ -50,6 +59,10 @@ public class World extends AbstractWorld {
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		critterIDcount = 1;
+		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
+		critterToIDMap = new HashMap<SimpleCritter, Integer>();
+		critterCreatorMap = new HashMap<Integer, Integer>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
@@ -137,6 +150,10 @@ public class World extends AbstractWorld {
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		critterIDcount = 1;
+		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
+		critterToIDMap = new HashMap<SimpleCritter, Integer>();
+		critterCreatorMap = new HashMap<Integer, Integer>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
@@ -202,7 +219,7 @@ public class World extends AbstractWorld {
 						break;
 					}
 
-					loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]));
+					loadOneCritter(sc, Integer.parseInt(info[2]), Integer.parseInt(info[3]), -1);
 					break;
 				}
 				line = bf.readLine();
@@ -226,6 +243,10 @@ public class World extends AbstractWorld {
 		setConstants();
 		critterMap = new HashMap<SimpleCritter, Hex>();
 		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		critterIDcount = 1;
+		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
+		critterToIDMap = new HashMap<SimpleCritter, Integer>();
+		critterCreatorMap = new HashMap<Integer, Integer>();
 		super.updatedHexes = new LinkedList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
@@ -314,7 +335,7 @@ public class World extends AbstractWorld {
 				}
 
 				if (isValidHex(randc, randr))
-					loadOneCritter(sc, randc, randr);
+					loadOneCritter(sc, randc, randr, -1);
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
@@ -338,7 +359,7 @@ public class World extends AbstractWorld {
 				}
 
 				if (isValidHex(randc, randr))
-					loadOneCritter(sc, randc, randr);
+					loadOneCritter(sc, randc, randr, -1);
 			}
 		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
@@ -347,8 +368,9 @@ public class World extends AbstractWorld {
 	}
 
 	@Override
-	public boolean[] loadCritters(SimpleCritter sc, int n) {
-		boolean[] result = new boolean[n];
+	public int[] loadCritters(SimpleCritter sc, int n, int sessionID) {
+		int[] result = new int[n];
+		Arrays.fill(result, -1);
 		for (int i = 0; i < n; i++) {
 			if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
 				break;
@@ -360,8 +382,7 @@ public class World extends AbstractWorld {
 			}
 
 			if (isValidHex(randc, randr)) {
-				boolean b = loadOneCritter(sc, randc, randr);
-				result[i] = b;
+				result[i] = loadOneCritter(sc, randc, randr, sessionID);
 			}
 		}
 		return result;
@@ -373,7 +394,7 @@ public class World extends AbstractWorld {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), -1);
 			if (isValidHex(c, r))
-				loadOneCritter(sc, c, r);
+				loadOneCritter(sc, c, r, -1);
 		} catch (FileNotFoundException e) {
 			System.err.println("Critter file not found.");
 			return;
@@ -381,33 +402,29 @@ public class World extends AbstractWorld {
 	}
 
 	@Override
-	public boolean loadOneCritter(SimpleCritter sc, int c, int r) {
+	public int loadOneCritter(SimpleCritter sc, int c, int r, int sessionID) {
 		if (!isValidHex(c, r))
-			return false;
+			return -1;
+		int result;
 		boolean added = grid[c][r].addContent(sc);
 		if (added) {
 			critterList.add(sc);
 			critterMap.put(sc, grid[c][r]);
 			updatedHexes.add(grid[c][r]);
+			result = critterIDcount;
+			IDToCritterMap.put(critterIDcount, sc);
+			critterToIDMap.put(sc, critterIDcount);
+			if(sessionID > 0)
+				critterCreatorMap.put(critterIDcount, sessionID);
+			critterIDcount++;
+		} else {
+			result = -1;
 		}
-		return added;
+		return result;
 	}
 
-	/**
-	 * Loads a single non-critter world object into the world at the specified
-	 * coordinates, if possible. Does nothing if the hex is not within the world
-	 * boundaries or if there is something already present at the hex. This method
-	 * cannot be used to add critters into the world. Use the method
-	 * {@code loadCritter(SimpleCritter sc, int c, int r)} instead.
-	 * 
-	 * @param sc
-	 *            the object to add
-	 * @param c
-	 *            the column index of the hex where the object will be added
-	 * @param r
-	 *            the row index of the hex where the object will be added
-	 */
-	private void addNonCritterObject(WorldObject wo, int c, int r) {
+	@Override
+	public void addNonCritterObject(WorldObject wo, int c, int r) {
 		if (wo instanceof Critter)
 			return;
 		if (!isValidHex(c, r))
@@ -652,8 +669,7 @@ public class World extends AbstractWorld {
 		sc.updateEnergy(-1 * CONSTANTS.get("BUD_COST").intValue() * complexity,
 				CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the
-		// critter
+		// if the critter did not have enough energy to complete this action, kills the critter
 		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
@@ -687,7 +703,9 @@ public class World extends AbstractWorld {
 		}
 
 		SimpleCritter baby = new Critter(prog, babymem, name, sc.getOrientation());
-		loadOneCritter(baby, newc, newr);
+		Integer parentCreatorID = critterCreatorMap.get(critterToIDMap.get(sc));
+		int babyCreatorID = parentCreatorID == null ? -1 : parentCreatorID;
+		loadOneCritter(baby, newc, newr, babyCreatorID);
 
 		if (sc.getEnergy() == 0)
 			kill(sc);
@@ -846,8 +864,11 @@ public class World extends AbstractWorld {
 		for (int i = 0; i < numMutations; i++)
 			prog = prog.mutate();
 		String name = random.nextBoolean() ? sc1.getName() : sc2.getName();
+		Integer parentCreatorID = random.nextBoolean() ? critterCreatorMap.get(critterToIDMap.get(sc1)) :
+														 critterCreatorMap.get(critterToIDMap.get(sc2));
+		int babyCreatorID = parentCreatorID == null ? -1 : parentCreatorID;
 		SimpleCritter baby = new Critter(prog, babymem, name, 0);
-		loadOneCritter(baby, babyColumn, babyRow);
+		loadOneCritter(baby, babyColumn, babyRow, babyCreatorID);
 
 		if (sc1.getEnergy() == 0 || sc2.getEnergy() == 0) {
 			if (sc1.getEnergy() == 0)
@@ -1010,6 +1031,18 @@ public class World extends AbstractWorld {
 		if (!isValidHex(c, r) || !(grid[c][r].getContent() instanceof SimpleCritter))
 			return null;
 		return (SimpleCritter) (grid[c][r].getContent());
+	}
+	
+	@Override
+	public int getCritterID(SimpleCritter sc) {
+		Integer ID = critterToIDMap.get(sc);
+		int result = ID == null ? 0 : ID;
+		return result;
+	}
+	
+	@Override
+	public SimpleCritter getCritterFromID(int id) {
+		return IDToCritterMap.get(id);
 	}
 
 	@Override
