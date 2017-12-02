@@ -10,6 +10,8 @@ public class WorldStateJSON {
 	private Integer population;
 	private Integer rows;
 	private Integer cols;
-	private Integer[] dead_critters;
+	private int[] dead_critters;
+	private JSONWorldObject[] state;
+	
 	
 }
