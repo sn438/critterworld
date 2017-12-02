@@ -366,10 +366,19 @@ public class Controller {
 		if (choice == chkRandom) {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
-				model.loadRandomCritters(critterFile, n);
+				if (localMode)
+					model.loadRandomCritters(critterFile, n);
+				else
+					handler.loadRandomCritters(critterFile, n, sessionId.getSessionId());
+				
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
 				a.setTitle("Invalid Number");
+				a.showAndWait();
+				return;
+			} catch (FileNotFoundException e) {
+				Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+				a.setTitle("Invalid File");
 				a.showAndWait();
 				return;
 			}
@@ -385,7 +394,17 @@ public class Controller {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
-					model.loadCritterAtLocation(critterFile, c, r);
+					if (localMode)
+						model.loadCritterAtLocation(critterFile, c, r);
+					else
+						try {
+							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionId());
+						} catch (FileNotFoundException e) {
+							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+							a.setTitle("Invalid File");
+							a.showAndWait();
+							return;
+						}
 				});
 			} catch (Exception e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid location");
@@ -651,13 +670,8 @@ public class Controller {
 					System.exit(0);
 				}
 			}
-			System.out.println("yesfjhfkjgjfjfhgjkfdg");
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = r.readLine();
-			/*
-			 * System.out.println(sessionIdString); System.out.println(r.readLine());
-			 * System.out.println(r.readLine());
-			 */
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");

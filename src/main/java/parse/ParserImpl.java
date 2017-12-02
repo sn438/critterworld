@@ -9,7 +9,7 @@ import ast.BinaryCondition.Operator;
 import ast.UnaryExpr.ExprType;
 import exceptions.SyntaxError;
 
-class ParserImpl implements Parser {
+public class ParserImpl implements Parser {
 	/** tokens is the Tokenizer that contains all the tokens from which the AST is built. */
 	private Tokenizer tokens;
 	private Program programAST;

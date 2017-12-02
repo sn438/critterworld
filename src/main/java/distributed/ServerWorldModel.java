@@ -11,12 +11,13 @@ import simulation.World;
 import simulation.WorldObject;
 import simulation.Hex;
 
-/** 
- * The model that stores world and critter states server-side. It also serves as an abstraction barrier between the world
- * and the modules that interact with the world.
+/**
+ * The model that stores world and critter states server-side. It also serves as
+ * an abstraction barrier between the world and the modules that interact with
+ * the world.
  */
 public class ServerWorldModel {
-	
+
 	/** An instance of the world. */
 	private SimpleWorld world;
 	/** The number of critters. */
@@ -29,7 +30,10 @@ public class ServerWorldModel {
 	private LinkedList<SimpleCritter> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-	/** A log of all the changes that have occurred to the world since version 0 (which is a blank world). */
+	/**
+	 * A log of all the changes that have occurred to the world since version 0
+	 * (which is a blank world).
+	 */
 	private ArrayList<LinkedList<Hex>> diffLog;
 
 	/** Creates a new blank world model. */
@@ -40,7 +44,7 @@ public class ServerWorldModel {
 			time = 0;
 			versionNumber = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
-			
+			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -48,15 +52,19 @@ public class ServerWorldModel {
 
 	/**
 	 * Creates a new random world.
+	 * 
 	 * @throws UnsupportedOperationException
 	 *             if the constants.txt file could not be read
 	 */
+	@Deprecated
 	public void createNewWorld() throws UnsupportedOperationException {
 		rwl.writeLock().lock();
 		try {
-			// if a world already exists, adds all its dead critters to the cumulative dead critter list
-			if (world != null)
+			// if a world already exists, adds all its dead critters to the cumulative dead
+			// critter list
+			if (world != null) {
 				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
+			}
 			world = new World();
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
@@ -80,9 +88,11 @@ public class ServerWorldModel {
 	public void loadWorld(String desc) throws IllegalArgumentException, UnsupportedOperationException {
 		rwl.writeLock().lock();
 		try {
-			// if a world already exists, adds all its dead critters to the cumulative dead critter list
-			if (world != null)
+			// if a world already exists, adds all its dead critters to the cumulative dead
+			// critter list
+			if (world != null) {
 				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
+			}
 			world = new World(desc);
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
@@ -128,7 +138,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/** Returns the current time step of the world. */
 	public int getCurrentTimeStep()
 	{
@@ -139,7 +149,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/** Returns the current version number. */
 	public int getCurrentVersionNumber()
 	{
@@ -150,7 +160,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/** Retrieves the running list of dead critters. */
 	public int[] getCumulativeDeadCritters()
 	{
@@ -164,7 +174,6 @@ public class ServerWorldModel {
 		} finally {
 			rwl.writeLock().unlock();
 		}
-		
 	}
 	
 	/** Returns an array of all living critters. */
@@ -192,9 +201,10 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Returns a number giving information about a hex.
+	 * 
 	 * @param c
 	 * @param r
 	 * @return
@@ -233,29 +243,28 @@ public class ServerWorldModel {
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
 			rwl.writeLock().unlock();
-			
+
 			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
-	 * Provides a map of everything that has changed in the world since the initial version.
+	 * Provides a map of everything that has changed in the world since the initial
+	 * version.
+	 * 
 	 * @param initialVersionNumber
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
-	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber)
-	{
-		//TODO implement locks
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber) {
+		// TODO implement locks
 		HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-		if(initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
+		if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
 			return null;
-		for (int i = initialVersionNumber + 1; i < diffLog.size(); i++)
-		{
-			for (Hex h : diffLog.get(i))
-			{
+		for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
+			for (Hex h : diffLog.get(i)) {
 				int c = h.getColumnIndex();
 				int r = h.getRowIndex();
 				result.put(h, world.getHexContent(c, r));
@@ -263,7 +272,7 @@ public class ServerWorldModel {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 
 	 * @param id
@@ -277,10 +286,12 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Removes a critter from the world, if it is there.
-	 * @param id The ID of the critter to remove
+	 * 
+	 * @param id
+	 *            The ID of the critter to remove
 	 */
 	public void removeCritter(int id) {
 		try {
@@ -292,7 +303,7 @@ public class ServerWorldModel {
 		}
 		
 	}
-	
+
 	/**
 	 * Loads in critters of a certain species into the world at random locations.
 	 * @param sc The critter species
@@ -309,7 +320,7 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Loads in a critter of a certain species into the world.
 	 * @param sc The critter species
