@@ -394,7 +394,17 @@ public class Controller {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
-					model.loadCritterAtLocation(critterFile, c, r);
+					if (localMode)
+						model.loadCritterAtLocation(critterFile, c, r);
+					else
+						try {
+							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionId());
+						} catch (FileNotFoundException e) {
+							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+							a.setTitle("Invalid File");
+							a.showAndWait();
+							return;
+						}
 				});
 			} catch (Exception e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid location");
@@ -662,13 +672,6 @@ public class Controller {
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = r.readLine();
-<<<<<<< HEAD
-=======
-			/*
-			 * System.out.println(sessionIdString); System.out.println(r.readLine());
-			 * System.out.println(r.readLine());
-			 */
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 			sessionId = gson.fromJson(sessionIdString, SessionId.class);
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");

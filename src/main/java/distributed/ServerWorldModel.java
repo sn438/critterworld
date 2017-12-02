@@ -26,21 +26,7 @@ public class ServerWorldModel {
 	private int time;
 	/** The current world version number. */
 	private int versionNumber;
-<<<<<<< HEAD
-	/**
-	 * Assigned as a critter ID. Is modified every time a critter is added to ensure
-	 * uniqueness of IDs.
-	 */
-	private int critterIDcount;
-	/** Maps unique critter IDs to critters. */
-	private HashMap<Integer, SimpleCritter> critterIDMap;
-	/**
-	 * A running list of all critters that have died across all worlds simulated in
-	 * this session.
-	 */
-=======
 	/** A running list of all critters that have died across all worlds simulated in this session. */
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 	private LinkedList<SimpleCritter> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
@@ -57,15 +43,8 @@ public class ServerWorldModel {
 			numCritters = 0;
 			time = 0;
 			versionNumber = 0;
-<<<<<<< HEAD
-			critterIDcount = 1; // critter IDs start at 1
 			diffLog = new ArrayList<LinkedList<Hex>>();
-			critterIDMap = new HashMap<Integer, SimpleCritter>();
 			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
-=======
-			diffLog = new ArrayList<LinkedList<Hex>>();
-			
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -87,13 +66,8 @@ public class ServerWorldModel {
 				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			}
 			world = new World();
-<<<<<<< HEAD
-			// System.out.println(world.getAndResetUpdatedHexes());
-			// diffLog.add(world.getAndResetUpdatedHexes());
-=======
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 			time = 0;
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
@@ -120,13 +94,8 @@ public class ServerWorldModel {
 				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			}
 			world = new World(desc);
-<<<<<<< HEAD
-			// System.out.println(world.getAndResetUpdatedHexes());
-			// diffLog.add(world.getAndResetUpdatedHexes());
-=======
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 			time = 0;
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
@@ -160,10 +129,6 @@ public class ServerWorldModel {
 	}
 
 	/** Returns the number of living critters in the world. */
-<<<<<<< HEAD
-	public int getNumCritters() {
-		return numCritters;
-=======
 	public int getNumCritters()
 	{
 		try {
@@ -172,14 +137,9 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 	}
 
 	/** Returns the current time step of the world. */
-<<<<<<< HEAD
-	public int getCurrentTimeStep() {
-		return time;
-=======
 	public int getCurrentTimeStep()
 	{
 		try {
@@ -188,14 +148,9 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 	}
 
 	/** Returns the current version number. */
-<<<<<<< HEAD
-	public int getCurrentVersionNumber() {
-		return versionNumber;
-=======
 	public int getCurrentVersionNumber()
 	{
 		try {
@@ -204,15 +159,9 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 	}
 
 	/** Retrieves the running list of dead critters. */
-<<<<<<< HEAD
-	public SimpleCritter[] getCumulativeDeadCritters() {
-		SimpleCritter[] result = new SimpleCritter[cumulativeDeadCritters.size()];
-		return cumulativeDeadCritters.toArray(result);
-=======
 	public int[] getCumulativeDeadCritters()
 	{
 		try {
@@ -225,7 +174,6 @@ public class ServerWorldModel {
 		} finally {
 			rwl.writeLock().unlock();
 		}
-		
 	}
 	
 	/** Returns an array of all living critters. */
@@ -252,7 +200,6 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 	}
 
 	/**
@@ -293,13 +240,8 @@ public class ServerWorldModel {
 			world.advanceOneTimeStep();
 			time++;
 			versionNumber++;
-<<<<<<< HEAD
-			// System.out.println(world.getAndResetUpdatedHexes());
-			// diffLog.add(world.getAndResetUpdatedHexes());
-=======
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 			rwl.writeLock().unlock();
 
 			rwl.readLock().lock();
@@ -356,6 +298,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 		
@@ -363,26 +306,6 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in critters of a certain species into the world at random locations.
-<<<<<<< HEAD
-	 * 
-	 * @param sc
-	 *            The critter species
-	 * @param n
-	 *            The number to add
-	 * @return The IDs of the added critters
-	 */
-	public int[] loadCritterRandomLocations(SimpleCritter sc, int n) {
-		int[] result = new int[n];
-		boolean[] b = world.loadCritters(sc, n);
-		for (int i = 0; i < b.length; i++) {
-			if (b[i]) {
-				result[i] = critterIDcount;
-				critterIDMap.put(critterIDcount, sc);
-				critterIDcount++;
-			} else {
-				result[i] = -1;
-			}
-=======
 	 * @param sc The critter species
 	 * @param n The number to add
 	 * @param sessionID
@@ -393,33 +316,13 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 		}
 	}
 
 	/**
 	 * Loads in a critter of a certain species into the world.
-<<<<<<< HEAD
-	 * 
-	 * @param sc
-	 *            The critter species
-	 * @param c
-	 *            The column index at which to add the critter
-	 * @param r
-	 *            The row index at which to add the critter
-	 * @return The ID of the added critter
-	 */
-	public int loadCritterAtLocation(SimpleCritter sc, int c, int r) {
-		boolean added = world.loadOneCritter(sc, c, r);
-		int result;
-		if (added) {
-			result = critterIDcount;
-			critterIDMap.put(critterIDcount, sc);
-			critterIDcount++;
-		} else {
-			result = -1;
-=======
 	 * @param sc The critter species
 	 * @param c The column index at which to add the critter
 	 * @param r The row index at which to add the critter
@@ -431,6 +334,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
@@ -447,7 +351,6 @@ public class ServerWorldModel {
 			world.addNonCritterObject(wo, c, r);
 		} finally {
 			rwl.writeLock().unlock();
->>>>>>> 14706a3559a3a46ce79ac742f27e18e7e7241779
 		}
 	}
 }

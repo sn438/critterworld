@@ -108,15 +108,14 @@ public class Server {
 			System.out.println(json);
 			CritterJSON loadCritterInfo = gson.fromJson(json,CritterJSON.class);
 			ParserImpl parser = new ParserImpl();
-			
 			InputStream stream = new ByteArrayInputStream(loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 			Program program = parser.parse(reader);
 			int[] memory = loadCritterInfo.getMem();
  			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
- 			model.loadCritterRandomLocations(critter, loadCritterInfo.getNum());
+ 			model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
  			System.out.println(model.getNumCritters());
-			if (sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write"))) {
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
 				return "User does not have admin access.";
 			} else {
