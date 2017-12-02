@@ -26,6 +26,9 @@ public interface SimpleWorld
 	/** Returns the amount of time passed since this world's genesis. */
 	int getTimePassed();
 	
+	/** Returns the name of this world. */
+	String getWorldName();
+	
 	/**
 	 * Loads critters of following a set pattern into this world.
 	 * @param filename the file containing the critter information
@@ -135,6 +138,8 @@ public interface SimpleWorld
 	int getCritterID(SimpleCritter sc);
 	
 	SimpleCritter getCritterFromID(int id);
+	
+	int getCritterCreatorID(SimpleCritter sc);
 	
 	/**
 	 * Retrieves the contents of a hex.

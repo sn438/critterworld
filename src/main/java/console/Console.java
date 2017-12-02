@@ -150,7 +150,7 @@ public class Console
 		if(sc == null)
 			return;
 		
-		critterInfo(sc.getName(), sc.getMemoryCopy(), sc.getProgram().toString(), sc.getLastRule());
+		//critterInfo(sc.getName(), sc.getMemoryCopy(), sc.getProgram().toString(), sc.getLastRuleIndex());
 	}
 
 	/* =========================== */

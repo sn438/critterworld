@@ -57,10 +57,16 @@ public interface SimpleCritter extends WorldObject
 	public String getName();
 	
 	/** Returns a string representation of the last rule executed by this critter. */
-	public String getLastRule();
+	public String getLastRuleString();
+	
+	/** Returns the index of the last rule executed by this critter, or -1 if none have been executed yet. */
+	public int getLastRuleIndex();
 	
 	/** Sets the last rule executed. */
-	public void setLastRule(String s);
+	public void setLastRuleString(String s);
+	
+	/** Sets the index of the last rule executed by this critter. */
+	public void setLastRuleIndex(int i);
 	
 	/**
 	 * Turns this critter in the direction specified.
