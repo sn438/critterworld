@@ -1,6 +1,7 @@
 package simulation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -99,7 +100,7 @@ public interface SimpleWorld
 	void advanceOneTimeStep();
 	
 	/** Retrieves the list of updated hexes from the most recent time steps, and then empties the list. */ 
-	LinkedList<Hex> getAndResetUpdatedHexes();
+	ArrayList<Hex> getAndResetUpdatedHexes();
 	
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	boolean isValidHex(int c, int r);

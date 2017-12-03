@@ -1,19 +1,14 @@
 package distributed;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.HashMap;
 
-import gui.WorldModel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import simulation.Food;
 import simulation.Hex;
-import simulation.Rock;
-import simulation.SimpleCritter;
-import simulation.WorldObject;
 
 /** A class that draws the hex grid for the client user interface. */
 public class ClientWorldMap {
@@ -60,6 +55,8 @@ public class ClientWorldMap {
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
 
+	private HashMap<JSONWorldObject, Hex> objects;
+	
 	/**
 	 *
 	 * @param can
@@ -74,6 +71,7 @@ public class ClientWorldMap {
 
 		columns = initialCols;
 		rows = initialRows;
+		objects = new HashMap<JSONWorldObject, Hex>();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -101,17 +99,28 @@ public class ClientWorldMap {
 
 	/** Redraws the world grid. */
 	public void draw(WorldStateJSON wsj) {
+		cachedState = wsj;
+		columns = wsj.getCols();
+		rows = wsj.getRows();
+
+		// draws world objects
+		gc.setLineWidth(3);
+		drawObjects(cachedState.getWorldObjects());
+
+		if (selectedHex != null) {
+			double[] highlightCoordinates = hexToCartesian(selectedHex);
+			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
+		}
+	}
+	
+	private void redraw() {
 		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 		gc.clearRect(0, 0, width, height);
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
-
-		cachedState = wsj;
-		columns = wsj.getCols();
-		rows = wsj.getRows();
-
+		
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -124,7 +133,6 @@ public class ClientWorldMap {
 				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
 				row_drawing_marker--;
 			}
-
 			for (int j = 0; j < row_drawing_marker; j++) {
 				drawHex(hexMarkerX, hexMarkerY);
 				hexMarkerY += (Math.sqrt(3) * (sideLength));
@@ -142,10 +150,10 @@ public class ClientWorldMap {
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3);
-
+		
 		// draws world objects
 		gc.setLineWidth(3);
-		//drawObjects();
+		drawObjects(cachedState.getWorldObjects());
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
@@ -352,7 +360,7 @@ public class ClientWorldMap {
 
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
-		draw(cachedState);
+		redraw();
 
 	}
 
@@ -397,7 +405,7 @@ public class ClientWorldMap {
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
 		gc.clearRect(0, 0, width, height);
-		draw(cachedState);
+		redraw();
 	}
 
 	public boolean select(double xCoordinate, double yCoordinate) {

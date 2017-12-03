@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -63,7 +64,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
@@ -154,7 +155,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
@@ -247,7 +248,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;

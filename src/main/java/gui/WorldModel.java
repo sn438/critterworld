@@ -39,7 +39,7 @@ public class WorldModel {
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	/** A log of all the changes that have occurred to the world since version 0 (which is a blank world). */
-	private ArrayList<LinkedList<Hex>> diffLog;
+	private ArrayList<ArrayList<Hex>> diffLog;
 
 	/** Creates a new blank world model. */
 	public WorldModel() {
@@ -49,7 +49,7 @@ public class WorldModel {
 			time = 0;
 			versionNumber = 0;
 			IDAssignment = 0;
-			diffLog = new ArrayList<LinkedList<Hex>>();
+			diffLog = new ArrayList<ArrayList<Hex>>();
 			critterIDMap = new HashMap<Integer, SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
@@ -179,7 +179,7 @@ public class WorldModel {
 		return cumulativeDeadCritters.toArray(result);
 	}
 	
-	public LinkedList<Hex> getUpdatedHexes()
+	public ArrayList<Hex> getUpdatedHexes()
 	{
 		return world.getAndResetUpdatedHexes();
 	}
