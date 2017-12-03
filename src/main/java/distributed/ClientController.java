@@ -1,4 +1,4 @@
-package gui;
+package distributed;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,8 +19,10 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
-import distributed.ClientRequestHandler;
-import distributed.SessionID;
+import gui.GUI;
+import gui.WorldMap;
+import gui.WorldModel;
+import gui.Controller.LoginInfo;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -31,7 +33,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -45,6 +46,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -62,7 +64,7 @@ import simulation.SimpleCritter;
  * This class handles user inputs and sends information to the world model and
  * world view to update their states accordingly.
  */
-public class Controller {
+public class ClientController {
 	@FXML
 	private MenuItem help;
 	@FXML
@@ -148,8 +150,7 @@ public class Controller {
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
 	private String urlInitial;
-	private SessionID sessionId;
-	private boolean localMode;
+	private SessionID sessionID;
 	private ClientRequestHandler handler;
 
 	@FXML
@@ -273,8 +274,8 @@ public class Controller {
 	}
 
 	private void newWorldServer() {
-		if (handler.createNewWorld(sessionId.getSessionId())) {
-			map = new WorldMap(c, handler, sessionId.getSessionId());
+		if (handler.createNewWorld(sessionID.getSessionId())) {
+			map = new WorldMap(c, handler, sessionID.getSessionId());
 			map.draw();
 		} else
 			return;
@@ -302,8 +303,8 @@ public class Controller {
 
 	private void loadServerWorld(File worldFile) {
 		try {
-			handler.loadWorld(worldFile, sessionId.getSessionId());
-			map = new WorldMap(c, handler, sessionId.getSessionId());
+			handler.loadWorld(worldFile, sessionID.getSessionId());
+			map = new WorldMap(c, handler, sessionID.getSessionId());
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
@@ -372,7 +373,7 @@ public class Controller {
 				if (localMode)
 					model.loadRandomCritters(critterFile, n);
 				else
-					handler.loadRandomCritters(critterFile, n, sessionId.getSessionId());
+					handler.loadRandomCritters(critterFile, n, sessionID.getSessionId());
 
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
@@ -401,7 +402,7 @@ public class Controller {
 						model.loadCritterAtLocation(critterFile, c, r);
 					else
 						try {
-							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionId());
+							handler.loadCritterAtLocation(critterFile, c, r, sessionID.getSessionId());
 						} catch (FileNotFoundException e) {
 							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 							a.setTitle("Invalid File");
@@ -502,7 +503,6 @@ public class Controller {
 		isCurrentlyDragging = false;
 	}
 
-	/** Updates the contents of the critter information box. */
 	private void updateInfoBox() {
 		if (map.getSelectedHex() != null) {
 			int[] hexCoordinatesSelected = map.getSelectedHex();
@@ -695,8 +695,8 @@ public class Controller {
 				sessionIdString += holder;
 				holder = r.readLine();
 			}
-			sessionId = gson.fromJson(sessionIdString, SessionID.class);
-			System.out.println(sessionId.getSessionId());
+			sessionID = gson.fromJson(sessionIdString, SessionID.class);
+			System.out.println(sessionID.getSessionId());
 			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");

@@ -1,10 +1,10 @@
 package distributed;
 
-public class SessionId {
+public class SessionID {
 
 	int session_id;
 
-	public SessionId(int sessionId) {
+	public SessionID(int sessionId) {
 		this.session_id = sessionId;
 	}
 	

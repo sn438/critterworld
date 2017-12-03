@@ -1039,6 +1039,15 @@ public class World extends AbstractWorld {
 	}
 	
 	@Override
+	public int[] getCritterLocation(SimpleCritter sc) {
+		Hex location = critterMap.get(sc);
+		if(location == null)
+			return null;
+		int c = location.getColumnIndex();
+		int r = location.getRowIndex();
+		return new int[] {c, r};
+	}
+	@Override
 	public int getCritterID(SimpleCritter sc) {
 		Integer ID = critterToIDMap.get(sc);
 		int result = (ID == null) ? 0 : ID;

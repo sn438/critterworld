@@ -137,9 +137,26 @@ public interface SimpleWorld
 	 */
 	int getCritterID(SimpleCritter sc);
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	SimpleCritter getCritterFromID(int id);
 	
+	/**
+	 * 
+	 * @param sc
+	 * @return
+	 */
 	int getCritterCreatorID(SimpleCritter sc);
+	
+	/**
+	 * 
+	 * @param sc
+	 * @return
+	 */
+	int[] getCritterLocation(SimpleCritter sc);
 	
 	/**
 	 * Retrieves the contents of a hex.

@@ -305,6 +305,20 @@ public class ServerWorldModel {
 	}
 
 	/**
+	 * 
+	 * @param sc
+	 * @return
+	 */
+	public int[] getCritterLocation(SimpleCritter sc) {
+		try {
+			rwl.readLock().lock();
+			return world.getCritterLocation(sc);
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+	
+	/**
 	 * Removes a critter from the world, if it is there.
 	 * @param id The ID of the critter to remove
 	 */
@@ -317,7 +331,6 @@ public class ServerWorldModel {
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
-
 	}
 
 	/**

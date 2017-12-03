@@ -167,11 +167,12 @@ public class Server {
 			}
 		}, gson::toJson);
 		
-		get("/critter", (request, response) -> {
-			response.header("Content-Type", "application/json");
-			String queryString = request.queryString();
-			int indexOfCritterID; 
-		});
+		// handles a client request to retrieve a single critter
+//		get("/critter", (request, response) -> {
+//			response.header("Content-Type", "application/json");
+//			String queryString = request.queryString();
+//			int indexOfCritterID; 
+//		});
 		
 		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
