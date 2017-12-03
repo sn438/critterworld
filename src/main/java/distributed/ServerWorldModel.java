@@ -44,7 +44,6 @@ public class ServerWorldModel {
 			time = 0;
 			versionNumber = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
-			critterIDMap = new HashMap<Integer, SimpleCritter>();
 			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
@@ -317,6 +316,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
@@ -334,6 +334,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 	}
