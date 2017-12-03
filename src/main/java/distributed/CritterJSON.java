@@ -15,7 +15,7 @@ public class CritterJSON {
 		this.positions = positions;
 	}
 
-	public CritterJSON(String species_id, String program, int[] mem, Integer num) {
+	public CritterJSON(String species_id, String program, int[] mem, int num) {
 		this.species_id = species_id;
 		this.program = program;
 		this.mem = mem;

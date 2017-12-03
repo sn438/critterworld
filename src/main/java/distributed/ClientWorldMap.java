@@ -59,7 +59,6 @@ public class ClientWorldMap {
 	private double origin_y;
 	/** Holds the last drawn time step. */
 	private int currentTimeStep;
-	private ClientRequestHandler handler;
 
 	/**
 	 * 
@@ -67,15 +66,14 @@ public class ClientWorldMap {
 	 * @param handler
 	 * @param sessionId
 	 */
-	public ClientWorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
+	public ClientWorldMap(Canvas can, int initialCols, int initialRows) {
 		gc = can.getGraphicsContext2D();
 		canvas = can;
-		this.handler = handler;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 
-		columns = handler.getColumns(sessionId);
-		rows = handler.getRows(sessionId);
+		columns = initialCols;
+		rows = initialRows;
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -102,7 +100,8 @@ public class ClientWorldMap {
 	}
 
 	/** Redraws the world grid. */
-	public void draw() {
+	public void draw(WorldStateJSON wsj) {
+		
 		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
@@ -110,6 +109,9 @@ public class ClientWorldMap {
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
 
+		columns = wsj.getCols();
+		rows = wsj.getRows();
+		
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -152,8 +154,13 @@ public class ClientWorldMap {
 	}
 
 	/** Draws the world objects onto the grid. */
-	private void drawObjects() {
-
+	private void drawObjects(JSONWorldObject[] objects) {
+		for(JSONWorldObject obj : objects) {
+			if (obj.getType().equals("critter"))
+				drawCritter(obj.getMemory()[3], obj.getOrientation(), obj.getSpeciesName(), obj.getCol(), obj.getRow());
+			else
+				drawWorldObject(obj, obj.getCol(), obj.getRow());
+		}
 	}
 
 	/**
@@ -163,7 +170,7 @@ public class ClientWorldMap {
 	 * @param c
 	 * @param r
 	 */
-	private void drawCritter(SimpleCritter sc, int c, int r) {
+	private void drawCritter(int critterSize, int dir, String species, int c, int r) {
 		if (!isValidHex(c, r))
 			return;
 
@@ -171,19 +178,14 @@ public class ClientWorldMap {
 		int hexCoordinates[] = new int[] { c, r };
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
+		drawHex(cartX, cartY);
 
-		if (sc == null) {
-			return;
-		}
-
-		int critterSize = sc.size();
 		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100;
 
 		double[] xPoints = new double[3];
 		double[] yPoints = new double[3];
 
 		// determine critter orientation
-		int dir = sc.getOrientation();
 		switch (dir) {
 		case 0:
 			xPoints[0] = 0;
@@ -238,15 +240,12 @@ public class ClientWorldMap {
 		}
 
 		// translate points to current hex
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++)
 			xPoints[i] += cartX;
-		}
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++)
 			yPoints[i] += cartY;
-		}
 
 		// set critter color
-		String species = sc.getName();
 		int randomizer = (int) (Math.sqrt(Math.abs(species.hashCode())) * 100);
 		int blendType = randomizer % 3;
 		double blendLevel = (randomizer % 100) / 100.0;
@@ -288,27 +287,26 @@ public class ClientWorldMap {
 
 	/**
 	 * Draws one non-critter object onto the world grid.
-	 * 
 	 * @param wo
 	 * @param c
 	 * @param r
 	 */
-	private void drawWorldObject(WorldObject wo, int c, int r) {
+	private void drawWorldObject(JSONWorldObject wo, int c, int r) {
 		if (!isValidHex(c, r))
 			return;
 
 		int hexCoordinates[] = new int[] { c, r };
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
+		drawHex(cartX, cartY);
 
-		if (wo instanceof Rock) {
+		if (wo.getType().equals("rock")) {
 			double size = 0.9 * sideLength;
 			gc.setStroke(Color.BROWN);// GOLDENROD
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
-
-		else if (wo instanceof Food) {
-			int calories = ((Food) wo).getCalories();
+		else if (wo.getType().equals("food")) {
+			int calories = wo.getCalories();
 			double size = 0.9 * sideLength;
 			gc.setStroke(Color.WHITE);// RED
 			gc.strokeOval(cartX - size / 2, cartY - size / 2, size, size);
@@ -358,7 +356,6 @@ public class ClientWorldMap {
 
 	/**
 	 * highlightHex highlights the hex that is currently selected
-	 * 
 	 * @param x x-coordinate of the spot that the user clicks
 	 * @param y y-coordinate of the spot that the user clicks
 	 */
@@ -423,7 +420,7 @@ public class ClientWorldMap {
 	 * 
 	 * @param xCoordinate
 	 * @param yCoordinate
-	 * @return An {@code int} array containing the (r, c) coordinates of the closest
+	 * @return An {@code int} array containing the (c, r) coordinates of the closest
 	 *         hex.
 	 */
 	public int[] closestHex(double xCoordinate, double yCoordinate) {
@@ -461,8 +458,7 @@ public class ClientWorldMap {
 	}
 
 	/**
-	 * A method that converts a hex coordinate pair converts it to cartesian coordinates.
-	 * 
+	 * A method that converts a hex coordinate pair to cartesian coordinates.
 	 * @param hexCoordinates
 	 * @return 
 	 */

@@ -53,32 +53,6 @@ public class ServerWorldModel {
 	}
 
 	/**
-	 * Creates a new random world.
-	 *
-	 * @throws UnsupportedOperationException
-	 *             if the constants.txt file could not be read
-	 */
-	@Deprecated
-	public void createNewWorld() throws UnsupportedOperationException {
-		rwl.writeLock().lock();
-		try {
-			// if a world already exists, adds all its dead critters to the cumulative dead
-			// critter list
-			if (world != null) {
-				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
-			}
-			world = new World();
-			//System.out.println(world.getAndResetUpdatedHexes());
-			diffLog.add(world.getAndResetUpdatedHexes());
-			time = 0;
-			versionNumber++;
-			numCritters = world.numRemainingCritters();
-		} finally {
-			rwl.writeLock().unlock();
-		}
-	}
-
-	/**
 	 * Loads in a world based on a description.
 	 *
 	 * @param desc
@@ -290,7 +264,7 @@ public class ServerWorldModel {
 		try {
 			rwl.readLock().lock();
 			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-			if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
 				return null;
 			for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
 				for (Hex h : diffLog.get(i)) {
@@ -340,6 +314,8 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
+			versionNumber++;
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 
@@ -357,6 +333,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
@@ -375,6 +352,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
@@ -391,6 +369,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.addNonCritterObject(wo, c, r);
 		} finally {
+			versionNumber++;
 			rwl.writeLock().unlock();
 		}
 	}
