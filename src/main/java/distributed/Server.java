@@ -11,6 +11,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
@@ -147,7 +150,11 @@ public class Server {
 			} else if (updateSince < 0 || updateSince > model.getCurrentVersionNumber()) {
 				response.status(406);
 				return "That version number is invalid.";
-			} else {
+			} else if (!model.isReady()) {
+				response.status(403);
+				return "A world must be loaded before you can view the world state.";
+			}
+			else {
 				int time = model.getCurrentTimeStep();
 				int version = model.getCurrentVersionNumber();
 				float rate = model.getRate();
@@ -156,26 +163,25 @@ public class Server {
 				int columns = model.getColumns();
 				int rows = model.getRows();
 				int[] deadList = model.getCumulativeDeadCritters();
-				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
-				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
-				// System.out.println("State length: " + state.length);
-				int counter = 0;
-				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
-					int c = entry.getKey().getColumnIndex();
-					int r = entry.getKey().getRowIndex();
-					WorldObject wo = entry.getValue();
-					if (wo instanceof SimpleCritter) {
-						SimpleCritter sc = (SimpleCritter) wo;
-						int critterID = model.getID(sc);
-						boolean permissions = model.hasCritterPermissions(sc, sessionID);
-						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
-					} else {
-						state[counter] = new JSONWorldObject(wo, c, r);
-					}
-					counter++;
-				}
-				// for (JSONWorldObject obj : state)
-				// System.out.println(obj);
+				System.out.println(deadList);
+				//HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
+				JSONWorldObject state[] = model.updateSince(updateSince, sessionID);
+				//System.out.println("State length: " + state.length);
+//				int counter = 0;
+//				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
+//					int c = entry.getKey().getColumnIndex();
+//					int r = entry.getKey().getRowIndex();
+//					WorldObject wo = entry.getValue();
+//					if (wo instanceof SimpleCritter) {
+//						SimpleCritter sc = (SimpleCritter) wo;
+//						int critterID = model.getID(sc);
+//						boolean permissions = model.hasCritterPermissions(sc, sessionID);
+//						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
+//					} else {
+//						state[counter] = new JSONWorldObject(wo, c, r);
+//					}
+//					counter++;
+//				}
 				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
 						state);
 			}
@@ -186,7 +192,6 @@ public class Server {
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 11;
 			int sessionID = Integer.parseInt(queryString.substring(indexOfSessionId));
-			String json = request.body();
 			if (sessionIdMap.get(sessionID) == null) {
 				response.status(401);
 				return "User does not have permission to view the world.";
@@ -206,7 +211,6 @@ public class Server {
 				}
 				return crittersJSON;
 			}
-
 		}, gson::toJson);
 
 		get("/critter", (request, response) -> {
@@ -304,7 +308,7 @@ public class Server {
 			CountJSON stepInfo = gson.fromJson(json, CountJSON.class);
 			if (stepInfo.getCount() < 0) {
 				response.status(406);
-				return "World cannot be stepped a negative amount of times."; 
+				return "World cannot be stepped a negative amount of times.";
 			}
 			int count = 1;
 			if (stepInfo.getCount() != null) {

@@ -1,5 +1,6 @@
 package simulation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -15,7 +16,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	/** Stores all critters that have died or have been removed. */
 	protected LinkedList<SimpleCritter> deadCritters;
 	/** A list of all the hexes that have changed during one critter turn. Is reset at the end of each turn. */
-	protected LinkedList<Hex> updatedHexes;
+	protected ArrayList<Hex> updatedHexes;
 	/** The number of time steps passed since this world's genesis. */
 	protected int timePassed;
 	
@@ -81,7 +82,7 @@ public abstract class AbstractWorld implements SimpleWorld
 	}
 	
 	@Override
-	public LinkedList<Hex> getAndResetUpdatedHexes()
+	public ArrayList<Hex> getAndResetUpdatedHexes()
 	{
 		try
 		{
@@ -89,7 +90,7 @@ public abstract class AbstractWorld implements SimpleWorld
 		}
 		finally
 		{
-			updatedHexes = new LinkedList<Hex>();
+			updatedHexes = new ArrayList<Hex>();
 		}
 	}
 

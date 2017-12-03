@@ -1,6 +1,5 @@
 package distributed;
 
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -26,6 +25,8 @@ public class ServerWorldModel {
 	private int time;
 	/** The current world version number. */
 	private int versionNumber;
+	/** The rate at which the world is run. */
+	private float simulationRate;
 	/** A running list of all critters that have died across all worlds simulated in this session. */
 	private LinkedList<Integer> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
@@ -34,9 +35,7 @@ public class ServerWorldModel {
 	 * A log of all the changes that have occurred to the world since version 0
 	 * (which is a blank world).
 	 */
-	private ArrayList<LinkedList<Hex>> diffLog;
-	/** The rate at which the world is run. */
-	private float rate;
+	private ArrayList<ArrayList<Hex>> diffLog;
 
 	/** Creates a new blank world model. */
 	public ServerWorldModel() {
@@ -45,8 +44,8 @@ public class ServerWorldModel {
 			numCritters = 0;
 			time = 0;
 			versionNumber = 0;
-			diffLog = new ArrayList<LinkedList<Hex>>();
-			cumulativeDeadCritters = new LinkedList<Integer>();
+			diffLog = new ArrayList<ArrayList<Hex>>();
+			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -76,10 +75,21 @@ public class ServerWorldModel {
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
+			simulationRate = 10;
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
 		} finally {
 			rwl.writeLock().unlock();
+		}
+	}
+
+	/** */
+	public boolean isReady() {
+		try {
+			rwl.readLock().lock();
+			return world != null;
+		} finally {
+			rwl.readLock().unlock();
 		}
 	}
 
@@ -113,6 +123,26 @@ public class ServerWorldModel {
 		}
 	}
 
+	/** Returns the simulation rate of the world. */
+	public float getRate() {
+		rwl.readLock().lock();
+		try {
+			return simulationRate;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+
+	/** Returns the simulation rate of the world. */
+	public void getRate(float f) {
+		rwl.writeLock().lock();
+		try {
+			simulationRate = f;
+		} finally {
+			rwl.writeLock().unlock();
+		}
+	}
+
 	/** Returns the number of living critters in the world. */
 	public int getNumCritters() {
 		try {
@@ -128,16 +158,6 @@ public class ServerWorldModel {
 		try {
 			rwl.readLock().lock();
 			return time;
-		} finally {
-			rwl.readLock().unlock();
-		}
-	}
-
-	/** Returns the current simulation rate. */
-	public float getRate() {
-		try {
-			rwl.readLock().lock();
-			return rate;
 		} finally {
 			rwl.readLock().unlock();
 		}
@@ -170,7 +190,6 @@ public class ServerWorldModel {
 	/** Returns an array of all living critters. */
 	public SimpleCritter[] listCritters() {
 		try {
-			//TODO implement
 			rwl.readLock().lock();
 			SimpleCritter[] result = new SimpleCritter[world.getCritterList().size()];
 			return world.getCritterList().toArray(result);
@@ -262,21 +281,38 @@ public class ServerWorldModel {
 	 * @param initialVersionNumber
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
-	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber) {
+	public JSONWorldObject[] updateSince(int initialVersionNumber, int sessionID) {
 		try {
 			rwl.readLock().lock();
-			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
 			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
 				return null;
+			int size = 0;
+			for(int i = initialVersionNumber; i < diffLog.size(); i++) {
+				size += diffLog.get(i).size();
+			}
+			JSONWorldObject[] objects = new JSONWorldObject[size];
+			int index = 0;
 			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
-				for (Hex h : diffLog.get(i)) {
-					int c = h.getColumnIndex();
-					int r = h.getRowIndex();
-					if(isValidHex(c, r))
-						result.put(h, world.getHexContent(c, r));
+				for (int j = 0; j < diffLog.get(i).size(); j++) {
+					int c = diffLog.get(i).get(j).getColumnIndex();
+					int r = diffLog.get(i).get(j).getRowIndex();
+					if(isValidHex(c, r)) {
+						WorldObject wo = world.getHexContent(c, r);
+						if(wo instanceof SimpleCritter) {
+							boolean permission = false;
+							Integer creatorID = world.getCritterCreatorID((SimpleCritter) wo);
+							Integer critterID = world.getCritterID((SimpleCritter) wo);
+							if(creatorID != null && creatorID == sessionID)
+								permission = true;
+							objects[index] = new JSONWorldObject((SimpleCritter) wo, c, r, critterID, permission);
+						} else {
+							objects[index] = new JSONWorldObject(wo, c, r);
+						}
+					}
+					index++;
 				}
 			}
-			return result;
+			return objects;
 		} finally {
 			rwl.readLock().unlock();
 		}
@@ -307,7 +343,7 @@ public class ServerWorldModel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param sc
 	 * @return
 	 */
@@ -319,7 +355,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Removes a critter from the world, if it is there.
 	 * @param id The ID of the critter to remove

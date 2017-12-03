@@ -331,6 +331,13 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to view the world.");
 				return null;
+			} else if (connection.getResponseCode() == 403) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Invalid Request");
+				alert.setContentText("A world must be loaded before you can view the world state.");
+				return null;
+			} else if (connection.getResponseCode() == 406) {
+				return null;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			WorldStateJSON state = gson.fromJson(r, WorldStateJSON.class);

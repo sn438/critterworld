@@ -67,7 +67,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
@@ -158,7 +158,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
@@ -251,7 +251,7 @@ public class World extends AbstractWorld {
 		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
 		critterToIDMap = new HashMap<SimpleCritter, Integer>();
 		critterCreatorMap = new HashMap<Integer, Integer>();
-		super.updatedHexes = new LinkedList<Hex>();
+		super.updatedHexes = new ArrayList<Hex>();
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;

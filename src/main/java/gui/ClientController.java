@@ -1,4 +1,4 @@
-package distributed;
+package gui;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,9 +19,10 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import ast.Program;
-import gui.GUI;
-import gui.WorldMap;
-import gui.WorldModel;
+import distributed.ClientRequestHandler;
+import distributed.ClientWorldMap;
+import distributed.SessionID;
+import distributed.WorldStateJSON;
 import gui.Controller.LoginInfo;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -148,37 +149,130 @@ public class ClientController {
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
 	private String urlInitial;
-	private SessionID sessionID;
+	private int sessionID;
 	private ClientRequestHandler handler;
 	private int currentVersion;
 
+	/** Logs into the server. */
+	private void login() {
+		Gson gson = new Gson();
+		Dialog<LoginInfo> dialog = new Dialog<>();
+		dialog.setTitle("Login Info");
+		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
+		DialogPane dialogPane = dialog.getDialogPane();
+		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		TextField levelTextField = new TextField("Level");
+		TextField passwordTextField = new TextField("Password");
+		// TextField urlTextField = new TextField("http://localhost:8080");
+		TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
+		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
+		Platform.runLater(levelTextField::requestFocus);
+		dialog.setResultConverter((ButtonType button) -> {
+			if (button == ButtonType.OK) {
+				return new LoginInfo(levelTextField.getText(), passwordTextField.getText(), urlTextField.getText());
+			}
+			return null;
+		});
+		Optional<LoginInfo> optionalResult = dialog.showAndWait();
+		optionalResult.ifPresent((LoginInfo results) -> {
+			loginInfo = new LoginInfo(results.level, results.password);
+			this.urlInitial = results.url;
+		});
+		URL url = null;
+		try {
+			url = new URL(this.urlInitial + "/login");
+			// url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
+			System.out.println(gson.toJson(loginInfo, LoginInfo.class));
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			System.out.println(url.toString());
+			connection.setDoOutput(true); // send a POST message
+			connection.setRequestMethod("POST");
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(loginInfo, LoginInfo.class));
+			w.flush();
+			if (connection.getResponseCode() == 401) {
+
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Login Error");
+				alert.setHeaderText("Credentials Not Recognized");
+				alert.setContentText("The login credentials you entered were invalid. Click "
+						+ "OK to continue in local mode or Cancel to exit the program.");
+				Optional<ButtonType> result = alert.showAndWait();
+
+				if (result.get() == ButtonType.OK) {
+					System.exit(0);
+				} else {
+					System.exit(0);
+				}
+			}
+			
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String sessionIdString = "";
+			String holder = r.readLine();
+			while(holder != null) {
+				sessionIdString += holder;
+				holder = r.readLine();
+			}
+			SessionID sessionId = gson.fromJson(sessionIdString, SessionID.class);
+			sessionID = sessionId.getSessionID();
+			System.out.println(sessionId.getSessionID());
+			
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Login Error");
+			alert.setHeaderText("Credentials Not Recognized");
+			alert.setContentText("The login credentials you entered were invalid. Click "
+					+ "OK to continue in local mode or Cancel to exit the program.");
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.get() == ButtonType.OK) {
+				System.exit(0);
+			} else {
+				System.exit(0);
+			}
+			return;
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Login Error");
+			alert.setHeaderText("Credentials Not Recognized");
+			alert.setContentText("The login credentials you entered were invalid. Click "
+					+ "OK to continue in local mode or Cancel to exit the program.");
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.get() == ButtonType.OK) {
+				System.exit(0);
+			} else {
+				System.exit(0);
+			}
+			return;
+		}
+
+		handler = new ClientRequestHandler(this.urlInitial);
+	}
+		
 	@FXML
 	public void initialize() {
 		login();
+		
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
-
+		
 		setupCanvas();
 		setGUIReady(false);
-	}
-
-	private void doReset() {
-		if (executor != null)
-			executor.shutdownNow();
-		if (timeline != null)
-			timeline.stop();
-
-		simulationRate = 30;
-
-		loadCritterFile.setDisable(true);
-		numCritters.setDisable(true);
-		pause.setDisable(true);
-		setGUIReady(false);
-		resetInfo();
-
-		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
-
+		
+		WorldStateJSON wsj = handler.updateSince(sessionID, 0);
+		if(wsj != null) {
+			map = new ClientWorldMap(c, wsj.getCols(), wsj.getRows());
+			currentVersion = wsj.getCurrentVersion();
+			setGUIReady(true);
+			map.draw(wsj);
+			crittersAlive.setText("Critters Alive: " + wsj.getPopulation());
+			stepsTaken.setText("Time: " + wsj.getCurrentTime());
+		}
+		
 		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT) {
@@ -195,12 +289,12 @@ public class ClientController {
 			}
 		});
 
-		// adds a listener to the slider to adjust world speed as the slider is changed
-		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-				simulationRate = new_val.longValue();
-			}
-		});
+//		// adds a listener to the slider to adjust world speed as the slider is changed
+//		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
+//			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+//				simulationRate = new_val.longValue();
+//			}
+//		});
 	}
 
 	private void setupCanvas() {
@@ -212,11 +306,11 @@ public class ClientController {
 		// listeners that dynamically redraw the canvas in response to window resizing
 		c.heightProperty().addListener(update -> {
 			if (map != null)
-				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
+				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 		c.widthProperty().addListener(update -> {
 			if (map != null)
-				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
+				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 	}
 
@@ -250,37 +344,26 @@ public class ClientController {
 		chkSpecify.setSelected(false);
 	}
 
+	private void updateView() {
+		WorldStateJSON update = handler.updateSince(sessionID, currentVersion);
+		currentVersion = update.getCurrentVersion();
+		if(map == null)
+			map = new ClientWorldMap(c, update.getCols(), update.getRows());
+		map.draw(update);
+		crittersAlive.setText("Critters Alive: " + update.getPopulation());
+		stepsTaken.setText("Time: " + update.getCurrentTime());
+	}
+	
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
-		doReset();
-		boolean localMode = false;
-		if (localMode) {
-			newWorld();
-		} else {
-			newWorldServer();
-		}
-
-	}
-
-	private void newWorld() {
-		model.createNewWorld();
-		map = new WorldMap(c, model);
-		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
-
-		map.draw();
+		newWorldServer();
 	}
 
 	private void newWorldServer() {
-		if (handler.createNewWorld(sessionID.getSessionId())) {
-			map = new WorldMap(c, handler, sessionID.getSessionId());
-			map.draw();
-		} else
-			return;
-		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		if (handler.createNewWorld(sessionID)) {
+			setGUIReady(true);
+			updateView();
+		}
 	}
 
 	@FXML
@@ -293,19 +376,15 @@ public class ClientController {
 		if (worldFile == null) {
 			return;
 		}
-		doReset();
-		boolean localMode = false;
-		if (localMode)
-			loadWorld(worldFile);
-		else
-			loadServerWorld(worldFile);
+
+		loadServerWorld(worldFile);
 	}
 
 	private void loadServerWorld(File worldFile) {
 		try {
-			handler.loadWorld(worldFile, sessionID.getSessionId());
-			map = new WorldMap(c, handler, sessionID.getSessionId());
-			map.draw();
+			handler.loadWorld(worldFile, sessionID);
+			setGUIReady(true);
+			updateView();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
@@ -322,38 +401,6 @@ public class ClientController {
 			a.showAndWait();
 			return;
 		}
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
-	}
-
-	private void loadWorld(File worldFile) {
-		try {
-			model.loadWorld(worldFile);
-			map = new WorldMap(c, model);
-			map.draw();
-		} catch (FileNotFoundException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
-		} catch (IllegalArgumentException e) {
-			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-			a.setTitle("Invalid File");
-			a.showAndWait();
-			return;
-		}
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-		c.setDisable(false);
-		c.setVisible(true);
 	}
 
 	@FXML
@@ -370,12 +417,7 @@ public class ClientController {
 		if (choice == chkRandom) {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
-				boolean localMode = false;
-				if (localMode)
-					model.loadRandomCritters(critterFile, n);
-				else
-					handler.loadRandomCritters(critterFile, n, sessionID.getSessionId());
-
+				handler.loadRandomCritters(critterFile, n, sessionID);
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
 				a.setTitle("Invalid Number");
@@ -399,18 +441,14 @@ public class ClientController {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
-					boolean localMode = false;
-					if (localMode)
-						model.loadCritterAtLocation(critterFile, c, r);
-					else
-						try {
-							handler.loadCritterAtLocation(critterFile, c, r, sessionID.getSessionId());
-						} catch (FileNotFoundException e) {
-							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
-							a.setTitle("Invalid File");
-							a.showAndWait();
-							return;
-						}
+					try {
+						handler.loadCritterAtLocation(critterFile, c, r, sessionID);
+					} catch (FileNotFoundException e) {
+						Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
+						a.setTitle("Invalid File");
+						a.showAndWait();
+						return;
+					}
 				});
 			} catch (Exception e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid location");
@@ -419,49 +457,46 @@ public class ClientController {
 				return;
 			}
 		}
-		map.draw();
+		updateView();
 	}
 
 	@FXML
 	private void handleStep(MouseEvent me) {
-		model.advanceTime();
-		updateInfoBox();
-		map.draw();
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+//		model.advanceTime();
+//		updateInfoBox();
+//		map.draw();
+//		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+//		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 	}
 
 	@FXML
 	private void handleRunPressed(MouseEvent me) {
-		if (simulationRate == 0)
-			return;
-
 		Thread worldUpdateThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				model.advanceTime();
+				updateView();
 				// System.out.println("ASFAS");
 			}
 		});
-		worldUpdateThread.setDaemon(false);
+		worldUpdateThread.setDaemon(true);
 
 		executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
-
-		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent ae) {
-				updateInfoBox();
-				map.draw();
-				updateInfoBox();
-				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
-			}
-		}));
-
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
+//
+//		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent ae) {
+//				updateInfoBox();
+//				map.draw();
+//				updateInfoBox();
+//				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+//				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+//			}
+//		}));
+//
+//		timeline.setCycleCount(Timeline.INDEFINITE);
+//		timeline.play();
 
 		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even
 									// while the current one is still running?
@@ -479,19 +514,7 @@ public class ClientController {
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		executor.shutdownNow();
-
-		newWorld.setDisable(false); // TODO refer to above
-		loadWorld.setDisable(false); // TODO refer to above
-		loadCritterFile.setDisable(false);
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
-
-		timeline.stop();
-		pause.setDisable(true);
+		
 	}
 
 	@FXML
@@ -506,39 +529,39 @@ public class ClientController {
 	}
 
 	private void updateInfoBox() {
-		if (map.getSelectedHex() != null) {
-			int[] hexCoordinatesSelected = map.getSelectedHex();
-			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
-			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
-			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-				memSizeText.setText(String.valueOf(critter.getMemLength()));
-				speciesText.setText(critter.getName());
-				int[] critterMemoryCopy = new int[critter.getMemLength()];
-				critterMemoryCopy = critter.getMemoryCopy();
-				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-				energyText.setText(String.valueOf(critterMemoryCopy[4]));
-				passText.setText(String.valueOf(critterMemoryCopy[5]));
-				tagText.setText(String.valueOf(critterMemoryCopy[6]));
-				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
-			} else {
-				memSizeText.setText("");
-				speciesText.setText("");
-				defenseText.setText("");
-				offenseText.setText("");
-				sizeText.setText("");
-				energyText.setText("");
-				passText.setText("");
-				tagText.setText("");
-				postureText.setText("");
-			}
-		} else {
-			columnText.setText("");
-			rowText.setText("");
-		}
+//		if (map.getSelectedHex() != null) {
+//			int[] hexCoordinatesSelected = map.getSelectedHex();
+//			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+//			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
+//			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+//				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+//				memSizeText.setText(String.valueOf(critter.getMemLength()));
+//				speciesText.setText(critter.getName());
+//				int[] critterMemoryCopy = new int[critter.getMemLength()];
+//				critterMemoryCopy = critter.getMemoryCopy();
+//				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+//				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+//				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+//				energyText.setText(String.valueOf(critterMemoryCopy[4]));
+//				passText.setText(String.valueOf(critterMemoryCopy[5]));
+//				tagText.setText(String.valueOf(critterMemoryCopy[6]));
+//				postureText.setText(String.valueOf(critterMemoryCopy[7]));
+//				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
+//			} else {
+//				memSizeText.setText("");
+//				speciesText.setText("");
+//				defenseText.setText("");
+//				offenseText.setText("");
+//				sizeText.setText("");
+//				energyText.setText("");
+//				passText.setText("");
+//				tagText.setText("");
+//				postureText.setText("");
+//			}
+//		} else {
+//			columnText.setText("");
+//			rowText.setText("");
+//		}
 	}
 
 	@FXML
@@ -620,125 +643,19 @@ public class ClientController {
 
 	@FXML
 	private void handleDisplayProgram(MouseEvent me) {
-		int[] hexCoordinates = new int[2];
-		hexCoordinates = map.getSelectedHex();
-		if (hexCoordinates == null) {
-			return;
-		}
-		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
-			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
-			Program critterProgram = critter.getProgram();
-			String critterProgramString = critterProgram.toString();
-			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
-			alert.setHeaderText("Critter Program");
-			alert.showAndWait();
-		}
-	}
-
-	/** Logs into the server. */
-	private void login() {
-		Gson gson = new Gson();
-		Dialog<LoginInfo> dialog = new Dialog<>();
-		dialog.setTitle("Login Info");
-		dialog.setHeaderText("Please Enter In The Passwords You Have Access To");
-		DialogPane dialogPane = dialog.getDialogPane();
-		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		TextField levelTextField = new TextField("Level");
-		TextField passwordTextField = new TextField("Password");
-		// TextField urlTextField = new TextField("http://localhost:8080");
-		TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
-		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
-		Platform.runLater(levelTextField::requestFocus);
-		dialog.setResultConverter((ButtonType button) -> {
-			if (button == ButtonType.OK) {
-				return new LoginInfo(levelTextField.getText(), passwordTextField.getText(), urlTextField.getText());
-			}
-			return null;
-		});
-		Optional<LoginInfo> optionalResult = dialog.showAndWait();
-		optionalResult.ifPresent((LoginInfo results) -> {
-			loginInfo = new LoginInfo(results.level, results.password);
-			this.urlInitial = results.url;
-		});
-		URL url = null;
-		try {
-			url = new URL(this.urlInitial + "/login");
-			// url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
-			System.out.println(gson.toJson(loginInfo, LoginInfo.class));
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			System.out.println(url.toString());
-			connection.setDoOutput(true); // send a POST message
-			connection.setRequestMethod("POST");
-			PrintWriter w = new PrintWriter(connection.getOutputStream());
-			w.println(gson.toJson(loginInfo, LoginInfo.class));
-			w.flush();
-			if (connection.getResponseCode() == 401) {
-
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Login Error");
-				alert.setHeaderText("Credentials Not Recognized");
-				alert.setContentText("The login credentials you entered were invalid. Click "
-						+ "OK to continue in local mode or Cancel to exit the program.");
-				Optional<ButtonType> result = alert.showAndWait();
-
-				if (result.get() == ButtonType.OK) {
-					boolean localMode = true;
-					model = new WorldModel();
-					return;
-				} else {
-					System.exit(0);
-				}
-			}
-			
-			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String sessionIdString = "";
-			String holder = r.readLine();
-			while(holder != null) {
-				sessionIdString += holder;
-				holder = r.readLine();
-			}
-			sessionID = gson.fromJson(sessionIdString, SessionID.class);
-			System.out.println(sessionID.getSessionId());
-			
-		} catch (MalformedURLException e) {
-			System.out.println("The URL entered was not correct.");
-			boolean localMode = true;
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Login Error");
-			alert.setHeaderText("Credentials Not Recognized");
-			alert.setContentText("The login credentials you entered were invalid. Click "
-					+ "OK to continue in local mode or Cancel to exit the program.");
-			Optional<ButtonType> result = alert.showAndWait();
-
-			if (result.get() == ButtonType.OK) {
-				localMode = true;
-				model = new WorldModel();
-				return;
-			} else {
-				System.exit(0);
-			}
-			return;
-		} catch (IOException e) {
-			System.out.println("Could not connect to the server");
-			boolean localMode = true;
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Login Error");
-			alert.setHeaderText("Credentials Not Recognized");
-			alert.setContentText("The login credentials you entered were invalid. Click "
-					+ "OK to continue in local mode or Cancel to exit the program.");
-			Optional<ButtonType> result = alert.showAndWait();
-
-			if (result.get() == ButtonType.OK) {
-				localMode = true;
-				model = new WorldModel();
-				return;
-			} else {
-				System.exit(0);
-			}
-			return;
-		}
-		boolean localMode = false;
-		handler = new ClientRequestHandler(this.urlInitial);
+//		int[] hexCoordinates = new int[2];
+//		hexCoordinates = map.getSelectedHex();
+//		if (hexCoordinates == null) {
+//			return;
+//		}
+//		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+//			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
+//			Program critterProgram = critter.getProgram();
+//			String critterProgramString = critterProgram.toString();
+//			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+//			alert.setHeaderText("Critter Program");
+//			alert.showAndWait();
+//		}
 	}
 
 	public class LoginInfo {
