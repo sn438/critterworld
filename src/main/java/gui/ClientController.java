@@ -467,6 +467,7 @@ public class ClientController {
 //		map.draw();
 //		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
 //		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		handler.advanceTime(sessionID);
 		
 	}
 

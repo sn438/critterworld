@@ -358,11 +358,11 @@ public class ClientRequestHandler {
 	/**
 	 * stepWorld() steps the world by one timestep.
 	 */
-	public void stepWorld(int sessionId) {
+	public void advanceTime(int sessionId) {
 		Gson gson = new Gson();
 		URL url;
 		try {
-			url = new URL(this.url + "/world?session_id=" + sessionId);
+			url = new URL(this.url + "/step?session_id=" + sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
