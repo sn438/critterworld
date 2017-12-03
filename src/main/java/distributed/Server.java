@@ -121,6 +121,87 @@ public class Server {
 				return "Ok";
 			}
 		});
+		// subsection of the world
+		get("/world", (request, response) -> {
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			String[] parameters = queryString.split("&");
+			int[] values = new int[parameters.length];
+			int sessionID = -1;
+			int updateSince = 0;
+			int from_row = 0;
+			int to_row = 0;
+			int from_column = 0;
+			int to_column = 0;
+			for (int i = 0; i < parameters.length; i++) {
+				String holder = parameters[i];
+				values[i] = Integer.parseInt(holder.substring(holder.indexOf("=") + 1));
+			}
+			for (int i = 0; i < values.length; i++) {
+				if (parameters[i].indexOf("session_id") != -1) {
+					sessionID = values[i];
+				}
+				else if (parameters[i].indexOf("update_since") != -1) {
+					updateSince = values[i];
+				}
+				else if (parameters[i].indexOf("from_row") != -1) {
+					from_row = values[i];
+				}
+				else if (parameters[i].indexOf("to_row") != -1) {
+					to_row = values[i];
+				}
+				else if (parameters[i].indexOf("from_column") != -1) {
+					from_column = values[i];
+				}
+				else if (parameters[i].indexOf("to_column") != -1) {
+					to_column = values[i];
+				}
+			}
+			if (from_row<to_row || from_column<to_column) {
+				response.status(406);
+				return "The from coordinates cannot be less than the two coordinates";
+			}
+			if (sessionIdMap.get(sessionID) == null) {
+				response.status(401);
+				return "User does not have permission to view the world.";
+			} else if (updateSince < 0 || updateSince > model.getCurrentVersionNumber()) {
+				response.status(406);
+				return "That version number is invalid.";
+			} else if (!model.isReady()) {
+				response.status(403);
+				return "A world must be loaded before you can view the world state.";
+			} else {
+				int time = model.getCurrentTimeStep();
+				int version = model.getCurrentVersionNumber();
+				//float rate = model.getRate();
+				String name = model.getWorldName();
+				int population = model.getNumCritters();
+				int columns = model.getColumns();
+				int rows = model.getRows();
+				int[] deadList = model.getCumulativeDeadCritters();
+				System.out.println(deadList);
+				// HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
+				//JSONWorldObject state[] = model.updateSince(updateSince, sessionID);
+				// System.out.println("State length: " + state.length);
+				// int counter = 0;
+				// for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
+				// int c = entry.getKey().getColumnIndex();
+				// int r = entry.getKey().getRowIndex();
+				// WorldObject wo = entry.getValue();
+				// if (wo instanceof SimpleCritter) {
+				// SimpleCritter sc = (SimpleCritter) wo;
+				// int critterID = model.getID(sc);
+				// boolean permissions = model.hasCritterPermissions(sc, sessionID);
+				// state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
+				// } else {
+				// state[counter] = new JSONWorldObject(wo, c, r);
+				// }
+				// counter++;
+				// }
+				return new WorldStateJSON(time, version, updateSince, 0, name, population, columns, rows, deadList,
+						null);
+			}
+		}, gson::toJson);
 
 		// handles a client request to retrieve the world state
 		get("/world", (request, response) -> {
@@ -153,37 +234,37 @@ public class Server {
 			} else if (!model.isReady()) {
 				response.status(403);
 				return "A world must be loaded before you can view the world state.";
-			}
-			else {
+			} else {
 				int time = model.getCurrentTimeStep();
 				int version = model.getCurrentVersionNumber();
-				float rate = model.getRate();
+				//float rate = model.getRate();
 				String name = model.getWorldName();
 				int population = model.getNumCritters();
 				int columns = model.getColumns();
 				int rows = model.getRows();
 				int[] deadList = model.getCumulativeDeadCritters();
 				System.out.println(deadList);
-				//HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
+				// HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
 				JSONWorldObject state[] = model.updateSince(updateSince, sessionID);
-				//System.out.println("State length: " + state.length);
-//				int counter = 0;
-//				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
-//					int c = entry.getKey().getColumnIndex();
-//					int r = entry.getKey().getRowIndex();
-//					WorldObject wo = entry.getValue();
-//					if (wo instanceof SimpleCritter) {
-//						SimpleCritter sc = (SimpleCritter) wo;
-//						int critterID = model.getID(sc);
-//						boolean permissions = model.hasCritterPermissions(sc, sessionID);
-//						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
-//					} else {
-//						state[counter] = new JSONWorldObject(wo, c, r);
-//					}
-//					counter++;
-//				}
-				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
-						state);
+				// System.out.println("State length: " + state.length);
+				// int counter = 0;
+				// for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
+				// int c = entry.getKey().getColumnIndex();
+				// int r = entry.getKey().getRowIndex();
+				// WorldObject wo = entry.getValue();
+				// if (wo instanceof SimpleCritter) {
+				// SimpleCritter sc = (SimpleCritter) wo;
+				// int critterID = model.getID(sc);
+				// boolean permissions = model.hasCritterPermissions(sc, sessionID);
+				// state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
+				// } else {
+				// state[counter] = new JSONWorldObject(wo, c, r);
+				// }
+				// counter++;
+				// }
+				//return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
+						//state);
+				return null;
 			}
 		}, gson::toJson);
 
