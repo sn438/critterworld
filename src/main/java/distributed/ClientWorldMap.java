@@ -326,7 +326,7 @@ public class ClientWorldMap {
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
 		} else if (wo.getType().equals("nothing")) {
-			double a = (double) sideLength; // for visual clarity in the calculations
+			double a = (double) sideLength - 1.0; // for visual clarity in the calculations
 			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
 			double[] xPoints = { cartX + a, cartX + a / 2, cartX - a / 2, cartX - a, cartX - a / 2, cartX + a / 2 };
