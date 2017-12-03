@@ -62,34 +62,6 @@ public class ClientWorldMap {
 	private ClientRequestHandler handler;
 
 	/**
-	 * Creates a new world map.
-	 * 
-	 * @param can The Canvas to draw on
-	 * @param wm The WorldModel to work off of
-	 */
-	public ClientWorldMap(Canvas can, WorldModel wm) {
-		gc = can.getGraphicsContext2D();
-		canvas = can;
-		model = wm;
-		height = canvas.getHeight();
-		width = canvas.getWidth();
-
-		columns = wm.getColumns();
-		rows = wm.getRows();
-
-		column_drawing_marker = columns;
-		row_drawing_marker = rows;
-		row_drawing_marker -= column_drawing_marker / 2;
-		sideLength = 30;
-
-		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
-				+ (sideLength / 2);
-		y_position_marker = (((double) height / 2)
-				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
-				+ (Math.sqrt(3) * (sideLength / 2));
-	}
-
-	/**
 	 * 
 	 * @param can
 	 * @param handler
