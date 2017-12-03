@@ -206,19 +206,6 @@ public class Server {
 			}
 		}, gson::toJson);
 
-		get("/world/generic", (request, response) -> {
-			response.header("Content-Type", "application/json");
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
-				response.status(401);
-				return "User does not have admin access.";
-			} else {
-				model.createNewWorld();
-				return "Ok";
-			}
-		}, gson::toJson);
 
 		get("/rowNum", (request, response) -> {
 			String queryString = request.queryString();

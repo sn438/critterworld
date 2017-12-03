@@ -35,7 +35,10 @@ public class ServerWorldModel {
 	 * (which is a blank world).
 	 */
 	private ArrayList<LinkedList<Hex>> diffLog;
-
+	/** The rate at which the world is run. */
+	private float rate;
+	private HashMap<Integer, SimpleCritter> critterIDMap;
+	
 	/** Creates a new blank world model. */
 	public ServerWorldModel() {
 		rwl.writeLock().lock();
@@ -51,30 +54,37 @@ public class ServerWorldModel {
 		}
 	}
 
-	/**
-	 * Creates a new random world.
-	 *
-	 * @throws UnsupportedOperationException
-	 *             if the constants.txt file could not be read
-	 */
-	@Deprecated
-	public void createNewWorld() throws UnsupportedOperationException {
-		rwl.writeLock().lock();
+	/** Returns the name of the world. */
+	public String getWorldName() {
 		try {
-			// if a world already exists, adds all its dead critters to the cumulative dead
-			// critter list
-			if (world != null) {
-				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
-			}
-			world = new World();
-			//System.out.println(world.getAndResetUpdatedHexes());
-			diffLog.add(world.getAndResetUpdatedHexes());
-			time = 0;
-			versionNumber++;
-			numCritters = world.numRemainingCritters();
+			rwl.readLock().lock();
+			return world.getWorldName();
 		} finally {
-			rwl.writeLock().unlock();
+			rwl.readLock().unlock();
 		}
+	}
+	
+	/** Returns the current simulation rate. */
+	public float getRate() {
+		try {
+			rwl.readLock().lock();
+			return rate;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+	
+	/** Determines whether a given sessionID has full permissions for a given critter */
+	public boolean hasCritterPermissions(SimpleCritter sc, int sessionID) {
+		try {
+			rwl.readLock().lock();
+			Integer creatorID = world.getCritterCreatorID(sc);
+			assert creatorID != null;
+			return creatorID == sessionID;
+		} finally {
+			rwl.readLock().unlock();
+		}
+		
 	}
 
 	/**
@@ -103,10 +113,6 @@ public class ServerWorldModel {
 		} finally {
 			rwl.writeLock().unlock();
 		}
-	}
-
-	public boolean isReady() {
-		return world != null;
 	}
 
 	/** Returns the number of columns in the world. */
@@ -261,20 +267,36 @@ public class ServerWorldModel {
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
 	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber) {
-		// TODO implement locks
-		HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-		if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
-			return null;
-		for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
-			for (Hex h : diffLog.get(i)) {
-				int c = h.getColumnIndex();
-				int r = h.getRowIndex();
-				result.put(h, world.getHexContent(c, r));
+		try {
+			rwl.readLock().lock();
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
+				return null;
+			for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r))
+						result.put(h, world.getHexContent(c, r));
+				}
 			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
 		}
-		return result;
 	}
 
+
+	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
+	private boolean isValidHex(int c, int r) {
+		if (c < 0 || r < 0)
+			return false;
+		else if (c >= world.getColumns() || r >= world.getRows())
+			return false;
+		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * world.getRows() - world.getColumns()))
+			return false;
+		return true;
+	}
 	/**
 	 *
 	 * @param id
