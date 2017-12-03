@@ -1,7 +1,6 @@
 package gui;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Map;
 
 import distributed.ClientRequestHandler;
@@ -65,9 +64,9 @@ public class WorldMap {
 	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
 	/** Holds the last drawn time step. */
-	private int currentTimeStep;
-	private boolean localMode;
-	private ClientRequestHandler handler;
+	//private int currentTimeStep;
+	//private boolean localMode;
+	//private ClientRequestHandler handler;
 
 	/**
 	 * Creates a new world map.
@@ -76,7 +75,7 @@ public class WorldMap {
 	 * @param wm The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
-		localMode = true;
+		//localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -105,10 +104,10 @@ public class WorldMap {
 	 * @param sessionId
 	 */
 	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
-		this.localMode = false;
+		//this.localMode = false;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
-		this.handler = handler;
+		//this.handler = handler;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 

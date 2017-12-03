@@ -55,7 +55,7 @@ public class ClientWorldMap {
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
 
-	private HashMap<JSONWorldObject, Hex> objects;
+	private HashMap<JSONWorldObject, Integer[]> objects;
 	
 	/**
 	 *
@@ -71,7 +71,7 @@ public class ClientWorldMap {
 
 		columns = initialCols;
 		rows = initialRows;
-		objects = new HashMap<JSONWorldObject, Hex>();
+		objects = new HashMap<JSONWorldObject, Integer[]>();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -97,7 +97,7 @@ public class ClientWorldMap {
 		return true;
 	}
 
-	/** Redraws the world grid. */
+	/** Draws the parts of the world grid that have changed from the last version. */
 	public void draw(WorldStateJSON wsj) {
 		cachedState = wsj;
 		columns = wsj.getCols();
@@ -113,7 +113,7 @@ public class ClientWorldMap {
 		}
 	}
 	
-	/** Redraws the entire world grid. */
+	/** Redraws the entire world grid. Used for zooming and panning purposes. */
 	private void redrawGrid() {
 		// resets the world grid
 		height = canvas.getHeight();
@@ -326,7 +326,7 @@ public class ClientWorldMap {
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
 		} else if (wo.getType().equals("nothing")) {
-			double a = (double) sideLength; // for visual clarity in the calculations
+			double a = (double) sideLength - 1.0; // for visual clarity in the calculations
 			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
 			double[] xPoints = { cartX + a, cartX + a / 2, cartX - a / 2, cartX - a, cartX - a / 2, cartX + a / 2 };
