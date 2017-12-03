@@ -38,6 +38,8 @@ public class Server {
 	private final String writePassword;
 	/** The password for admin access to the server. */
 	private final String adminPassword;
+	/** The rate at which the world is run. */
+	private float simulationRate;
 	private int session_id_count;
 	private HashMap<Integer, String> sessionIdMap;
 	private ServerWorldModel model;
@@ -237,34 +239,33 @@ public class Server {
 			} else {
 				int time = model.getCurrentTimeStep();
 				int version = model.getCurrentVersionNumber();
-				//float rate = model.getRate();
+				float rate = simulationRate;
 				String name = model.getWorldName();
 				int population = model.getNumCritters();
 				int columns = model.getColumns();
 				int rows = model.getRows();
 				int[] deadList = model.getCumulativeDeadCritters();
 				System.out.println(deadList);
-				// HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
-				JSONWorldObject state[] = model.updateSince(updateSince, sessionID);
-				// System.out.println("State length: " + state.length);
-				// int counter = 0;
-				// for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
-				// int c = entry.getKey().getColumnIndex();
-				// int r = entry.getKey().getRowIndex();
-				// WorldObject wo = entry.getValue();
-				// if (wo instanceof SimpleCritter) {
-				// SimpleCritter sc = (SimpleCritter) wo;
-				// int critterID = model.getID(sc);
-				// boolean permissions = model.hasCritterPermissions(sc, sessionID);
-				// state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
-				// } else {
-				// state[counter] = new JSONWorldObject(wo, c, r);
-				// }
-				// counter++;
-				// }
-				//return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
-						//state);
-				return null;
+				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
+				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
+				//System.out.println("State length: " + state.length);
+				int counter = 0;
+				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
+					int c = entry.getKey().getColumnIndex();
+					int r = entry.getKey().getRowIndex();
+					WorldObject wo = entry.getValue();
+					if (wo instanceof SimpleCritter) {
+						SimpleCritter sc = (SimpleCritter) wo;
+						int critterID = model.getID(sc);
+						boolean permissions = model.hasCritterPermissions(sc, sessionID);
+						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
+					} else {
+						state[counter] = new JSONWorldObject(wo, c, r);
+					}
+					counter++;
+				}
+				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
+						state);
 			}
 		}, gson::toJson);
 
@@ -380,7 +381,7 @@ public class Server {
 				response.status(401);
 				return "User does not have write access.";
 			}
-			if (model.getRate() != 0) {
+			if (simulationRate != 0) {
 				response.status(406);
 				return "User cannot step because rate is not 0.";
 			}
@@ -401,6 +402,17 @@ public class Server {
 
 			return "Ok";
 		});
+
+//		post("/run", (request, response) -> {
+//			response.header("Content-Type", "application/json");
+//		});
+
+		Thread worldUpdateThread = new Thread(new Runnable() {
+		@Override
+		public void run() {
+
+		}
+	});
 
 	}
 

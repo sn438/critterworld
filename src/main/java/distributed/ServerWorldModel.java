@@ -1,6 +1,7 @@
 package distributed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -25,8 +26,6 @@ public class ServerWorldModel {
 	private int time;
 	/** The current world version number. */
 	private int versionNumber;
-	/** The rate at which the world is run. */
-	private float simulationRate;
 	/** A running list of all critters that have died across all worlds simulated in this session. */
 	private LinkedList<Integer> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
@@ -75,7 +74,6 @@ public class ServerWorldModel {
 			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
-			simulationRate = 10;
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
 		} finally {
@@ -120,26 +118,6 @@ public class ServerWorldModel {
 			return world.getRows();
 		} finally {
 			rwl.readLock().unlock();
-		}
-	}
-
-	/** Returns the simulation rate of the world. */
-	public float getRate() {
-		rwl.readLock().lock();
-		try {
-			return simulationRate;
-		} finally {
-			rwl.readLock().unlock();
-		}
-	}
-
-	/** Returns the simulation rate of the world. */
-	public void getRate(float f) {
-		rwl.writeLock().lock();
-		try {
-			simulationRate = f;
-		} finally {
-			rwl.writeLock().unlock();
 		}
 	}
 
@@ -281,38 +259,21 @@ public class ServerWorldModel {
 	 * @param initialVersionNumber
 	 * @return a HashMap mapping changed hexes to the objects at those hexes.
 	 */
-	public JSONWorldObject[] updateSince(int initialVersionNumber, int sessionID) {
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber) {
 		try {
 			rwl.readLock().lock();
 			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
 				return null;
-			int size = 0;
-			for(int i = initialVersionNumber; i < diffLog.size(); i++) {
-				size += diffLog.get(i).size();
-			}
-			JSONWorldObject[] objects = new JSONWorldObject[size];
-			int index = 0;
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
 			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
-				for (int j = 0; j < diffLog.get(i).size(); j++) {
-					int c = diffLog.get(i).get(j).getColumnIndex();
-					int r = diffLog.get(i).get(j).getRowIndex();
-					if(isValidHex(c, r)) {
-						WorldObject wo = world.getHexContent(c, r);
-						if(wo instanceof SimpleCritter) {
-							boolean permission = false;
-							Integer creatorID = world.getCritterCreatorID((SimpleCritter) wo);
-							Integer critterID = world.getCritterID((SimpleCritter) wo);
-							if(creatorID != null && creatorID == sessionID)
-								permission = true;
-							objects[index] = new JSONWorldObject((SimpleCritter) wo, c, r, critterID, permission);
-						} else {
-							objects[index] = new JSONWorldObject(wo, c, r);
-						}
-					}
-					index++;
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r))
+						result.put(h, world.getHexContent(c, r));
 				}
 			}
-			return objects;
+			return result;
 		} finally {
 			rwl.readLock().unlock();
 		}
@@ -342,11 +303,7 @@ public class ServerWorldModel {
 		}
 	}
 
-	/**
-	 *
-	 * @param sc
-	 * @return
-	 */
+	/** Provides the hex coordinate location of a critter. */
 	public int[] getCritterLocation(SimpleCritter sc) {
 		try {
 			rwl.readLock().lock();
