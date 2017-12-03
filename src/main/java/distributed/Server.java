@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 
 import ast.Program;
-import gui.WorldModel;
 import parse.ParserImpl;
 import simulation.Critter;
 import simulation.FileParser;
@@ -179,6 +178,7 @@ public class Server {
 						state);
 			}
 		}, gson::toJson);
+<<<<<<< HEAD
 /*
 		get("/critter", (request, response) -> {
 			response.header("Content-Type", "application/json");
@@ -186,6 +186,16 @@ public class Server {
 			int indexOfCritterID; 
 		});
 		*/
+=======
+
+		// handles a client request to retrieve a single critter
+//		get("/critter", (request, response) -> {
+//			response.header("Content-Type", "application/json");
+//			String queryString = request.queryString();
+//			int indexOfCritterID; 
+//		});
+
+>>>>>>> b4e2ae56ff5dae6bfc2b1eeeeb123a9ef5b1d50e
 		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
 			System.out.println("We have reached critters"); //TODO remove

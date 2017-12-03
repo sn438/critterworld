@@ -17,7 +17,7 @@ import simulation.WorldObject;
 
 /** A class that draws the hex grid for the client user interface. */
 public class ClientWorldMap {
-	
+
 	private GraphicsContext gc;
 	private Canvas canvas;
 	private int[] selectedHex;
@@ -54,17 +54,17 @@ public class ClientWorldMap {
 
 	/** Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_x;
-
 	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
-	/** Holds the last drawn time step. */
-	private int currentTimeStep;
+
+	/** A local cached version of the world state. */
+	private WorldStateJSON cachedState;
 
 	/**
-	 * 
+	 *
 	 * @param can
-	 * @param handler
-	 * @param sessionId
+	 * @param initialCols
+	 * @param initialRows
 	 */
 	public ClientWorldMap(Canvas can, int initialCols, int initialRows) {
 		gc = can.getGraphicsContext2D();
@@ -101,7 +101,6 @@ public class ClientWorldMap {
 
 	/** Redraws the world grid. */
 	public void draw(WorldStateJSON wsj) {
-		
 		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
@@ -109,9 +108,10 @@ public class ClientWorldMap {
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
 
+		cachedState = wsj;
 		columns = wsj.getCols();
 		rows = wsj.getRows();
-		
+
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -165,7 +165,6 @@ public class ClientWorldMap {
 
 	/**
 	 * Draws one critter onto the world grid.
-	 * 
 	 * @param sc
 	 * @param c
 	 * @param r
@@ -179,6 +178,7 @@ public class ClientWorldMap {
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 		drawHex(cartX, cartY);
+		gc.setLineWidth(3.0);
 
 		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100;
 
@@ -299,6 +299,7 @@ public class ClientWorldMap {
 		double cartX = hexToCartesian(hexCoordinates)[0];
 		double cartY = hexToCartesian(hexCoordinates)[1];
 		drawHex(cartX, cartY);
+		gc.setLineWidth(3.0);
 
 		if (wo.getType().equals("rock")) {
 			double size = 0.9 * sideLength;
@@ -320,6 +321,7 @@ public class ClientWorldMap {
 
 	/** Draws a hexagon centered at the rectangular coordinates specified by {@code centerX} and {@code centerY}. */
 	private void drawHex(double centerX, double centerY) {
+		gc.setLineWidth(1.0);
 		gc.setStroke(HEX_COLOR);
 		gc.strokePolygon(
 				new double[] { centerX + sideLength, centerX + (sideLength / 2), centerX - (sideLength / 2),
@@ -331,7 +333,7 @@ public class ClientWorldMap {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn) {
@@ -350,8 +352,8 @@ public class ClientWorldMap {
 
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
+		draw(cachedState);
 
-		//draw();
 	}
 
 	/**
@@ -376,7 +378,7 @@ public class ClientWorldMap {
 
 	/**
 	 * drag implements panning
-	 * 
+	 *
 	 * @param deltaX
 	 * @param deltaY
 	 */
@@ -395,7 +397,7 @@ public class ClientWorldMap {
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
 		gc.clearRect(0, 0, width, height);
-		//draw();
+		draw(cachedState);
 	}
 
 	public boolean select(double xCoordinate, double yCoordinate) {
@@ -410,14 +412,14 @@ public class ClientWorldMap {
 		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
-		//draw();
+		draw(cachedState);
 		return returnValue;
 	}
 
 	/**
 	 * A method that, given a set of rectangular canvas coordinates, returns the
 	 * coordinates of the hex it is located in.
-	 * 
+	 *
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 * @return An {@code int} array containing the (c, r) coordinates of the closest
@@ -460,7 +462,7 @@ public class ClientWorldMap {
 	/**
 	 * A method that converts a hex coordinate pair to cartesian coordinates.
 	 * @param hexCoordinates
-	 * @return 
+	 * @return
 	 */
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
