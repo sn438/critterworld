@@ -266,7 +266,7 @@ public class ServerWorldModel {
 			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
 			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
 				return null;
-			for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
+			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
 				for (Hex h : diffLog.get(i)) {
 					int c = h.getColumnIndex();
 					int r = h.getRowIndex();
@@ -327,6 +327,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
+			diffLog.add(world.getAndResetUpdatedHexes());
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
@@ -345,6 +346,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			diffLog.add(world.getAndResetUpdatedHexes());
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
@@ -364,6 +366,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			diffLog.add(world.getAndResetUpdatedHexes());
 			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
@@ -381,6 +384,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.addNonCritterObject(wo, c, r);
 		} finally {
+			diffLog.add(world.getAndResetUpdatedHexes());
 			versionNumber++;
 			rwl.writeLock().unlock();
 		}
