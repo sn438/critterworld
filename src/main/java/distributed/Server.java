@@ -158,8 +158,9 @@ public class Server {
 				int[] deadList = model.getCumulativeDeadCritters();
 				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
 				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
+				//System.out.println("State length: " + state.length);
+				int counter = 0;
 				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
-					int counter = 0;
 					int c = entry.getKey().getColumnIndex();
 					int r = entry.getKey().getRowIndex();
 					WorldObject wo = entry.getValue();
@@ -171,19 +172,48 @@ public class Server {
 					} else {
 						state[counter] = new JSONWorldObject(wo, c, r);
 					}
+					counter++;
 				}
+//				for (JSONWorldObject obj : state)
+//					System.out.println(obj);
 				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
 						state);
 			}
 		}, gson::toJson);
-
-		// handles a client request to retrieve a single critter
-//		get("/critter", (request, response) -> {
-//			response.header("Content-Type", "application/json");
-//			String queryString = request.queryString();
-//			int indexOfCritterID; 
-//		});
-
+		
+		get("/critters", (request, response) -> {
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 11;
+			int sessionID = Integer.parseInt(queryString.substring(indexOfSessionId));
+			String json = request.body();
+			if (sessionIdMap.get(sessionID) == null) {
+				response.status(401);
+				return "User does not have permission to view the world.";
+			} else {
+				SimpleCritter[] critters = model.listCritters();
+				JSONWorldObject[] crittersJSON = new JSONWorldObject[critters.length];
+				int counter = 0;
+				for (SimpleCritter critter: critters) {
+					boolean hasFullPermission = model.hasCritterPermissions(critter, sessionID);
+					int column = model.getCritterLocation(critter)[0];
+					int row = model.getCritterLocation(critter)[0];
+					int critterId = model.getID(critter);
+					JSONWorldObject holder = new JSONWorldObject(critter, column, row, critterId, hasFullPermission);
+					crittersJSON[counter] = holder;
+				}
+				return crittersJSON;
+			}
+				
+			
+		}, gson::toJson);
+/*
+		get("/critter", (request, response) -> {
+			response.header("Content-Type", "application/json");
+			String queryString = request.queryString();
+			int indexOfCritterID; 
+		});
+		*/
 		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
 			System.out.println("We have reached critters"); //TODO remove

@@ -1,5 +1,7 @@
 package distributed;
 
+import java.util.Arrays;
+
 /** A JSON representation of the state of a world. */
 public class WorldStateJSON {
 	private Integer current_timestep;
@@ -24,8 +26,11 @@ public class WorldStateJSON {
 		population = numCritters;
 		cols = c;
 		rows = r;
-		dead_critters = deadList;
+		dead_critters = Arrays.copyOf(deadList, deadList.length);
+		//state = new JSONWorldObject[objectList.length];
+		//System.arraycopy(objectList, 0, state, 0 , objectList.length);
 		state = objectList;
+		//System.out.println(state.length);
 	}
 	
 	public Integer getCurrentTime() {

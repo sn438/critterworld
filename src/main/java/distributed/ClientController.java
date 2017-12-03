@@ -253,6 +253,7 @@ public class ClientController {
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
 		doReset();
+		boolean localMode = false;
 		if (localMode) {
 			newWorld();
 		} else {
@@ -293,6 +294,7 @@ public class ClientController {
 			return;
 		}
 		doReset();
+		boolean localMode = false;
 		if (localMode)
 			loadWorld(worldFile);
 		else
@@ -368,6 +370,7 @@ public class ClientController {
 		if (choice == chkRandom) {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
+				boolean localMode = false;
 				if (localMode)
 					model.loadRandomCritters(critterFile, n);
 				else
@@ -396,6 +399,7 @@ public class ClientController {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
+					boolean localMode = false;
 					if (localMode)
 						model.loadCritterAtLocation(critterFile, c, r);
 					else
@@ -678,7 +682,7 @@ public class ClientController {
 				Optional<ButtonType> result = alert.showAndWait();
 
 				if (result.get() == ButtonType.OK) {
-					localMode = true;
+					boolean localMode = true;
 					model = new WorldModel();
 					return;
 				} else {
@@ -698,7 +702,7 @@ public class ClientController {
 			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
-			localMode = true;
+			boolean localMode = true;
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Login Error");
 			alert.setHeaderText("Credentials Not Recognized");
@@ -716,7 +720,7 @@ public class ClientController {
 			return;
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
-			localMode = true;
+			boolean localMode = true;
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Login Error");
 			alert.setHeaderText("Credentials Not Recognized");
@@ -733,7 +737,7 @@ public class ClientController {
 			}
 			return;
 		}
-		localMode = false;
+		boolean localMode = false;
 		handler = new ClientRequestHandler(this.urlInitial);
 	}
 

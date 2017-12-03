@@ -17,7 +17,7 @@ import simulation.WorldObject;
 
 /** A class that draws the hex grid for the client user interface. */
 public class ClientWorldMap {
-	
+
 	private GraphicsContext gc;
 	private Canvas canvas;
 	private int[] selectedHex;
@@ -56,12 +56,12 @@ public class ClientWorldMap {
 	private double origin_x;
 	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
 	private double origin_y;
-	
+
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
 
 	/**
-	 * 
+	 *
 	 * @param can
 	 * @param initialCols
 	 * @param initialRows
@@ -111,7 +111,7 @@ public class ClientWorldMap {
 		cachedState = wsj;
 		columns = wsj.getCols();
 		rows = wsj.getRows();
-		
+
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -179,7 +179,7 @@ public class ClientWorldMap {
 		double cartY = hexToCartesian(hexCoordinates)[1];
 		drawHex(cartX, cartY);
 		gc.setLineWidth(3.0);
-		
+
 		double size = 0.9 * sideLength * (50 + critterSize / 2) / 100;
 
 		double[] xPoints = new double[3];
@@ -333,7 +333,7 @@ public class ClientWorldMap {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn) {
@@ -352,8 +352,8 @@ public class ClientWorldMap {
 
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
-
 		draw(cachedState);
+
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class ClientWorldMap {
 
 	/**
 	 * drag implements panning
-	 * 
+	 *
 	 * @param deltaX
 	 * @param deltaY
 	 */
@@ -419,7 +419,7 @@ public class ClientWorldMap {
 	/**
 	 * A method that, given a set of rectangular canvas coordinates, returns the
 	 * coordinates of the hex it is located in.
-	 * 
+	 *
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 * @return An {@code int} array containing the (c, r) coordinates of the closest
@@ -462,7 +462,7 @@ public class ClientWorldMap {
 	/**
 	 * A method that converts a hex coordinate pair to cartesian coordinates.
 	 * @param hexCoordinates
-	 * @return 
+	 * @return
 	 */
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;
