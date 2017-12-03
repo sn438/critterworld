@@ -119,6 +119,7 @@ public class Server {
 				return "Ok";
 			}
 		});
+<<<<<<< HEAD
 
 		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
@@ -162,6 +163,9 @@ public class Server {
 			return lcr;
 		}, gson::toJson);
 
+=======
+		
+>>>>>>> e13cf02133ab955fee35243955f9367439b75b80
 		// handles a client request to retrieve the world state
 		get("/world", (request, response) -> {
 			response.header("Content-Type", "application/json");
@@ -219,27 +223,57 @@ public class Server {
 						state);
 			}
 		}, gson::toJson);
+<<<<<<< HEAD
 
 		get("/rowNum", (request, response) -> {
+=======
+		
+		get("/critter", (request, response) -> {
+			response.header("Content-Type", "application/json");
+>>>>>>> e13cf02133ab955fee35243955f9367439b75b80
+			String queryString = request.queryString();
+			int indexOfCritterID; 
+		});
+		
+		// handles a client request to load in critters
+		post("/critters", (request, response) -> {
+			System.out.println("We have reached critters"); //TODO remove
+			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null) {
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
-				return "User does not have read access";
-			} else
-				return model.getRows();
-		}, gson::toJson);
-
-		get("/colNum", (request, response) -> {
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null) {
-				response.status(401);
-				return "User does not have read access";
-			} else
-				return model.getColumns();
+				return "User does not have write access.";
+			}
+			String json = request.body();
+			System.out.println(json);
+			CritterJSON loadCritterInfo = gson.fromJson(json, CritterJSON.class);
+			ParserImpl parser = new ParserImpl();
+			InputStream stream = new ByteArrayInputStream(
+					loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+			Program program = parser.parse(reader);
+			reader.close();
+			int[] ids = null;
+			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
+			if (loadCritterInfo.getPositions() == null)
+				ids = model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
+			else {
+				PositionJSON[] positions = loadCritterInfo.getPositions();
+				int counter = 0;
+				ids = new int[positions.length];
+				for (PositionJSON positionHolder: positions) {
+					int c = positionHolder.getColumn();
+					int r = positionHolder.getRow();
+					int id = model.loadCritterAtLocation(critter, c, r, session_id);
+					ids[counter] = id;
+					counter++;
+				}
+			}
+ 			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
+ 			System.out.println(model.getNumCritters());
+			return lcr;
 		}, gson::toJson);
 	}
 

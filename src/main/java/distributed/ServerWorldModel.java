@@ -52,8 +52,6 @@ public class ServerWorldModel {
 		}
 	}
 
-	
-
 	/**
 	 * Loads in a world based on a description.
 	 *
@@ -315,6 +313,8 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.removeCritter(world.getCritterFromID(id));
 		} finally {
+			versionNumber++;
+			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
 
@@ -332,6 +332,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadCritters(sc, n, sessionID);
 		} finally {
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
@@ -350,6 +351,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			return world.loadOneCritter(sc, c, r, sessionID);
 		} finally {
+			versionNumber++;
 			numCritters = world.numRemainingCritters();
 			rwl.writeLock().unlock();
 		}
@@ -366,6 +368,7 @@ public class ServerWorldModel {
 			rwl.writeLock().lock();
 			world.addNonCritterObject(wo, c, r);
 		} finally {
+			versionNumber++;
 			rwl.writeLock().unlock();
 		}
 	}

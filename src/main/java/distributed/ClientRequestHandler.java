@@ -256,6 +256,15 @@ public class ClientRequestHandler {
 		}
 	}
 
+	/**
+	 * 
+	 * @param f
+	 * @param c
+	 * @param r
+	 * @param sessionId
+	 * @throws FileNotFoundException
+	 * @throws IllegalArgumentException
+	 */
 	public void loadCritterAtLocation(File f, int c, int r, int sessionId) throws FileNotFoundException, IllegalArgumentException {
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new FileReader(f));
