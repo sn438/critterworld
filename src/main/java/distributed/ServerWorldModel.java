@@ -52,38 +52,7 @@ public class ServerWorldModel {
 		}
 	}
 
-	/** Returns the name of the world. */
-	public String getWorldName() {
-		try {
-			rwl.readLock().lock();
-			return world.getWorldName();
-		} finally {
-			rwl.readLock().unlock();
-		}
-	}
-
-	/** Returns the current simulation rate. */
-	public float getRate() {
-		try {
-			rwl.readLock().lock();
-			return rate;
-		} finally {
-			rwl.readLock().unlock();
-		}
-	}
-
-	/** Determines whether a given sessionID has full permissions for a given critter */
-	public boolean hasCritterPermissions(SimpleCritter sc, int sessionID) {
-		try {
-			rwl.readLock().lock();
-			Integer creatorID = world.getCritterCreatorID(sc);
-			assert creatorID != null;
-			return creatorID == sessionID;
-		} finally {
-			rwl.readLock().unlock();
-		}
-
-	}
+	
 
 	/**
 	 * Loads in a world based on a description.
@@ -186,7 +155,7 @@ public class ServerWorldModel {
 	/** Retrieves the running list of dead critters. */
 	public int[] getCumulativeDeadCritters() {
 		try {
-			rwl.readLock().lock(); //should this be read lock?
+			rwl.readLock().lock();
 			int[] result = new int[cumulativeDeadCritters.size()];
 			for(int i = 0; i < cumulativeDeadCritters.size(); i++) {
 				result[i] = world.getCritterID(cumulativeDeadCritters.get(i));
@@ -297,7 +266,7 @@ public class ServerWorldModel {
 		try {
 			rwl.readLock().lock();
 			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-			if (initialVersionNumber < 0 || initialVersionNumber >= diffLog.size() - 1)
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
 				return null;
 			for (int i = initialVersionNumber + 1; i < diffLog.size(); i++) {
 				for (Hex h : diffLog.get(i)) {
@@ -312,18 +281,6 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-
-	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
-	private boolean isValidHex(int c, int r) {
-		if (c < 0 || r < 0)
-			return false;
-		else if (c >= world.getColumns() || r >= world.getRows())
-			return false;
-		else if ((2 * r - c) < 0 || (2 * r - c) >= (2 * world.getRows() - world.getColumns()))
-			return false;
-		return true;
-	}
-
 
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	private boolean isValidHex(int c, int r) {
