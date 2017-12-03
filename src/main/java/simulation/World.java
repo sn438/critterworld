@@ -420,6 +420,7 @@ public class World extends AbstractWorld {
 		if (!isValidHex(c, r))
 			return -1;
 		int result;
+		sc.randomizeOrientation();
 		boolean added = grid[c][r].addContent(sc);
 		if (added) {
 			critterList.add(sc);

@@ -45,7 +45,7 @@ public class ServerWorldModel {
 			time = 0;
 			versionNumber = 0;
 			diffLog = new ArrayList<ArrayList<Hex>>();
-			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
+			cumulativeDeadCritters = new LinkedList<Integer>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
