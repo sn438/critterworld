@@ -60,7 +60,6 @@ public class GUI extends Application {
 // TODO add change view angle thing if time, or kozen easter egg, or sounds
 
 // Andy:
-// TODO has below bug been fixed?
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
 // TODO start worldmodel updates and stuff
 // TODO find better way to loop through all critters???
@@ -70,13 +69,3 @@ public class GUI extends Application {
 // TODO fix bug for non terminating threads
 // TODO create loadCritterResponseJSON
 // TODO handle IllegalArgumentException in controller
-
-// Bug: new world,
-// reset,
-// loadworld,
-// spiralcritterworld
-// loaded 20 noenergybudcritters
-// ConcurrencyModificationException: probably because things inside the map are
-// being modified??
-// iterating through list of critters and objects
-// critter species names?

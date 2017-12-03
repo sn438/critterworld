@@ -55,7 +55,7 @@ public class ClientWorldMap {
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
 
-	private HashMap<JSONWorldObject, Hex> objects;
+	private HashMap<JSONWorldObject, Integer[]> objects;
 	
 	/**
 	 *
@@ -71,7 +71,7 @@ public class ClientWorldMap {
 
 		columns = initialCols;
 		rows = initialRows;
-		objects = new HashMap<JSONWorldObject, Hex>();
+		objects = new HashMap<JSONWorldObject, Integer[]>();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -97,7 +97,7 @@ public class ClientWorldMap {
 		return true;
 	}
 
-	/** Redraws the world grid. */
+	/** Draws the parts of the world grid that have changed from the last version. */
 	public void draw(WorldStateJSON wsj) {
 		cachedState = wsj;
 		columns = wsj.getCols();
@@ -113,7 +113,7 @@ public class ClientWorldMap {
 		}
 	}
 	
-	/** Redraws the entire world grid. */
+	/** Redraws the entire world grid. Used for zooming and panning purposes. */
 	private void redrawGrid() {
 		// resets the world grid
 		height = canvas.getHeight();

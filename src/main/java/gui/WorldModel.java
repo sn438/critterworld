@@ -31,9 +31,9 @@ public class WorldModel {
 	/** The current world version number. */
 	private int versionNumber;
 	/** Assigned as a critter ID. Is modified every time a critter is added to ensure uniqueness of IDs. */
-	private int IDAssignment;
+	//private int IDAssignment;
 	/** Maps unique critter IDs to critters. */
-	private HashMap<Integer, SimpleCritter> critterIDMap;
+	//private HashMap<Integer, SimpleCritter> critterIDMap;
 	/** A running list of all critters that have died across all worlds simulated in this session. */
 	private LinkedList<SimpleCritter> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
@@ -48,9 +48,9 @@ public class WorldModel {
 			numCritters = 0;
 			time = 0;
 			versionNumber = 0;
-			IDAssignment = 0;
+			//IDAssignment = 0;
 			diffLog = new ArrayList<ArrayList<Hex>>();
-			critterIDMap = new HashMap<Integer, SimpleCritter>();
+			//critterIDMap = new HashMap<Integer, SimpleCritter>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
