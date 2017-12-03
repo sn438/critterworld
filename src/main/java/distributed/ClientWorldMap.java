@@ -351,7 +351,7 @@ public class ClientWorldMap {
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
 
-		draw();
+		//draw();
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class ClientWorldMap {
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
 		gc.clearRect(0, 0, width, height);
-		draw();
+		//draw();
 	}
 
 	public boolean select(double xCoordinate, double yCoordinate) {
@@ -410,7 +410,7 @@ public class ClientWorldMap {
 		}
 		double[] highlightCoordinates = hexToCartesian(closestHexCoordinates);
 		highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
-		draw();
+		//draw();
 		return returnValue;
 	}
 
