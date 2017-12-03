@@ -51,7 +51,7 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
-
+	
 	/**
 	 * Loads in a world based on a description.
 	 *
@@ -129,7 +129,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/** Returns the current simulation rate. */
 	public float getRate() {
 		try {
@@ -191,7 +191,7 @@ public class ServerWorldModel {
 		}
 	}
 
-	
+
 	/** Determines whether a given sessionID has full permissions for a given critter. */
 	public boolean hasCritterPermissions(SimpleCritter sc, int sessionID) {
 		try {
@@ -202,9 +202,9 @@ public class ServerWorldModel {
 		} finally {
 			rwl.readLock().unlock();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns a number giving information about a hex.
 	 * @param c
@@ -279,7 +279,7 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
@@ -290,7 +290,6 @@ public class ServerWorldModel {
 			return false;
 		return true;
 	}
-
 	/**
 	 * Returns a critter object based on its ID
 	 * @param id
@@ -359,7 +358,7 @@ public class ServerWorldModel {
 	}
 
 	/**
-	 * Loads a non-critter world object into the world. 
+	 * Loads a non-critter world object into the world.
 	 * @param wo The object to load in (can be food or a rock)
 	 * @param c The column index at which to add the object
 	 * @param r The row index at which to add the object

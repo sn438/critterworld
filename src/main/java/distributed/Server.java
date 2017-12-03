@@ -213,42 +213,6 @@ public class Server {
  			System.out.println(model.getNumCritters());
 			return lcr;
 		}, gson::toJson);
-
-		get("/world/generic", (request, response) -> {
-			response.header("Content-Type", "application/json");
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
-				response.status(401);
-				return "User does not have admin access.";
-			} else {
-				//model.createNewWorld();
-				return "Ok";
-			}
-		}, gson::toJson);
-
-		get("/rowNum", (request, response) -> {
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null) {
-				response.status(401);
-				return "User does not have read access";
-			} else
-				return model.getRows();
-		}, gson::toJson);
-
-		get("/colNum", (request, response) -> {
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			if (sessionIdMap.get(session_id) == null) {
-				response.status(401);
-				return "User does not have read access";
-			} else
-				return model.getColumns();
-		}, gson::toJson);
 	}
 
 	/** Returns the port number of the server. */
