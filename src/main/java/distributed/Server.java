@@ -24,7 +24,6 @@ import simulation.Hex;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
-
 /** A server that responds to HTTP requests. */
 public class Server {
 	/** The single instance of the server. */
@@ -43,6 +42,7 @@ public class Server {
 
 	/**
 	 * Creates a new server.
+	 *
 	 * @param portNum
 	 * @param readPass
 	 * @param writePass
@@ -100,34 +100,48 @@ public class Server {
 			}
 
 		}, gson::toJson);
-		
+
 		post("/critters", (request, response) -> {
 			System.out.println("We have reached critters");
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
 			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
-			String json = request.body();
-			System.out.println(json);
-			CritterJSON loadCritterInfo = gson.fromJson(json,CritterJSON.class);
-			ParserImpl parser = new ParserImpl();
-			InputStream stream = new ByteArrayInputStream(loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-			Program program = parser.parse(reader);
-			reader.close();
- 			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
- 			int[] ids = model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
- 			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
- 			System.out.println(model.getNumCritters());
 			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
 				return "User does not have write access.";
-			} else {
-				return lcr;
 			}
+			String json = request.body();
+			System.out.println(json);
+			CritterJSON loadCritterInfo = gson.fromJson(json, CritterJSON.class);
+			ParserImpl parser = new ParserImpl();
+			InputStream stream = new ByteArrayInputStream(
+					loadCritterInfo.getProgram().getBytes(StandardCharsets.UTF_8.name()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+			Program program = parser.parse(reader);
+			reader.close();
+			int[] memory = loadCritterInfo.getMem();
+			int[] ids = null;
+			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
+			if (loadCritterInfo.getPositions() == null)
+				ids = model.loadCritterRandomLocations(critter, loadCritterInfo.getNum(), session_id);
+			else {
+				PositionJSON[] positions = loadCritterInfo.getPositions();
+				int counter = 0;
+				ids = new int[positions.length];
+				for (PositionJSON positionHolder: positions) {
+					int c = positionHolder.getColumn();
+					int r = positionHolder.getRow();
+					int id = model.loadCritterAtLocation(critter, c, r, session_id);
+					ids[counter] = id;
+					counter++;
+				}
+			}
+ 			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
+ 			System.out.println(model.getNumCritters());
+			return lcr;
 		}, gson::toJson);
 
-		
 		post("/world", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();
@@ -159,7 +173,7 @@ public class Server {
 			} else {
 				sessionID = Integer.parseInt(queryString.substring(indexOfSessionID + 1));
 			}
-		
+
 			if(sessionIdMap.get(sessionID) == null) {
 				response.status(401);
 				return "User does not have permission to view the world.";
@@ -186,12 +200,12 @@ public class Server {
 						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
 					} else {
 						state[counter] = new JSONWorldObject(wo, c, r);
-					}	
+					}
 				}
 				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList, state);
 			}
 		}, gson::toJson);
-		
+
 		get("/world/generic", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();

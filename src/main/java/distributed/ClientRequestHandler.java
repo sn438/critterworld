@@ -36,9 +36,14 @@ import simulation.WorldObject;
 public class ClientRequestHandler {
 	/** Stores the most recently retrieved version of the world. */
 	private int mostRecentVersion;
+	private String url;
+
+	public ClientRequestHandler(String url) {
+		this.url = url;
+	}
 
 	/**
-	 * 
+	 *
 	 * @param sessionId
 	 * @return
 	 */
@@ -63,9 +68,7 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -93,7 +96,7 @@ public class ClientRequestHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param worldfile
 	 * @param sessionId
 	 * @return
@@ -117,9 +120,8 @@ public class ClientRequestHandler {
 		LoadWorldInfoJSON loadWorldInfo = new LoadWorldInfoJSON(description);
 		URL url = null;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=423956134");
-			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId);
+			// url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -159,7 +161,8 @@ public class ClientRequestHandler {
 		URL url = null;
 		int returnValue = 0;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/colNum?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
+			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
@@ -170,8 +173,8 @@ public class ClientRequestHandler {
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			returnValue = Integer.parseInt(r.readLine());
-
+			WorldStateJSON worldState =  gson.fromJson(r, WorldStateJSON.class);
+			returnValue = worldState.getCols();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -185,7 +188,7 @@ public class ClientRequestHandler {
 		URL url = null;
 		int returnValue = 0;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/rowNum?session_id=" + sessionId);
+			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
@@ -193,11 +196,11 @@ public class ClientRequestHandler {
 				alert.setTitle("Invalid Request");
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("User is not an admin so a New World cannot be created.");
-				return 0;
+				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			returnValue = Integer.parseInt(r.readLine());
-
+			WorldStateJSON worldState =  gson.fromJson(r, WorldStateJSON.class);
+			returnValue = worldState.getRows();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -224,9 +227,9 @@ public class ClientRequestHandler {
 		critterJSON = new CritterJSON(critter.getName(), programDescription, mem, num);
 		URL url;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
+			url = new URL(this.url + "/critters?session_id=" + sessionId);
+			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
+			// sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
@@ -242,10 +245,12 @@ public class ClientRequestHandler {
 				alert.setContentText("You do not have permission to add critters.");
 			}
 			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			// BufferedReader r1 = new BufferedReader(new
-			// InputStreamReader(connection.getInputStream()));
-			// System.out.println(r1.readLine());
-			reader.close();
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = r1.readLine();
+			while (line != null) {
+				System.out.println(line);
+				line = r1.readLine();
+			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -255,7 +260,7 @@ public class ClientRequestHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param sessionID
 	 * @param updateSince
 	 * @return
@@ -280,7 +285,7 @@ public class ClientRequestHandler {
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			WorldStateJSON state = gson.fromJson(r, WorldStateJSON.class);
 			return state;
-			
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 			return null;
@@ -290,7 +295,7 @@ public class ClientRequestHandler {
 			return null;
 		}
 	}
-	
+
 	public void loadCritterAtLocation(File f, int c, int r, int sessionId) throws FileNotFoundException {
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new FileReader(f));
@@ -302,13 +307,13 @@ public class ClientRequestHandler {
 			programDescription += (rule.toString() + "\r\n");
 		}
 		int[] mem = critter.getMemoryCopy();
-		PositionJSON[] positions = new PositionJSON[] {new PositionJSON(c, r)};
+		PositionJSON[] positions = new PositionJSON[] { new PositionJSON(c, r) };
 		CritterJSON critterJSON = new CritterJSON(critter.getName(), programDescription, mem, positions);
 		URL url;
 		try {
-			// url = new
-			// URL("http://hexworld.herokuapp.com:80/hexworld/world?session_id=918581436");
-			url = new URL("http://localhost:" + 8080 + "/critters?session_id=" + sessionId);
+			url = new URL(this.url + "/critters?session_id=" + sessionId);
+			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
+			// sessionId);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true); // send a POST message
@@ -323,10 +328,13 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
-			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			// BufferedReader r1 = new BufferedReader(new
-			// InputStreamReader(connection.getInputStream()));
-			// System.out.println(r1.readLine());
+			//System.out.println(gson.toJson(critterJSON, CritterJSON.class));
+			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = r1.readLine();
+			while (line != null) {
+				System.out.println(line);
+				line = r1.readLine();
+			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

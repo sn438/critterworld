@@ -13,10 +13,10 @@ public class JSONWorldObject {
 	private Integer row;
 	/** The type of the object, as a string. */
 	private String type;
-	
+
 	/** Food objects only: the number of calories. */
 	private Integer value;
-	
+
 	/** Critter objects only: the critter ID. */
 	private Integer id;
 	/** Critter objects only: the species name. */
@@ -29,7 +29,8 @@ public class JSONWorldObject {
 	private String program;
 	/** Critter objects only: the index of the most recently executed rule. */
 	private Integer recently_executed_rule;
-	
+
+
 	/**
 	 * Creates a new JSON object of type "rock" or "nothing".
 	 * @param typ The type of the object (must be either "rock" or "nothing")
@@ -41,7 +42,7 @@ public class JSONWorldObject {
 		col = c;
 		row = r;
 	}
-	
+
 	/**
 	 * Creates a JSON object of type food.
 	 * @param typ The type of the object (must be "food")
@@ -55,7 +56,7 @@ public class JSONWorldObject {
 		row = r;
 		value = calories;
 	}
-	
+
 	/**
 	 * Creates a JSON critter object for which the user has full permissions
 	 * @param typ The type of the object (must be "critter")
@@ -78,8 +79,9 @@ public class JSONWorldObject {
 		program = prog;
 		mem = memory;
 		recently_executed_rule = ruleIndex;
+
 	}
-	
+
 	/**
 	 * Creates a JSON critter object for which the user does not have full permissions
 	 * @param typ The type of the object (must be "critter")
@@ -99,9 +101,9 @@ public class JSONWorldObject {
 		species_id = species;
 		mem = memory;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param wo
 	 * @param c
 	 * @param r
@@ -109,7 +111,7 @@ public class JSONWorldObject {
 	public JSONWorldObject(WorldObject wo, int c, int r) {
 		col = c;
 		row = r;
-		
+
 		if(wo instanceof Rock) {
 			type = "rock";
 		} else if(wo instanceof Food) {
@@ -119,9 +121,9 @@ public class JSONWorldObject {
 			type = "nothing";
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param sc
 	 * @param c
 	 * @param r
@@ -140,47 +142,47 @@ public class JSONWorldObject {
 			recently_executed_rule = sc.getLastRuleIndex();
 		}
 	}
-	
+
 	/** Returns the type of this object. */
 	public String getType() {
 		return type;
 	}
-	
+
 	/** Returns the column index of this object. */
 	public Integer getCol() {
 		return col;
 	}
-	
+
 	/** Returns the row index of this object. */
 	public Integer getRow() {
 		return row;
 	}
-	
+
 	/** Returns the caloric content of this object, if it is food. */
 	public Integer getCalories() {
 		return value;
 	}
-	
+
 	public Integer getCritterID() {
 		return id;
 	}
-	
+
 	public String getSpeciesName() {
 		return species_id;
 	}
-	
+
 	public Integer getOrientation() {
 		return direction;
 	}
-	
+
 	public int[] getMemory() {
 		return mem;
 	}
-	
+
 	public String getProgram() {
 		return program;
 	}
-	
+
 	public Integer getLastRuleIndex() {
 		return recently_executed_rule;
 	}
