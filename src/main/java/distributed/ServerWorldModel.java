@@ -51,7 +51,7 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Loads in a world based on a description.
 	 *
@@ -153,7 +153,7 @@ public class ServerWorldModel {
 	/** Retrieves the running list of dead critters. */
 	public int[] getCumulativeDeadCritters() {
 		try {
-			rwl.readLock().lock(); //should this be read lock?
+			rwl.readLock().lock();
 			int[] result = new int[cumulativeDeadCritters.size()];
 			for(int i = 0; i < cumulativeDeadCritters.size(); i++) {
 				result[i] = world.getCritterID(cumulativeDeadCritters.get(i));
