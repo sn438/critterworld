@@ -131,13 +131,11 @@ public class ClientController {
 
 	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
-	/** The model that contains the world state. */
-	private WorldModel model;
 	/** Controls the hex grid. */
-	private WorldMap map;
+	private ClientWorldMap map;
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
-	/** The executor that is used to step the world periodically. */
+	/** The executor used to periodically query the world for updates. */
 	private ScheduledExecutorService executor;
 
 	private double panMarkerX;
@@ -152,6 +150,7 @@ public class ClientController {
 	private String urlInitial;
 	private SessionID sessionID;
 	private ClientRequestHandler handler;
+	private int currentVersion;
 
 	@FXML
 	public void initialize() {
@@ -170,7 +169,6 @@ public class ClientController {
 		if (timeline != null)
 			timeline.stop();
 
-		model = new WorldModel();
 		simulationRate = 30;
 
 		loadCritterFile.setDisable(true);
@@ -214,11 +212,11 @@ public class ClientController {
 		// listeners that dynamically redraw the canvas in response to window resizing
 		c.heightProperty().addListener(update -> {
 			if (map != null)
-				map.draw();
+				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
 		});
 		c.widthProperty().addListener(update -> {
 			if (map != null)
-				map.draw();
+				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
 		});
 	}
 
@@ -255,6 +253,7 @@ public class ClientController {
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
 		doReset();
+		boolean localMode = false;
 		if (localMode) {
 			newWorld();
 		} else {
@@ -295,6 +294,7 @@ public class ClientController {
 			return;
 		}
 		doReset();
+		boolean localMode = false;
 		if (localMode)
 			loadWorld(worldFile);
 		else
@@ -370,6 +370,7 @@ public class ClientController {
 		if (choice == chkRandom) {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
+				boolean localMode = false;
 				if (localMode)
 					model.loadRandomCritters(critterFile, n);
 				else
@@ -398,6 +399,7 @@ public class ClientController {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
+					boolean localMode = false;
 					if (localMode)
 						model.loadCritterAtLocation(critterFile, c, r);
 					else
@@ -680,7 +682,7 @@ public class ClientController {
 				Optional<ButtonType> result = alert.showAndWait();
 
 				if (result.get() == ButtonType.OK) {
-					localMode = true;
+					boolean localMode = true;
 					model = new WorldModel();
 					return;
 				} else {
@@ -700,7 +702,7 @@ public class ClientController {
 			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
-			localMode = true;
+			boolean localMode = true;
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Login Error");
 			alert.setHeaderText("Credentials Not Recognized");
@@ -718,7 +720,7 @@ public class ClientController {
 			return;
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
-			localMode = true;
+			boolean localMode = true;
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Login Error");
 			alert.setHeaderText("Credentials Not Recognized");
@@ -735,7 +737,7 @@ public class ClientController {
 			}
 			return;
 		}
-		localMode = false;
+		boolean localMode = false;
 		handler = new ClientRequestHandler(this.urlInitial);
 	}
 
