@@ -55,7 +55,7 @@ public class ClientWorldMap {
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
 
-	private HashMap<JSONWorldObject, int[]> objects;
+	private HashMap<JSONWorldObject, Integer[]> objects;
 	
 	/**
 	 *
@@ -71,7 +71,7 @@ public class ClientWorldMap {
 
 		columns = initialCols;
 		rows = initialRows;
-		objects = new HashMap<JSONWorldObject, int[]>();
+		objects = new HashMap<JSONWorldObject, Integer[]>();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -83,6 +83,7 @@ public class ClientWorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
+
 	}
 
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
@@ -104,12 +105,6 @@ public class ClientWorldMap {
 
 		// draws world objects
 		gc.setLineWidth(3);
-		for(JSONWorldObject obj : cachedState.getWorldObjects()) {
-			int[] location = new int[2];
-			location[0] = obj.getCol();
-			location[1] = obj.getRow();
-			objects.put(obj, location);
-		}
 		drawObjects(cachedState.getWorldObjects());
 
 		if (selectedHex != null) {

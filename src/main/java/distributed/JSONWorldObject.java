@@ -1,7 +1,5 @@
 package distributed;
 
-import java.util.Arrays;
-
 import simulation.Food;
 import simulation.Rock;
 import simulation.SimpleCritter;
@@ -187,17 +185,5 @@ public class JSONWorldObject {
 
 	public Integer getLastRuleIndex() {
 		return recently_executed_rule;
-	}
-	
-	@Override
-	public int hashCode() {
-		String s = "";
-		if(type.equals("critter"))
-			s += type + col + row + id + species_id + direction + Arrays.toString(mem) + program + recently_executed_rule;
-		else if(type.equals("food"))
-			s += type + col + row + value;
-		else
-			s += type + col + row;
-		return s.hashCode();
 	}
 }

@@ -163,8 +163,8 @@ public class ClientController {
 		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		TextField levelTextField = new TextField("Level");
 		TextField passwordTextField = new TextField("Password");
-		TextField urlTextField = new TextField("http://localhost:8080");
-		//TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
+		// TextField urlTextField = new TextField("http://localhost:8080");
+		TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
 		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
 		Platform.runLater(levelTextField::requestFocus);
 		dialog.setResultConverter((ButtonType button) -> {
@@ -468,6 +468,7 @@ public class ClientController {
 //		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
 //		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 		handler.advanceTime(sessionID);
+		
 	}
 
 	@FXML
