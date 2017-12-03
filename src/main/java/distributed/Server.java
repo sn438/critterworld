@@ -101,12 +101,32 @@ public class Server {
 
 		}, gson::toJson);
 
+		// handles a client request to load a new world
+		post("/world", (request, response) -> {
+			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
+			String json = request.body();
+			System.out.println(json);
+			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
+			String description = loadWorldInfo.getDescription();
+			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
+				response.status(401);
+				return "User does not have admin access.";
+			} else {
+				model.loadWorld(description);
+				return "Ok";
+			}
+		});
+		
+		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
-			System.out.println("We have reached critters");
+			System.out.println("We have reached critters"); //TODO remove
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1, queryString.length()));
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
 			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
 				return "User does not have write access.";
@@ -120,7 +140,6 @@ public class Server {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 			Program program = parser.parse(reader);
 			reader.close();
-			int[] memory = loadCritterInfo.getMem();
 			int[] ids = null;
 			SimpleCritter critter = new Critter(program, loadCritterInfo.getMem(), loadCritterInfo.getSpeciesId());
 			if (loadCritterInfo.getPositions() == null)
@@ -142,24 +161,7 @@ public class Server {
 			return lcr;
 		}, gson::toJson);
 
-		post("/world", (request, response) -> {
-			response.header("Content-Type", "text/plain");
-			String queryString = request.queryString();
-			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
-			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
-			String json = request.body();
-			System.out.println(json);
-			LoadWorldInfoJSON loadWorldInfo = gson.fromJson(json, LoadWorldInfoJSON.class);
-			String description = loadWorldInfo.getDescription();
-			if (sessionIdMap.get(session_id) == null || !sessionIdMap.get(session_id).equals("admin")) {
-				response.status(401);
-				return "User does not have admin access.";
-			} else {
-				model.loadWorld(description);
-				return "Ok";
-			}
-		});
-
+		// handles a client request to retrieve the world state
 		get("/world", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();

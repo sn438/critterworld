@@ -22,7 +22,7 @@
 	xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="gui.Controller">
 	<children>
-		<MenuBar fx:id="Menu" prefHeight="25.0" AnchorPane.leftAnchor="0.0"
+		<MenuBar prefHeight="25.0" AnchorPane.leftAnchor="0.0"
 			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="File">

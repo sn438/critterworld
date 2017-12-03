@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,7 +30,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -44,6 +45,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -587,9 +590,21 @@ public class Controller {
 
 	@FXML
 	private void help(ActionEvent ae) {
-		// TODO actually make this helpful
-		GraphicsContext gc = c.getGraphicsContext2D();
-		gc.strokeText("SUJITH", 100, 100);
+		String fileName = "instructions.txt";
+		ImageView imgview = new ImageView(GUI.icon);
+		Alert alert = new Alert(AlertType.INFORMATION);	
+		alert.setGraphic(imgview);
+		try {
+			String helpText = new String(Files.readAllBytes(Paths.get(fileName)));
+			alert.setContentText(helpText);
+			alert.setHeaderText("How to Use CRITTERWORLD");
+			alert.showAndWait();
+		} catch (IOException e) {
+			String errorText = "Please refer to user manual for instructions on how to use product.";
+			alert.setContentText(errorText);
+			alert.setHeaderText(null);
+			alert.showAndWait();
+		}
 	}
 
 	@FXML
