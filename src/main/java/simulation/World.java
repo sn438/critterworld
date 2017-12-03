@@ -597,7 +597,7 @@ public class World extends AbstractWorld {
 	private int calculateSmellWeight(SmellValue a, SmellValue b) {
 		int x = a.orientation;
 		int y = b.orientation;
-		return Math.min(Math.abs(x - y), 6 - Math.abs(x - y));
+		return Math.min(Math.abs(x - y), 6 - Math.abs(x - y)) + 1;
 	}
 
 	/* ========================================= */

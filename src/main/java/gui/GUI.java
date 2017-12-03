@@ -40,11 +40,10 @@ public class GUI extends Application {
 }
 
 // Sujith:
-// TODO when is "numValidHexes: [insert number]" printed? why is it printed?
 // TODO work on server stuff
 
 // Rishi:
-// TODO implement smell
+// TODO finish up the todos in smell method
 // TODO add food add rocks buttons = use addWorldObject()
 // TODO draw written problem #3 in paint
 // TODO add welcome to critterworld spiel in help text, and also put a made by us thing
