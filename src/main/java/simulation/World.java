@@ -35,7 +35,10 @@ public class World extends AbstractWorld {
 	private int rows;
 	/** The number of hexes that lie on the world grid. */
 	private int numValidHexes;
-	/** Assigned as a critter ID. Is modified every time a critter is added to ensure uniqueness of IDs. */
+	/**
+	 * Assigned as a critter ID. Is modified every time a critter is added to ensure
+	 * uniqueness of IDs.
+	 */
 	private int critterIDcount;
 	/** Maps unique critter IDs to critters. */
 	private HashMap<Integer, SimpleCritter> IDToCritterMap;
@@ -308,7 +311,7 @@ public class World extends AbstractWorld {
 	public int getRows() {
 		return rows;
 	}
-	
+
 	@Override
 	public String getWorldName() {
 		return worldname;
@@ -329,7 +332,7 @@ public class World extends AbstractWorld {
 	public void loadCritters(String filename, int n, int direction) {
 		try {
 			for (int i = 0; i < n; i++) {
-				if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+				if (i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
 					break;
 				BufferedReader br = new BufferedReader(new FileReader(filename));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
@@ -353,7 +356,7 @@ public class World extends AbstractWorld {
 	public void loadCritters(File file, int n, int direction) {
 		try {
 			for (int i = 0; i < n; i++) {
-				if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+				if (i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
 					break;
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
@@ -378,7 +381,7 @@ public class World extends AbstractWorld {
 		int[] result = new int[n];
 		Arrays.fill(result, -1);
 		for (int i = 0; i < n; i++) {
-			if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
+			if (i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
 				break;
 			int randc = (int) (Math.random() * columns);
 			int randr = (int) (Math.random() * rows);
@@ -393,7 +396,7 @@ public class World extends AbstractWorld {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void loadCritterAtLocation(File file, int c, int r) {
 		try {
@@ -420,7 +423,7 @@ public class World extends AbstractWorld {
 			result = critterIDcount;
 			IDToCritterMap.put(critterIDcount, sc);
 			critterToIDMap.put(sc, critterIDcount);
-			if(sessionID > 0)
+			if (sessionID > 0)
 				critterCreatorMap.put(critterIDcount, sessionID);
 			critterIDcount++;
 		} else {
@@ -486,21 +489,115 @@ public class World extends AbstractWorld {
 
 	@Override
 	public int smell(SimpleCritter sc) {
-		AdjustablePriorityQueue<Node> frontier = new AdjustablePriorityQueue<>();
 		int direction = 0;
-		int distance = 0;
+		int distance = 1000;
+		ArrayList<SmellValue> foodList = new ArrayList<SmellValue>();
+
+		HashMap<Hex, SmellValue> graph = new HashMap<Hex, SmellValue>();
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) { // TODO is grid always rectangular so i can make this 0 instead of i?
-				if (!isValidHex(i, j)) {
-					if (grid[i][j].hexAppearance() == 0) {
-						
+			for (int j = 0; j < grid[i].length; j++) { // TODO is grid always a rect so i can make this 0 instead of i?
+				if (isValidHex(i, j)) {
+					if (grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
+						SmellValue sv = new SmellValue();
+						graph.put(grid[i][j], sv);
+						if (grid[i][j].hexAppearance() < -1) {
+							foodList.add(sv);
+						}
 					}
 				}
 			}
 		}
-		
-		// TODO implement
+
+		// sets up root hex for smell function
+		Hex root = critterMap.get(sc);
+		SmellValue rootSmell = graph.get(root);
+		rootSmell.totalDist = 0;
+		rootSmell.orientation = sc.getOrientation();
+		rootSmell.numSteps = 0;
+
+		// sets up priority queue
+		AdjustablePriorityQueue<Hex> frontier = new AdjustablePriorityQueue<Hex>();
+		frontier.add(root);
+		frontier.setPriority(root, 0);
+
+		boolean initialIteration = true;
+		while (!frontier.isEmpty()) {
+			// pops hex from priority queue
+			Hex curr = frontier.remove();
+			SmellValue currSmell = graph.get(curr);
+			int c = curr.getColumnIndex();
+			int r = curr.getRowIndex();
+
+			// find neighbor hexes if they exist
+			Hex[] neighbors = new Hex[6];
+			if (isValidHex(c, r + 1))
+				neighbors[0] = grid[c][r + 1];
+			if (isValidHex(c + 1, r + 1))
+				neighbors[1] = grid[c + 1][r + 1];
+			if (isValidHex(c, r + 1))
+				neighbors[2] = grid[c + 1][r];
+			if (isValidHex(c, r - 1))
+				neighbors[3] = grid[c][r - 1];
+			if (isValidHex(c - 1, r - 1))
+				neighbors[4] = grid[c - 1][r - 1];
+			if (isValidHex(c - 1, r))
+				neighbors[5] = grid[c - 1][r];
+
+			// apply an iteration of Dijkstra's algorithm
+			for (int i = 0; i < neighbors.length; i++) {
+				SmellValue sv = graph.get(neighbors[i]);
+				if (sv != null) {
+					boolean isFood = foodList.contains(sv);
+
+					// moves on to the next hex if it has taken 11 steps to reach new hex (or 12 in
+					// the case of food)
+					if (currSmell.numSteps == (isFood ? 11 : 10)) {
+						continue;
+					}
+
+					int newDistance = currSmell.totalDist;
+					if (!isFood) {
+						newDistance += calculateSmellWeight(currSmell, sv);
+					}
+
+					if (sv.totalDist == Integer.MAX_VALUE) {
+						sv.totalDist = newDistance;
+						sv.origin = initialIteration ? i : currSmell.origin;
+						sv.numSteps = currSmell.numSteps + 1;
+						frontier.add(neighbors[i]);
+						frontier.setPriority(neighbors[i], sv.totalDist);
+					} else {
+						sv.totalDist = Math.min(sv.totalDist, newDistance);
+						if (sv.totalDist == newDistance) {
+							sv.origin = initialIteration ? i : currSmell.origin;
+							sv.numSteps = currSmell.numSteps + 1;
+						}
+						frontier.setPriority(neighbors[i], sv.totalDist);
+					}
+				}
+			}
+
+			initialIteration = false;
+		}
+
+		// finds closest food
+		for (SmellValue sv : foodList) {
+			distance = Math.min(distance, sv.totalDist);
+			if (distance == sv.totalDist) {
+				direction = sv.origin;
+			}
+		}
+
+		// TODO optimization: have a particular track of searching end if it hits food
+		// TODO test method a bunch when done
+
 		return distance * 1000 + direction;
+	}
+
+	private int calculateSmellWeight(SmellValue a, SmellValue b) {
+		int x = a.orientation;
+		int y = b.orientation;
+		return Math.min(Math.abs(x - y), 6 - Math.abs(x - y)) + 1;
 	}
 
 	/* ========================================= */
@@ -675,7 +772,8 @@ public class World extends AbstractWorld {
 		sc.updateEnergy(-1 * CONSTANTS.get("BUD_COST").intValue() * complexity,
 				CONSTANTS.get("ENERGY_PER_SIZE").intValue());
 
-		// if the critter did not have enough energy to complete this action, kills the critter
+		// if the critter did not have enough energy to complete this action, kills the
+		// critter
 		if (sc.getEnergy() < 0) {
 			kill(sc);
 			return;
@@ -870,8 +968,8 @@ public class World extends AbstractWorld {
 		for (int i = 0; i < numMutations; i++)
 			prog = prog.mutate();
 		String name = random.nextBoolean() ? sc1.getName() : sc2.getName();
-		Integer parentCreatorID = random.nextBoolean() ? critterCreatorMap.get(critterToIDMap.get(sc1)) :
-														 critterCreatorMap.get(critterToIDMap.get(sc2));
+		Integer parentCreatorID = random.nextBoolean() ? critterCreatorMap.get(critterToIDMap.get(sc1))
+				: critterCreatorMap.get(critterToIDMap.get(sc2));
 		int babyCreatorID = parentCreatorID == null ? -1 : parentCreatorID;
 		SimpleCritter baby = new Critter(prog, babymem, name, 0);
 		loadOneCritter(baby, babyColumn, babyRow, babyCreatorID);
@@ -981,10 +1079,10 @@ public class World extends AbstractWorld {
 		nonCritterObjectMap.put(remnant, location);
 		location.addContent(remnant);
 	}
-	
+
 	@Override
 	public void removeCritter(SimpleCritter sc) {
-		if(sc == null)
+		if (sc == null)
 			return;
 		Hex location = critterMap.get(sc);
 		location.removeContent();
@@ -1038,23 +1136,24 @@ public class World extends AbstractWorld {
 			return null;
 		return (SimpleCritter) (grid[c][r].getContent());
 	}
-	
+
 	@Override
 	public int[] getCritterLocation(SimpleCritter sc) {
 		Hex location = critterMap.get(sc);
-		if(location == null)
+		if (location == null)
 			return null;
 		int c = location.getColumnIndex();
 		int r = location.getRowIndex();
-		return new int[] {c, r};
+		return new int[] { c, r };
 	}
+
 	@Override
 	public int getCritterID(SimpleCritter sc) {
 		Integer ID = critterToIDMap.get(sc);
 		int result = (ID == null) ? 0 : ID;
 		return result;
 	}
-	
+
 	@Override
 	public SimpleCritter getCritterFromID(int id) {
 		return IDToCritterMap.get(id);
@@ -1064,7 +1163,7 @@ public class World extends AbstractWorld {
 	public int getCritterCreatorID(SimpleCritter sc) {
 		return critterCreatorMap.get(getCritterID(sc));
 	}
-	
+
 	@Override
 	public WorldObject getHexContent(int c, int r) {
 		if (!isValidHex(c, r))
