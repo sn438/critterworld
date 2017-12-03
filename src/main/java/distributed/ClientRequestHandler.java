@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-
 import simulation.FileParser;
 import simulation.Hex;
 import simulation.SimpleCritter;
@@ -78,7 +77,7 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); //TODO remove
+			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 		return true;
@@ -133,7 +132,7 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); //TODO remove
+			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		} finally {
 			br.close();
@@ -144,6 +143,7 @@ public class ClientRequestHandler {
 
 	/**
 	 * Returns the number of columns in the world.
+	 * 
 	 * @return The number of columns, or -1 if the user does not have permission
 	 */
 	public int getColumns(int sessionId) {
@@ -163,7 +163,7 @@ public class ClientRequestHandler {
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			WorldStateJSON worldState =  gson.fromJson(r, WorldStateJSON.class);
+			WorldStateJSON worldState = gson.fromJson(r, WorldStateJSON.class);
 			returnValue = worldState.getCols();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
@@ -189,7 +189,7 @@ public class ClientRequestHandler {
 				return -1;
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			WorldStateJSON worldState =  gson.fromJson(r, WorldStateJSON.class);
+			WorldStateJSON worldState = gson.fromJson(r, WorldStateJSON.class);
 			returnValue = worldState.getRows();
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
@@ -212,11 +212,12 @@ public class ClientRequestHandler {
 	 * @throws FileNotFoundException
 	 * @throws IllegalArgumentException
 	 */
-	public void loadRandomCritters(File f, int n, int sessionId) throws FileNotFoundException, IllegalArgumentException {
+	public void loadRandomCritters(File f, int n, int sessionId)
+			throws FileNotFoundException, IllegalArgumentException {
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 		SimpleCritter critter = FileParser.parseCritter(reader, 8, 0);
-		if(critter == null)
+		if (critter == null)
 			throw new IllegalArgumentException();
 		CritterJSON critterJSON = null;
 		String programDescription = critter.getProgram().toString();
@@ -251,7 +252,7 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); //TODO remove
+			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 	}
@@ -265,11 +266,12 @@ public class ClientRequestHandler {
 	 * @throws FileNotFoundException
 	 * @throws IllegalArgumentException
 	 */
-	public void loadCritterAtLocation(File f, int c, int r, int sessionId) throws FileNotFoundException, IllegalArgumentException {
+	public void loadCritterAtLocation(File f, int c, int r, int sessionId)
+			throws FileNotFoundException, IllegalArgumentException {
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 		SimpleCritter critter = FileParser.parseCritter(reader, 8, 0);
-		if(critter == null)
+		if (critter == null)
 			throw new IllegalArgumentException();
 		String programDescription = critter.getProgram().toString();
 		int[] mem = critter.getMemoryCopy();
@@ -294,7 +296,7 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
-			//System.out.println(gson.toJson(critterJSON, CritterJSON.class));
+			// System.out.println(gson.toJson(critterJSON, CritterJSON.class));
 			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String line = r1.readLine();
 			while (line != null) {
@@ -304,11 +306,11 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); //TODO remove
+			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 	}
-	
+
 	/**
 	 *
 	 * @param sessionID
@@ -319,7 +321,7 @@ public class ClientRequestHandler {
 		Gson gson = new Gson();
 		URL url;
 		try {
-			url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionID + "&update_since=" + updateSince);
+			url = new URL(this.url + "/world?session_id=" + sessionID + "&update_since=" + updateSince);
 			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
@@ -347,10 +349,39 @@ public class ClientRequestHandler {
 			System.out.println("The URL entered was not correct.");
 			return null;
 		} catch (IOException e) {
-			e.printStackTrace(); //TODO remove
+			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 			return null;
 		}
+	}
+
+	/**
+	 * stepWorld() steps the world by one timestep.
+	 */
+	public void stepWorld(int sessionId) {
+		Gson gson = new Gson();
+		URL url;
+		try {
+			url = new URL(this.url + "/world?session_id=" + sessionId);
+			System.out.println(url);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Length", "0");
+			if (connection.getResponseCode() == 401) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Invalid Request");
+				alert.setHeaderText("Access Denied");
+				alert.setContentText("You do not have permission to view the world.");
+			}
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			System.out.println(r.readLine());
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+		}
+
 	}
 
 	private boolean isValidHex(int c, int r, int columns, int rows) {
