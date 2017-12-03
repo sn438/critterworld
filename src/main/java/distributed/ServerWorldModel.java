@@ -27,7 +27,7 @@ public class ServerWorldModel {
 	/** The current world version number. */
 	private int versionNumber;
 	/** A running list of all critters that have died across all worlds simulated in this session. */
-	private LinkedList<SimpleCritter> cumulativeDeadCritters;
+	private LinkedList<Integer> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	/**
@@ -46,7 +46,7 @@ public class ServerWorldModel {
 			time = 0;
 			versionNumber = 0;
 			diffLog = new ArrayList<LinkedList<Hex>>();
-			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
+			cumulativeDeadCritters = new LinkedList<Integer>();
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -67,7 +67,10 @@ public class ServerWorldModel {
 			// if a world already exists, adds all its dead critters to the cumulative dead
 			// critter list
 			if (world != null) {
-				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
+				for(SimpleCritter sc : world.collectCritterCorpses())
+					cumulativeDeadCritters.add(world.getCritterID(sc));
+				for(SimpleCritter sc : world.collectCritterCorpses())
+					cumulativeDeadCritters.add(world.getCritterID(sc));
 			}
 			world = new World(desc);
 			//System.out.println(world.getAndResetUpdatedHexes());
@@ -155,9 +158,8 @@ public class ServerWorldModel {
 		try {
 			rwl.readLock().lock();
 			int[] result = new int[cumulativeDeadCritters.size()];
-			for(int i = 0; i < cumulativeDeadCritters.size(); i++) {
-				result[i] = world.getCritterID(cumulativeDeadCritters.get(i));
-			}
+			for (int i = 0; i < cumulativeDeadCritters.size(); i++)
+				result[i] = cumulativeDeadCritters.get(i);
 			return result;
 		} finally {
 			rwl.readLock().unlock();

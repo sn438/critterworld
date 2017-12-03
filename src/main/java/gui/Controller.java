@@ -397,6 +397,8 @@ public class Controller {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
+					System.out.println("c: " + c);
+					System.out.println("r: " + r);
 					if (localMode)
 						model.loadCritterAtLocation(critterFile, c, r);
 					else

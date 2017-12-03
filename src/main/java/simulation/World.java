@@ -375,6 +375,10 @@ public class World extends AbstractWorld {
 	@Override
 	public int[] loadCritters(SimpleCritter sc, int n, int sessionID) {
 		int[] result = new int[n];
+		Program scProgram = sc.getProgram();
+		int[] scMem = sc.getMemoryCopy();
+		String scId = sc.getName();
+		int scDir = sc.getOrientation();
 		Arrays.fill(result, -1);
 		for (int i = 0; i < n; i++) {
 			if(i >= numValidHexes - (critterList.size() + nonCritterObjectMap.size()))
@@ -387,7 +391,8 @@ public class World extends AbstractWorld {
 			}
 
 			if (isValidHex(randc, randr)) {
-				result[i] = loadOneCritter(sc, randc, randr, sessionID);
+				SimpleCritter holder = new Critter(scProgram, scMem, scId, scDir);
+				result[i] = loadOneCritter(holder, randc, randr, sessionID);
 			}
 		}
 		return result;

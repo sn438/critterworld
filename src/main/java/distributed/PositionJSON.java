@@ -5,7 +5,7 @@ public class PositionJSON {
 	private Integer row;
 	private Integer col;
 
-	public PositionJSON(int row, int col) {
+	public PositionJSON(int col, int row) {
 		this.row = row;
 		this.col = col;
 	}

@@ -158,7 +158,7 @@ public class Server {
 				int[] deadList = model.getCumulativeDeadCritters();
 				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
 				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
-				//System.out.println("State length: " + state.length);
+				// System.out.println("State length: " + state.length);
 				int counter = 0;
 				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
 					int c = entry.getKey().getColumnIndex();
@@ -174,13 +174,13 @@ public class Server {
 					}
 					counter++;
 				}
-//				for (JSONWorldObject obj : state)
-//					System.out.println(obj);
+				// for (JSONWorldObject obj : state)
+				// System.out.println(obj);
 				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
 						state);
 			}
 		}, gson::toJson);
-		
+
 		get("/critters", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
@@ -192,36 +192,66 @@ public class Server {
 				return "User does not have permission to view the world.";
 			} else {
 				SimpleCritter[] critters = model.listCritters();
+				System.out.println(critters);
 				JSONWorldObject[] crittersJSON = new JSONWorldObject[critters.length];
 				int counter = 0;
-				for (SimpleCritter critter: critters) {
+				for (SimpleCritter critter : critters) {
 					boolean hasFullPermission = model.hasCritterPermissions(critter, sessionID);
 					int column = model.getCritterLocation(critter)[0];
 					int row = model.getCritterLocation(critter)[0];
 					int critterId = model.getID(critter);
 					JSONWorldObject holder = new JSONWorldObject(critter, column, row, critterId, hasFullPermission);
 					crittersJSON[counter] = holder;
+					counter++;
 				}
 				return crittersJSON;
 			}
-				
-			
+
 		}, gson::toJson);
-/*
+
 		get("/critter", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
-			int indexOfCritterID; 
-		});
-		*/
+			int sessionId = -1;
+			int critterId = -1;
+			if (queryString.indexOf("&id") != -1) {
+				int indexOfSessionId = queryString.indexOf("session_id=") + "session_id=".length();
+				int indexOfCritterId = queryString.indexOf("id=", queryString.indexOf('&')) + "id=".length();
+				sessionId = Integer.parseInt(queryString.substring(indexOfSessionId, queryString.indexOf("&")));
+				critterId = Integer.parseInt(queryString.substring(indexOfCritterId));
+			} else {
+				int indexOfSessionId = queryString.indexOf("session_id=") + "session_id=".length();
+				int indexOfCritterId = queryString.indexOf("id=") + "id=".length();
+				sessionId = Integer.parseInt(queryString.substring(indexOfSessionId));
+				critterId = Integer.parseInt(queryString.substring(indexOfCritterId, queryString.indexOf("&")));
+			}
+			String json = request.body();
+			if (sessionIdMap.get(sessionId) == null) {
+				response.status(401);
+				return "User does not have permission to view the world.";
+			} else if (model.retrieveCritter(critterId) == null) {
+				response.status(401);
+				return "Critter with the following id does not exist in the world.";
+			} else {
+				SimpleCritter critter = model.retrieveCritter(critterId);
+				boolean hasFullPermission = model.hasCritterPermissions(critter, sessionId);
+				int column = model.getCritterLocation(critter)[0];
+				int row = model.getCritterLocation(critter)[0];
+				JSONWorldObject holder = new JSONWorldObject(critter, column, row, critterId, hasFullPermission);
+				return holder;
+			}
+
+		}, gson::toJson);
+
 		// handles a client request to load in critters
 		post("/critters", (request, response) -> {
-			System.out.println("We have reached critters"); //TODO remove
+			System.out.println("We have reached critters"); // TODO remove
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=", 0) + 10;
 			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId + 1));
-			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin") || sessionIdMap.get(session_id).equals("write")))) {
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
+					|| sessionIdMap.get(session_id).equals("write")))) {
 				response.status(401);
 				return "User does not have write access.";
 			}
@@ -242,7 +272,7 @@ public class Server {
 				PositionJSON[] positions = loadCritterInfo.getPositions();
 				int counter = 0;
 				ids = new int[positions.length];
-				for (PositionJSON positionHolder: positions) {
+				for (PositionJSON positionHolder : positions) {
 					int c = positionHolder.getColumn();
 					int r = positionHolder.getRow();
 					int id = model.loadCritterAtLocation(critter, c, r, session_id);
@@ -250,10 +280,43 @@ public class Server {
 					counter++;
 				}
 			}
- 			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
- 			System.out.println(model.getNumCritters());
+			LoadCritterResponseJSON lcr = new LoadCritterResponseJSON(critter.getName(), ids);
+			System.out.println(model.getNumCritters());
 			return lcr;
 		}, gson::toJson);
+
+		post("/step", (request, response) -> {
+			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=") + 11;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId));
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
+					|| sessionIdMap.get(session_id).equals("write")))) {
+				response.status(401);
+				return "User does not have write access.";
+			}
+			if (model.getRate() != 0) {
+				response.status(406);
+				return "User cannot step because rate is not 0.";
+			}
+			String json = request.body();
+			System.out.println(json);
+			CountJSON stepInfo = gson.fromJson(json, CountJSON.class);
+			if (stepInfo.getCount() < 0) {
+				response.status(406);
+				return "World cannot be stepped a negative amount of times."; 
+			}
+			int count = 1;
+			if (stepInfo.getCount() != null) {
+				count = stepInfo.getCount();
+			}
+			for (int i = 0; i < count; i++) {
+				model.advanceTime();
+			}
+
+			return "Ok";
+		});
+
 	}
 
 	/** Returns the port number of the server. */
