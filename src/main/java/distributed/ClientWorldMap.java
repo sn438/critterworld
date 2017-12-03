@@ -113,7 +113,8 @@ public class ClientWorldMap {
 		}
 	}
 	
-	private void redraw() {
+	/** Redraws the entire world grid. */
+	private void redrawGrid() {
 		// resets the world grid
 		height = canvas.getHeight();
 		width = canvas.getWidth();
@@ -324,6 +325,15 @@ public class ClientWorldMap {
 			gc.setLineWidth(1);
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
+		} else if (wo.getType().equals("nothing")) {
+			double a = (double) sideLength; // for visual clarity in the calculations
+			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
+
+			double[] xPoints = { cartX + a, cartX + a / 2, cartX - a / 2, cartX - a, cartX - a / 2, cartX + a / 2 };
+			double[] yPoints = { cartY, cartY - m, cartY - m, cartY, cartY + m, cartY + m };
+			
+			gc.setFill(BACKGROUND_COLOR);
+			gc.fillPolygon(xPoints, yPoints, 6);
 		}
 	}
 
@@ -360,7 +370,7 @@ public class ClientWorldMap {
 
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
-		redraw();
+		redrawGrid();
 
 	}
 
@@ -405,7 +415,7 @@ public class ClientWorldMap {
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
 		gc.clearRect(0, 0, width, height);
-		redraw();
+		redrawGrid();
 	}
 
 	public boolean select(double xCoordinate, double yCoordinate) {

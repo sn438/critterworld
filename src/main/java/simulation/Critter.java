@@ -88,6 +88,13 @@ public class Critter implements SimpleCritter
 	}
 	
 	@Override
+	public void randomizeOrientation()
+	{
+		int rand = (int) (Math.random() * 6);
+		orientation = Direction.constructDir(rand);
+	}
+	
+	@Override
 	public String getLastRuleString()
 	{
 		return lastRuleCompleted;

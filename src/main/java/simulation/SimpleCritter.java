@@ -16,6 +16,9 @@ public interface SimpleCritter extends WorldObject
 	/** Returns the orientation of this critter. */
 	public int getOrientation();
 	
+	/** Randomizes the orientation of this critter. */
+	public void randomizeOrientation();
+	
 	/** Returns the current energy level of this critter. */
 	public int getEnergy();
 	
