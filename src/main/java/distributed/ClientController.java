@@ -131,13 +131,11 @@ public class ClientController {
 
 	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
-	/** The model that contains the world state. */
-	private WorldModel model;
 	/** Controls the hex grid. */
-	private WorldMap map;
+	private ClientWorldMap map;
 	/** The rate at which the simulation is run. */
 	private long simulationRate;
-	/** The executor that is used to step the world periodically. */
+	/** The executor used to periodically query the world for updates. */
 	private ScheduledExecutorService executor;
 
 	private double panMarkerX;
@@ -152,6 +150,7 @@ public class ClientController {
 	private String urlInitial;
 	private SessionID sessionID;
 	private ClientRequestHandler handler;
+	private int currentVersion;
 
 	@FXML
 	public void initialize() {
@@ -170,7 +169,6 @@ public class ClientController {
 		if (timeline != null)
 			timeline.stop();
 
-		model = new WorldModel();
 		simulationRate = 30;
 
 		loadCritterFile.setDisable(true);
@@ -214,11 +212,11 @@ public class ClientController {
 		// listeners that dynamically redraw the canvas in response to window resizing
 		c.heightProperty().addListener(update -> {
 			if (map != null)
-				map.draw();
+				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
 		});
 		c.widthProperty().addListener(update -> {
 			if (map != null)
-				map.draw();
+				map.draw(handler.updateSince(sessionID.getSessionID(), currentVersion));
 		});
 	}
 

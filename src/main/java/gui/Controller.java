@@ -273,8 +273,8 @@ public class Controller {
 	}
 
 	private void newWorldServer() {
-		if (handler.createNewWorld(sessionId.getSessionId())) {
-			map = new WorldMap(c, handler, sessionId.getSessionId());
+		if (handler.createNewWorld(sessionId.getSessionID())) {
+			map = new WorldMap(c, handler, sessionId.getSessionID());
 			map.draw();
 		} else
 			return;
@@ -302,8 +302,8 @@ public class Controller {
 
 	private void loadServerWorld(File worldFile) {
 		try {
-			handler.loadWorld(worldFile, sessionId.getSessionId());
-			map = new WorldMap(c, handler, sessionId.getSessionId());
+			handler.loadWorld(worldFile, sessionId.getSessionID());
+			map = new WorldMap(c, handler, sessionId.getSessionID());
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
@@ -372,7 +372,7 @@ public class Controller {
 				if (localMode)
 					model.loadRandomCritters(critterFile, n);
 				else
-					handler.loadRandomCritters(critterFile, n, sessionId.getSessionId());
+					handler.loadRandomCritters(critterFile, n, sessionId.getSessionID());
 
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
@@ -403,7 +403,7 @@ public class Controller {
 						model.loadCritterAtLocation(critterFile, c, r);
 					else
 						try {
-							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionId());
+							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionID());
 						} catch (FileNotFoundException e) {
 							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 							a.setTitle("Invalid File");
@@ -698,7 +698,7 @@ public class Controller {
 				holder = r.readLine();
 			}
 			sessionId = gson.fromJson(sessionIdString, SessionID.class);
-			System.out.println(sessionId.getSessionId());
+			System.out.println(sessionId.getSessionID());
 			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");

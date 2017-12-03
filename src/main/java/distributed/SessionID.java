@@ -2,13 +2,13 @@ package distributed;
 
 public class SessionID {
 
-	int session_id;
+	private int session_id;
 
-	public SessionID(int sessionId) {
-		this.session_id = sessionId;
+	public SessionID(int sessionID) {
+		this.session_id = sessionID;
 	}
 	
-	public int getSessionId() {
+	public int getSessionID() {
 		return session_id;
 	}
 }
