@@ -1,14 +1,15 @@
-species: Spiral
-memsize: 12
+species: Smell
+memsize: 13
 defense: 2
 offense: 3
 size: 1
 energy: 50000
 posture: 17
 
-//ensures that the critter has enough energy, and will eat food in its way
 ENERGY <= SIZE * 3 --> wait;
 ahead[1] < -1 --> eat;
+
+1 = 1 --> mem[6] := smell;
 
 mem[9] = 0 --> mem[8] := mem[8] + 1 mem[9] := 1 forward;
 

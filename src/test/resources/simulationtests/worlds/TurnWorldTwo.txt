@@ -1,0 +1,3 @@
+name Turn World 1
+size 5 10
+critter src/test/resources/simulationTests/critters/Turner2.txt 3 4 0

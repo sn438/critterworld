@@ -1,0 +1,5 @@
+name Attack World 
+size 5 10
+
+critter src/test/resources/simulationTests/critters/AttackCritter1.txt 3 4 0
+critter src/test/resources/simulationTests/critters/AttackCritter2.txt 3 5 3

@@ -1,4 +1,0 @@
-name Moving World 3
-size 5 10
-
-critter src/test/resources/simulationTests/MovingCritterLittleEnergy.txt 3 5 0

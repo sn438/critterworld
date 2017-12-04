@@ -1,0 +1,4 @@
+name Spiral World
+size 11 13
+critter src/test/resources/simulationTests/critters/spiral_critter.txt 5 6 0
+food 5 7 10000

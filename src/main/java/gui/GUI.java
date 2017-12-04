@@ -37,6 +37,8 @@ public class GUI extends Application {
 	}
 }
 
+// TODO check all todos before submitting (especially "// todo remove"s)
+
 // Sujith:
 // TODO work on server stuff
 

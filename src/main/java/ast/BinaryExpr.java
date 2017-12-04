@@ -104,7 +104,6 @@ public class BinaryExpr extends AbstractNode implements Expr
 			right.setParent(this);
 			return true;
 		}
-		System.out.println("You messed up RCW in BinaryExpr."); //TODO remove when done testing
 		return false;
 	}
 	
