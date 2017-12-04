@@ -497,14 +497,15 @@ public class World extends AbstractWorld {
 	}
 
 	@Override
-	public void addNonCritterObject(WorldObject wo, int c, int r) {
+	public boolean addNonCritterObject(WorldObject wo, int c, int r) {
 		if (wo instanceof Critter)
-			return;
+			return false;
 		if (!isValidHex(c, r))
-			return;
+			return false;
 		nonCritterObjectMap.put(wo, grid[c][r]);
-		grid[c][r].addContent(wo);
+		boolean isValid = grid[c][r].addContent(wo);
 		updatedHexes.add(grid[c][r]);
+		return isValid;
 	}
 
 	/* ========================================= */

@@ -87,8 +87,9 @@ public interface SimpleWorld
 	 * @param wo The object to add
 	 * @param c The column index of the hex where the object will be added
 	 * @param r The row index of the hex where the object will be added
+	 * @return 
 	 */
-	void addNonCritterObject(WorldObject wo, int c, int r);
+	boolean addNonCritterObject(WorldObject wo, int c, int r);
 	
 	/** Gets a list of the living critters in the world. */
 	LinkedList<SimpleCritter> getCritterList();

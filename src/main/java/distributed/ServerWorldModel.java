@@ -366,10 +366,12 @@ public class ServerWorldModel {
 	 * @param c The column index at which to add the object
 	 * @param r The row index at which to add the object
 	 */
-	public void addWorldObject(WorldObject wo, int c, int r) {
+	public boolean addWorldObject(WorldObject wo, int c, int r) {
+		System.out.println("dfjhkjfdkjfdghkfdjg");
 		try {
 			rwl.writeLock().lock();
-			world.addNonCritterObject(wo, c, r);
+			boolean isValid = world.addNonCritterObject(wo, c, r);
+			return isValid;
 		} finally {
 			diffLog.add(world.getAndResetUpdatedHexes());
 			versionNumber++;

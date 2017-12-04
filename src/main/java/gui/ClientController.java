@@ -261,8 +261,8 @@ public class ClientController {
 		setGUIReady(true);
 
 		WorldStateJSON wsj = handler.updateSince(sessionID, 0);
-		if (wsj != null) {
 
+		if (wsj != null) {
 			map = new ClientWorldMap(c, wsj.getCols(), wsj.getRows());
 			// System.out.println("This is map:" + map);
 			currentVersion = wsj.getCurrentVersion();
