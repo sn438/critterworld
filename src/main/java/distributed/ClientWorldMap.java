@@ -83,6 +83,12 @@ public class ClientWorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
+		
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+		gc.clearRect(0, 0, width, height);
+		gc.setFill(BACKGROUND_COLOR);
+		gc.fillRect(0, 0, width, height);
 	}
 
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
@@ -98,7 +104,9 @@ public class ClientWorldMap {
 
 	/** Draws the parts of the world grid that have changed from the last version. */
 	public void draw(WorldStateJSON wsj) {
+		System.out.println("Draw has been reached");
 		cachedState = wsj;
+		
 		columns = wsj.getCols();
 		rows = wsj.getRows();
 
@@ -172,8 +180,9 @@ public class ClientWorldMap {
 		for(JSONWorldObject obj : objects) {
 			if (obj.getType().equals("critter"))
 				drawCritter(obj.getMemory()[3], obj.getOrientation(), obj.getSpeciesName(), obj.getCol(), obj.getRow());
-			else
+			else {
 				drawWorldObject(obj, obj.getCol(), obj.getRow());
+				}
 		}
 	}
 
@@ -331,6 +340,7 @@ public class ClientWorldMap {
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
 		} else if (wo.getType().equals("nothing")) {
+			
 			double a = (double) sideLength - 1.0; // for visual clarity in the calculations
 			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
