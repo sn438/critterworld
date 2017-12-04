@@ -325,11 +325,14 @@ public class ClientWorldMap {
 		gc.setLineWidth(3.0);
 
 		if (wo.getType().equals("rock")) {
+			
+			System.out.println("rock");
 			double size = 0.9 * sideLength;
 			gc.setStroke(Color.BROWN);// GOLDENROD
 			gc.strokeRect(cartX - size / 2, cartY - size / 2, size, size);
 		}
 		else if (wo.getType().equals("food")) {
+			System.out.println("food");
 			int calories = wo.getCalories();
 			double size = 0.9 * sideLength;
 			gc.setStroke(Color.WHITE);// RED
@@ -340,14 +343,13 @@ public class ClientWorldMap {
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
 		} else if (wo.getType().equals("nothing")) {
-			
+			System.out.println("nothing");
 			double a = (double) sideLength - 1.0; // for visual clarity in the calculations
 			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
 			double[] xPoints = { cartX + a, cartX + a / 2, cartX - a / 2, cartX - a, cartX - a / 2, cartX + a / 2 };
 			double[] yPoints = { cartY, cartY - m, cartY - m, cartY, cartY + m, cartY + m };
 			
-			gc.setFill(BACKGROUND_COLOR);
 			gc.fillPolygon(xPoints, yPoints, 6);
 		}
 	}

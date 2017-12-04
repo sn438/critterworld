@@ -23,7 +23,9 @@ import ast.Program;
 import parse.ParserImpl;
 import simulation.Critter;
 import simulation.FileParser;
+import simulation.Food;
 import simulation.Hex;
+import simulation.Rock;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
 
@@ -466,8 +468,40 @@ public class Server {
 			return lcr;
 		}, gson::toJson);
 
-		post("/step", (request, response) -> {
+		post("/world/create_entity", (request, response) -> {
 			System.out.println("Step has been reached");
+			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=") + 11;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId));
+			if (!((sessionIdMap.get(session_id) != null) && ((sessionIdMap.get(session_id).equals("admin"))|| (sessionIdMap.get(session_id).equals("write"))))) {
+				response.status(401);
+				return "User does not have write access.";
+			}
+			String json = request.body();
+			System.out.println(json);
+			JSONWorldObject entityInfo = gson.fromJson(json, JSONWorldObject.class);
+			if (entityInfo.getType().equals("rock") && entityInfo.getAmount( )!= null) {
+				response.status(406);
+				return "Rocks cannot have an amount.";
+			}
+			WorldObject object;
+			if (entityInfo.getType().equals("rock")) {
+				object = new Rock();
+			}
+			else {
+				object = new Food(entityInfo.getAmount());
+			}
+			if (!model.addWorldObject(object, entityInfo.getCol(), entityInfo.getRow())) {
+				response.status(406);
+				return "Invalid hex, location already occupied.";
+			}
+				
+			response.status(200);
+			return "Ok";
+		});
+		
+		post("/step", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();
 			int indexOfSessionId = queryString.indexOf("session_id=") + 11;
@@ -512,6 +546,9 @@ public class Server {
 
 			}
 		});
+		
+				
+		
 
 	}
 
