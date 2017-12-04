@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import java.util.Set;
 import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
-import cs2110.AdjustablePriorityQueue;
 
 /** A class to simulate the world state. */
 public class World extends AbstractWorld {
@@ -189,7 +189,6 @@ public class World extends AbstractWorld {
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 		}
 		numValidHexes = 0;
-
 		// initializes world grid
 		grid = new Hex[columns][rows];
 		for (int i = 0; i < grid.length; i++)
@@ -228,6 +227,11 @@ public class World extends AbstractWorld {
 				}
 				line = bf.readLine();
 			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Critter file not found.");
+			return;
+		} catch (IOException e) {
+			return;
 		} catch (Exception e) {
 			return;
 		}
@@ -271,7 +275,6 @@ public class World extends AbstractWorld {
 			}
 
 		// randomly fills about 1/40 of the hexes in the world with rocks
-		//System.out.println("numValidHexes: " + numValidHexes);
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
@@ -360,6 +363,9 @@ public class World extends AbstractWorld {
 					break;
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
+				if (sc == null) {
+					return;
+				}
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
 				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty()) {
@@ -499,9 +505,10 @@ public class World extends AbstractWorld {
 		int distance = 1000;
 		ArrayList<SmellValue> foodList = new ArrayList<SmellValue>();
 
+		// adds all the possible hexes to be used in method to a hash map
 		HashMap<Hex, SmellValue> graph = new HashMap<Hex, SmellValue>();
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) { // TODO is grid always a rect so i can make this 0 instead of i?
+			for (int j = 0; j < grid[i].length; j++) {
 				if (isValidHex(i, j)) {
 					if (grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
 						SmellValue sv = new SmellValue();
@@ -762,7 +769,10 @@ public class World extends AbstractWorld {
 			kill(attacker);
 	}
 
-	/** Performs the logistic function 1 / (1 + e^-x). */
+	/**
+	 * Applies the logistic function, {@code f(x) = 1 / (1 + e^-x)}, to the given
+	 * number.
+	 */
 	private double logisticFunction(double x) {
 		double exponent = -1 * x;
 		return (1 / (1 + Math.exp(exponent)));
@@ -808,7 +818,6 @@ public class World extends AbstractWorld {
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
 		for (int i = 0; i < numMutations; i++) {
-			// System.out.println("mutate");
 			prog = prog.mutate();
 		}
 
@@ -937,7 +946,7 @@ public class World extends AbstractWorld {
 		}
 		Program prog = new ProgramImpl(babyRules);
 
-		// generating memory
+		// generate memory
 		int[] babymem = null;
 		if (random.nextBoolean()) {
 			babymem = new int[sc1.getMemLength()];
@@ -957,7 +966,7 @@ public class World extends AbstractWorld {
 		for (int i = 5; i < babymem.length; i++)
 			babymem[i] = 0;
 
-		// coordinate Generation
+		// generate coordinates
 		int babyColumn = 0;
 		int babyRow = 0;
 		if (random.nextBoolean()) {

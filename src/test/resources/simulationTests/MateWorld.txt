@@ -1,5 +1,0 @@
-name Mate World 
-size 5 10
-
-critter src/test/resources/simulationTests/MatingParent1.txt 3 4 0
-critter src/test/resources/simulationTests/MatingParent2.txt 3 5 3

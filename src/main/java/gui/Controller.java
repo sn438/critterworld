@@ -287,7 +287,7 @@ public class Controller {
 	private void handleLoadWorldPressed(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File initDirectory = new File("./src/test/resources/simulationtests"); // TODO remove before submitting?
+		File initDirectory = new File("./src/test/resources/simulationtests/worlds"); // TODO remove before submitting?
 		fc.setInitialDirectory(initDirectory); // TODO remove before submitting?
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null) {
@@ -356,10 +356,15 @@ public class Controller {
 	}
 
 	@FXML
+	private void handleCheckRandom(MouseEvent me) {
+		numCritters.setText(Integer.toString(1));
+	}
+	
+	@FXML
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("./src/test/resources/simulationtests"); // TODO remove
+		File f = new File("./src/test/resources/simulationtests/critters"); // TODO remove
 		fc.setInitialDirectory(f); // TODO remove
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
@@ -439,7 +444,6 @@ public class Controller {
 			@Override
 			public void run() {
 				model.advanceTime();
-				// System.out.println("ASFAS");
 			}
 		});
 		worldUpdateThread.setDaemon(false);
@@ -594,7 +598,7 @@ public class Controller {
 	private void help(ActionEvent ae) {
 		String fileName = "instructions.txt";
 		ImageView imgview = new ImageView(GUI.icon);
-		Alert alert = new Alert(AlertType.INFORMATION);	
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setGraphic(imgview);
 		try {
 			String helpText = new String(Files.readAllBytes(Paths.get(fileName)));
@@ -689,17 +693,17 @@ public class Controller {
 					System.exit(0);
 				}
 			}
-			
+
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = "";
 			String holder = r.readLine();
-			while(holder != null) {
+			while (holder != null) {
 				sessionIdString += holder;
 				holder = r.readLine();
 			}
 			sessionId = gson.fromJson(sessionIdString, SessionID.class);
 			System.out.println(sessionId.getSessionID());
-			
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 			localMode = true;

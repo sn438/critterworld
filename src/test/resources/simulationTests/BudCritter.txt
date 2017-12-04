@@ -1,8 +1,0 @@
-species: example
-memsize: 11
-defense: 2
-offense: 3
-size: 1
-energy: 5000000
-posture: 17
-3 = 3 --> bud;

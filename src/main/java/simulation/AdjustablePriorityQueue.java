@@ -1,4 +1,4 @@
-package cs2110;
+package simulation;
 
 import java.util.AbstractQueue;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
  * elements or a supplied {@link java.util.Comparator}. An attempt to insert an
  * element that is already there results in an {@link IllegalArgumentException}.
  * 
+ * @author CS 2110
  * @param <T>
  *           the type of elements contained in this {@code PriorityQueue}.
  */

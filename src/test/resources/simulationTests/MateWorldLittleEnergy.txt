@@ -1,5 +1,0 @@
-name Mate World Little Energy
-size 5 10
-
-critter src/test/resources/simulationTests/MatingParent3.txt 3 4 0
-critter src/test/resources/simulationTests/MatingParent4.txt 3 5 3

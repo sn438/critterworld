@@ -135,7 +135,6 @@ public class MutationReplace extends AbstractMutation
 		for(int i = 0; i < size; i++)
 		{
 			index = i + rand < size ? i + rand : i + rand - size;
-			//System.out.println(index + " " + rand + " " + i); //TODO remove when done testing
 			if(root.nodeAt(index).getType() == a.getType())
 			{
 				copy = (Action) (root.nodeAt(index)).clone();

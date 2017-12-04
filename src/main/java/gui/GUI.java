@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 	public static final Image icon = new Image(
 			GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
-	// public static final Image icon = new Image("gui/critterworld_favicon.png");
-	// TODO why is it not just something as simple as this?
 
 	public static void main(String[] args) {
 		launch(args);
@@ -38,6 +36,8 @@ public class GUI extends Application {
 		}
 	}
 }
+
+// TODO check all todos before submitting (especially "// todo remove"s)
 
 // Sujith:
 // TODO work on server stuff

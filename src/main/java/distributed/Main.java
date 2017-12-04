@@ -9,7 +9,6 @@ public class Main {
 		String readPassword = null;
 		String writePassword = null;
 		String adminPassword = null;
-		boolean serverLoaded = false;
 		int portNumber = 0;
 		try {
 			if (args.length == 0) {
@@ -20,11 +19,11 @@ public class Main {
 				readPassword = args[1];
 				writePassword = args[2];
 				adminPassword = args[3];
-				serverLoaded = true;
 				server = Server.getInstance(portNumber, readPassword, writePassword, adminPassword);
 				server.run();
 			} else {
-				System.out.println("Bad input."); // TODO what to do in the case of bad input?
+				System.out.println("Incorrect number of arguments... initializing client.");
+				GUI.main(null);
 			}
 		} catch (Exception e) {
 			System.out.println("Server was not started. Please start server first.");

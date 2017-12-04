@@ -240,13 +240,10 @@ public class WorldModel {
 			time++;
 			versionNumber++;
 			//System.out.println(world.getAndResetUpdatedHexes());
-			//diffLog.add(world.getAndResetUpdatedHexes());
-			rwl.writeLock().unlock();
-			
-			rwl.readLock().lock();
+			diffLog.add(world.getAndResetUpdatedHexes());
 			numCritters = world.numRemainingCritters();
 		} finally {
-			rwl.readLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 	
@@ -283,11 +280,9 @@ public class WorldModel {
 			rwl.writeLock().lock();
 			world.loadCritters(f, n, -1);
 			versionNumber++;
-			rwl.writeLock().unlock();
-			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
-			rwl.readLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 
@@ -296,11 +291,9 @@ public class WorldModel {
 			rwl.writeLock().lock();
 			world.loadCritterAtLocation(f, c, r);
 			versionNumber++;
-			rwl.writeLock().unlock();
-			rwl.readLock().lock();
 			numCritters = world.numRemainingCritters();
 		} finally {
-			rwl.readLock().unlock();
+			rwl.writeLock().unlock();
 		}
 	}
 }
