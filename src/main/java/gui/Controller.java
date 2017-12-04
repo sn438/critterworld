@@ -679,7 +679,10 @@ public class Controller {
 			SimpleCritter critter = localCache.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
 			String critterProgramString = critterProgram.toString();
+			
 			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+			ImageView imgview = new ImageView(GUI.icon);
+			alert.setGraphic(imgview);
 			alert.setHeaderText("Critter Program");
 			alert.showAndWait();
 		}
