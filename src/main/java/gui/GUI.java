@@ -61,7 +61,6 @@ public class GUI extends Application {
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
-// TODO start worldmodel updates and stuff
 // TODO find better way to loop through all critters???
 // TODO locks in world model - ask about those?
 // TODO is there a way to have the program stop automatically when the GUI is

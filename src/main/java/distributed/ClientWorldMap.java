@@ -2,13 +2,13 @@ package distributed;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import simulation.Hex;
 
 /** A class that draws the hex grid for the client user interface. */
 public class ClientWorldMap {
@@ -54,8 +54,8 @@ public class ClientWorldMap {
 
 	/** A local cached version of the world state. */
 	private WorldStateJSON cachedState;
-
-	private HashMap<JSONWorldObject, Integer[]> objects;
+	/** A list of all objects in the world. */
+	private HashMap<JSONWorldObject, int[]> objectMap;
 	
 	/**
 	 *
@@ -71,7 +71,7 @@ public class ClientWorldMap {
 
 		columns = initialCols;
 		rows = initialRows;
-		objects = new HashMap<JSONWorldObject, Integer[]>();
+		objectMap = new HashMap<JSONWorldObject, int[]>();
 
 		column_drawing_marker = columns;
 		row_drawing_marker = rows;
@@ -83,7 +83,49 @@ public class ClientWorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
-
+		
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+		gc.clearRect(0, 0, width, height);
+		gc.setFill(BACKGROUND_COLOR);
+		gc.fillRect(0, 0, width, height);
+		
+//		// resets the world grid
+//		height = canvas.getHeight();
+//		width = canvas.getWidth();
+//		gc.clearRect(0, 0, width, height);
+//		gc.setFill(BACKGROUND_COLOR);
+//		gc.fillRect(0, 0, width, height);
+//			
+//		// draws grid and sets the origin
+//		gc.setLineWidth(1);
+//		double hexMarkerX = x_position_marker;
+//		double hexMarkerY = y_position_marker;
+//		for (int i = 0; i < column_drawing_marker; i++) {
+//			if (i % 2 == 0 && column_drawing_marker % 2 == 0) {
+//				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
+//			}
+//			if (i % 2 == 1 && column_drawing_marker % 2 == 1) {
+//				hexMarkerY += Math.sqrt(3) * (sideLength / 2);
+//				row_drawing_marker--;
+//			}
+//			for (int j = 0; j < row_drawing_marker; j++) {
+//				drawHex(hexMarkerX, hexMarkerY);
+//				hexMarkerY += (Math.sqrt(3) * (sideLength));
+//			}
+//
+//			hexMarkerX += sideLength + (sideLength / 2);
+//			hexMarkerY = y_position_marker;
+//			if (i % 2 == 1 && column_drawing_marker % 2 == 1) {
+//				row_drawing_marker++;
+//			}
+//		}
+//		hexMarkerX = x_position_marker;
+//		origin_x = hexMarkerX;
+//		origin_y = hexMarkerY + (sideLength * (Math.sqrt(3)) * row_drawing_marker) - (Math.sqrt(3) * (sideLength / 2));
+//		if (column_drawing_marker % 2 == 0)
+//			origin_y += (sideLength / 2) * (Math.sqrt(3));
+//		origin_y -= sideLength / 2 * Math.sqrt(3);
 	}
 
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
@@ -99,12 +141,21 @@ public class ClientWorldMap {
 
 	/** Draws the parts of the world grid that have changed from the last version. */
 	public void draw(WorldStateJSON wsj) {
+		System.out.println("Draw has been reached");
 		cachedState = wsj;
+		
 		columns = wsj.getCols();
 		rows = wsj.getRows();
 
 		// draws world objects
 		gc.setLineWidth(3);
+//		for(JSONWorldObject obj : cachedState.getWorldObjects()) {
+//			int[] location = new int[2];
+//			location[0] = obj.getCol();
+//			location[1] = obj.getRow();
+//			objectMap.put(obj, location);
+//		}
+
 		drawObjects(cachedState.getWorldObjects());
 
 		if (selectedHex != null) {
@@ -154,7 +205,7 @@ public class ClientWorldMap {
 		
 		// draws world objects
 		gc.setLineWidth(3);
-		drawObjects(cachedState.getWorldObjects());
+		redrawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
@@ -167,11 +218,23 @@ public class ClientWorldMap {
 		for(JSONWorldObject obj : objects) {
 			if (obj.getType().equals("critter"))
 				drawCritter(obj.getMemory()[3], obj.getOrientation(), obj.getSpeciesName(), obj.getCol(), obj.getRow());
-			else
+			else {
 				drawWorldObject(obj, obj.getCol(), obj.getRow());
+				}
 		}
 	}
 
+	/** Redraws all the world objects. */
+	private void redrawObjects() {
+		for(Entry<JSONWorldObject, int[]> obj : objectMap.entrySet()) {
+			JSONWorldObject key = obj.getKey();
+			if (key.getType().equals("critter"))
+				drawCritter(key.getMemory()[3], key.getOrientation(), key.getSpeciesName(), key.getCol(), key.getRow());
+			else
+				drawWorldObject(key, key.getCol(), key.getRow());
+		}
+	}
+	
 	/**
 	 * Draws one critter onto the world grid.
 	 * @param sc
@@ -326,6 +389,7 @@ public class ClientWorldMap {
 			gc.strokeText(String.valueOf(calories), cartX, cartY);
 			gc.setLineWidth(3);
 		} else if (wo.getType().equals("nothing")) {
+			
 			double a = (double) sideLength - 1.0; // for visual clarity in the calculations
 			double m = a * Math.sqrt(3) / 2.0; // for visual clarity in the calculations
 
@@ -370,7 +434,7 @@ public class ClientWorldMap {
 
 		x_position_marker = width / 2 - (width / 2 - x_position_marker) * factor;
 		y_position_marker = height / 2 - (height / 2 - y_position_marker) * factor;
-		redrawGrid();
+		//redrawGrid();
 
 	}
 
@@ -415,7 +479,7 @@ public class ClientWorldMap {
 			y_position_marker = Math.sqrt(3) * sideLength - Math.sqrt(3) * sideLength * row_drawing_marker;
 
 		gc.clearRect(0, 0, width, height);
-		redrawGrid();
+		//redrawGrid();
 	}
 
 	public boolean select(double xCoordinate, double yCoordinate) {

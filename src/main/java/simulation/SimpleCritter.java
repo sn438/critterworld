@@ -4,6 +4,12 @@ import ast.Program;
 
 public interface SimpleCritter extends WorldObject
 {
+	/** Returns the ID of this critter, or 0 if it hasn't been assigned one. */
+	public int getID();
+	
+	/** Sets the ID of this critter. */
+	public void setID(int id);
+	
 	/** Returns the ruleset of this critter. */
 	public Program getProgram();
 	

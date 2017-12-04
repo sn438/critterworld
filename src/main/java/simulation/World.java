@@ -18,6 +18,7 @@ import java.util.Set;
 import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
+import distributed.WorldStateJSON;
 
 /** A class to simulate the world state. */
 public class World extends AbstractWorld {
@@ -135,6 +136,23 @@ public class World extends AbstractWorld {
 				break;
 			}
 		}
+	}
+
+	/** */
+	public World(WorldStateJSON state) throws FileNotFoundException, IllegalArgumentException {
+		// sets constants and initializes instance fields
+		super();
+		setConstants();
+		critterMap = new HashMap<SimpleCritter, Hex>();
+		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		critterIDcount = 1;
+		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
+		critterToIDMap = new HashMap<SimpleCritter, Integer>();
+		critterCreatorMap = new HashMap<Integer, Integer>();
+		super.updatedHexes = new ArrayList<Hex>();
+		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
+		super.timePassed = 0;
 	}
 
 	/**

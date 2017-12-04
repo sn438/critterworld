@@ -367,7 +367,7 @@ public class ClientRequestHandler {
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Length", "0");
+			connection.setRequestProperty("Content-Type", "application/json");
 			if (connection.getResponseCode() == 401) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Invalid Request");
@@ -375,7 +375,7 @@ public class ClientRequestHandler {
 				alert.setContentText("You do not have permission to view the world.");
 			}
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r.readLine());
+			//System.out.println(r.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
