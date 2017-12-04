@@ -253,6 +253,11 @@ public class ClientController {
 	}
 		
 	@FXML
+	private void handleCheckRandom(MouseEvent me) {
+		numCritters.setText(Integer.toString(1));
+	}
+	
+	@FXML
 	public void initialize() {
 		
 		//System.out.println("Initialize has been reached");

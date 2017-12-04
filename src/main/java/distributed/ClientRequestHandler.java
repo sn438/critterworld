@@ -72,8 +72,6 @@ public class ClientRequestHandler {
 				alert.setContentText("You do not have permission to create a new world.");
 				return false;
 			}
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r1.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -152,7 +150,6 @@ public class ClientRequestHandler {
 		int returnValue = 0;
 		try {
 			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
@@ -226,9 +223,6 @@ public class ClientRequestHandler {
 		URL url;
 		try {
 			url = new URL(this.url + "/critters?session_id=" + sessionId);
-			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
-			// sessionId);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
@@ -241,13 +235,6 @@ public class ClientRequestHandler {
 				alert.setTitle("Invalid Request");
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to add critters.");
-			}
-			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line = r1.readLine();
-			while (line != null) {
-				System.out.println(line);
-				line = r1.readLine();
 			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
@@ -296,13 +283,6 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
-			// System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line = r1.readLine();
-			while (line != null) {
-				System.out.println(line);
-				line = r1.readLine();
-			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
@@ -322,7 +302,6 @@ public class ClientRequestHandler {
 		URL url;
 		try {
 			url = new URL(this.url + "/world?session_id=" + sessionID + "&update_since=" + updateSince);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("GET");
@@ -374,8 +353,6 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to view the world.");
 			}
-			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			//System.out.println(r.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

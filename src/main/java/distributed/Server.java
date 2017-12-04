@@ -22,6 +22,7 @@ import distributed.SimulationControlJSON.CountJSON;
 import distributed.SimulationControlJSON.RateJSON;
 import parse.ParserImpl;
 import simulation.Critter;
+import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
 import simulation.SimpleCritter;
@@ -62,6 +63,7 @@ public class Server {
 		model = new ServerWorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
 		rwl = new ReentrantReadWriteLock();
+		simulationRate = 10;
 	}
 
 	public static Server getInstance(int portNum, String readPass, String writePass, String adminPass) {
@@ -499,10 +501,11 @@ public class Server {
 		Thread worldUpdateThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(simulationRate > 0) {
+				while(simulationRate > 0 && model.getWorld() != null) {
 					long time = (long) (1000 / simulationRate);
 					rwl.writeLock().lock();
 					model.advanceTime();
+					System.out.println("Thread is running");
 					rwl.writeLock().unlock();
 
 					try {

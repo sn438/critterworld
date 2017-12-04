@@ -271,6 +271,25 @@ public class ServerWorldModel {
 		}
 	}
 
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column, int to_column) {
+		try {
+			rwl.readLock().lock();
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
+				return null;
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row )
+						result.put(h, world.getHexContent(c, r));
+				}
+			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
 	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
@@ -377,5 +396,9 @@ public class ServerWorldModel {
 			versionNumber++;
 			rwl.writeLock().unlock();
 		}
+	}
+	
+	public SimpleWorld getWorld() {
+		return this.world;
 	}
 }
