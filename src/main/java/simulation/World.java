@@ -18,6 +18,7 @@ import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
 import cs2110.AdjustablePriorityQueue;
+import distributed.JSONWorldObject;
 import distributed.WorldStateJSON;
 
 /** A class to simulate the world state. */
@@ -26,6 +27,8 @@ public class World extends AbstractWorld {
 	private String worldname;
 	/** Contains the hex grid of the world. */
 	private Hex[][] grid;
+	/** Contains the objects of the world. */
+	private JSONWorldObject[][] objects;
 	/** Maps each critter to a location in the world. */
 	private HashMap<SimpleCritter, Hex> critterMap;
 	/** Maps each non critter object to a location in the world. */
@@ -153,6 +156,37 @@ public class World extends AbstractWorld {
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
+		
+		columns = state.getCols();
+		rows = state.getRows();
+		worldname = state.getName();
+		numValidHexes = 0;
+		
+		// initializes world grid
+		grid = new Hex[columns][rows];
+		objects = new JSONWorldObject[columns][rows];
+		for (int i = 0; i < grid.length; i++)
+			for (int j = 0; j < grid[0].length; j++)
+				if (isValidHex(i, j)) {
+					grid[i][j] = new Hex(i, j);
+					numValidHexes++;
+					updatedHexes.add(grid[i][j]);
+				}
+		
+		for(JSONWorldObject obj : state.getWorldObjects()) {
+			objects[obj.getCol()][obj.getRow()] = obj;
+			if(obj.getType().equals("critter")) {
+				int[] mem = obj.getMemory();
+				String name = obj.getSpeciesName();
+				int dir = obj.getOrientation();
+				loadOneCritter(new Critter(null, mem, name, dir), obj.getCol(), obj.getRow(), -1);
+			} else if(obj.getType().equals("rock")) {
+				addNonCritterObject(new Rock(), obj.getCol(), obj.getRow());
+			} else if(obj.getType().equals("food")) {
+				Food f = new Food(obj.getCalories());
+				addNonCritterObject(f, obj.getCol(), obj.getRow());
+			}
+		}
 	}
 
 	/**
