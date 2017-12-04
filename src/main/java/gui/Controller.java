@@ -20,7 +20,9 @@ import com.google.gson.Gson;
 
 import ast.Program;
 import distributed.ClientRequestHandler;
+import distributed.ClientWorldMap;
 import distributed.SessionID;
+import distributed.WorldStateJSON;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -129,8 +131,8 @@ public class Controller {
 
 	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
-	/** The model that contains the world state. */
-	private WorldModel model;
+	/** A local cached version of the world. */
+	private WorldModel localCache;
 	/** Controls the hex grid. */
 	private WorldMap map;
 	/** The rate at which the simulation is run. */
@@ -148,9 +150,10 @@ public class Controller {
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
 	private String urlInitial;
-	private SessionID sessionId;
+	private int sessionID;
 	private boolean localMode;
 	private ClientRequestHandler handler;
+	private int currentVersion;
 
 	private boolean devMode = true; // TODO make false before submitting
 
@@ -160,18 +163,58 @@ public class Controller {
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
+		localCache = new WorldModel();
 
+		simulationRate = 30;
 		setupCanvas();
 		setGUIReady(false);
+		if(!localMode) {
+			setGUIReady(true);
+			continuouslyRefreshView();
+		}
 	}
 
+	public void continuouslyRefreshView() {
+		Thread refresh = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(simulationRate > 0) {
+					long time = (long) (1000 / simulationRate);
+					System.out.println("blah");
+					updateView();
+					
+					try {
+						Thread.sleep(time);
+					} catch(InterruptedException i) {
+						System.out.println("Could not pause thread execution.");
+					}
+				}
+			}
+		});
+		refresh.setDaemon(true);
+		Platform.runLater(refresh);
+	}
+	
+	private void updateView() {
+		WorldStateJSON update = handler.updateSince(sessionID, currentVersion);
+		if(update != null) {
+			System.out.println("update");
+			currentVersion = update.getCurrentVersion();
+			localCache.loadWorld(update);
+			if(map == null)
+				map = new WorldMap(c, localCache);
+			map.draw();
+			crittersAlive.setText("Critters Alive: " + update.getPopulation());
+			stepsTaken.setText("Time: " + update.getCurrentTime());
+		}
+	}
+	
 	private void doReset() {
 		if (executor != null)
 			executor.shutdownNow();
 		if (timeline != null)
 			timeline.stop();
 
-		model = new WorldModel();
 		simulationRate = 30;
 
 		loadCritterFile.setDisable(true);
@@ -264,24 +307,20 @@ public class Controller {
 	}
 
 	private void newWorld() {
-		model.createNewWorld();
-		map = new WorldMap(c, model);
+		localCache.createNewWorld();
+		map = new WorldMap(c, localCache);
 		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
+		stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
 
 		map.draw();
 	}
 
 	private void newWorldServer() {
-		if (handler.createNewWorld(sessionId.getSessionID())) {
-			map = new WorldMap(c, handler, sessionId.getSessionID());
-			map.draw();
+		if (handler.createNewWorld(sessionID)) {
+			updateView();
 		} else
 			return;
-		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 	}
 
 	@FXML
@@ -305,9 +344,8 @@ public class Controller {
 
 	private void loadServerWorld(File worldFile) {
 		try {
-			handler.loadWorld(worldFile, sessionId.getSessionID());
-			map = new WorldMap(c, handler, sessionId.getSessionID());
-			map.draw();
+			handler.loadWorld(worldFile, sessionID);
+			updateView();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
@@ -335,8 +373,8 @@ public class Controller {
 
 	private void loadWorld(File worldFile) {
 		try {
-			model.loadWorld(worldFile);
-			map = new WorldMap(c, model);
+			localCache.loadWorld(worldFile);
+			map = new WorldMap(c, localCache);
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
@@ -380,9 +418,11 @@ public class Controller {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
 				if (localMode)
-					model.loadRandomCritters(critterFile, n);
-				else
-					handler.loadRandomCritters(critterFile, n, sessionId.getSessionID());
+					localCache.loadRandomCritters(critterFile, n);
+				else {
+					handler.loadRandomCritters(critterFile, n, sessionID);
+					updateView();
+				}
 
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
@@ -410,10 +450,11 @@ public class Controller {
 					System.out.println("c: " + c);
 					System.out.println("r: " + r);
 					if (localMode)
-						model.loadCritterAtLocation(critterFile, c, r);
+						localCache.loadCritterAtLocation(critterFile, c, r);
 					else
 						try {
-							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionID());
+							handler.loadCritterAtLocation(critterFile, c, r, sessionID);
+							updateView();
 						} catch (FileNotFoundException e) {
 							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 							a.setTitle("Invalid File");
@@ -433,72 +474,75 @@ public class Controller {
 
 	@FXML
 	private void handleStep(MouseEvent me) {
-		model.advanceTime();
-		updateInfoBox();
-		map.draw();
-		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		if (localMode) {
+			localCache.advanceTime();
+			updateInfoBox();
+			map.draw();
+			crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
+			stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
+		} else {
+			handler.advanceTime();
+			updateView();
+		}
 	}
 
 	@FXML
 	private void handleRunPressed(MouseEvent me) {
-		if (simulationRate == 0)
-			return;
+		if (localMode) {
+			if (simulationRate == 0)
+				return;
+			Thread worldUpdateThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					localCache.advanceTime();
+				}
+			});
+			worldUpdateThread.setDaemon(false);
+			executor = Executors.newSingleThreadScheduledExecutor();
+			executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
+			timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
 
-		Thread worldUpdateThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				model.advanceTime();
-			}
-		});
-		worldUpdateThread.setDaemon(false);
-
-		executor = Executors.newSingleThreadScheduledExecutor();
-		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
-
-		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent ae) {
-				updateInfoBox();
-				map.draw();
-				updateInfoBox();
-				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
-			}
-		}));
-
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
-
-		newWorld.setDisable(true);
-		loadWorld.setDisable(true);
-		loadCritterFile.setDisable(true);
-		chkRandom.setDisable(true);
-		chkSpecify.setDisable(true);
-		numCritters.setDisable(true);
-		stepForward.setDisable(true);
-		run.setDisable(true);
-		simulationSpeed.setDisable(true);
-
-		pause.setDisable(false);
+				@Override
+				public void handle(ActionEvent ae) {
+					updateInfoBox();
+					map.draw();
+					updateInfoBox();
+					crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
+					stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
+				}
+			}));
+			timeline.setCycleCount(Timeline.INDEFINITE);
+			timeline.play();
+			newWorld.setDisable(true);
+			loadWorld.setDisable(true);
+			loadCritterFile.setDisable(true);
+			chkRandom.setDisable(true);
+			chkSpecify.setDisable(true);
+			numCritters.setDisable(true);
+			stepForward.setDisable(true);
+			run.setDisable(true);
+			simulationSpeed.setDisable(true);
+			pause.setDisable(false);
+		}
 	}
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		executor.shutdownNow();
+		if(!localMode) {
+			executor.shutdownNow();
 
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
-		loadCritterFile.setDisable(false);
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
+			newWorld.setDisable(false);
+			loadWorld.setDisable(false);
+			loadCritterFile.setDisable(false);
+			chkRandom.setDisable(false);
+			chkSpecify.setDisable(false);
+			stepForward.setDisable(false);
+			run.setDisable(false);
+			simulationSpeed.setDisable(false);
 
-		timeline.stop();
-		pause.setDisable(true);
+			timeline.stop();
+			pause.setDisable(true);
+		}
 	}
 
 	@FXML
@@ -518,8 +562,8 @@ public class Controller {
 			int[] hexCoordinatesSelected = map.getSelectedHex();
 			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
 			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
-			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+			if (localCache.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+				SimpleCritter critter = localCache.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
 				memSizeText.setText(String.valueOf(critter.getMemLength()));
 				speciesText.setText(critter.getName());
 				int[] critterMemoryCopy = new int[critter.getMemLength()];
@@ -577,8 +621,6 @@ public class Controller {
 
 	@FXML
 	private void handleKeyEvents(KeyEvent ke) {
-		// TODO make it possible to press multiple keys at once for panning? seems to be
-		// difficult.
 		if (ke.getCode().equals(KeyCode.UP)) {
 			map.drag(0, 400);
 		}
@@ -633,8 +675,8 @@ public class Controller {
 		if (hexCoordinates == null) {
 			return;
 		}
-		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
-			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
+		if (localCache.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+			SimpleCritter critter = localCache.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
 			String critterProgramString = critterProgram.toString();
 			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
@@ -691,7 +733,7 @@ public class Controller {
 
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
-					model = new WorldModel();
+					localCache = new WorldModel();
 					return;
 				} else {
 					System.exit(0);
@@ -705,7 +747,7 @@ public class Controller {
 				sessionIdString += holder;
 				holder = r.readLine();
 			}
-			sessionId = gson.fromJson(sessionIdString, SessionID.class);
+			SessionID sessionId = gson.fromJson(sessionIdString, SessionID.class);
 			System.out.println(sessionId.getSessionID());
 
 		} catch (MalformedURLException e) {
@@ -720,7 +762,7 @@ public class Controller {
 
 			if (result.get() == ButtonType.OK) {
 				localMode = true;
-				model = new WorldModel();
+				localCache = new WorldModel();
 				return;
 			} else {
 				System.exit(0);
@@ -738,7 +780,7 @@ public class Controller {
 
 			if (result.get() == ButtonType.OK) {
 				localMode = true;
-				model = new WorldModel();
+				localCache = new WorldModel();
 				return;
 			} else {
 				System.exit(0);

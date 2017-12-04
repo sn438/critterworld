@@ -104,36 +104,6 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
-	 * @param can
-	 * @param handler
-	 * @param sessionId
-	 */
-	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
-		// this.localMode = false;
-		gc = can.getGraphicsContext2D();
-		canvas = can;
-		// this.handler = handler;
-		height = canvas.getHeight();
-		width = canvas.getWidth();
-
-		columns = handler.getColumns(sessionId);
-		rows = handler.getRows(sessionId);
-
-		column_drawing_marker = columns;
-		row_drawing_marker = rows;
-		row_drawing_marker -= column_drawing_marker / 2;
-		sideLength = 30;
-
-		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
-				+ (sideLength / 2);
-		y_position_marker = (((double) height / 2)
-				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
-				+ (Math.sqrt(3) * (sideLength / 2));
-
-	}
-
-	/**
 	 * Determines whether or not a hex with column index {@code c} and row index
 	 * {@code r} is on the world grid.
 	 */

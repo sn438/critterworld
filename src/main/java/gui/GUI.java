@@ -44,7 +44,6 @@ public class GUI extends Application {
 
 // Rishi:
 // TODO finish up the todos in smell method
-// TODO add food add rocks buttons = use addWorldObject()
 // TODO draw written problem #3 in paint
 // TODO add welcome to critterworld spiel in help text, and also put a made by us thing
 // TODO create some smarter critter programs for better testing (and as prep for
@@ -57,7 +56,6 @@ public class GUI extends Application {
 // disabled unless a critter is selected?
 // TODO review instructions at end to make sure they are consistent with any
 // changes to gui made
-// TODO add change view angle thing if time, or kozen easter egg, or sounds
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed

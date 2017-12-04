@@ -17,9 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import simulation.FileParser;
-import simulation.Hex;
 import simulation.SimpleCritter;
-import simulation.WorldObject;
 
 /** A class to handle client requests to the server. */
 public class ClientRequestHandler {
@@ -359,7 +357,6 @@ public class ClientRequestHandler {
 	 * stepWorld() steps the world by one timestep.
 	 */
 	public void advanceTime(int sessionId) {
-		Gson gson = new Gson();
 		URL url;
 		try {
 			url = new URL(this.url + "/step?session_id=" + sessionId);
@@ -374,8 +371,6 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to view the world.");
 			}
-			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			//System.out.println(r.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

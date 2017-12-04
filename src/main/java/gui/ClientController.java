@@ -152,6 +152,7 @@ public class ClientController {
 	private int sessionID;
 	private ClientRequestHandler handler;
 	private int currentVersion;
+	private WorldModel localCache;
 
 	/** Logs into the server. */
 	private void login() {
@@ -267,9 +268,9 @@ public class ClientController {
 		
 		WorldStateJSON wsj = handler.updateSince(sessionID, 0);
 		if(wsj != null) {
-			
+			localCache = new WorldModel();
+			localCache.loadWorld(wsj);
 			map = new ClientWorldMap(c, wsj.getCols(), wsj.getRows());
-			//System.out.println("This is map:" + map);
 			currentVersion = wsj.getCurrentVersion();
 			setGUIReady(true);
 			map.draw(wsj);

@@ -71,7 +71,6 @@ public class ServerWorldModel {
 					cumulativeDeadCritters.add(world.getCritterID(sc));
 			}
 			world = new World(desc);
-			//System.out.println(world.getAndResetUpdatedHexes());
 			diffLog.add(world.getAndResetUpdatedHexes());
 			time = 0;
 			versionNumber++;
@@ -239,7 +238,6 @@ public class ServerWorldModel {
 		world.advanceOneTimeStep();
 		time++;
 		versionNumber++;
-		//System.out.println(world.getAndResetUpdatedHexes());
 		diffLog.add(world.getAndResetUpdatedHexes());
 		numCritters = world.numRemainingCritters();
 	}
@@ -262,6 +260,35 @@ public class ServerWorldModel {
 					int c = h.getColumnIndex();
 					int r = h.getRowIndex();
 					if(isValidHex(c, r))
+						result.put(h, world.getHexContent(c, r));
+				}
+			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param initialVersionNumber
+	 * @param from_row
+	 * @param to_row
+	 * @param from_column
+	 * @param to_column
+	 * @return
+	 */
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column, int to_column) {
+		try {
+			rwl.readLock().lock();
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
+				return null;
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row )
 						result.put(h, world.getHexContent(c, r));
 				}
 			}

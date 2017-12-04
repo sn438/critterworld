@@ -61,6 +61,7 @@ public class Server {
 		model = new ServerWorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
 		rwl = new ReentrantReadWriteLock();
+		simulationRate = 0;
 	}
 
 	public static Server getInstance(int portNum, String readPass, String writePass, String adminPass) {

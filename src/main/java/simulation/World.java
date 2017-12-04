@@ -142,7 +142,7 @@ public class World extends AbstractWorld {
 	}
 
 	/** */
-	public World(WorldStateJSON state) throws FileNotFoundException, IllegalArgumentException {
+	public World(WorldStateJSON state) throws IllegalArgumentException {
 		// sets constants and initializes instance fields
 		super();
 		setConstants();
