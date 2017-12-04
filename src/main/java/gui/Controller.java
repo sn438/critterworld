@@ -261,7 +261,6 @@ public class Controller {
 		} else {
 			newWorldServer();
 		}
-
 	}
 
 	private void newWorld() {
