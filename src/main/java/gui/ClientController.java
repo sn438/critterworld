@@ -254,6 +254,8 @@ public class ClientController {
 		
 	@FXML
 	public void initialize() {
+		
+		//System.out.println("Initialize has been reached");
 		login();
 		
 		loadCritterFile.setDisable(true);
@@ -261,11 +263,13 @@ public class ClientController {
 		pause.setDisable(true);
 		
 		setupCanvas();
-		setGUIReady(false);
+		setGUIReady(true);
 		
 		WorldStateJSON wsj = handler.updateSince(sessionID, 0);
 		if(wsj != null) {
+			
 			map = new ClientWorldMap(c, wsj.getCols(), wsj.getRows());
+			//System.out.println("This is map:" + map);
 			currentVersion = wsj.getCurrentVersion();
 			setGUIReady(true);
 			map.draw(wsj);
@@ -306,10 +310,12 @@ public class ClientController {
 		// listeners that dynamically redraw the canvas in response to window resizing
 		c.heightProperty().addListener(update -> {
 			if (map != null)
+				//System.out.println("Updating is happening");
 				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 		c.widthProperty().addListener(update -> {
 			if (map != null)
+				//System.out.println("Updating is happening");
 				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 	}
@@ -345,6 +351,7 @@ public class ClientController {
 	}
 
 	private void updateView() {
+		System.out.println("View is being updated");
 		WorldStateJSON update = handler.updateSince(sessionID, currentVersion);
 		currentVersion = update.getCurrentVersion();
 		if(map == null)
@@ -468,6 +475,7 @@ public class ClientController {
 //		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
 //		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 		handler.advanceTime(sessionID);
+		updateView();
 	}
 
 	@FXML
