@@ -1,4 +1,0 @@
-1. ABDCEGIHF
-2. ABCDEFGHI
-3. DBACF -> E -> GIH
-// draw (3.) as a proper graph

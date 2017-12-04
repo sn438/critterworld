@@ -58,24 +58,30 @@ public class WorldMap {
 	private double x_position_marker;
 	private double y_position_marker;
 
-	/** Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate). */
+	/**
+	 * Marks the rectangular x coordinate of the origin (the (0, 0) hex coordinate).
+	 */
 	private double origin_x;
 
-	/** Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate). */
+	/**
+	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
+	 */
 	private double origin_y;
 	/** Holds the last drawn time step. */
-	//private int currentTimeStep;
-	//private boolean localMode;
-	//private ClientRequestHandler handler;
+	// private int currentTimeStep;
+	// private boolean localMode;
+	// private ClientRequestHandler handler;
 
 	/**
 	 * Creates a new world map.
 	 * 
-	 * @param can The Canvas to draw on
-	 * @param wm The WorldModel to work off of
+	 * @param can
+	 *            The Canvas to draw on
+	 * @param wm
+	 *            The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
-		//localMode = true;
+		// localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -104,10 +110,10 @@ public class WorldMap {
 	 * @param sessionId
 	 */
 	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
-		//this.localMode = false;
+		// this.localMode = false;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
-		//this.handler = handler;
+		// this.handler = handler;
 		height = canvas.getHeight();
 		width = canvas.getWidth();
 
@@ -127,7 +133,10 @@ public class WorldMap {
 
 	}
 
-	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
+	/**
+	 * Determines whether or not a hex with column index {@code c} and row index
+	 * {@code r} is on the world grid.
+	 */
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
 			return false;
@@ -177,10 +186,10 @@ public class WorldMap {
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3);
-
+		
 		// draws world objects
 		gc.setLineWidth(3);
-		//drawObjects();
+		drawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
@@ -201,19 +210,6 @@ public class WorldMap {
 			int r = entry.getValue().getRowIndex();
 			drawWorldObject(entry.getKey(), c, r);
 		}
-		
-		// this uses a list of updated hexes to draw objects. Still needs work to make it compatible with zoom
-//		LinkedList<Hex> hexesToDraw = model.getUpdatedHexes();
-//		for (Hex h : hexesToDraw)
-//		{
-//			WorldObject wo = h.getContent();
-//			int c = h.getColumnIndex();
-//			int r = h.getRowIndex();
-//			if(wo instanceof SimpleCritter)
-//				drawCritter((SimpleCritter) wo, c, r);
-//			else
-//				drawWorldObject(wo, c, r);
-//		}
 	}
 
 	/**
@@ -310,7 +306,6 @@ public class WorldMap {
 		int randomizer = (int) (Math.sqrt(Math.abs(species.hashCode())) * 100);
 		int blendType = randomizer % 3;
 		double blendLevel = (randomizer % 100) / 100.0;
-		// System.out.println(randomizer + " " + blendType + " " + blendLevel);
 		double red;
 		double green;
 		double blue;
@@ -338,8 +333,8 @@ public class WorldMap {
 		Color color = new Color(red, green, blue, 1);
 
 		// draw critter (outlines only)
-		 gc.setStroke(color);
-		 gc.strokePolygon(xPoints, yPoints, 3);
+		gc.setStroke(color);
+		gc.strokePolygon(xPoints, yPoints, 3);
 
 		// draw critter (filled in)
 		// gc.setFill(color);
@@ -380,7 +375,10 @@ public class WorldMap {
 		}
 	}
 
-	/** Draws a hexagon centered at the rectangular coordinates specified by {@code centerX} and {@code centerY}. */
+	/**
+	 * Draws a hexagon centered at the rectangular coordinates specified by
+	 * {@code centerX} and {@code centerY}.
+	 */
 	private void drawHex(double centerX, double centerY) {
 		gc.setStroke(HEX_COLOR);
 		gc.strokePolygon(
@@ -419,8 +417,10 @@ public class WorldMap {
 	/**
 	 * highlightHex highlights the hex that is currently selected
 	 * 
-	 * @param x x-coordinate of the spot that the user clicks
-	 * @param y y-coordinate of the spot that the user clicks
+	 * @param x
+	 *            x-coordinate of the spot that the user clicks
+	 * @param y
+	 *            y-coordinate of the spot that the user clicks
 	 */
 	public void highlightHex(double x, double y) {
 		int[] hexCoordinates = closestHex(x, y);
@@ -504,8 +504,6 @@ public class WorldMap {
 		double distanceSquared = Integer.MAX_VALUE;
 		int returnIndex = 0;
 		for (int i = 0; i < 4; i++) {
-			// System.out.println("Option #" + i + ": " + possibleCoordinates[i][0] + " " +
-			// possibleCoordinates[i][1]);
 			double tempArray[] = hexToCartesian(possibleCoordinates[i]);
 			double tempDistanceSquared = Math.pow(xCoordinate - tempArray[0], 2)
 					+ Math.pow(yCoordinate - tempArray[1], 2);
@@ -514,17 +512,15 @@ public class WorldMap {
 				returnIndex = i;
 			}
 		}
-		// System.out.println(possibleCoordinates[returnIndex][0] + " " +
-		// possibleCoordinates[returnIndex][1]);
-		// System.out.println("\n");
 		return possibleCoordinates[returnIndex];
 	}
 
 	/**
-	 * A method that converts a hex coordinate pair converts it to cartesian coordinates.
+	 * A method that converts a hex coordinate pair converts it to cartesian
+	 * coordinates.
 	 * 
 	 * @param hexCoordinates
-	 * @return 
+	 * @return
 	 */
 	private double[] hexToCartesian(int[] hexCoordinates) {
 		double x_coordinate = ((3 * sideLength) / 2) * hexCoordinates[0] + origin_x;

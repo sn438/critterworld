@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -17,7 +18,8 @@ import java.util.Set;
 import ast.Program;
 import ast.ProgramImpl;
 import ast.Rule;
-import cs2110.AdjustablePriorityQueue;
+import distributed.JSONWorldObject;
+import distributed.WorldStateJSON;
 
 /** A class to simulate the world state. */
 public class World extends AbstractWorld {
@@ -25,6 +27,8 @@ public class World extends AbstractWorld {
 	private String worldname;
 	/** Contains the hex grid of the world. */
 	private Hex[][] grid;
+	/** Contains the objects of the world. */
+	private JSONWorldObject[][] objects;
 	/** Maps each critter to a location in the world. */
 	private HashMap<SimpleCritter, Hex> critterMap;
 	/** Maps each non critter object to a location in the world. */
@@ -137,6 +141,54 @@ public class World extends AbstractWorld {
 		}
 	}
 
+	/** */
+	public World(WorldStateJSON state) throws FileNotFoundException, IllegalArgumentException {
+		// sets constants and initializes instance fields
+		super();
+		setConstants();
+		critterMap = new HashMap<SimpleCritter, Hex>();
+		nonCritterObjectMap = new HashMap<WorldObject, Hex>();
+		critterIDcount = 1;
+		IDToCritterMap = new HashMap<Integer, SimpleCritter>();
+		critterToIDMap = new HashMap<SimpleCritter, Integer>();
+		critterCreatorMap = new HashMap<Integer, Integer>();
+		super.updatedHexes = new ArrayList<Hex>();
+		super.critterList = new LinkedList<SimpleCritter>();
+		super.deadCritters = new LinkedList<SimpleCritter>();
+		super.timePassed = 0;
+		
+		columns = state.getCols();
+		rows = state.getRows();
+		worldname = state.getName();
+		numValidHexes = 0;
+		
+		// initializes world grid
+		grid = new Hex[columns][rows];
+		objects = new JSONWorldObject[columns][rows];
+		for (int i = 0; i < grid.length; i++)
+			for (int j = 0; j < grid[0].length; j++)
+				if (isValidHex(i, j)) {
+					grid[i][j] = new Hex(i, j);
+					numValidHexes++;
+					updatedHexes.add(grid[i][j]);
+				}
+		
+		for(JSONWorldObject obj : state.getWorldObjects()) {
+			objects[obj.getCol()][obj.getRow()] = obj;
+			if(obj.getType().equals("critter")) {
+				int[] mem = obj.getMemory();
+				String name = obj.getSpeciesName();
+				int dir = obj.getOrientation();
+				loadOneCritter(new Critter(null, mem, name, dir), obj.getCol(), obj.getRow(), -1);
+			} else if(obj.getType().equals("rock")) {
+				addNonCritterObject(new Rock(), obj.getCol(), obj.getRow());
+			} else if(obj.getType().equals("food")) {
+				Food f = new Food(obj.getCalories());
+				addNonCritterObject(f, obj.getCol(), obj.getRow());
+			}
+		}
+	}
+
 	/**
 	 * Loads a world from a world description file, in the form of a pre-determined
 	 * file.
@@ -189,7 +241,6 @@ public class World extends AbstractWorld {
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 		}
 		numValidHexes = 0;
-
 		// initializes world grid
 		grid = new Hex[columns][rows];
 		for (int i = 0; i < grid.length; i++)
@@ -228,6 +279,11 @@ public class World extends AbstractWorld {
 				}
 				line = bf.readLine();
 			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Critter file not found.");
+			return;
+		} catch (IOException e) {
+			return;
 		} catch (Exception e) {
 			return;
 		}
@@ -271,7 +327,6 @@ public class World extends AbstractWorld {
 			}
 
 		// randomly fills about 1/40 of the hexes in the world with rocks
-		//System.out.println("numValidHexes: " + numValidHexes);
 		int c = (int) (Math.random() * columns);
 		int r = (int) (Math.random() * rows);
 		int n = 0;
@@ -360,6 +415,9 @@ public class World extends AbstractWorld {
 					break;
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				SimpleCritter sc = FileParser.parseCritter(br, getMinMemory(), direction);
+				if (sc == null) {
+					return;
+				}
 				int randc = (int) (Math.random() * columns);
 				int randr = (int) (Math.random() * rows);
 				while (!isValidHex(randc, randr) || !grid[randc][randr].isEmpty()) {
@@ -500,11 +558,13 @@ public class World extends AbstractWorld {
 		int distance = 1000;
 		ArrayList<SmellValue> foodList = new ArrayList<SmellValue>();
 
+		// adds all the possible hexes to be used in method to a hash map
+		Hex root = critterMap.get(sc);
 		HashMap<Hex, SmellValue> graph = new HashMap<Hex, SmellValue>();
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) { // TODO is grid always a rect so i can make this 0 instead of i?
+			for (int j = 0; j < grid[i].length; j++) {
 				if (isValidHex(i, j)) {
-					if (grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
+					if (grid[i][j] == root || grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
 						SmellValue sv = new SmellValue();
 						graph.put(grid[i][j], sv);
 						if (grid[i][j].hexAppearance() < -1) {
@@ -515,8 +575,7 @@ public class World extends AbstractWorld {
 			}
 		}
 
-		// sets up root hex for smell function
-		Hex root = critterMap.get(sc);
+		// sets up critter's smellValue for smell function
 		SmellValue rootSmell = graph.get(root);
 		rootSmell.totalDist = 0;
 		rootSmell.orientation = sc.getOrientation();
@@ -532,6 +591,11 @@ public class World extends AbstractWorld {
 			// pops hex from priority queue
 			Hex curr = frontier.remove();
 			SmellValue currSmell = graph.get(curr);
+
+			if (foodList.contains(currSmell)) {
+				continue; // TODO remove this optimization to smell if it makes things break
+			}
+
 			int c = curr.getColumnIndex();
 			int r = curr.getRowIndex();
 
@@ -541,7 +605,7 @@ public class World extends AbstractWorld {
 				neighbors[0] = grid[c][r + 1];
 			if (isValidHex(c + 1, r + 1))
 				neighbors[1] = grid[c + 1][r + 1];
-			if (isValidHex(c, r + 1))
+			if (isValidHex(c + 1, r))
 				neighbors[2] = grid[c + 1][r];
 			if (isValidHex(c, r - 1))
 				neighbors[3] = grid[c][r - 1];
@@ -594,9 +658,6 @@ public class World extends AbstractWorld {
 				direction = sv.origin;
 			}
 		}
-
-		// TODO optimization: have a particular track of searching end if it hits food
-		// TODO test method a bunch when done
 
 		return distance * 1000 + direction;
 	}
@@ -763,7 +824,10 @@ public class World extends AbstractWorld {
 			kill(attacker);
 	}
 
-	/** Performs the logistic function 1 / (1 + e^-x). */
+	/**
+	 * Applies the logistic function, {@code f(x) = 1 / (1 + e^-x)}, to the given
+	 * number.
+	 */
 	private double logisticFunction(double x) {
 		double exponent = -1 * x;
 		return (1 / (1 + Math.exp(exponent)));
@@ -809,7 +873,6 @@ public class World extends AbstractWorld {
 		Program prog = sc.getProgram();
 		int numMutations = numberMutations();
 		for (int i = 0; i < numMutations; i++) {
-			// System.out.println("mutate");
 			prog = prog.mutate();
 		}
 
@@ -938,7 +1001,7 @@ public class World extends AbstractWorld {
 		}
 		Program prog = new ProgramImpl(babyRules);
 
-		// generating memory
+		// generate memory
 		int[] babymem = null;
 		if (random.nextBoolean()) {
 			babymem = new int[sc1.getMemLength()];
@@ -958,7 +1021,7 @@ public class World extends AbstractWorld {
 		for (int i = 5; i < babymem.length; i++)
 			babymem[i] = 0;
 
-		// coordinate Generation
+		// generate coordinates
 		int babyColumn = 0;
 		int babyRow = 0;
 		if (random.nextBoolean()) {

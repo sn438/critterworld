@@ -1,4 +1,0 @@
-name Bud World 1
-size 5 10
-
-critter src/test/resources/simulationTests/BudCritter.txt 3 5 0

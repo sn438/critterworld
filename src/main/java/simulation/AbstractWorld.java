@@ -69,7 +69,6 @@ public abstract class AbstractWorld implements SimpleWorld
 				Interpreter im = new InterpreterImpl(sc, this);
 				im.simulateCritterTurn();
 			}
-			//System.out.println(getAndResetUpdatedHexes());
 		}
 		
 		for(int i = 0; i < clone.size(); i++)

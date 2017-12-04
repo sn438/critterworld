@@ -236,20 +236,12 @@ public class ServerWorldModel {
 
 	/** Advances one time step. */
 	public void advanceTime() {
-		try {
-			rwl.writeLock().lock();
-			world.advanceOneTimeStep();
-			time++;
-			versionNumber++;
-			//System.out.println(world.getAndResetUpdatedHexes());
-			diffLog.add(world.getAndResetUpdatedHexes());
-			rwl.writeLock().unlock();
-
-			rwl.readLock().lock();
-			numCritters = world.numRemainingCritters();
-		} finally {
-			rwl.readLock().unlock();
-		}
+		world.advanceOneTimeStep();
+		time++;
+		versionNumber++;
+		//System.out.println(world.getAndResetUpdatedHexes());
+		diffLog.add(world.getAndResetUpdatedHexes());
+		numCritters = world.numRemainingCritters();
 	}
 
 	/**
@@ -270,26 +262,6 @@ public class ServerWorldModel {
 					int c = h.getColumnIndex();
 					int r = h.getRowIndex();
 					if(isValidHex(c, r))
-						result.put(h, world.getHexContent(c, r));
-				}
-			}
-			return result;
-		} finally {
-			rwl.readLock().unlock();
-		}
-	}
-	
-	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column, int to_column) {
-		try {
-			rwl.readLock().lock();
-			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
-				return null;
-			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
-			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
-				for (Hex h : diffLog.get(i)) {
-					int c = h.getColumnIndex();
-					int r = h.getRowIndex();
-					if(isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row )
 						result.put(h, world.getHexContent(c, r));
 				}
 			}

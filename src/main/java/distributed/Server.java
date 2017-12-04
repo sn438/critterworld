@@ -12,18 +12,16 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 
 import ast.Program;
+import distributed.SimulationControlJSON.CountJSON;
+import distributed.SimulationControlJSON.RateJSON;
 import parse.ParserImpl;
 import simulation.Critter;
-import simulation.FileParser;
-import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
 import simulation.SimpleCritter;
@@ -46,6 +44,7 @@ public class Server {
 	private int session_id_count;
 	private HashMap<Integer, String> sessionIdMap;
 	private ServerWorldModel model;
+	private ReentrantReadWriteLock rwl;
 
 	/**
 	 * Creates a new server.
@@ -62,6 +61,7 @@ public class Server {
 		adminPassword = adminPass;
 		model = new ServerWorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
+		rwl = new ReentrantReadWriteLock();
 	}
 
 	public static Server getInstance(int portNum, String readPass, String writePass, String adminPass) {
@@ -136,7 +136,7 @@ public class Server {
 				response.status(401);
 				return "Removal was unsuccessful.";
 			}
-			
+
 		});
 		// handles a client request to load a new world
 		post("/world", (request, response) -> {
@@ -298,71 +298,7 @@ public class Server {
 				}
 			}
 		}, gson::toJson);
-/*
-		// handles a client request to retrieve the world state
-		get("/world", (request, response) -> {
-			System.out.println("The whole get world state stuff works.");
-			response.header("Content-Type", "application/json");
-			String queryString = request.queryString();
-			int indexOfSessionID = queryString.indexOf("session_id=") + "session_id=".length();
-			int sessionID = -1;
-			int updateSince = 0;
-			if (queryString.contains("&update_since")) {
-				int indexOfUpdateSince = queryString.indexOf("&update_since=") + "&update_since=".length();
-				sessionID = Integer
-						.parseInt(queryString.substring(indexOfSessionID, queryString.indexOf("&update_since")));
-				updateSince = Integer.parseInt(queryString.substring(indexOfUpdateSince));
-			} else if (queryString.contains("&session_id=")) {
-				indexOfSessionID = queryString.indexOf("&session_id=") + "&session_id=".length();
-				int indexOfUpdateSince = queryString.indexOf("update_since=") + "update_since=".length();
-				updateSince = Integer
-						.parseInt(queryString.substring(indexOfUpdateSince, queryString.indexOf("&session_id=")));
-				sessionID = Integer.parseInt(queryString.substring(indexOfSessionID));
-			} else {
-				sessionID = Integer.parseInt(queryString.substring(indexOfSessionID));
-			}
 
-			if (sessionIdMap.get(sessionID) == null) {
-				response.status(401);
-				return "User does not have permission to view the world.";
-			} else if (updateSince < 0 || updateSince > model.getCurrentVersionNumber()) {
-				response.status(406);
-				return "That version number is invalid.";
-			} else if (!model.isReady()) {
-				response.status(403);
-				return "A world must be loaded before you can view the world state.";
-			} else {
-				int time = model.getCurrentTimeStep();
-				int version = model.getCurrentVersionNumber();
-				float rate = simulationRate;
-				String name = model.getWorldName();
-				int population = model.getNumCritters();
-				int columns = model.getColumns();
-				int rows = model.getRows();
-				int[] deadList = model.getCumulativeDeadCritters();
-				System.out.println(deadList);
-				HashMap<Hex, WorldObject> objects = model.updateSince(updateSince);
-				JSONWorldObject state[] = new JSONWorldObject[objects.size()];
-				int counter = 0;
-				for (Entry<Hex, WorldObject> entry : objects.entrySet()) {
-					int c = entry.getKey().getColumnIndex();
-					int r = entry.getKey().getRowIndex();
-					WorldObject wo = entry.getValue();
-					if (wo instanceof SimpleCritter) {
-						SimpleCritter sc = (SimpleCritter) wo;
-						int critterID = model.getID(sc);
-						boolean permissions = model.hasCritterPermissions(sc, sessionID);
-						state[counter] = new JSONWorldObject(sc, c, r, critterID, permissions);
-					} else {
-						state[counter] = new JSONWorldObject(wo, c, r);
-					}
-					counter++;
-				}
-				return new WorldStateJSON(time, version, updateSince, rate, name, population, columns, rows, deadList,
-						state);
-			}
-		}, gson::toJson);
-*/
 		get("/critters", (request, response) -> {
 			response.header("Content-Type", "application/json");
 			String queryString = request.queryString();
@@ -406,7 +342,6 @@ public class Server {
 				sessionId = Integer.parseInt(queryString.substring(indexOfSessionId));
 				critterId = Integer.parseInt(queryString.substring(indexOfCritterId, queryString.indexOf("&")));
 			}
-			String json = request.body();
 			if (sessionIdMap.get(sessionId) == null) {
 				response.status(401);
 				return "User does not have permission to view the world.";
@@ -496,11 +431,11 @@ public class Server {
 				response.status(406);
 				return "Invalid hex, location already occupied.";
 			}
-				
+
 			response.status(200);
 			return "Ok";
 		});
-		
+
 		post("/step", (request, response) -> {
 			response.header("Content-Type", "text/plain");
 			String queryString = request.queryString();
@@ -524,10 +459,10 @@ public class Server {
 					response.status(406);
 					return "World cannot be stepped a negative amount of times.";
 				}
-				else 
+				else
 					count = stepInfo.getCount();
 			}
-			
+
 			for (int i = 0; i < count; i++) {
 				System.out.println("ok");
 				model.advanceTime();
@@ -536,20 +471,48 @@ public class Server {
 			return "Ok";
 		});
 
-		// post("/run", (request, response) -> {
-		// response.header("Content-Type", "application/json");
-		// });
+		post("/run", (request, response) -> {
+			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=") + 11;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId));
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
+					|| sessionIdMap.get(session_id).equals("write")))) {
+				response.status(401);
+				return "User does not have write access.";
+			}
+			String json = request.body();
+			RateJSON info = gson.fromJson(json, RateJSON.class);
+
+			if(info.getRate() < 0 || info.getRate() > 50) {
+				response.status(406);
+				return "Invalid simulation rate.";
+			} else {
+				rwl.writeLock().lock();
+				simulationRate = info.getRate();
+				rwl.writeLock().unlock();
+			}
+			return "Ok";
+
+		});
 
 		Thread worldUpdateThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				while(simulationRate > 0) {
+					long time = (long) (1000 / simulationRate);
+					rwl.writeLock().lock();
+					model.advanceTime();
+					rwl.writeLock().unlock();
 
-			}
-		});
-		
-				
-		
-
+					try {
+						Thread.sleep(time);
+					} catch(InterruptedException i) {
+						System.out.println("Could not pause thread execution.");
+					}
+				}
+			}});
+		worldUpdateThread.start();
 	}
 
 	/** Returns the port number of the server. */

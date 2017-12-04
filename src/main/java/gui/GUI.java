@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 	public static final Image icon = new Image(
 			GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
-	// public static final Image icon = new Image("gui/critterworld_favicon.png");
-	// TODO why is it not just something as simple as this?
 
 	public static void main(String[] args) {
 		launch(args);
@@ -39,13 +37,14 @@ public class GUI extends Application {
 	}
 }
 
+// TODO write tests?
+// TODO check all todos before submitting (especially "// todo remove"s)
+
 // Sujith:
 // TODO work on server stuff
 
 // Rishi:
 // TODO finish up the todos in smell method
-// TODO add food add rocks buttons = use addWorldObject()
-// TODO draw written problem #3 in paint
 // TODO add welcome to critterworld spiel in help text, and also put a made by us thing
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
@@ -61,7 +60,6 @@ public class GUI extends Application {
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
-// TODO start worldmodel updates and stuff
 // TODO find better way to loop through all critters???
 // TODO locks in world model - ask about those?
 // TODO is there a way to have the program stop automatically when the GUI is
