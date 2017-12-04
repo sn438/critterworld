@@ -541,6 +541,8 @@ public class World extends AbstractWorld {
 
 		// sets up root hex for smell function
 		Hex root = critterMap.get(sc);
+		System.out.println(sc);
+		System.out.println(root);
 		SmellValue rootSmell = graph.get(root);
 		rootSmell.totalDist = 0;
 		rootSmell.orientation = sc.getOrientation();

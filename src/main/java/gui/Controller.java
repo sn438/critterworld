@@ -152,6 +152,8 @@ public class Controller {
 	private boolean localMode;
 	private ClientRequestHandler handler;
 
+	private boolean devMode = true; // TODO make false before submitting
+
 	@FXML
 	public void initialize() {
 		login();
@@ -287,8 +289,10 @@ public class Controller {
 	private void handleLoadWorldPressed(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose World File");
-		File initDirectory = new File("./src/test/resources/simulationtests/worlds"); // TODO remove before submitting?
-		fc.setInitialDirectory(initDirectory); // TODO remove before submitting?
+		if (devMode) {
+			File initDirectory = new File("./src/test/resources/simulationtests/worlds");
+			fc.setInitialDirectory(initDirectory);
+		}
 		File worldFile = fc.showOpenDialog(new Popup());
 		if (worldFile == null) {
 			return;
@@ -359,13 +363,15 @@ public class Controller {
 	private void handleCheckRandom(MouseEvent me) {
 		numCritters.setText(Integer.toString(1));
 	}
-	
+
 	@FXML
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		File f = new File("./src/test/resources/simulationtests/critters"); // TODO remove
-		fc.setInitialDirectory(f); // TODO remove
+		if (devMode) {
+			File f = new File("./src/test/resources/simulationtests/critters");
+			fc.setInitialDirectory(f);
+		}
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
 			return;
@@ -466,9 +472,8 @@ public class Controller {
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
 
-		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even
-									// while the current one is still running?
-		loadWorld.setDisable(true); // TODO refer to above
+		newWorld.setDisable(true);
+		loadWorld.setDisable(true);
 		loadCritterFile.setDisable(true);
 		chkRandom.setDisable(true);
 		chkSpecify.setDisable(true);
@@ -484,8 +489,8 @@ public class Controller {
 	private void handlePauseClicked(MouseEvent me) {
 		executor.shutdownNow();
 
-		newWorld.setDisable(false); // TODO refer to above
-		loadWorld.setDisable(false); // TODO refer to above
+		newWorld.setDisable(false);
+		loadWorld.setDisable(false);
 		loadCritterFile.setDisable(false);
 		chkRandom.setDisable(false);
 		chkSpecify.setDisable(false);
