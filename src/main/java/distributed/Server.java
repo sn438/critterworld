@@ -22,6 +22,7 @@ import distributed.SimulationControlJSON.CountJSON;
 import distributed.SimulationControlJSON.RateJSON;
 import parse.ParserImpl;
 import simulation.Critter;
+import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
 import simulation.SimpleCritter;
