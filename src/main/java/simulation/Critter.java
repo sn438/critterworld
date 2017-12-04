@@ -6,6 +6,8 @@ import java.util.Arrays;
 /** A critter is a creature that inhabits CritterWorld. */
 public class Critter implements SimpleCritter
 {
+	/** The ID of this critter. */
+	private int ID;
 	/** The set of rules for this critter. */
 	private Program prog;
 	/** The memory of this critter, which stores important attributes of the critter. */
@@ -39,6 +41,7 @@ public class Critter implements SimpleCritter
 		readyToMingle = false;
 		lastRuleCompleted = null;
 		lastRuleIndex = -1;
+		ID = 0;
 		
 		orientation = Direction.constructDir(dir);
 	}
@@ -58,9 +61,22 @@ public class Critter implements SimpleCritter
 		readyToMingle = false;
 		lastRuleCompleted = null;
 		lastRuleIndex = -1;
+		ID = 0;
 		
 		int rand = (int) (Math.random() * 6);
 		orientation = Direction.constructDir(rand);
+	}
+	
+	@Override
+	public int getID()
+	{
+		return ID;
+	}
+	
+	@Override
+	public void setID(int id)
+	{
+		ID = id;
 	}
 	
 	@Override

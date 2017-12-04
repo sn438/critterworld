@@ -236,20 +236,12 @@ public class ServerWorldModel {
 
 	/** Advances one time step. */
 	public void advanceTime() {
-		try {
-			rwl.writeLock().lock();
-			world.advanceOneTimeStep();
-			time++;
-			versionNumber++;
-			//System.out.println(world.getAndResetUpdatedHexes());
-			diffLog.add(world.getAndResetUpdatedHexes());
-			rwl.writeLock().unlock();
-
-			rwl.readLock().lock();
-			numCritters = world.numRemainingCritters();
-		} finally {
-			rwl.readLock().unlock();
-		}
+		world.advanceOneTimeStep();
+		time++;
+		versionNumber++;
+		//System.out.println(world.getAndResetUpdatedHexes());
+		diffLog.add(world.getAndResetUpdatedHexes());
+		numCritters = world.numRemainingCritters();
 	}
 
 	/**

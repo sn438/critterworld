@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 	public static final Image icon = new Image(
 			GUI.class.getClassLoader().getResourceAsStream("gui/critterworld_favicon.png"));
-	// public static final Image icon = new Image("gui/critterworld_favicon.png");
-	// TODO why is it not just something as simple as this?
 
 	public static void main(String[] args) {
 		launch(args);
@@ -61,7 +59,6 @@ public class GUI extends Application {
 
 // Andy:
 // TODO double check to make sure all A4 and A5 grader bugs have been fixed
-// TODO start worldmodel updates and stuff
 // TODO find better way to loop through all critters???
 // TODO locks in world model - ask about those?
 // TODO is there a way to have the program stop automatically when the GUI is

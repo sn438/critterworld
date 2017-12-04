@@ -11,17 +11,16 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 
 import ast.Program;
+import distributed.SimulationControlJSON.CountJSON;
+import distributed.SimulationControlJSON.RateJSON;
 import parse.ParserImpl;
 import simulation.Critter;
-import simulation.FileParser;
 import simulation.Hex;
 import simulation.SimpleCritter;
 import simulation.WorldObject;
@@ -43,6 +42,7 @@ public class Server {
 	private int session_id_count;
 	private HashMap<Integer, String> sessionIdMap;
 	private ServerWorldModel model;
+	private ReentrantReadWriteLock rwl;
 
 	/**
 	 * Creates a new server.
@@ -59,6 +59,7 @@ public class Server {
 		adminPassword = adminPass;
 		model = new ServerWorldModel();
 		sessionIdMap = new HashMap<Integer, String>();
+		rwl = new ReentrantReadWriteLock();
 	}
 
 	public static Server getInstance(int portNum, String readPass, String writePass, String adminPass) {
@@ -323,17 +324,48 @@ public class Server {
 			return "Ok";
 		});
 
-//		post("/run", (request, response) -> {
-//			response.header("Content-Type", "application/json");
-//		});
+		post("/run", (request, response) -> {
+			response.header("Content-Type", "text/plain");
+			String queryString = request.queryString();
+			int indexOfSessionId = queryString.indexOf("session_id=") + 11;
+			int session_id = Integer.parseInt(queryString.substring(indexOfSessionId));
+			if (!(sessionIdMap.get(session_id) != null && (sessionIdMap.get(session_id).equals("admin")
+					|| sessionIdMap.get(session_id).equals("write")))) {
+				response.status(401);
+				return "User does not have write access.";
+			}
+			String json = request.body();
+			RateJSON info = gson.fromJson(json, RateJSON.class);
+			 
+			if(info.getRate() < 0 || info.getRate() > 50) {
+				response.status(406);
+				return "Invalid simulation rate.";
+			} else {
+				rwl.writeLock().lock();
+				simulationRate = info.getRate();
+				rwl.writeLock().unlock();
+			}
+			return "Ok";
+			
+		});
 		
 		Thread worldUpdateThread = new Thread(new Runnable() {
-		@Override
-		public void run() {
-			
-		}
-	});
-		
+			@Override
+			public void run() {
+				while(simulationRate > 0) {
+					long time = (long) (1000 / simulationRate);
+					rwl.writeLock().lock();
+					model.advanceTime();
+					rwl.writeLock().unlock();
+				
+					try {
+						Thread.sleep(time);
+					} catch(InterruptedException i) {
+						System.out.println("Could not pause thread execution.");
+					}
+				}
+			}});
+		worldUpdateThread.start();
 	}
 
 	/** Returns the port number of the server. */
