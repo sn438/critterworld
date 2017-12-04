@@ -1,22 +1,13 @@
 species: Smell
-memsize: 13
+memsize: 8
 defense: 2
 offense: 3
 size: 1
 energy: 50000
-posture: 17
+posture: 15
 
 ENERGY <= SIZE * 3 --> wait;
 ahead[1] < -1 --> eat;
-
-1 = 1 --> mem[6] := smell;
-
-mem[9] = 0 --> mem[8] := mem[8] + 1 mem[9] := 1 forward;
-
-mem[9] = 1 and mem[10] = 0 --> mem[10] := mem[10] + 1 right;
-mem[10] = 1 and mem[11] < mem[8] - 1 --> mem[11] := mem[11] + 1 forward;
-mem[10] = 1 and mem[11] = mem[8] - 1 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
-
-mem[11] < mem[8] --> mem[11] := mem[11] + 1 forward;
-mem[11] = mem[8] and mem[10] < 6 --> mem[10] := mem[10] + 1 mem[11] := 0 right;
-mem[10] = 6 and mem[9] = 1 --> mem[9] := 0 mem[10] := 0 mem[11] := 0;
+smell mod 1000 >= 1 and smell mod 1000 <= 3 --> right;
+smell mod 1000 >= 4 and smell mod 1000 <= 5 --> left;
+smell > 0 --> forward;
