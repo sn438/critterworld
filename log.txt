@@ -1,3 +1,1387 @@
+commit 1d7740e5cbc753342c469cc829a0970a0692d9df
+Merge: 01787ea c6213f7
+Author: Andy <az389@cornell.edu>
+Date:   Mon Dec 4 00:00:33 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 01787ea8143888855004c2cce14badef4cbe5db3
+Merge: 8c26867 c3cd790
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 23:59:18 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit c6213f729701d0170d823f05cf5a429bcb103686
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 23:59:02 2017 -0500
+
+    tiny change
+
+commit 372bf4d0af6bd2b43e39e265b3fcc95a4a8a818f
+Merge: 6d4279a c3cd790
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 23:53:44 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 8c268675b55d75d3388b643198d657908b75983e
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 23:53:21 2017 -0500
+
+    Final changes
+
+commit 6d4279a6ff6396e65fbcc229881733da51bce000
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 23:52:59 2017 -0500
+
+    pushing
+
+commit c3cd790ba8ed1f862203848d2166be296bcedef2
+Merge: 6673122 e012507
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 23:02:03 2017 -0500
+
+    Merge of Server
+
+commit 6673122e35a86785f4baf312fc2296df1b175f7c
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 23:00:39 2017 -0500
+
+    Server should be finished
+
+commit e0125077e9955b04cc21333462ae0cd9329388f4
+Merge: c828227 d5228f7
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 22:59:29 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit c8282278f36f2b40e4785d92ab819681ec7fe611
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 22:59:21 2017 -0500
+
+    finished drawing written problem #3 and uploaded new file as a pdf
+
+commit d5228f7618ad111f511235a8b5610d513908ce3a
+Merge: 2f01114 fa5312c
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 22:20:53 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 2f0111410c3bb738c51f236100864045ed9a1ed8
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 22:16:40 2017 -0500
+
+    Creating a world object from json
+
+commit fa5312cec880d49f430082b54b6f2aa96431501d
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 21:53:51 2017 -0500
+
+    removing outdated TODOs; various updates
+
+commit c86c7e1102afc9bf19cd706676268e7b4ab0ed4d
+Merge: d094f31 d8e3e66
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 21:38:44 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit d094f310da8335564ec6a2e084b07961282f2bcf
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 21:37:47 2017 -0500
+
+    changes to file organization, removing old testing print statements, various other updates
+
+commit d8e3e66d5cff25025ff3a4e0ee78a09da1c3e5d8
+Merge: 3b8a9ba 81b8e77
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 21:36:33 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 3b8a9bacbaef4d327d75d23a6daf0fda1ace2850
+Merge: d8d70d9 a9d8adb
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 21:26:00 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit d8d70d9bde68aadbe4045f1174fbbfa04f9a96f2
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 21:24:14 2017 -0500
+
+    More changes to server
+
+commit 81b8e77b2b022c2db89e6fb10c490a1efc795b3b
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 21:24:08 2017 -0500
+
+    Deleting now works
+
+commit a9d8adbfa39bec09c6ab287ce905205d435bfe4d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 16:51:26 2017 -0500
+
+    Merge of Server
+
+commit ebbe7a797fb2b644216de8713ffca888b560282c
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 16:49:12 2017 -0500
+
+    Initial Subsection of the World
+
+commit 79b81e394afcc8580226db6ebfe612c09972244e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 16:45:42 2017 -0500
+
+    Revert "Drawing stuff"
+    
+    This reverts commit 1851c68a09ad254ddd4dc6188c343677be4662be.
+
+commit 1851c68a09ad254ddd4dc6188c343677be4662be
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 16:43:38 2017 -0500
+
+    Drawing stuff
+
+commit fe1db7f33173965c59bf00c47337bf43915e1a42
+Merge: a70e080 eb1b04b
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 15:29:19 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit a70e0801981b5d8b4f881b71fc1cff8d5e9e4d2c
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 15:29:10 2017 -0500
+
+    Step should work
+
+commit eb1b04b430540d47f7e41949243259789babe48f
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 15:28:52 2017 -0500
+
+    Fix
+
+commit 73aa6b43df6fea35e4b902252b604adf5a69653a
+Merge: 8f1f6f8 12ddebe
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 15:22:01 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 8f1f6f88e0ed9db4627f339f7348452ced15b24e
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 15:21:59 2017 -0500
+
+    Minor changes
+
+commit 12ddebee09302f0425175fb01e696b4df718bf24
+Merge: c369af8 42ed9be
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 15:10:17 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit c369af8968361b8962aca456aa0098165bae9ab2
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 15:10:05 2017 -0500
+
+    Stepping of the World
+
+commit 42ed9be5342ee5d298e417f16fa70551d80131cd
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 15:09:54 2017 -0500
+
+    Drawing changes
+
+commit aba239448c17b394596d52ad1f566b8729fe3258
+Merge: 13fb438 8cf16ae
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 14:47:58 2017 -0500
+
+    Merging of Server Changes
+
+commit 8cf16ae44d64e328f246dc50bb4f8c8fe49bd61e
+Merge: cbde6c0 de393ad
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 14:44:59 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit cbde6c026d44917ec5fb02286a1e53d5d9fa96b5
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 14:44:57 2017 -0500
+
+    World drawing
+
+commit 13fb4380f2ae9725d245c68646372e95c0590fc9
+Merge: 8079d46 de393ad
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 14:43:26 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit 8079d465fb8005ab912c787dd1ba519ed158adb7
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 14:43:19 2017 -0500
+
+    Stepping For Server Now Works
+
+commit de393ad1f9307dfbaa2fd1d7c980a46416c005be
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 07:23:44 2017 -0500
+
+    small but VERY important fix to smell
+
+commit 70748d93a94e938e674ec95f7ee78da30bbde9c0
+Merge: 3abd6ec 665ded3
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 06:46:51 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 3abd6ec40f694cc7e3db9bb92a28d248fd516456
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Dec 3 06:46:44 2017 -0500
+
+    FINISHED SMELL
+    
+    has not been tested yet -- will test soon
+
+commit 665ded3f51040e4b2597ac0f913108fd2cf88b6a
+Merge: 6e9ce99 e7908b6
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 02:57:25 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 6e9ce99c6a8ca111d79da0871098e51ca5d01c18
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 02:57:23 2017 -0500
+
+    Temporary stuff
+
+commit ffd2a514db481f3a0441815b9af1b3928ac7d162
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 02:56:44 2017 -0500
+
+    Fixes and refactoring
+
+commit e7908b62045945f2bf67573cb608d9bbd5c51b76
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 02:55:21 2017 -0500
+
+    World State Was Fixed
+
+commit cbd770efbfe1472d60c201fb48ff86b720d82ed9
+Merge: cdaae7d b4e2ae5
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 00:31:49 2017 -0500
+
+    Small merge
+
+commit cdaae7d7b212ffcafd361e5db2cb50577926cdab
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Dec 3 00:29:40 2017 -0500
+
+    Start of work on get critters
+
+commit b4e2ae56ff5dae6bfc2b1eeeeb123a9ef5b1d50e
+Merge: ce08bca fa1873b
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 00:26:42 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit ce08bca6dbcc82a9ddfb1fb28d2776d58d7dc685
+Author: Andy <az389@cornell.edu>
+Date:   Sun Dec 3 00:25:29 2017 -0500
+
+    Work on new controller
+
+commit fa1873b7c2c4c51cc0f6f80b0efbfbcdb4a00746
+Merge: 8cadd6a e13cf02
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 23:11:04 2017 -0500
+
+    C:/Program Files/Git/critters modification
+
+commit 8cadd6a77b134d9f30e980ec0820cff9ea741758
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 23:08:24 2017 -0500
+
+    Server Changes For Get World
+
+commit e13cf02133ab955fee35243955f9367439b75b80
+Merge: a92dc7f 883cafc
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 23:01:57 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a92dc7f8253124bcdacd33fbef5f60170c891a69
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 22:59:12 2017 -0500
+
+    Fixing up world state stuff
+
+commit 883cafc9ca415489f78f3e48f4bdd41ced79b7d7
+Merge: eaec6dc 03cc15e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 22:09:52 2017 -0500
+
+    ServerWorldModel Merge
+
+commit eaec6dc43c003933be9d2e7a996a8660cef4fa9b
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 22:08:13 2017 -0500
+
+    More Minor Changes
+
+commit 03cc15eba9827477585d53ab80502b2fc6b4d230
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 19:43:01 2017 -0500
+
+    Fixing merge conflict bugs
+
+commit 09ecb921e2d99479cfed63df34761215e5dda3e0
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 19:11:26 2017 -0500
+
+    Updated server world model
+
+commit f72042515f74eade22db2ecdb8f380a974fd756e
+Merge: 95dc967 82f2018
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 19:04:45 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 95dc9677586fe864dfb47111cd444a5ead6c3300
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 19:04:44 2017 -0500
+
+    Starting work on client view
+
+commit 82f2018ccf8a39ffa6199e853fb71bf14165fde8
+Merge: c69422f 9c237f8
+Author: ra534 <ra534@cornell.edu>
+Date:   Sat Dec 2 18:58:11 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit c69422f261212ef285d4c813db896270d3e3705a
+Author: ra534 <ra534@cornell.edu>
+Date:   Sat Dec 2 18:58:02 2017 -0500
+
+    added help functionality!
+
+commit 9c237f8d3396dd9a7e017da3966cbc05b194e548
+Merge: 7153cdb d17f69d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 18:22:36 2017 -0500
+
+    World can get information from both local and demo servers
+
+commit 7153cdb03ce2880af751cb9ef7f6d602b17d6989
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 17:40:28 2017 -0500
+
+    Minor Changes to Get Rows and Columns
+
+commit d17f69d0c8f42b5a84d4fd8805ae9fd007acc77e
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 17:37:07 2017 -0500
+
+    Finished work on server/client side update_since
+    
+    Still need to do drawing
+
+commit 873e55a7549b2e50afbd4ebc6c979ba42dba9d29
+Merge: baae19d 9e40b2d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 16:28:40 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit baae19dda00a68b1fbb4b1391b280a7973b0a931
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 16:28:34 2017 -0500
+
+    Load Critter and Connecting to the Demo Server
+
+commit 9e40b2db60695456b9fefdcc73f798cd9d33b1df
+Merge: fce8455 1dd4f36
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 04:20:19 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit fce8455e8ffacea305044aecb7c1aa248cdf0698
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 04:20:17 2017 -0500
+
+    JSONs for diff
+
+commit 1dd4f36fe426785e1c1297f31858f195eaf7548e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 04:14:35 2017 -0500
+
+    Load Critter at Random Hexes Works
+
+commit 222ca65994c37d4be0591f5b62b8a3c25f51268d
+Merge: 28d5d89 14706a3
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 03:23:13 2017 -0500
+
+    Andy and Sujith merge
+
+commit 28d5d8956f87c09ac6ab906280ce16b98a9cba11
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Dec 2 03:17:44 2017 -0500
+
+    Basic Load Critter
+
+commit 14706a3559a3a46ce79ac742f27e18e7e7241779
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 03:14:37 2017 -0500
+
+    Commented out drawing of objects
+
+commit 2d63da11bbcf8735ffb4b4f21b23d9f96527bab0
+Merge: da23509 382d093
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 03:13:50 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit da235094f3b9443ea4b3c0b3e7d6fc9609bcb72d
+Author: Andy <az389@cornell.edu>
+Date:   Sat Dec 2 03:13:48 2017 -0500
+
+    World Model stuff
+
+commit 382d0931e93941e9039f3b6d4e84e22ca56fcf96
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Dec 1 23:40:54 2017 -0500
+
+    completed some GUI related TODOs!
+
+commit f50f395090cc649941ba96cc8666bd9d55332fd6
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Dec 1 22:26:22 2017 -0500
+
+    more work on smell; written problems completed!
+    
+    (graph for written problem #3 still needs to be pretty-printed)
+
+commit 7899616b0f34cf199258692d7caf7d4666288dc8
+Merge: 140e375 c6a38af
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Fri Dec 1 16:37:53 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit 140e3751bea819d035ec0f5748124eb34e4564e4
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Fri Dec 1 16:37:43 2017 -0500
+
+    Can connect correctly to the demo server
+
+commit c6a38af43dc5395d160dd37f19bc9d8b6f93da5c
+Author: Andy <az389@cornell.edu>
+Date:   Fri Dec 1 16:35:54 2017 -0500
+
+    Finishing up model functions
+
+commit 310709bd56cee37ac9dbeeb2323f8fdbc519ab32
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Dec 1 03:56:02 2017 -0500
+
+    updated TODOs
+
+commit cc9a8be735de4991097da6569ccc299cd269762b
+Merge: a71d7fb cdf56f6
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Dec 1 03:50:15 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a71d7fbab5ebaff2940fa3c1430db6f7736849d3
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Dec 1 03:50:11 2017 -0500
+
+    currently working on smell
+    
+    not complete yet
+
+commit cdf56f6dc309ce839db509831a7deb32a375da8b
+Author: Andy <az389@cornell.edu>
+Date:   Fri Dec 1 03:09:34 2017 -0500
+
+    Fixing dead critters
+
+commit e64a42becfff51cafbfbf7632c699fed0ecc24d7
+Author: Andy <az389@cornell.edu>
+Date:   Thu Nov 30 12:05:08 2017 -0500
+
+    Minor refactoring and closing a reader
+
+commit 4f24f97f874e9ce24fb8a8b7b792b238252c7094
+Merge: 3947fa3 86ed38f
+Author: Andy <az389@cornell.edu>
+Date:   Thu Nov 30 11:57:25 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 3947fa3a30a149db7d9265150e61cf3e973ea12d
+Author: Andy <az389@cornell.edu>
+Date:   Thu Nov 30 11:57:22 2017 -0500
+
+    Javadocs + deadcritter list stuff
+
+commit 86ed38fb57a34fe2a42e4a1630719f9dc888323d
+Merge: dfbb830 2168385
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 30 11:15:52 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit dfbb830f722420c37c014f91fcaec68e0a3aea55
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 30 11:15:36 2017 -0500
+
+    New World is Up To Spec
+
+commit 2168385dcddd0b0490c1c3398c373ca8aaf56357
+Author: Andy <az389@cornell.edu>
+Date:   Thu Nov 30 01:13:30 2017 -0500
+
+    Re-added locks - seems to not cause any problems
+    
+    Will ask about the locks tomorrow.
+
+commit d8511108e995077fbe07e16c7a562e5b2b19cc2d
+Author: Andy <az389@cornell.edu>
+Date:   Thu Nov 30 00:31:00 2017 -0500
+
+    Fixed major bug (no more stuttering)
+
+commit dba123c584f1a78c6fc87b85409c2f6c53ec96da
+Merge: 4a6f1ff b36736c
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 22:20:07 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 4a6f1ffba844149db8e8cabf0b369aad86b2ecfb
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 22:14:54 2017 -0500
+
+    Fixes???
+
+commit b36736ccc8d73b3821fe2ef0f6931d123ccb1b3d
+Merge: 5446771 03e48b6
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 29 21:02:27 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 5446771085549b36e202cebcac2e8934b8b0257b
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 29 21:00:22 2017 -0500
+
+    starting smell
+
+commit 03e48b618a3822cd28549360b5d279a6f2eabd40
+Merge: 02eed19 89a49d9
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 18:30:45 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit 02eed19fb15a24a363fed470bddbc5dd3c628a5a
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 18:30:17 2017 -0500
+
+    Load World Kind Of Works Now
+
+commit 89a49d9ad7d2f22af44dd8df4c5534ed872057b1
+Merge: a84f317 87e7e29
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 18:28:10 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a84f317aa412f8fb35a1b29435bc3b9c999f3114
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 18:28:08 2017 -0500
+
+    Minor fix
+
+commit e7ee7fcfdd3ecce23eda62b565923642d4c90c8e
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 18:27:54 2017 -0500
+
+    Smell
+
+commit 87e7e29fd741672805f384e03d7e2ead06ec78a8
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 16:41:17 2017 -0500
+
+    Spacing from SpiralCritter was removed
+
+commit 0c3bea4a5f11834b9c7d553d41b50f54a58fe557
+Merge: bcf06dd 941ae91
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 16:36:35 2017 -0500
+
+    Controller was merged.
+
+commit bcf06dd2f1f1e7fb5542900442b380ea14254c45
+Merge: 3b50475 3de6f4a
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 16:35:26 2017 -0500
+
+    Merge of Andy and Sujith Load WOrld stuff
+
+commit 941ae915e7ad017782f6c0fc40c2d5ca05ab8558
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 29 15:58:35 2017 -0500
+
+    Generate world from string description
+
+commit 3b5047551c33e6c076d79604ea431bd8b20f5196
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 29 15:54:29 2017 -0500
+
+    Load World
+
+commit 3de6f4a9df7a177d95c4ec0e26471e55e6ef0f02
+Merge: 36a12d4 353b589
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 28 10:55:45 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 36a12d4951da6afbee183d5a1f815495e7da4445
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 28 10:55:43 2017 -0500
+
+    Formatting GUI and trying to debug concurrency bugs
+
+commit 353b589447015b7af62921bc287518a098fcd48f
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 28 01:33:13 2017 -0500
+
+    reverted back to previous art style
+    
+    using outlines rather than fill for critters is probably more efficient as it is less drawing for the program to do. might help when having to draw 100s of critters.
+
+commit 7eece06d072345375989f9f98073ecc22b0f06c8
+Merge: 0c7343e 59e7a0f
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 28 01:06:18 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 0c7343e684bcbc33e4a7c1121eb7474c6eaa21df
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 28 00:51:08 2017 -0500
+
+    more work on controller
+
+commit 59e7a0fd0590dfbe71be5a952f67a3f87da824b5
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 28 00:50:06 2017 -0500
+
+    Initial work on diff log
+    
+    It's untested and probably doesn't work
+
+commit 324a83e926927f94156b6b696cb670b878180e20
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 28 00:47:30 2017 -0500
+
+    optimized controller
+    
+    modularized much of the code in the Controller class, and removed code from places where it was redundant
+
+commit c38b428c44ae3bad762cd6fa01fcc06fd1e29618
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 27 17:26:29 2017 -0500
+
+    Minor fix
+
+commit 645e883f63dcc29574ff56bd41ff843d1bb2fd08
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 27 14:09:31 2017 -0500
+
+    Improving error messages
+
+commit 57dd3ef24d08670b892ee35fc5e48b042cf2c008
+Merge: 6147409 3132c33
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 27 14:05:02 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 614740932e93a35927e629feb5d232aa2692d506
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 27 14:05:01 2017 -0500
+
+    Starting to adapt WorldModel for the server
+
+commit 3132c33aae050722e654b292613d56e333d3d65d
+Author: ra534 <ra534@cornell.edu>
+Date:   Mon Nov 27 01:26:12 2017 -0500
+
+    some TODOs
+
+commit ce2936a74ec99f0c57dc661a1f87d04f59202110
+Merge: a19da69 4dfd495
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 23:03:40 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit a19da69a5ead5df594f5f9db575af1e922a19955
+Merge: 184bc73 0e69a19
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 23:03:35 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 4dfd4956be755b71d25bb413ef9283d6238422e6
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 26 23:02:52 2017 -0500
+
+    Fix for Login
+
+commit 184bc73656a91494a3d57a3f0b0dfdd251c61788
+Merge: 4a1f5cf 95c81b3
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 22:55:32 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 0e69a19e0ff8fdf05349d412e692125d66c860bd
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 26 22:52:52 2017 -0500
+
+    Psych I didn't merge correctly just fixed it.
+
+commit 4a1f5cf57bce5bd43937e8ac86fae9dbe5cd6f88
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 22:52:10 2017 -0500
+
+    Locks
+
+commit 95c81b3709534055b49cf958cec06f644b1c6d60
+Merge: 25b3b1f 081225e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 26 22:44:57 2017 -0500
+
+    I merged correctly for the first time
+
+commit 25b3b1f0b5cf6c099df7ba6d56710ac0eed3656c
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 26 22:37:05 2017 -0500
+
+    Fixes for New World/Generic
+
+commit 081225ecce34de282eba29a7ef01e49fa1339a3c
+Merge: d9f969c bb7712d
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 26 19:28:40 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit d9f969ca28d120addcbe10e73c261cdcec191c70
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 26 19:28:24 2017 -0500
+
+    minor edits
+
+commit bb7712d661f92e7c0b35db345ef7ec67068aa583
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 17:30:23 2017 -0500
+
+    A5 fixes + GUI reformatting
+
+commit 7eef4a373b794b055c309c325174a4f6715c3645
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 26 17:11:00 2017 -0500
+
+    some more merge-related changes and formatting
+
+commit 873d52fd86c70cc585cb45188fc93b375a8f282d
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 26 17:01:04 2017 -0500
+
+    Revert "Revert "Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch""
+    
+    This reverts commit 7fc22702c636c0b00d7632c591633f2883f544ef.
+
+commit e0a4df73e2d56d23efcfc0e58371cfce189153f5
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 26 16:28:03 2017 -0500
+
+    Small fixes
+
+commit e30bab467d392bae2dfeb4a52e968b075b00d6ac
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 26 16:17:00 2017 -0500
+
+    resolved merge nightmare
+    
+    fixed out-of-date and incorrect TODOs and reverted deletions of code in GUI
+
+commit 85ec645da45e4955002c030a2436c72e74a18b6f
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Nov 25 21:50:42 2017 -0500
+
+    Merging Done Correctly Now
+
+commit b6c72ddf7f38f2febce504deced700b919d925c3
+Merge: 0c4c95b 10604fa
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Nov 25 21:43:50 2017 -0500
+
+    New World Stuff
+
+commit 0c4c95b43eab097a629c783c7a0cb3de267e9209
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Nov 25 21:40:06 2017 -0500
+
+    New World Sort Of Works
+
+commit 10604fa8471e6d55b798c05768ee7599a68fc5a3
+Author: Andy <az389@cornell.edu>
+Date:   Sat Nov 25 21:39:09 2017 -0500
+
+    Fixed an A5 bug
+
+commit 6301c5ee4285a6d36b8cce3f3629760740266bb1
+Merge: 1edbadc d6bd678
+Author: Andy <az389@cornell.edu>
+Date:   Sat Nov 25 21:28:54 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 1edbadc400f9dc121a62f5c79ad920e625a580a3
+Author: Andy <az389@cornell.edu>
+Date:   Sat Nov 25 21:24:04 2017 -0500
+
+    Critter info box now becomes blank after hex is unselected
+
+commit d6bd67892a7ff90b3cbf8dbbb5dd0f3066cae94f
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Nov 25 14:17:25 2017 -0500
+
+    Initial World Stuff on Server
+
+commit e561377f828d0180ab4c4f30561dd927145c1e99
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 22:12:53 2017 -0500
+
+    Login Now Error Handles
+
+commit 55c900193eef4a8d3a2fd35b2e6a45bd5f0ffa97
+Merge: 7a844ae 6ba4688
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:26:08 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit 6ba468890137f29d727a1d875b204c1dd6d5f00f
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:24:37 2017 -0500
+
+    Revert "Server Initial Changes"
+    
+    This reverts commit c235f7ff689c806ac72360cd10351c7d1116b050.
+
+commit 7a844ae8c07fee0c0a3c2dba2e217b8d7c4ef9f1
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:24:13 2017 -0500
+
+    Revert "Server Initial Changes"
+    
+    This reverts commit c235f7ff689c806ac72360cd10351c7d1116b050.
+
+commit 9acce39949d803a33c48b69720f7927caba658be
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:21:35 2017 -0500
+
+    Revert "Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch"
+    
+    This reverts commit fd28a2a7011b73f61bce84c5f4c14be28c909b64, reversing
+    changes made to c235f7ff689c806ac72360cd10351c7d1116b050.
+
+commit 7fc22702c636c0b00d7632c591633f2883f544ef
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:20:40 2017 -0500
+
+    Revert "Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch"
+    
+    This reverts commit fd28a2a7011b73f61bce84c5f4c14be28c909b64, reversing
+    changes made to c235f7ff689c806ac72360cd10351c7d1116b050.
+
+commit fd28a2a7011b73f61bce84c5f4c14be28c909b64
+Merge: c235f7f 53197a3
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:01:39 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit c235f7ff689c806ac72360cd10351c7d1116b050
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Thu Nov 23 21:01:21 2017 -0500
+
+    Server Initial Changes
+
+commit 53197a34fdcc1edf4b6a3efd9ac5073094d82b29
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 21 18:02:56 2017 -0500
+
+    updated TODOs
+
+commit 6c924539ab374ad212280bc21df275196e94a054
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 21 17:55:43 2017 -0500
+
+    new reset functionality works!
+
+commit cc20cff6ab3bc5314ebc75cd0e79358e44e21ce6
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 21 17:35:10 2017 -0500
+
+    restructuring reset functionality
+
+commit c2d81045be2ad29e932819e99269606207ea3edf
+Author: ra534 <ra534@cornell.edu>
+Date:   Tue Nov 21 16:22:16 2017 -0500
+
+    attempted to resolve icon issues (unsure if successful)
+
+commit ac63d1e5ed4e5f51bf6e3ec7d6a4f851d3bac1cd
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 22:17:14 2017 -0500
+
+    uploading updated favicon (did not upload last time)
+
+commit fafba02498de2ba578383d64fb92b4f3c4bc04d9
+Merge: 6915501 a777224
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 18:09:01 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 69155015d38fccf60d001a788d5b192b79b7738e
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 18:08:59 2017 -0500
+
+    fancy TODOs if we have time/motivation
+
+commit a777224a0e57582a60965e3edf42570fc3400b62
+Merge: 06ea395 ab070e8
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 18:03:51 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 06ea39509231678c38d79c9b15f2d79c529be9cc
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 18:03:50 2017 -0500
+
+    Stuff
+
+commit ab070e84425c4ee79d2a20f60d0fc0d4488939f8
+Merge: 299e373 5a8dae4
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 17:47:21 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 299e3734771c16b0757af886468c48a335cf503c
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 17:45:59 2017 -0500
+
+    some changes to gui
+
+commit 5a8dae433d42fb2f997825c562ba25b3d70152ee
+Merge: 1df02cb b34ea62
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 16:53:08 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 1df02cbe90fc5eb09293cc7adb3ee5e1083d35ab
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 16:53:05 2017 -0500
+
+    Icons!
+
+commit b34ea6202f81851354183f0a1892d6c85ebd7463
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 16:52:40 2017 -0500
+
+    icon updated
+
+commit 33bb331efcd31946ba3ba05a2fb554b5c39f577e
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 16:32:07 2017 -0500
+
+    favicon converted to png format
+
+commit b7fba3333f0bf5fdf4892065e030c869b3feb4e8
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 16:29:30 2017 -0500
+
+    uploaded favicon
+
+commit 11cd6881227afb2e461bf9436f86424f114189c3
+Merge: a45e4e9 9af4288
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 19 16:05:40 2017 -0500
+
+    Merge of Rishi and Master
+
+commit a45e4e9e518513f631c5a2bc9a557b329a58a57a
+Merge: 0cb28a2 28e8042
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 19 16:02:16 2017 -0500
+
+    Merge Of All Our Work
+
+commit 9af428841e328a5d1a588044d8aecffa3bcf2223
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 16:01:41 2017 -0500
+
+    working on hex selection mood
+
+commit 6f1328e4fbb5185713ee058ca9932b973356486f
+Merge: 16c257a c66ead8
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 15:51:56 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 16c257ada927a841d19696c5f41ccb8e7cd5ed17
+Author: ra534 <ra534@cornell.edu>
+Date:   Sun Nov 19 15:51:52 2017 -0500
+
+    deleting deprecated method
+
+commit c66ead8ed49e7a54940013ad413d15ac037a8cfb
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 15:51:15 2017 -0500
+
+    Formatting fixes
+
+commit 0cb28a2413af821e517ff92abd69921b9a7b044e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sun Nov 19 15:49:20 2017 -0500
+
+    Minor Change To Login
+
+commit 28e80427d75dee362e088c2258f280d54eb12d83
+Author: Andy <az389@cornell.edu>
+Date:   Sun Nov 19 02:58:41 2017 -0500
+
+    Fixes on controller
+
+commit 1e635066aad6c8fcf4ea1a2b6c7fddcccdf217ce
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 17 19:33:37 2017 -0500
+
+    some more TODO updates
+
+commit 033b94ce20e41f87ad9d243ed26a5b40a67100a3
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 17 19:32:43 2017 -0500
+
+    critter info works better now
+
+commit 508efd1ea893ca84978df3efb1a078a499159a89
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 17 18:48:06 2017 -0500
+
+    formatting of critter info box improved
+
+commit 9bef759c91082201741d905f8297eb55f55de255
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 17 17:13:22 2017 -0500
+
+    TODOs
+
+commit 410cba0501df71219b6effb9fd8cd2a9bb0cc63f
+Author: ra534 <ra534@cornell.edu>
+Date:   Thu Nov 16 04:56:32 2017 -0500
+
+    ZOOM WORKS NOW
+
+commit 821a32ef2ef6397b4a93bf683dcf89275b0e82ba
+Author: ra534 <ra534@cornell.edu>
+Date:   Thu Nov 16 04:32:09 2017 -0500
+
+    drag works now!!
+
+commit 73f2dc4ba6fa500f9804924ffed8ac2843900706
+Merge: 1b54385 d7c6e8a
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 20:57:27 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 1b543854583c963b803f164716b49127ff7c240f
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 20:57:21 2017 -0500
+
+    working on the dragging
+
+commit d7c6e8a81bacad70baed9c8f97aa09b8a39db8a9
+Merge: bad9b62 e9fae21
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:55:49 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit bad9b62799de0d50180c21ae23ea51a5f6f669a0
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:55:48 2017 -0500
+
+    Temp fixes
+
+commit e9fae219b28442e323f853088c68c93bda2f4543
+Merge: be90507 ec848e2
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 20:48:15 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit be9050755e14529124bfd86917e28e7b4069676b
+Merge: 82d0d71 7273ded
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 20:46:34 2017 -0500
+
+    Login Merge Work
+
+commit ec848e286fa42d8c4aad0112a89710689839de74
+Merge: 848d7f6 b9567a6
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:46:05 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 848d7f6eeecdbf73882ba1178383fc02a176c014
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:46:03 2017 -0500
+
+    Miscellaneous fixes
+
+commit b9567a6ddb3c214b467c1eca02edc09ab8c53d72
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 20:42:25 2017 -0500
+
+    made it not broke
+
+commit 82d0d71a02216147ebb6e4e6e4beb1f8ce471e5e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 20:41:48 2017 -0500
+
+    Login Work is Mostly Done
+
+commit 7273ded110d96dde87eb1a537a9f9bb3397d4d70
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 20:32:14 2017 -0500
+
+    added todos, formatting, continued work on drag
+
+commit 827d390a09bf8d243b188fc6e5b61734fd120e28
+Merge: 7b3d96e 6aff4ab
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:10:47 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 7b3d96ecf39ca9e6e16ad7bebb7371673ccd2541
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 20:09:37 2017 -0500
+
+    Hex Selection fixed!
+
+commit 6aff4ab0a705a2249d63f3744a42b810bd817dd8
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 20:01:39 2017 -0500
+
+    fixed hex selection, worked on drag
+
+commit e60cf3efa5d26104929dcb0418e98652c6e99bbe
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 05:33:05 2017 -0500
+
+    critter color + todo's
+
+commit 5c0d61e615e8747effff295bfd17035fab8dd2d9
+Merge: 6b55a11 72b85ee
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 04:12:42 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 6b55a11d8b69f2aa94e8da1c1b1b21502c929776
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 04:08:26 2017 -0500
+
+    working on stuff
+
+commit 72b85ee1e05258a31d44058c2cbd6f38a966ad5a
+Merge: b4c7bb2 f6968ee
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 00:30:40 2017 -0500
+
+    Merge remote-tracking branch 'origin' into SujithBranch
+
+commit b4c7bb299f4c962b4582c815afb2a5001255c4f0
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 00:24:31 2017 -0500
+
+    More Login Stuff
+
+commit 923a224d54026b3a78279eb1c5fdaf1f2c6c2b7c
+Merge: f238157 1b3d343
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Wed Nov 15 00:16:35 2017 -0500
+
+    Merge remote-tracking branch 'origin' into SujithBranch
+
+commit f6968ee7089c34525bfe40a66bc7a5b09b547590
+Merge: 196eb87 c7f4b4a
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 00:10:44 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 196eb879b9f46ca303af382289b18bbb10411948
+Author: Andy <az389@cornell.edu>
+Date:   Wed Nov 15 00:07:11 2017 -0500
+
+    Minor fixes
+
+commit c7f4b4a003b50104ad5f5c7b4e82e60e89f71153
+Author: ra534 <ra534@cornell.edu>
+Date:   Wed Nov 15 00:05:21 2017 -0500
+
+    ctrl + shift + f
+
+commit 1b3d34319d61e1f0ced34bc68789724a814d51ab
+Merge: 370e32f 57987a9
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Nov 14 23:42:08 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit f238157389a2e46b01f42b1396b665202b1a0bf5
+Merge: 370e32f 57987a9
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Nov 14 23:38:59 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw into SujithBranch
+
+commit 57987a93d7a5071c15464278fc7787dd8d03f1d2
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 14 23:37:09 2017 -0500
+
+    Minor comment
+
+commit 65fba1b5b9eb8474fb4289df67d759d016435fa8
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 14 23:02:00 2017 -0500
+
+    Important A5 fixes
+
+commit 733b73304dac6317c198e966ed50123e93d8b5c9
+Merge: 6af49ab 398e7f8
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 14 22:34:26 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 6af49abed67e3caa8e9a4163ff7440150808d878
+Author: Andy <az389@cornell.edu>
+Date:   Tue Nov 14 22:34:24 2017 -0500
+
+    Stroke width
+
+commit 370e32f9fdff001224615c9c040f9eed1ea9e756
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Tue Nov 14 22:02:15 2017 -0500
+
+    Login Work
+
+commit 398e7f8ffa7e91fa38643769762b2fbc001dc6c5
+Merge: f593366 7c9af1e
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Nov 13 16:46:17 2017 -0500
+
+    Merge remote-tracking branch 'origin' into SujithBranch
+
+commit f593366a9aa0c76f9cdc0f1e0ede08495d181f5d
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Mon Nov 13 16:45:53 2017 -0500
+
+    Initial Zoom Testing
+
+commit 7c9af1e3822644d6cd2b45c7c5e018c56686d7dd
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 13 12:36:20 2017 -0500
+
+    Rocks are now colored properly
+
+commit 1f2e312efa95405d4f0de64d4abaa26aea63bf1d
+Merge: 44e1f73 9cdb057
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 13 12:01:41 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit 44e1f73f301c6721c50268234195cb898636c1e0
+Author: Andy <az389@cornell.edu>
+Date:   Mon Nov 13 12:00:46 2017 -0500
+
+    Fixed some major bugs with A5
+
+commit 9cdb057379dad6987ea11a8fdc99eab66c8508db
+Author: sn438 <31802007+sn438@users.noreply.github.com>
+Date:   Sat Nov 11 12:21:47 2017 -0500
+
+    test commit
+
+commit ee57f891df89150a73c0aa24c1d1210156ad35b7
+Author: ra534 <ra534@cornell.edu>
+Date:   Sat Nov 11 00:02:27 2017 -0500
+
+    finalizing
+
+commit 8def5183f63f17bc1f6ce45b8ad2bfe0a9dda2a8
+Merge: decf2c7 ebda8c4
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 10 23:52:04 2017 -0500
+
+    Merge branch 'master' of https://github.coecis.cornell.edu/cs2112-f17/team-az389-sn438-cw
+
+commit decf2c7ebc32298343c9c55c82672c12b1a76abd
+Author: ra534 <ra534@cornell.edu>
+Date:   Fri Nov 10 23:51:55 2017 -0500
+
+    moreeee
+
 commit ebda8c4e6c697f662fee6175ad1fbb5d3f8efb63
 Merge: cbcf1c1 771991f
 Author: Andy <az389@cornell.edu>
