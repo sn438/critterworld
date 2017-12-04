@@ -582,6 +582,7 @@ public class World extends AbstractWorld {
 		rootSmell.totalDist = 0;
 		rootSmell.orientation = sc.getOrientation();
 		rootSmell.numSteps = 0;
+		rootSmell.origin = sc.getOrientation();
 
 		// sets up priority queue
 		AdjustablePriorityQueue<Hex> frontier = new AdjustablePriorityQueue<Hex>();
@@ -635,7 +636,7 @@ public class World extends AbstractWorld {
 					}
 					if (sv.totalDist == Integer.MAX_VALUE) {
 						sv.totalDist = newDistance;
-						sv.origin = initialIteration ? i : currSmell.origin;
+						sv.origin = initialIteration ? ((i - rootSmell.origin + 6) % 6) : currSmell.origin;
 						sv.numSteps = currSmell.numSteps + 1;
 						frontier.add(neighbors[i]);
 						frontier.setPriority(neighbors[i], sv.totalDist);
