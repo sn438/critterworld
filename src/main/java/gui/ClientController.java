@@ -18,22 +18,19 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 
-import ast.Program;
 import distributed.ClientRequestHandler;
 import distributed.ClientWorldMap;
 import distributed.SessionID;
 import distributed.WorldStateJSON;
-import gui.Controller.LoginInfo;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -47,7 +44,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -58,8 +54,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
-import javafx.util.Duration;
-import simulation.SimpleCritter;
 
 /**
  * This class handles user inputs and sends information to the world model and
@@ -164,7 +158,8 @@ public class ClientController {
 		TextField levelTextField = new TextField("Level");
 		TextField passwordTextField = new TextField("Password");
 		TextField urlTextField = new TextField("http://localhost:8080");
-		//TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
+		// TextField urlTextField = new
+		// TextField("http://hexworld.herokuapp.com:80/hexworld");
 		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
 		Platform.runLater(levelTextField::requestFocus);
 		dialog.setResultConverter((ButtonType button) -> {
@@ -205,18 +200,18 @@ public class ClientController {
 					System.exit(0);
 				}
 			}
-			
+
 			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String sessionIdString = "";
 			String holder = r.readLine();
-			while(holder != null) {
+			while (holder != null) {
 				sessionIdString += holder;
 				holder = r.readLine();
 			}
 			SessionID sessionId = gson.fromJson(sessionIdString, SessionID.class);
 			sessionID = sessionId.getSessionID();
 			System.out.println(sessionId.getSessionID());
-			
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -251,32 +246,32 @@ public class ClientController {
 
 		handler = new ClientRequestHandler(this.urlInitial);
 	}
-		
+
 	@FXML
 	public void initialize() {
-		
-		//System.out.println("Initialize has been reached");
+
+		// System.out.println("Initialize has been reached");
 		login();
-		
+
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
 		pause.setDisable(true);
-		
+
 		setupCanvas();
 		setGUIReady(true);
-		
+
 		WorldStateJSON wsj = handler.updateSince(sessionID, 0);
-		if(wsj != null) {
-			
+		if (wsj != null) {
+
 			map = new ClientWorldMap(c, wsj.getCols(), wsj.getRows());
-			//System.out.println("This is map:" + map);
+			// System.out.println("This is map:" + map);
 			currentVersion = wsj.getCurrentVersion();
 			setGUIReady(true);
 			map.draw(wsj);
 			crittersAlive.setText("Critters Alive: " + wsj.getPopulation());
 			stepsTaken.setText("Time: " + wsj.getCurrentTime());
 		}
-		
+
 		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT) {
@@ -293,12 +288,14 @@ public class ClientController {
 			}
 		});
 
-//		// adds a listener to the slider to adjust world speed as the slider is changed
-//		simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
-//			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-//				simulationRate = new_val.longValue();
-//			}
-//		});
+		// // adds a listener to the slider to adjust world speed as the slider is
+		// changed
+		// simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
+		// public void changed(ObservableValue<? extends Number> ov, Number old_val,
+		// Number new_val) {
+		// simulationRate = new_val.longValue();
+		// }
+		// });
 	}
 
 	private void setupCanvas() {
@@ -310,12 +307,12 @@ public class ClientController {
 		// listeners that dynamically redraw the canvas in response to window resizing
 		c.heightProperty().addListener(update -> {
 			if (map != null)
-				//System.out.println("Updating is happening");
+				// System.out.println("Updating is happening");
 				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 		c.widthProperty().addListener(update -> {
 			if (map != null)
-				//System.out.println("Updating is happening");
+				// System.out.println("Updating is happening");
 				map.draw(handler.updateSince(sessionID, currentVersion));
 		});
 	}
@@ -354,13 +351,13 @@ public class ClientController {
 		System.out.println("View is being updated");
 		WorldStateJSON update = handler.updateSince(sessionID, currentVersion);
 		currentVersion = update.getCurrentVersion();
-		if(map == null)
+		if (map == null)
 			map = new ClientWorldMap(c, update.getCols(), update.getRows());
 		map.draw(update);
 		crittersAlive.setText("Critters Alive: " + update.getPopulation());
 		stepsTaken.setText("Time: " + update.getCurrentTime());
 	}
-	
+
 	@FXML
 	private void handleNewWorldPressed(MouseEvent me) {
 		newWorldServer();
@@ -469,11 +466,11 @@ public class ClientController {
 
 	@FXML
 	private void handleStep(MouseEvent me) {
-//		model.advanceTime();
-//		updateInfoBox();
-//		map.draw();
-//		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-//		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		// model.advanceTime();
+		// updateInfoBox();
+		// map.draw();
+		// crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		// stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 		handler.advanceTime(sessionID);
 		updateView();
 	}
@@ -491,21 +488,22 @@ public class ClientController {
 
 		executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
-//
-//		timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent ae) {
-//				updateInfoBox();
-//				map.draw();
-//				updateInfoBox();
-//				crittersAlive.setText("Critters Alive: " + model.getNumCritters());
-//				stepsTaken.setText("Time: " + model.getCurrentTimeStep());
-//			}
-//		}));
-//
-//		timeline.setCycleCount(Timeline.INDEFINITE);
-//		timeline.play();
+		//
+		// timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new
+		// EventHandler<ActionEvent>() {
+		//
+		// @Override
+		// public void handle(ActionEvent ae) {
+		// updateInfoBox();
+		// map.draw();
+		// updateInfoBox();
+		// crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		// stepsTaken.setText("Time: " + model.getCurrentTimeStep());
+		// }
+		// }));
+		//
+		// timeline.setCycleCount(Timeline.INDEFINITE);
+		// timeline.play();
 
 		newWorld.setDisable(true); // TODO should we take these 4 lines out so you can create a new world even
 									// while the current one is still running?
@@ -523,7 +521,7 @@ public class ClientController {
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		
+
 	}
 
 	@FXML
@@ -538,39 +536,41 @@ public class ClientController {
 	}
 
 	private void updateInfoBox() {
-//		if (map.getSelectedHex() != null) {
-//			int[] hexCoordinatesSelected = map.getSelectedHex();
-//			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
-//			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
-//			if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-//				SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-//				memSizeText.setText(String.valueOf(critter.getMemLength()));
-//				speciesText.setText(critter.getName());
-//				int[] critterMemoryCopy = new int[critter.getMemLength()];
-//				critterMemoryCopy = critter.getMemoryCopy();
-//				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-//				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-//				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-//				energyText.setText(String.valueOf(critterMemoryCopy[4]));
-//				passText.setText(String.valueOf(critterMemoryCopy[5]));
-//				tagText.setText(String.valueOf(critterMemoryCopy[6]));
-//				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-//				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
-//			} else {
-//				memSizeText.setText("");
-//				speciesText.setText("");
-//				defenseText.setText("");
-//				offenseText.setText("");
-//				sizeText.setText("");
-//				energyText.setText("");
-//				passText.setText("");
-//				tagText.setText("");
-//				postureText.setText("");
-//			}
-//		} else {
-//			columnText.setText("");
-//			rowText.setText("");
-//		}
+		// if (map.getSelectedHex() != null) {
+		// int[] hexCoordinatesSelected = map.getSelectedHex();
+		// columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+		// rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
+		// if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) !=
+		// null) {
+		// SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0],
+		// hexCoordinatesSelected[1]);
+		// memSizeText.setText(String.valueOf(critter.getMemLength()));
+		// speciesText.setText(critter.getName());
+		// int[] critterMemoryCopy = new int[critter.getMemLength()];
+		// critterMemoryCopy = critter.getMemoryCopy();
+		// defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+		// offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+		// sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+		// energyText.setText(String.valueOf(critterMemoryCopy[4]));
+		// passText.setText(String.valueOf(critterMemoryCopy[5]));
+		// tagText.setText(String.valueOf(critterMemoryCopy[6]));
+		// postureText.setText(String.valueOf(critterMemoryCopy[7]));
+		// lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
+		// } else {
+		// memSizeText.setText("");
+		// speciesText.setText("");
+		// defenseText.setText("");
+		// offenseText.setText("");
+		// sizeText.setText("");
+		// energyText.setText("");
+		// passText.setText("");
+		// tagText.setText("");
+		// postureText.setText("");
+		// }
+		// } else {
+		// columnText.setText("");
+		// rowText.setText("");
+		// }
 	}
 
 	@FXML
@@ -626,7 +626,7 @@ public class ClientController {
 	private void help(ActionEvent ae) {
 		String fileName = "instructions.txt";
 		ImageView imgview = new ImageView(GUI.icon);
-		Alert alert = new Alert(AlertType.INFORMATION);	
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setGraphic(imgview);
 		try {
 			String helpText = new String(Files.readAllBytes(Paths.get(fileName)));
@@ -652,19 +652,22 @@ public class ClientController {
 
 	@FXML
 	private void handleDisplayProgram(MouseEvent me) {
-//		int[] hexCoordinates = new int[2];
-//		hexCoordinates = map.getSelectedHex();
-//		if (hexCoordinates == null) {
-//			return;
-//		}
-//		if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
-//			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
-//			Program critterProgram = critter.getProgram();
-//			String critterProgramString = critterProgram.toString();
-//			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
-//			alert.setHeaderText("Critter Program");
-//			alert.showAndWait();
-//		}
+		// int[] hexCoordinates = new int[2];
+		// hexCoordinates = map.getSelectedHex();
+		// if (hexCoordinates == null) {
+		// return;
+		// }
+		// if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+		// SimpleCritter critter = model.getCritter(hexCoordinates[0],
+		// hexCoordinates[1]);
+		// Program critterProgram = critter.getProgram();
+		// String critterProgramString = critterProgram.toString();
+		// Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+		// ImageView imgview = new ImageView(GUI.icon);
+		// alert.setGraphic(imgview);
+		// alert.setHeaderText("Critter Program");
+		// alert.showAndWait();
+		// }
 	}
 
 	public class LoginInfo {

@@ -337,6 +337,7 @@ public class Controller {
 		try {
 			model.loadWorld(worldFile);
 			map = new WorldMap(c, model);
+			setGUIReady(true);
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
@@ -637,7 +638,10 @@ public class Controller {
 			SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
 			Program critterProgram = critter.getProgram();
 			String critterProgramString = critterProgram.toString();
+			
 			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+			ImageView imgview = new ImageView(GUI.icon);
+			alert.setGraphic(imgview);
 			alert.setHeaderText("Critter Program");
 			alert.showAndWait();
 		}

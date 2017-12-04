@@ -574,6 +574,8 @@ public class World extends AbstractWorld {
 			}
 		}
 
+		ArrayList<Hex> visitedHexes = new ArrayList<>();
+		
 		// sets up critter's smellValue for smell function
 		SmellValue rootSmell = graph.get(root);
 		rootSmell.totalDist = 0;
@@ -589,6 +591,7 @@ public class World extends AbstractWorld {
 		while (!frontier.isEmpty()) {
 			// pops hex from priority queue
 			Hex curr = frontier.remove();
+			visitedHexes.add(curr);
 			SmellValue currSmell = graph.get(curr);
 
 			if (foodList.contains(currSmell)) {
@@ -629,14 +632,13 @@ public class World extends AbstractWorld {
 					if (!isFood) {
 						newDistance += calculateSmellWeight(currSmell, sv);
 					}
-
 					if (sv.totalDist == Integer.MAX_VALUE) {
 						sv.totalDist = newDistance;
 						sv.origin = initialIteration ? i : currSmell.origin;
 						sv.numSteps = currSmell.numSteps + 1;
 						frontier.add(neighbors[i]);
 						frontier.setPriority(neighbors[i], sv.totalDist);
-					} else {
+					} else if (!visitedHexes.contains(neighbors[i])) {
 						sv.totalDist = Math.min(sv.totalDist, newDistance);
 						if (sv.totalDist == newDistance) {
 							sv.origin = initialIteration ? i : currSmell.origin;
@@ -657,7 +659,7 @@ public class World extends AbstractWorld {
 				direction = sv.origin;
 			}
 		}
-
+		System.out.println(distance * 1000 + direction);
 		return distance * 1000 + direction;
 	}
 
