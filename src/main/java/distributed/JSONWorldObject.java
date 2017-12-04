@@ -18,7 +18,7 @@ public class JSONWorldObject {
 
 	/** Food objects only: the number of calories. */
 	private Integer value;
-
+	private Integer amount;
 	/** Critter objects only: the critter ID. */
 	private Integer id;
 	/** Critter objects only: the species name. */
@@ -31,6 +31,10 @@ public class JSONWorldObject {
 	private String program;
 	/** Critter objects only: the index of the most recently executed rule. */
 	private Integer recently_executed_rule;
+	
+	
+	
+	
 
 
 	/**
@@ -83,7 +87,15 @@ public class JSONWorldObject {
 		recently_executed_rule = ruleIndex;
 
 	}
-
+	
+	
+	public JSONWorldObject(int col, int row, String type, int amount) {
+		this.row = row;
+		this.col = col;
+		this.type = type;
+		this.amount = amount;
+	}
+	
 	/**
 	 * Creates a JSON critter object for which the user does not have full permissions
 	 * @param typ The type of the object (must be "critter")
@@ -189,6 +201,9 @@ public class JSONWorldObject {
 		return recently_executed_rule;
 	}
 	
+	public Integer getAmount() {
+		return this.amount;
+	}
 	@Override
 	public int hashCode() {
 		String s = "";

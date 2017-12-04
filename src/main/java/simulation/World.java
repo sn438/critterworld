@@ -497,14 +497,15 @@ public class World extends AbstractWorld {
 	}
 
 	@Override
-	public void addNonCritterObject(WorldObject wo, int c, int r) {
+	public boolean addNonCritterObject(WorldObject wo, int c, int r) {
 		if (wo instanceof Critter)
-			return;
+			return false;
 		if (!isValidHex(c, r))
-			return;
+			return false;
 		nonCritterObjectMap.put(wo, grid[c][r]);
-		grid[c][r].addContent(wo);
+		boolean isValid = grid[c][r].addContent(wo);
 		updatedHexes.add(grid[c][r]);
+		return isValid;
 	}
 
 	/* ========================================= */
@@ -558,11 +559,12 @@ public class World extends AbstractWorld {
 		ArrayList<SmellValue> foodList = new ArrayList<SmellValue>();
 
 		// adds all the possible hexes to be used in method to a hash map
+		Hex root = critterMap.get(sc);
 		HashMap<Hex, SmellValue> graph = new HashMap<Hex, SmellValue>();
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (isValidHex(i, j)) {
-					if (grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
+					if (grid[i][j] == root || grid[i][j].hexAppearance() == 0 || grid[i][j].hexAppearance() < -1) {
 						SmellValue sv = new SmellValue();
 						graph.put(grid[i][j], sv);
 						if (grid[i][j].hexAppearance() < -1) {
@@ -573,10 +575,7 @@ public class World extends AbstractWorld {
 			}
 		}
 
-		// sets up root hex for smell function
-		Hex root = critterMap.get(sc);
-		System.out.println(sc);
-		System.out.println(root);
+		// sets up critter's smellValue for smell function
 		SmellValue rootSmell = graph.get(root);
 		rootSmell.totalDist = 0;
 		rootSmell.orientation = sc.getOrientation();
@@ -592,6 +591,11 @@ public class World extends AbstractWorld {
 			// pops hex from priority queue
 			Hex curr = frontier.remove();
 			SmellValue currSmell = graph.get(curr);
+
+			if (foodList.contains(currSmell)) {
+				continue; // TODO remove this optimization to smell if it makes things break
+			}
+
 			int c = curr.getColumnIndex();
 			int r = curr.getRowIndex();
 
@@ -601,7 +605,7 @@ public class World extends AbstractWorld {
 				neighbors[0] = grid[c][r + 1];
 			if (isValidHex(c + 1, r + 1))
 				neighbors[1] = grid[c + 1][r + 1];
-			if (isValidHex(c, r + 1))
+			if (isValidHex(c + 1, r))
 				neighbors[2] = grid[c + 1][r];
 			if (isValidHex(c, r - 1))
 				neighbors[3] = grid[c][r - 1];
@@ -654,9 +658,6 @@ public class World extends AbstractWorld {
 				direction = sv.origin;
 			}
 		}
-
-		// TODO optimization: have a particular track of searching end if it hits food
-		// TODO test method a bunch when done
 
 		return distance * 1000 + direction;
 	}

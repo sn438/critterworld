@@ -37,6 +37,7 @@ public class GUI extends Application {
 	}
 }
 
+// TODO write tests?
 // TODO check all todos before submitting (especially "// todo remove"s)
 
 // Sujith:
@@ -44,7 +45,10 @@ public class GUI extends Application {
 
 // Rishi:
 // TODO finish up the todos in smell method
+<<<<<<< HEAD
 // TODO draw written problem #3 in paint
+=======
+>>>>>>> c3cd790ba8ed1f862203848d2166be296bcedef2
 // TODO add welcome to critterworld spiel in help text, and also put a made by us thing
 // TODO create some smarter critter programs for better testing (and as prep for
 // critter tournament :))
