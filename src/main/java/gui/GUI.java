@@ -37,6 +37,9 @@ public class GUI extends Application {
 	}
 }
 
+// Rishi:
+// TODO use MAX_SMELL_DIST instead of 10
+
 // Andy:
 // TODO when loading a world, given critter orientations are ignored -- random values are used
 // TODO reduce min width probably cuz it's a very high amount right now
