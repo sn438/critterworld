@@ -77,16 +77,12 @@ public class World extends AbstractWorld {
 		super.timePassed = 0;
 
 		String[] lines = worlddesc.split("\r\n");
-		System.out.println(lines.length);
-		for (String line : lines) {
-			System.out.println(line);
-		}
 		if (lines.length < 2)
 			throw new IllegalArgumentException();
 
 		// parses the world name, and if no valid one is parsed, supplies a default one
 		worldname = FileParser.parseAttributeFromLine(lines[0], "name ");
-
+		
 		if (worldname.equals(""))
 			worldname = "Arrakis";
 
@@ -96,16 +92,14 @@ public class World extends AbstractWorld {
 			String worldDimensions = FileParser.parseAttributeFromLine(lines[1], "size ");
 			String[] dim = worldDimensions.split(" ");
 			columns = Integer.parseInt(dim[0]);
-			System.out.println("columns: " + columns);
 			rows = Integer.parseInt(dim[1]);
-			System.out.println("rows: " + rows);
-
 			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0)) {
 				columns = CONSTANTS.get("COLUMNS").intValue();
 				rows = CONSTANTS.get("ROWS").intValue();
 				System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			columns = CONSTANTS.get("COLUMNS").intValue();
 			rows = CONSTANTS.get("ROWS").intValue();
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
@@ -280,7 +274,7 @@ public class World extends AbstractWorld {
 				line = bf.readLine();
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Critter file not found.");
+			System.err.println("Critter file not found.");
 			return;
 		} catch (IOException e) {
 			return;
@@ -1144,7 +1138,8 @@ public class World extends AbstractWorld {
 		critterList.remove(sc);
 		updatedHexes.add(location);
 		deadCritters.add(sc);
-
+		System.out.println("A critter has been killed.");
+		System.out.println("The number of deadCritters is: " + deadCritters.size());
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		nonCritterObjectMap.put(remnant, location);
 		location.addContent(remnant);
@@ -1160,6 +1155,8 @@ public class World extends AbstractWorld {
 		critterList.remove(sc);
 		updatedHexes.add(location);
 		deadCritters.add(sc);
+		System.out.println("A critter has been removed.");
+		System.out.println("The number of deadCritters is: " + deadCritters.size());
 	}
 
 	@Override

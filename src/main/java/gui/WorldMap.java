@@ -2,6 +2,7 @@ package gui;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import distributed.ClientRequestHandler;
 import javafx.scene.canvas.Canvas;
@@ -67,6 +68,7 @@ public class WorldMap {
 	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
 	 */
 	private double origin_y;
+	private boolean localMode;
 	/** Holds the last drawn time step. */
 	// private int currentTimeStep;
 	// private boolean localMode;
@@ -81,7 +83,7 @@ public class WorldMap {
 	 *            The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
-		// localMode = true;
+		localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -110,7 +112,7 @@ public class WorldMap {
 	 * @param sessionId
 	 */
 	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
-		// this.localMode = false;
+		this.localMode = false;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		// this.handler = handler;
@@ -155,7 +157,6 @@ public class WorldMap {
 		gc.clearRect(0, 0, width, height);
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
-
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -189,12 +190,14 @@ public class WorldMap {
 		
 		// draws world objects
 		gc.setLineWidth(3);
-		drawObjects();
+		if (localMode)
+			drawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
 			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		}
+		
 	}
 
 	/** Draws the world objects onto the grid. */
@@ -211,7 +214,21 @@ public class WorldMap {
 			drawWorldObject(entry.getKey(), c, r);
 		}
 	}
-
+	
+	void drawCritters(Set<Map.Entry<SimpleCritter, Hex>> critterSet){
+		for (Map.Entry<SimpleCritter, Hex> entry : critterSet) {
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawCritter(entry.getKey(), c, r);
+		}
+	}
+	void drawObjects(Set<Map.Entry<WorldObject, Hex>> objectSet){
+		for (Map.Entry<WorldObject, Hex> entry : objectSet) {
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawWorldObject(entry.getKey(), c, r);
+		}
+	}
 	/**
 	 * Draws one critter onto the world grid.
 	 * 

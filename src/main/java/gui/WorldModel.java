@@ -54,12 +54,14 @@ public class WorldModel {
 	public WorldModel() {
 		rwl.writeLock().lock();
 		try {
+			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
 			numCritters = 0;
 			time = 0;
 			versionNumber = 0;
 			// IDAssignment = 0;
 			diffLog = new ArrayList<ArrayList<Hex>>();
 			// critterIDMap = new HashMap<Integer, SimpleCritter>();
+			createNewWorld();
 		} finally {
 			rwl.writeLock().unlock();
 		}
@@ -76,7 +78,7 @@ public class WorldModel {
 		try {
 			// if a world already exists, adds all its dead critters to the cumulative dead
 			// critter list
-			if (world != null)
+			if (world != null && world.collectCritterCorpses() != null)
 				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
 			world = new World();
 			// System.out.println(world.getAndResetUpdatedHexes());

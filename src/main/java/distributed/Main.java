@@ -26,6 +26,7 @@ public class Main {
 				GUI.main(null);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Server was not started. Please start server first.");
 		}
 	}
