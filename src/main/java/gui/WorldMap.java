@@ -2,6 +2,7 @@ package gui;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import distributed.ClientRequestHandler;
 import javafx.scene.canvas.Canvas;
@@ -67,6 +68,7 @@ public class WorldMap {
 	 * Marks the rectangular y coordinate of the origin (the (0, 0) hex coordinate).
 	 */
 	private double origin_y;
+	private boolean localMode;
 	/** Holds the last drawn time step. */
 	// private int currentTimeStep;
 	// private boolean localMode;
@@ -74,14 +76,14 @@ public class WorldMap {
 
 	/**
 	 * Creates a new world map.
-	 * 
+	 *
 	 * @param can
 	 *            The Canvas to draw on
 	 * @param wm
 	 *            The WorldModel to work off of
 	 */
 	public WorldMap(Canvas can, WorldModel wm) {
-		// localMode = true;
+		localMode = true;
 		gc = can.getGraphicsContext2D();
 		canvas = can;
 		model = wm;
@@ -101,6 +103,36 @@ public class WorldMap {
 		y_position_marker = (((double) height / 2)
 				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
 				+ (Math.sqrt(3) * (sideLength / 2));
+	}
+
+	/**
+	 *
+	 * @param can
+	 * @param handler
+	 * @param sessionId
+	 */
+	public WorldMap(Canvas can, ClientRequestHandler handler, int sessionId) {
+		this.localMode = false;
+		gc = can.getGraphicsContext2D();
+		canvas = can;
+		// this.handler = handler;
+		height = canvas.getHeight();
+		width = canvas.getWidth();
+
+		columns = handler.getColumns(sessionId);
+		rows = handler.getRows(sessionId);
+
+		column_drawing_marker = columns;
+		row_drawing_marker = rows;
+		row_drawing_marker -= column_drawing_marker / 2;
+		sideLength = 30;
+
+		x_position_marker = ((double) width / 2) - ((((double) column_drawing_marker / 2) / 2) * 3 * sideLength)
+				+ (sideLength / 2);
+		y_position_marker = (((double) height / 2)
+				- (((double) row_drawing_marker / 2) * (Math.sqrt(3) * (sideLength))))
+				+ (Math.sqrt(3) * (sideLength / 2));
+
 	}
 
 	/**
@@ -125,7 +157,6 @@ public class WorldMap {
 		gc.clearRect(0, 0, width, height);
 		gc.setFill(BACKGROUND_COLOR);
 		gc.fillRect(0, 0, width, height);
-
 		// draws grid and sets the origin
 		gc.setLineWidth(1);
 		double hexMarkerX = x_position_marker;
@@ -156,15 +187,17 @@ public class WorldMap {
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3);
-		
+
 		// draws world objects
 		gc.setLineWidth(3);
-		drawObjects();
+		if (localMode)
+			drawObjects();
 
 		if (selectedHex != null) {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
 			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		}
+
 	}
 
 	/** Draws the world objects onto the grid. */
@@ -182,9 +215,23 @@ public class WorldMap {
 		}
 	}
 
+	void drawCritters(Set<Map.Entry<SimpleCritter, Hex>> critterSet){
+		for (Map.Entry<SimpleCritter, Hex> entry : critterSet) {
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawCritter(entry.getKey(), c, r);
+		}
+	}
+	void drawObjects(Set<Map.Entry<WorldObject, Hex>> objectSet){
+		for (Map.Entry<WorldObject, Hex> entry : objectSet) {
+			int c = entry.getValue().getColumnIndex();
+			int r = entry.getValue().getRowIndex();
+			drawWorldObject(entry.getKey(), c, r);
+		}
+	}
 	/**
 	 * Draws one critter onto the world grid.
-	 * 
+	 *
 	 * @param sc
 	 * @param c
 	 * @param r
@@ -313,7 +360,7 @@ public class WorldMap {
 
 	/**
 	 * Draws one non-critter object onto the world grid.
-	 * 
+	 *
 	 * @param wo
 	 * @param c
 	 * @param r
@@ -361,7 +408,7 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn) {
@@ -386,7 +433,7 @@ public class WorldMap {
 
 	/**
 	 * highlightHex highlights the hex that is currently selected
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate of the spot that the user clicks
 	 * @param y
@@ -409,7 +456,7 @@ public class WorldMap {
 
 	/**
 	 * drag implements panning
-	 * 
+	 *
 	 * @param deltaX
 	 * @param deltaY
 	 */
@@ -450,7 +497,7 @@ public class WorldMap {
 	/**
 	 * A method that, given a set of rectangular canvas coordinates, returns the
 	 * coordinates of the hex it is located in.
-	 * 
+	 *
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 * @return An {@code int} array containing the (r, c) coordinates of the closest
@@ -488,7 +535,7 @@ public class WorldMap {
 	/**
 	 * A method that converts a hex coordinate pair converts it to cartesian
 	 * coordinates.
-	 * 
+	 *
 	 * @param hexCoordinates
 	 * @return
 	 */

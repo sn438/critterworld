@@ -1,28 +1,41 @@
 package gui;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jetty.websocket.server.WebSocketHandler.Simple;
+
 import com.google.gson.Gson;
+import com.sun.javafx.collections.MappingChange.Map;
 
 import ast.Program;
+import ast.ProgramImpl;
 import distributed.ClientRequestHandler;
-import distributed.ClientWorldMap;
+import distributed.JSONWorldObject;
+import distributed.Mutex;
 import distributed.SessionID;
 import distributed.WorldStateJSON;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -58,7 +71,14 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.util.Duration;
+import parse.ParserImpl;
+import simulation.Critter;
+import simulation.Food;
+import simulation.Hex;
+import simulation.Rock;
 import simulation.SimpleCritter;
+import simulation.World;
+import simulation.WorldObject;
 
 /**
  * This class handles user inputs and sends information to the world model and
@@ -132,7 +152,7 @@ public class Controller {
 	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
 	/** A local cached version of the world. */
-	private WorldModel localCache;
+	private WorldModel model;
 	/** Controls the hex grid. */
 	private WorldMap map;
 	/** The rate at which the simulation is run. */
@@ -150,72 +170,79 @@ public class Controller {
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
 	private String urlInitial;
-	private int sessionID;
 	private boolean localMode;
 	private ClientRequestHandler handler;
-	private int currentVersion;
-
-	private boolean devMode = true; // TODO make false before submitting
+	private HashMap<Hex, SimpleCritter> hexToCritterMap;
+	private boolean devMode = true;
+	private SessionID sessionId;
 
 	@FXML
 	public void initialize() {
 		login();
-		loadCritterFile.setDisable(true);
-		numCritters.setDisable(true);
-		pause.setDisable(true);
-		localCache = new WorldModel();
+		if (!localMode) {
+			map = new WorldMap(c, handler, sessionId.getSessionID());
+			loadCritterFile.setDisable(true);
+			numCritters.setDisable(true);
+			pause.setDisable(true);
+			setupCanvas();
+			setGUIReadyServer(true);
+			Timeline tl = new Timeline();
+			tl.setCycleCount(Animation.INDEFINITE);
+			KeyFrame updateGUI = new KeyFrame(Duration.seconds(0.2000), new EventHandler<ActionEvent>() {
 
-		simulationRate = 30;
-		setupCanvas();
-		setGUIReady(false);
-		if(!localMode) {
-			setGUIReady(true);
-			continuouslyRefreshView();
-		}
-	}
+				public void handle(ActionEvent event) {
+					map.draw();
+					simulationSpeed.valueProperty().addListener(new ChangeListener<Number>() {
+						public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+							simulationRate = new_val.longValue();
+							handler.changeRate(simulationRate, sessionId.getSessionID());
+						}
+					});
 
-	public void continuouslyRefreshView() {
-		Thread refresh = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while(simulationRate > 0) {
-					long time = (long) (1000 / simulationRate);
-					System.out.println("blah");
-					updateView();
-					
+					LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+						@Override
+						public void changed(ObservableValue<? extends Toggle> ov, Toggle oldT, Toggle newT) {
+							if (newT == null) {
+								numCritters.setDisable(true);
+								loadCritterFile.setDisable(true);
+							} else if (newT == (Toggle) chkRandom) {
+								numCritters.setDisable(false);
+								loadCritterFile.setDisable(false);
+							} else if (newT == (Toggle) chkSpecify) {
+								numCritters.setDisable(true);
+								loadCritterFile.setDisable(false);
+							}
+						}
+					});
+					loadCritterFile.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							loadCritterFile.setDisable(true);
+						}
+					});
 					try {
-						Thread.sleep(time);
-					} catch(InterruptedException i) {
-						System.out.println("Could not pause thread execution.");
+						setWorldState();
+					} catch (UnsupportedEncodingException e) {
+						System.out.println("The world could not be drawn.");
+					} catch (IOException e) {
+						System.out.println("The world could not be drawn.");
 					}
 				}
-			}
-		});
-		refresh.setDaemon(true);
-		Platform.runLater(refresh);
-	}
-	
-	private void updateView() {
-		WorldStateJSON update = handler.updateSince(sessionID, currentVersion);
-		if(update != null) {
-			System.out.println("update");
-			currentVersion = update.getCurrentVersion();
-			localCache.loadWorld(update);
-			if(map == null)
-				map = new WorldMap(c, localCache);
-			map.draw();
-			crittersAlive.setText("Critters Alive: " + update.getPopulation());
-			stepsTaken.setText("Time: " + update.getCurrentTime());
+			});
+
+			tl.getKeyFrames().add(updateGUI);
+			tl.play();
+		}
+		else {
+			handleNewWorldPressed(null);
 		}
 	}
-	
+
 	private void doReset() {
 		if (executor != null)
 			executor.shutdownNow();
 		if (timeline != null)
 			timeline.stop();
-
-		simulationRate = 30;
 
 		loadCritterFile.setDisable(true);
 		numCritters.setDisable(true);
@@ -223,6 +250,8 @@ public class Controller {
 		setGUIReady(false);
 		resetInfo();
 
+		model = new WorldModel();
+		simulationRate = 30;
 		c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 
 		LoadChoice.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -249,6 +278,87 @@ public class Controller {
 		});
 	}
 
+	private void setWorldState() throws IOException {
+		WorldStateJSON worldState = null;
+		if (map != null) {
+			int[] bottomLeftCorner = map.closestHex(0, c.getHeight());
+			int[] topRightCorner = map.closestHex(c.getWidth(), 0);
+			for (int i = 0; i < 2; i++) {
+				if (bottomLeftCorner[i] < 0) {
+					bottomLeftCorner[i] = 0;
+				}
+			}
+			for (int i = 0; i < 2; i++) {
+				if (topRightCorner[i] < 0) {
+
+					topRightCorner[i] = 0;
+				}
+			}
+			worldState = handler.getWorldObjects(topRightCorner[0], bottomLeftCorner[0], topRightCorner[1],
+					bottomLeftCorner[1], sessionId.getSessionID());
+			if (worldState == null) {
+				return;
+			}
+			JSONWorldObject[] worldObjects = worldState.getWorldObjects();
+			HashMap<WorldObject, Hex> objectMap = new HashMap<WorldObject, Hex>();
+			HashMap<SimpleCritter, Hex> critterMap = new HashMap<SimpleCritter, Hex>();
+			this.hexToCritterMap = new HashMap<Hex, SimpleCritter>();
+			if (worldObjects != null) {
+				for (JSONWorldObject worldObject : worldObjects) {
+					if (worldObject.getType().equals("rock")) {
+						int c = worldObject.getCol();
+						int r = worldObject.getRow();
+						Hex hex = new Hex(c, r);
+						Rock rock = new Rock();
+						objectMap.put(rock, hex);
+					}
+					if (worldObject.getType().equals("food")) {
+						int c = worldObject.getCol();
+						int r = worldObject.getRow();
+						Hex hex = new Hex(c, r);
+						int calories = worldObject.getCalories();
+						Food food = new Food(calories);
+						objectMap.put(food, hex);
+					}
+					if (worldObject.getType().equals("critter")) {
+						int c = worldObject.getCol();
+						int r = worldObject.getRow();
+						Hex hex = new Hex(c, r);
+						String programString = worldObject.getProgram();
+						Program program = null;
+						if (programString != null) {
+							ParserImpl parser = new ParserImpl();
+							InputStream stream = new ByteArrayInputStream(
+									worldObject.getProgram().getBytes(StandardCharsets.UTF_8.name()));
+							BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+							program = parser.parse(reader);
+							reader.close();
+						}
+						int[] mem = worldObject.getMemory();
+						String speciesName = worldObject.getSpeciesName();
+						int orientation = worldObject.getOrientation();
+						SimpleCritter critter = new Critter(program, mem, speciesName, orientation);
+						critterMap.put(critter, hex);
+						synchronized (this.hexToCritterMap) {
+							this.hexToCritterMap.put(hex, critter);
+						}
+					}
+				}
+			}
+			Set<Entry<SimpleCritter, Hex>> critterSet = critterMap.entrySet();
+			Set<Entry<WorldObject, Hex>> objectSet = objectMap.entrySet();
+			if (critterSet.size() > 0) {
+				map.drawCritters(critterSet);
+			}
+			if (objectSet.size() > 0) {
+				map.drawObjects(objectSet);
+			}
+			crittersAlive.setText("Critters Alive: " + worldState.getPopulation());
+			stepsTaken.setText("Time: " + worldState.getCurrentTime());
+		}
+
+	}
+
 	private void setupCanvas() {
 		c.addEventFilter(MouseEvent.ANY, (e) -> c.requestFocus());
 
@@ -271,6 +381,17 @@ public class Controller {
 		chkSpecify.setDisable(!isReady);
 		stepForward.setDisable(!isReady);
 		run.setDisable(!isReady);
+		simulationSpeed.setDisable(!isReady);
+		displayProgram.setDisable(!isReady);
+		c.setDisable(!isReady);
+		c.setVisible(isReady);
+	}
+
+	private void setGUIReadyServer(boolean isReady) {
+		chkRandom.setDisable(!isReady);
+		chkSpecify.setDisable(!isReady);
+		stepForward.setDisable(!isReady);
+		run.setDisable(isReady);
 		simulationSpeed.setDisable(!isReady);
 		displayProgram.setDisable(!isReady);
 		c.setDisable(!isReady);
@@ -307,20 +428,25 @@ public class Controller {
 	}
 
 	private void newWorld() {
-		localCache.createNewWorld();
-		map = new WorldMap(c, localCache);
+		model.createNewWorld();
+		map = new WorldMap(c, model);
 		setGUIReady(true);
-		crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
-		stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
+		crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+		stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 
 		map.draw();
 	}
 
 	private void newWorldServer() {
-		if (handler.createNewWorld(sessionID)) {
-			updateView();
-		} else
+		setGUIReadyServer(true);
+		if (handler.createNewWorld(sessionId.getSessionID())) {
+			map = new WorldMap(c, handler, sessionId.getSessionID());
+			map.draw();
+		} else {
+			map.draw();
 			return;
+		}
+
 	}
 
 	@FXML
@@ -344,8 +470,14 @@ public class Controller {
 
 	private void loadServerWorld(File worldFile) {
 		try {
-			handler.loadWorld(worldFile, sessionID);
-			updateView();
+			setGUIReadyServer(true);
+			if (handler.loadWorld(worldFile, sessionId.getSessionID())) {
+				map = new WorldMap(c, handler, sessionId.getSessionID());
+				map.draw();
+			} else {
+				map.draw();
+				return;
+			}
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 			a.setTitle("Invalid File");
@@ -373,8 +505,8 @@ public class Controller {
 
 	private void loadWorld(File worldFile) {
 		try {
-			localCache.loadWorld(worldFile);
-			map = new WorldMap(c, localCache);
+			model.loadWorld(worldFile);
+			map = new WorldMap(c, model);
 			map.draw();
 		} catch (FileNotFoundException e) {
 			Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
@@ -405,10 +537,6 @@ public class Controller {
 	private void handleLoadCritters(MouseEvent me) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose Critter File");
-		if (devMode) {
-			File f = new File("./src/test/resources/simulationtests/critters");
-			fc.setInitialDirectory(f);
-		}
 		File critterFile = fc.showOpenDialog(new Popup());
 		if (critterFile == null)
 			return;
@@ -418,10 +546,9 @@ public class Controller {
 			try {
 				int n = Integer.parseInt(numCritters.getText());
 				if (localMode)
-					localCache.loadRandomCritters(critterFile, n);
+					model.loadRandomCritters(critterFile, n);
 				else {
-					handler.loadRandomCritters(critterFile, n, sessionID);
-					updateView();
+					handler.loadRandomCritters(critterFile, n, sessionId.getSessionID());
 				}
 
 			} catch (NumberFormatException e) {
@@ -447,14 +574,11 @@ public class Controller {
 					String row = result.get().split(" ")[1];
 					int c = Integer.parseInt(col);
 					int r = Integer.parseInt(row);
-					System.out.println("c: " + c);
-					System.out.println("r: " + r);
 					if (localMode)
-						localCache.loadCritterAtLocation(critterFile, c, r);
+						model.loadCritterAtLocation(critterFile, c, r);
 					else
 						try {
-							handler.loadCritterAtLocation(critterFile, c, r, sessionID);
-							updateView();
+							handler.loadCritterAtLocation(critterFile, c, r, sessionId.getSessionID());
 						} catch (FileNotFoundException e) {
 							Alert a = new Alert(AlertType.ERROR, "Your file could not be read. Please try again.");
 							a.setTitle("Invalid File");
@@ -475,14 +599,14 @@ public class Controller {
 	@FXML
 	private void handleStep(MouseEvent me) {
 		if (localMode) {
-			localCache.advanceTime();
+			model.advanceTime();
 			updateInfoBox();
 			map.draw();
-			crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
-			stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
+			crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+			stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 		} else {
-			handler.advanceTime();
-			updateView();
+			if (this.simulationRate == 0)
+				handler.advanceTime(sessionId.getSessionID());
 		}
 	}
 
@@ -491,15 +615,18 @@ public class Controller {
 		if (localMode) {
 			if (simulationRate == 0)
 				return;
+
 			Thread worldUpdateThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					localCache.advanceTime();
+					model.advanceTime();
 				}
 			});
 			worldUpdateThread.setDaemon(false);
+
 			executor = Executors.newSingleThreadScheduledExecutor();
 			executor.scheduleAtFixedRate(worldUpdateThread, 0, 1000 / simulationRate, TimeUnit.MILLISECONDS);
+
 			timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 30), new EventHandler<ActionEvent>() {
 
 				@Override
@@ -507,12 +634,14 @@ public class Controller {
 					updateInfoBox();
 					map.draw();
 					updateInfoBox();
-					crittersAlive.setText("Critters Alive: " + localCache.getNumCritters());
-					stepsTaken.setText("Time: " + localCache.getCurrentTimeStep());
+					crittersAlive.setText("Critters Alive: " + model.getNumCritters());
+					stepsTaken.setText("Time: " + model.getCurrentTimeStep());
 				}
 			}));
+
 			timeline.setCycleCount(Timeline.INDEFINITE);
 			timeline.play();
+
 			newWorld.setDisable(true);
 			loadWorld.setDisable(true);
 			loadCritterFile.setDisable(true);
@@ -522,6 +651,7 @@ public class Controller {
 			stepForward.setDisable(true);
 			run.setDisable(true);
 			simulationSpeed.setDisable(true);
+
 			pause.setDisable(false);
 		}
 	}
@@ -550,7 +680,8 @@ public class Controller {
 		if (me.getButton() == MouseButton.PRIMARY && !isCurrentlyDragging) {
 			double xCoordinateSelected = me.getSceneX();
 			double yCoordinateSelected = me.getSceneY() - 25;
-			map.select(xCoordinateSelected, yCoordinateSelected);
+			if (map != null)
+				map.select(xCoordinateSelected, yCoordinateSelected);
 			updateInfoBox();
 		}
 		isCurrentlyDragging = false;
@@ -558,38 +689,105 @@ public class Controller {
 
 	/** Updates the contents of the critter information box. */
 	private void updateInfoBox() {
-		if (map.getSelectedHex() != null) {
-			int[] hexCoordinatesSelected = map.getSelectedHex();
-			columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
-			rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
-			if (localCache.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-				SimpleCritter critter = localCache.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-				memSizeText.setText(String.valueOf(critter.getMemLength()));
-				speciesText.setText(critter.getName());
-				int[] critterMemoryCopy = new int[critter.getMemLength()];
-				critterMemoryCopy = critter.getMemoryCopy();
-				defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-				offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-				sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-				energyText.setText(String.valueOf(critterMemoryCopy[4]));
-				passText.setText(String.valueOf(critterMemoryCopy[5]));
-				tagText.setText(String.valueOf(critterMemoryCopy[6]));
-				postureText.setText(String.valueOf(critterMemoryCopy[7]));
-				lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
+			memSizeText.setText("");
+			speciesText.setText("");
+			defenseText.setText("");
+			offenseText.setText("");
+			sizeText.setText("");
+			energyText.setText("");
+			passText.setText("");
+			tagText.setText("");
+			postureText.setText("");
+			if (localMode) {
+				if (map.getSelectedHex() != null) {
+					int[] hexCoordinatesSelected = map.getSelectedHex();
+					columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+					rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
+					if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+						SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+						memSizeText.setText(String.valueOf(critter.getMemLength()));
+						speciesText.setText(critter.getName());
+						int[] critterMemoryCopy = new int[critter.getMemLength()];
+						critterMemoryCopy = critter.getMemoryCopy();
+						defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+						offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+						sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+						energyText.setText(String.valueOf(critterMemoryCopy[4]));
+						passText.setText(String.valueOf(critterMemoryCopy[5]));
+						tagText.setText(String.valueOf(critterMemoryCopy[6]));
+						postureText.setText(String.valueOf(critterMemoryCopy[7]));
+						lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
+					}
+				} else {
+					columnText.setText("");
+					rowText.setText("");
+				}
 			} else {
-				memSizeText.setText("");
-				speciesText.setText("");
-				defenseText.setText("");
-				offenseText.setText("");
-				sizeText.setText("");
-				energyText.setText("");
-				passText.setText("");
-				tagText.setText("");
-				postureText.setText("");
+				synchronized (this.hexToCritterMap) {
+				int[] hexCoordinatesSelected = map.getSelectedHex();
+				if (hexCoordinatesSelected != null) {
+					columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+					rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
+					Hex hex = new Hex(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+					Set<Entry<Hex, SimpleCritter>> entryCritterSet = this.hexToCritterMap.entrySet();
+					for (Entry entry : entryCritterSet) {
+						if (entry.getKey().equals(hex)) {
+							SimpleCritter critter = (SimpleCritter) entry.getValue();
+							memSizeText.setText(String.valueOf(critter.getMemLength()));
+							speciesText.setText(critter.getName());
+							int[] critterMemoryCopy = new int[critter.getMemLength()];
+							critterMemoryCopy = critter.getMemoryCopy();
+							defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+							offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+							sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+							energyText.setText(String.valueOf(critterMemoryCopy[4]));
+							passText.setText(String.valueOf(critterMemoryCopy[5]));
+							tagText.setText(String.valueOf(critterMemoryCopy[6]));
+							postureText.setText(String.valueOf(critterMemoryCopy[7]));
+							lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
+							break;
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	@FXML
+	private void handleDisplayProgram(MouseEvent me) {
+		if (localMode) {
+			int[] hexCoordinates = new int[2];
+			hexCoordinates = map.getSelectedHex();
+			if (hexCoordinates == null) {
+				return;
+			}
+			if (model.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
+				SimpleCritter critter = model.getCritter(hexCoordinates[0], hexCoordinates[1]);
+				Program critterProgram = critter.getProgram();
+				String critterProgramString = critterProgram.toString();
+				Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+				alert.setHeaderText("Critter Program");
+				alert.showAndWait();
 			}
 		} else {
-			columnText.setText("");
-			rowText.setText("");
+			int[] hexCoordinatesSelected = map.getSelectedHex();
+			if (hexCoordinatesSelected != null) {
+				Hex hex = new Hex(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+				Set<Entry<Hex, SimpleCritter>> entryCritterSet = this.hexToCritterMap.entrySet();
+				for (Entry entry : entryCritterSet) {
+					if (entry.getKey().equals(hex)) {
+						SimpleCritter critter = (SimpleCritter) entry.getValue();
+						if (critter.getProgram() != null) {
+							String critterProgramString = critter.getProgram().toString();
+							Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
+							alert.setHeaderText("Critter Program");
+							alert.showAndWait();
+						}
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -611,8 +809,8 @@ public class Controller {
 				panMarkerY = me.getSceneY();
 			}
 			isCurrentlyDragging = true;
-
-			map.drag((me.getSceneX() - panMarkerX) / 0.05, (me.getSceneY() - panMarkerY) / 0.05);
+			if (map != null)
+				map.drag((me.getSceneX() - panMarkerX) / 0.05, (me.getSceneY() - panMarkerY) / 0.05);
 
 			panMarkerX = me.getSceneX();
 			panMarkerY = me.getSceneY();
@@ -668,26 +866,6 @@ public class Controller {
 		System.exit(0);
 	}
 
-	@FXML
-	private void handleDisplayProgram(MouseEvent me) {
-		int[] hexCoordinates = new int[2];
-		hexCoordinates = map.getSelectedHex();
-		if (hexCoordinates == null) {
-			return;
-		}
-		if (localCache.getCritter(hexCoordinates[0], hexCoordinates[1]) != null) {
-			SimpleCritter critter = localCache.getCritter(hexCoordinates[0], hexCoordinates[1]);
-			Program critterProgram = critter.getProgram();
-			String critterProgramString = critterProgram.toString();
-			
-			Alert alert = new Alert(AlertType.INFORMATION, critterProgramString);
-			ImageView imgview = new ImageView(GUI.icon);
-			alert.setGraphic(imgview);
-			alert.setHeaderText("Critter Program");
-			alert.showAndWait();
-		}
-	}
-
 	/** Logs into the server. */
 	private void login() {
 		Gson gson = new Gson();
@@ -698,8 +876,9 @@ public class Controller {
 		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 		TextField levelTextField = new TextField("Level");
 		TextField passwordTextField = new TextField("Password");
-		// TextField urlTextField = new TextField("http://localhost:8080");
-		TextField urlTextField = new TextField("http://hexworld.herokuapp.com:80/hexworld");
+		TextField urlTextField = new TextField("http://localhost:8080");
+		// TextField urlTextField = new
+		// TextField("http://hexworld.herokuapp.com:80/hexworld");
 		dialogPane.setContent(new VBox(8, levelTextField, passwordTextField, urlTextField));
 		Platform.runLater(levelTextField::requestFocus);
 		dialog.setResultConverter((ButtonType button) -> {
@@ -717,9 +896,7 @@ public class Controller {
 		try {
 			url = new URL(this.urlInitial + "/login");
 			// url = new URL("http://hexworld.herokuapp.com:80/hexworld/login");
-			System.out.println(gson.toJson(loginInfo, LoginInfo.class));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			System.out.println(url.toString());
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
 			PrintWriter w = new PrintWriter(connection.getOutputStream());
@@ -736,7 +913,7 @@ public class Controller {
 
 				if (result.get() == ButtonType.OK) {
 					localMode = true;
-					localCache = new WorldModel();
+					model = new WorldModel();
 					return;
 				} else {
 					System.exit(0);
@@ -750,8 +927,7 @@ public class Controller {
 				sessionIdString += holder;
 				holder = r.readLine();
 			}
-			SessionID sessionId = gson.fromJson(sessionIdString, SessionID.class);
-			System.out.println(sessionId.getSessionID());
+			sessionId = gson.fromJson(sessionIdString, SessionID.class);
 
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
@@ -765,7 +941,7 @@ public class Controller {
 
 			if (result.get() == ButtonType.OK) {
 				localMode = true;
-				localCache = new WorldModel();
+				model = new WorldModel();
 				return;
 			} else {
 				System.exit(0);
@@ -783,7 +959,7 @@ public class Controller {
 
 			if (result.get() == ButtonType.OK) {
 				localMode = true;
-				localCache = new WorldModel();
+				model = new WorldModel();
 				return;
 			} else {
 				System.exit(0);

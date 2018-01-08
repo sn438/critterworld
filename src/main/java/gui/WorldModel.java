@@ -2,8 +2,11 @@ package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import distributed.WorldStateJSON;
 import simulation.Hex;
@@ -25,28 +28,55 @@ public class WorldModel {
 	private int numCritters;
 	/** The number of time steps taken. */
 	private int time;
+	private LinkedList<SimpleCritter> cumulativeDeadCritters;
+	private int versionNumber;
+	private ArrayList<ArrayList<Hex>> diffLog;
+	private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
 	/** Creates a new blank world model. */
 	public WorldModel() {
-		numCritters = 0;
-		time = 0;
+		rwl.writeLock().lock();
+		try {
+			cumulativeDeadCritters = new LinkedList<SimpleCritter>();
+			numCritters = 0;
+			time = 0;
+			versionNumber = 0;
+			// IDAssignment = 0;
+			diffLog = new ArrayList<ArrayList<Hex>>();
+			// critterIDMap = new HashMap<Integer, SimpleCritter>();
+			createNewWorld();
+		} finally {
+			rwl.writeLock().unlock();
+		}
 	}
 
 	/**
 	 * Creates a new random world.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             if the constants.txt file could not be read
 	 */
 	public void createNewWorld() throws UnsupportedOperationException {
-		world = new World();
-		time = 0;
-		numCritters = world.numRemainingCritters();
+		rwl.writeLock().lock();
+		try {
+			// if a world already exists, adds all its dead critters to the cumulative dead
+			// critter list
+			if (world != null && world.collectCritterCorpses() != null)
+				cumulativeDeadCritters.addAll(world.collectCritterCorpses());
+			world = new World();
+			// System.out.println(world.getAndResetUpdatedHexes());
+			// diffLog.add(world.getAndResetUpdatedHexes());
+			time = 0;
+			versionNumber++;
+			numCritters = world.numRemainingCritters();
+		} finally {
+			rwl.writeLock().unlock();
+		}
 	}
 
 	/**
 	 * Loads in a world based on a description.
-	 * 
+	 *
 	 * @param desc
 	 * @throws IllegalArgumentException
 	 *             if the description is invalid
@@ -61,7 +91,7 @@ public class WorldModel {
 
 	/**
 	 * Loads in a world file.
-	 * 
+	 *
 	 * @param worldfile
 	 * @throws FileNotFoundException
 	 *             if the file could not be found or is somehow invalid
@@ -100,7 +130,7 @@ public class WorldModel {
 
 	/**
 	 * Returns a number giving information about a hex.
-	 * 
+	 *
 	 * @param c
 	 * @param r
 	 * @return
@@ -119,7 +149,7 @@ public class WorldModel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<Map.Entry<SimpleCritter, Hex>> getCritterMap() {
@@ -127,7 +157,7 @@ public class WorldModel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public synchronized Set<Map.Entry<WorldObject, Hex>> getObjectMap() {
@@ -143,7 +173,7 @@ public class WorldModel {
 
 	/**
 	 * Loads critters at random locations.
-	 * 
+	 *
 	 * @param f The file specifying the critter to load
 	 * @param n The number of critters to load
 	 */

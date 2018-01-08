@@ -28,7 +28,7 @@ public class Hex {
 
 	/**
 	 * Adds a world object to this hex, if it is empty.
-	 * 
+	 *
 	 * @param wo
 	 *            the object to add
 	 * @return whether or not {@code wo} was able to be added to this hex.
@@ -72,7 +72,11 @@ public class Hex {
 		return content.toString();
 	}
 
-	public boolean equals(Hex other) {
-		return this.colIndex == other.colIndex && this.rowIndex == other.rowIndex;
+	@Override
+	public boolean equals(Object o) {
+		Hex secondHex = (Hex) o;
+		if (this.getColumnIndex() == secondHex.getColumnIndex() && this.getRowIndex() == secondHex.getRowIndex())
+			return true;
+		return false;
 	}
 }

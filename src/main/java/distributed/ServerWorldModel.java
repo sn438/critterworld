@@ -2,7 +2,11 @@ package distributed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import simulation.SimpleCritter;
@@ -26,7 +30,10 @@ public class ServerWorldModel {
 	private int time;
 	/** The current world version number. */
 	private int versionNumber;
-	/** A running list of all critters that have died across all worlds simulated in this session. */
+	/**
+	 * A running list of all critters that have died across all worlds simulated in
+	 * this session.
+	 */
 	private LinkedList<Integer> cumulativeDeadCritters;
 	/** Supplies the locks for the models. */
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
@@ -49,6 +56,26 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
+	public void loadWorld() throws IllegalArgumentException, UnsupportedOperationException {
+		rwl.writeLock().lock();
+		try {
+			// if a world already exists, adds all its dead critters to the cumulative dead
+			// critter list
+			if (world != null) {
+				for (SimpleCritter sc : world.collectCritterCorpses())
+					cumulativeDeadCritters.add(world.getCritterID(sc));
+				for (SimpleCritter sc : world.collectCritterCorpses())
+					cumulativeDeadCritters.add(world.getCritterID(sc));
+			}
+			world = new World();
+			diffLog.add(world.getAndResetUpdatedHexes());
+			time = 0;
+			versionNumber++;
+			numCritters = world.numRemainingCritters();
+		} finally {
+			rwl.writeLock().unlock();
+		}
+	}
 
 	/**
 	 * Loads in a world based on a description.
@@ -65,9 +92,9 @@ public class ServerWorldModel {
 			// if a world already exists, adds all its dead critters to the cumulative dead
 			// critter list
 			if (world != null) {
-				for(SimpleCritter sc : world.collectCritterCorpses())
+				for (SimpleCritter sc : world.collectCritterCorpses())
 					cumulativeDeadCritters.add(world.getCritterID(sc));
-				for(SimpleCritter sc : world.collectCritterCorpses())
+				for (SimpleCritter sc : world.collectCritterCorpses())
 					cumulativeDeadCritters.add(world.getCritterID(sc));
 			}
 			world = new World(desc);
@@ -177,6 +204,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Gets a critter's ID from a pointer to that critter
+	 *
 	 * @param sc
 	 * @return The critter's ID, or 0 if no critter ID exists for that critter
 	 */
@@ -189,8 +217,10 @@ public class ServerWorldModel {
 		}
 	}
 
-
-	/** Determines whether a given sessionID has full permissions for a given critter. */
+	/**
+	 * Determines whether a given sessionID has full permissions for a given
+	 * critter.
+	 */
 	public boolean hasCritterPermissions(SimpleCritter sc, int sessionID) {
 		try {
 			rwl.readLock().lock();
@@ -205,6 +235,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Returns a number giving information about a hex.
+	 *
 	 * @param c
 	 * @param r
 	 * @return
@@ -235,11 +266,13 @@ public class ServerWorldModel {
 
 	/** Advances one time step. */
 	public void advanceTime() {
-		world.advanceOneTimeStep();
-		time++;
-		versionNumber++;
-		diffLog.add(world.getAndResetUpdatedHexes());
-		numCritters = world.numRemainingCritters();
+		if (world != null) {
+			world.advanceOneTimeStep();
+			time++;
+			versionNumber++;
+			diffLog.add(world.getAndResetUpdatedHexes());
+			numCritters = world.numRemainingCritters();
+		}
 	}
 
 	/**
@@ -259,7 +292,7 @@ public class ServerWorldModel {
 				for (Hex h : diffLog.get(i)) {
 					int c = h.getColumnIndex();
 					int r = h.getRowIndex();
-					if(isValidHex(c, r))
+					if (isValidHex(c, r))
 						result.put(h, world.getHexContent(c, r));
 				}
 			}
@@ -268,9 +301,9 @@ public class ServerWorldModel {
 			rwl.readLock().unlock();
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param initialVersionNumber
 	 * @param from_row
 	 * @param to_row
@@ -298,7 +331,41 @@ public class ServerWorldModel {
 		}
 	}
 
-	/** Determines whether or not a hex with column index {@code c} and row index {@code r} is on the world grid. */
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column,
+			int to_column) {
+		try {
+			rwl.readLock().lock();
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
+				return null;
+			if (initialVersionNumber == 0) {
+				HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+				for (Hex h : diffLog.get(0)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if (isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row)
+						result.put(h, world.getHexContent(c, r));
+				}
+				return result;
+			}
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if (isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row)
+						result.put(h, world.getHexContent(c, r));
+				}
+			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+
+	/**
+	 * Determines whether or not a hex with column index {@code c} and row index
+	 * {@code r} is on the world grid.
+	 */
 	private boolean isValidHex(int c, int r) {
 		if (c < 0 || r < 0)
 			return false;
@@ -308,10 +375,13 @@ public class ServerWorldModel {
 			return false;
 		return true;
 	}
+
 	/**
 	 * Returns a critter object based on its ID
+	 *
 	 * @param id
-	 * @return The critter with the specified ID, or {@code null} if no such critter exists
+	 * @return The critter with the specified ID, or {@code null} if no such critter
+	 *         exists
 	 */
 	public SimpleCritter retrieveCritter(int id) {
 		try {
@@ -334,7 +404,9 @@ public class ServerWorldModel {
 
 	/**
 	 * Removes a critter from the world, if it is there.
-	 * @param id The ID of the critter to remove
+	 *
+	 * @param id
+	 *            The ID of the critter to remove
 	 */
 	public void removeCritter(int id) {
 		try {
@@ -350,8 +422,11 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in critters of a certain species into the world at random locations.
-	 * @param sc The critter species
-	 * @param n The number to add
+	 *
+	 * @param sc
+	 *            The critter species
+	 * @param n
+	 *            The number to add
 	 * @param sessionID
 	 * @return The IDs of the added critters
 	 */
@@ -369,9 +444,13 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in a critter of a certain species into the world.
-	 * @param sc The critter species
-	 * @param c The column index at which to add the critter
-	 * @param r The row index at which to add the critter
+	 *
+	 * @param sc
+	 *            The critter species
+	 * @param c
+	 *            The column index at which to add the critter
+	 * @param r
+	 *            The row index at which to add the critter
 	 * @param sessionID
 	 * @return The ID of the added critter
 	 */
@@ -389,9 +468,13 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads a non-critter world object into the world.
-	 * @param wo The object to load in (can be food or a rock)
-	 * @param c The column index at which to add the object
-	 * @param r The row index at which to add the object
+	 *
+	 * @param wo
+	 *            The object to load in (can be food or a rock)
+	 * @param c
+	 *            The column index at which to add the object
+	 * @param r
+	 *            The row index at which to add the object
 	 */
 	public boolean addWorldObject(WorldObject wo, int c, int r) {
 		try {
@@ -403,5 +486,9 @@ public class ServerWorldModel {
 			versionNumber++;
 			rwl.writeLock().unlock();
 		}
+	}
+
+	public SimpleWorld getWorld() {
+		return this.world;
 	}
 }

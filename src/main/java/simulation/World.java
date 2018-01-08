@@ -53,7 +53,7 @@ public class World extends AbstractWorld {
 
 	/**
 	 * Loads a world from a description.
-	 * 
+	 *
 	 * @param worlddesc
 	 *            A String description of the world.
 	 * @throws UnsupportedOperationException
@@ -93,13 +93,13 @@ public class World extends AbstractWorld {
 			String[] dim = worldDimensions.split(" ");
 			columns = Integer.parseInt(dim[0]);
 			rows = Integer.parseInt(dim[1]);
-
 			if (!(columns > 0 && rows > 0 && 2 * rows - columns > 0)) {
 				columns = CONSTANTS.get("COLUMNS").intValue();
 				rows = CONSTANTS.get("ROWS").intValue();
 				System.err.println("Invalid world dimensions. Supplying default world dimensions...");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			columns = CONSTANTS.get("COLUMNS").intValue();
 			rows = CONSTANTS.get("ROWS").intValue();
 			System.err.println("Invalid world dimensions. Supplying default world dimensions...");
@@ -150,12 +150,12 @@ public class World extends AbstractWorld {
 		super.critterList = new LinkedList<SimpleCritter>();
 		super.deadCritters = new LinkedList<SimpleCritter>();
 		super.timePassed = 0;
-		
+
 		columns = state.getCols();
 		rows = state.getRows();
 		worldname = state.getName();
 		numValidHexes = 0;
-		
+
 		// initializes world grid
 		grid = new Hex[columns][rows];
 		objects = new JSONWorldObject[columns][rows];
@@ -166,17 +166,17 @@ public class World extends AbstractWorld {
 					numValidHexes++;
 					updatedHexes.add(grid[i][j]);
 				}
-		
-		for(JSONWorldObject obj : state.getWorldObjects()) {
+
+		for (JSONWorldObject obj : state.getWorldObjects()) {
 			objects[obj.getCol()][obj.getRow()] = obj;
-			if(obj.getType().equals("critter")) {
+			if (obj.getType().equals("critter")) {
 				int[] mem = obj.getMemory();
 				String name = obj.getSpeciesName();
 				int dir = obj.getOrientation();
 				loadOneCritter(new Critter(null, mem, name, dir), obj.getCol(), obj.getRow(), -1);
-			} else if(obj.getType().equals("rock")) {
+			} else if (obj.getType().equals("rock")) {
 				addNonCritterObject(new Rock(), obj.getCol(), obj.getRow());
-			} else if(obj.getType().equals("food")) {
+			} else if (obj.getType().equals("food")) {
 				Food f = new Food(obj.getCalories());
 				addNonCritterObject(f, obj.getCol(), obj.getRow());
 			}
@@ -186,7 +186,7 @@ public class World extends AbstractWorld {
 	/**
 	 * Loads a world from a world description file, in the form of a pre-determined
 	 * file.
-	 * 
+	 *
 	 * @param file
 	 *            The file that contains world information.
 	 * @throws FileNotFoundException
@@ -274,7 +274,7 @@ public class World extends AbstractWorld {
 				line = bf.readLine();
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Critter file not found.");
+			System.err.println("Critter file not found.");
 			return;
 		} catch (IOException e) {
 			return;
@@ -285,7 +285,7 @@ public class World extends AbstractWorld {
 
 	/**
 	 * Generates a default size world containing nothing but randomly placed rocks.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             if the world constants file could not be found or was improperly
 	 *             formatted
@@ -337,7 +337,7 @@ public class World extends AbstractWorld {
 	/**
 	 * Parses the constants file in the project directory and stores the constants
 	 * in the CONSTANTS field.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *             if the constants file couldn't be found or is improperly
 	 *             formatted
@@ -570,18 +570,18 @@ public class World extends AbstractWorld {
 		}
 
 		ArrayList<Hex> visitedHexes = new ArrayList<>();
-		
+
 		// sets up critter's smellValue for smell function
 		SmellValue rootSmell = graph.get(root);
-		rootSmell.totalDist = 0;
+		rootSmell.totalDist = -1;
 		rootSmell.orientation = sc.getOrientation();
 		rootSmell.numSteps = 0;
-		rootSmell.origin = sc.getOrientation();
+		rootSmell.origin = 0;
 
 		// sets up priority queue
 		AdjustablePriorityQueue<Hex> frontier = new AdjustablePriorityQueue<Hex>();
 		frontier.add(root);
-		frontier.setPriority(root, 0);
+		frontier.setPriority(root, -1);
 
 		boolean initialIteration = true;
 		while (!frontier.isEmpty()) {
@@ -590,8 +590,11 @@ public class World extends AbstractWorld {
 			visitedHexes.add(curr);
 			SmellValue currSmell = graph.get(curr);
 
+			// exits current path of food search if it has already found food because it is
+			// impossible to find a closer food in the same path since weights are always
+			// positive
 			if (foodList.contains(currSmell)) {
-				continue; // TODO remove this optimization to smell if it makes things break
+				continue;
 			}
 
 			int c = curr.getColumnIndex();
@@ -624,13 +627,11 @@ public class World extends AbstractWorld {
 						continue;
 					}
 
-					int newDistance = currSmell.totalDist;
-					if (!isFood) {
-						newDistance += calculateSmellWeight(currSmell, sv);
-					}
+					sv.orientation = i;
+					int newDistance = currSmell.totalDist + calculateSmellWeight(currSmell, sv);
 					if (sv.totalDist == Integer.MAX_VALUE) {
 						sv.totalDist = newDistance;
-						sv.origin = initialIteration ? ((i - rootSmell.origin + 6) % 6) : currSmell.origin;
+						sv.origin = initialIteration ? ((i - rootSmell.orientation + 6) % 6) : currSmell.origin;
 						sv.numSteps = currSmell.numSteps + 1;
 						frontier.add(neighbors[i]);
 						frontier.setPriority(neighbors[i], sv.totalDist);
@@ -655,7 +656,9 @@ public class World extends AbstractWorld {
 				direction = sv.origin;
 			}
 		}
-		return distance * 1000 + direction;
+		int returnValue = distance * 1000 + direction;
+		System.out.println(returnValue);
+		return returnValue;
 	}
 
 	private int calculateSmellWeight(SmellValue a, SmellValue b) {
@@ -1140,7 +1143,6 @@ public class World extends AbstractWorld {
 		critterList.remove(sc);
 		updatedHexes.add(location);
 		deadCritters.add(sc);
-
 		Food remnant = new Food(CONSTANTS.get("FOOD_PER_SIZE").intValue() * sc.size());
 		nonCritterObjectMap.put(remnant, location);
 		location.addContent(remnant);

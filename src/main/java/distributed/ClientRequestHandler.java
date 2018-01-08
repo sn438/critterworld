@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import com.google.gson.Gson;
@@ -70,16 +71,37 @@ public class ClientRequestHandler {
 				alert.setContentText("You do not have permission to create a new world.");
 				return false;
 			}
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			System.out.println(r1.readLine());
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 		return true;
 
+	}
+
+	public WorldStateJSON getWorldObjects(int to_column, int from_column, int to_row, int from_row, int sessionId) throws SocketTimeoutException {
+		Gson gson = new Gson();
+		URL url = null;
+		WorldStateJSON worldState= null;
+		try {
+			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + 0 + "&from_row=" + from_row + "&to_row=" + to_row + "&from_col=" + from_column + "&to_col=" + to_column);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.connect();
+			if (connection.getResponseCode() == 401) {
+				return null;
+			}
+			if (connection.getResponseCode() == 403) {
+				return null;
+			}
+			BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			worldState = gson.fromJson(r, WorldStateJSON.class);
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+		}
+		return worldState;
 	}
 
 	/**
@@ -130,7 +152,6 @@ public class ClientRequestHandler {
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		} finally {
 			br.close();
@@ -141,7 +162,7 @@ public class ClientRequestHandler {
 
 	/**
 	 * Returns the number of columns in the world.
-	 * 
+	 *
 	 * @return The number of columns, or -1 if the user does not have permission
 	 */
 	public int getColumns(int sessionId) {
@@ -150,7 +171,6 @@ public class ClientRequestHandler {
 		int returnValue = 0;
 		try {
 			url = new URL(this.url + "/world?session_id=" + sessionId + "&update_since=" + this.mostRecentVersion);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.connect();
 			if (connection.getResponseCode() == 401) {
@@ -197,13 +217,36 @@ public class ClientRequestHandler {
 		return returnValue;
 	}
 
-	public void advanceTime() {
-		// TODO Auto-generated method stub
+	public void changeRate(long simulationRate, int sessionId) {
+		SimulationControlJSON.RateJSON rateJSON = new SimulationControlJSON.RateJSON(simulationRate);
+		URL url = null;
+		Gson gson = new Gson();
+		try {
+			url = new URL(this.url + "/run?session_id=" + sessionId);
+			// url = new URL("http://localhost:" + 8080 + "/world?session_id=" + sessionId);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true); // send a POST message
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
+			PrintWriter w = new PrintWriter(connection.getOutputStream());
+			w.println(gson.toJson(rateJSON, SimulationControlJSON.RateJSON.class));
+			w.flush();
+			if (connection.getResponseCode() == 406) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Invalid Request");
+				alert.setHeaderText("Access Denied");
+				alert.setContentText("The simulation rate was invalid.");
+			}
 
+		} catch (MalformedURLException e) {
+			System.out.println("The URL entered was not correct.");
+		} catch (IOException e) {
+			System.out.println("Could not connect to the server");
+		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param f
 	 * @param n
 	 * @param sessionId
@@ -224,9 +267,6 @@ public class ClientRequestHandler {
 		URL url;
 		try {
 			url = new URL(this.url + "/critters?session_id=" + sessionId);
-			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
-			// sessionId);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
@@ -240,23 +280,15 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to add critters.");
 			}
-			System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line = r1.readLine();
-			while (line != null) {
-				System.out.println(line);
-				line = r1.readLine();
-			}
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param f
 	 * @param c
 	 * @param r
@@ -278,9 +310,6 @@ public class ClientRequestHandler {
 		URL requestURL;
 		try {
 			requestURL = new URL(this.url + "/critters?session_id=" + sessionId);
-			// url = new URL("http://localhost:" + 8080 + "/critters?session_id=" +
-			// sessionId);
-			System.out.println(requestURL);
 			HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
 			connection.setDoOutput(true); // send a POST message
 			connection.setRequestMethod("POST");
@@ -294,17 +323,7 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The user cannot create a new world because the user is not an admin.");
 			}
-			// System.out.println(gson.toJson(critterJSON, CritterJSON.class));
-			BufferedReader r1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line = r1.readLine();
-			while (line != null) {
-				System.out.println(line);
-				line = r1.readLine();
-			}
-		} catch (MalformedURLException e) {
-			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO remove
 			System.out.println("Could not connect to the server");
 		}
 	}
@@ -320,7 +339,6 @@ public class ClientRequestHandler {
 		URL url;
 		try {
 			url = new URL(this.url + "/world?session_id=" + sessionID + "&update_since=" + updateSince);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("GET");
@@ -354,13 +372,13 @@ public class ClientRequestHandler {
 	}
 
 	/**
-	 * stepWorld() steps the world by one timestep.
+	 * advanceTime steps the world by one timestep.
 	 */
 	public void advanceTime(int sessionId) {
+		Gson gson = new Gson();
 		URL url;
 		try {
 			url = new URL(this.url + "/step?session_id=" + sessionId);
-			System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
