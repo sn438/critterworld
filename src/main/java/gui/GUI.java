@@ -37,33 +37,10 @@ public class GUI extends Application {
 	}
 }
 
-// TODO write tests?
-// TODO check all todos before submitting (especially "// todo remove"s)
-
-// Sujith:
-// TODO work on server stuff
-
 // Rishi:
-// TODO finish up the todos in smell method
-// TODO add welcome to critterworld spiel in help text, and also put a made by us thing
-// TODO create some smarter critter programs for better testing (and as prep for
-// critter tournament :))
-// TODO optimize zooming so that it only redraws visible portion and not whole
-// entire hex grid?
-// TODO load critter button and num critters field should reset after critters
-// are loaded, right?
-// TODO what does display program do if no critter is selected? should it be
-// disabled unless a critter is selected?
-// TODO review instructions at end to make sure they are consistent with any
-// changes to gui made
-// TODO add change view angle thing if time, or kozen easter egg, or sounds
+// TODO use MAX_SMELL_DIST instead of 10
 
 // Andy:
-// TODO double check to make sure all A4 and A5 grader bugs have been fixed
-// TODO find better way to loop through all critters???
-// TODO locks in world model - ask about those?
-// TODO is there a way to have the program stop automatically when the GUI is
-// closed while running?
-// TODO fix bug for non terminating threads
-// TODO create loadCritterResponseJSON
-// TODO handle IllegalArgumentException in controller
+// TODO resolve merge conflict in ClientController
+// TODO when loading a world, given critter orientations are ignored -- random values are used
+// TODO reduce min width probably cuz it's a very high amount right now

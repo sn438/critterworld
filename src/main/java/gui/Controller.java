@@ -151,7 +151,7 @@ public class Controller {
 
 	/** A timeline that redraws the world periodically. */
 	private Timeline timeline;
-	/** The model that contains the world state. */
+	/** A local cached version of the world. */
 	private WorldModel model;
 	/** Controls the hex grid. */
 	private WorldMap map;
@@ -170,11 +170,11 @@ public class Controller {
 	private boolean isCurrentlyDragging = false;
 	private LoginInfo loginInfo;
 	private String urlInitial;
-	private SessionID sessionId;
 	private boolean localMode;
 	private ClientRequestHandler handler;
 	private HashMap<Hex, SimpleCritter> hexToCritterMap;
 	private boolean devMode = true;
+	private SessionID sessionId;
 
 	@FXML
 	public void initialize() {
@@ -188,7 +188,7 @@ public class Controller {
 			setGUIReadyServer(true);
 			Timeline tl = new Timeline();
 			tl.setCycleCount(Animation.INDEFINITE);
-			KeyFrame updateGUI = new KeyFrame(Duration.seconds(0.1000), new EventHandler<ActionEvent>() {
+			KeyFrame updateGUI = new KeyFrame(Duration.seconds(0.2000), new EventHandler<ActionEvent>() {
 
 				public void handle(ActionEvent event) {
 					map.draw();
@@ -547,8 +547,9 @@ public class Controller {
 				int n = Integer.parseInt(numCritters.getText());
 				if (localMode)
 					model.loadRandomCritters(critterFile, n);
-				else
+				else {
 					handler.loadRandomCritters(critterFile, n, sessionId.getSessionID());
+				}
 
 			} catch (NumberFormatException e) {
 				Alert a = new Alert(AlertType.ERROR, "Make sure you've inputed a valid number of critters to load in.");
@@ -657,19 +658,21 @@ public class Controller {
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		executor.shutdownNow();
+		if(!localMode) {
+			executor.shutdownNow();
 
-		newWorld.setDisable(false);
-		loadWorld.setDisable(false);
-		loadCritterFile.setDisable(false);
-		chkRandom.setDisable(false);
-		chkSpecify.setDisable(false);
-		stepForward.setDisable(false);
-		run.setDisable(false);
-		simulationSpeed.setDisable(false);
+			newWorld.setDisable(false);
+			loadWorld.setDisable(false);
+			loadCritterFile.setDisable(false);
+			chkRandom.setDisable(false);
+			chkSpecify.setDisable(false);
+			stepForward.setDisable(false);
+			run.setDisable(false);
+			simulationSpeed.setDisable(false);
 
-		timeline.stop();
-		pause.setDisable(true);
+			timeline.stop();
+			pause.setDisable(true);
+		}
 	}
 
 	@FXML
@@ -816,8 +819,6 @@ public class Controller {
 
 	@FXML
 	private void handleKeyEvents(KeyEvent ke) {
-		// TODO make it possible to press multiple keys at once for panning? seems to be
-		// difficult.
 		if (ke.getCode().equals(KeyCode.UP)) {
 			map.drag(0, 400);
 		}

@@ -76,7 +76,7 @@ public class ServerWorldModel {
 			rwl.writeLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Loads in a world based on a description.
 	 *
@@ -204,7 +204,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Gets a critter's ID from a pointer to that critter
-	 * 
+	 *
 	 * @param sc
 	 * @return The critter's ID, or 0 if no critter ID exists for that critter
 	 */
@@ -235,7 +235,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Returns a number giving information about a hex.
-	 * 
+	 *
 	 * @param c
 	 * @param r
 	 * @return
@@ -302,6 +302,35 @@ public class ServerWorldModel {
 		}
 	}
 
+	/**
+	 *
+	 * @param initialVersionNumber
+	 * @param from_row
+	 * @param to_row
+	 * @param from_column
+	 * @param to_column
+	 * @return
+	 */
+	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column, int to_column) {
+		try {
+			rwl.readLock().lock();
+			if (initialVersionNumber < 0 || initialVersionNumber > diffLog.size())
+				return null;
+			HashMap<Hex, WorldObject> result = new HashMap<Hex, WorldObject>();
+			for (int i = initialVersionNumber; i < diffLog.size(); i++) {
+				for (Hex h : diffLog.get(i)) {
+					int c = h.getColumnIndex();
+					int r = h.getRowIndex();
+					if(isValidHex(c, r) && c >= from_column && c <= to_column && r >= from_row && r <= to_row )
+						result.put(h, world.getHexContent(c, r));
+				}
+			}
+			return result;
+		} finally {
+			rwl.readLock().unlock();
+		}
+	}
+
 	public HashMap<Hex, WorldObject> updateSince(int initialVersionNumber, int from_row, int to_row, int from_column,
 			int to_column) {
 		try {
@@ -349,7 +378,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Returns a critter object based on its ID
-	 * 
+	 *
 	 * @param id
 	 * @return The critter with the specified ID, or {@code null} if no such critter
 	 *         exists
@@ -375,7 +404,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Removes a critter from the world, if it is there.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of the critter to remove
 	 */
@@ -393,7 +422,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in critters of a certain species into the world at random locations.
-	 * 
+	 *
 	 * @param sc
 	 *            The critter species
 	 * @param n
@@ -415,7 +444,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads in a critter of a certain species into the world.
-	 * 
+	 *
 	 * @param sc
 	 *            The critter species
 	 * @param c
@@ -439,7 +468,7 @@ public class ServerWorldModel {
 
 	/**
 	 * Loads a non-critter world object into the world.
-	 * 
+	 *
 	 * @param wo
 	 *            The object to load in (can be food or a rock)
 	 * @param c

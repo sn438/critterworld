@@ -76,7 +76,7 @@ public class WorldMap {
 
 	/**
 	 * Creates a new world map.
-	 * 
+	 *
 	 * @param can
 	 *            The Canvas to draw on
 	 * @param wm
@@ -106,7 +106,7 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param can
 	 * @param handler
 	 * @param sessionId
@@ -187,7 +187,7 @@ public class WorldMap {
 		if (column_drawing_marker % 2 == 0)
 			origin_y += (sideLength / 2) * (Math.sqrt(3));
 		origin_y -= sideLength / 2 * Math.sqrt(3);
-		
+
 		// draws world objects
 		gc.setLineWidth(3);
 		if (localMode)
@@ -197,7 +197,7 @@ public class WorldMap {
 			double[] highlightCoordinates = hexToCartesian(selectedHex);
 			highlightHex(highlightCoordinates[0], highlightCoordinates[1]);
 		}
-		
+
 	}
 
 	/** Draws the world objects onto the grid. */
@@ -214,7 +214,7 @@ public class WorldMap {
 			drawWorldObject(entry.getKey(), c, r);
 		}
 	}
-	
+
 	void drawCritters(Set<Map.Entry<SimpleCritter, Hex>> critterSet){
 		for (Map.Entry<SimpleCritter, Hex> entry : critterSet) {
 			int c = entry.getValue().getColumnIndex();
@@ -231,7 +231,7 @@ public class WorldMap {
 	}
 	/**
 	 * Draws one critter onto the world grid.
-	 * 
+	 *
 	 * @param sc
 	 * @param c
 	 * @param r
@@ -360,7 +360,7 @@ public class WorldMap {
 
 	/**
 	 * Draws one non-critter object onto the world grid.
-	 * 
+	 *
 	 * @param wo
 	 * @param c
 	 * @param r
@@ -408,7 +408,7 @@ public class WorldMap {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param zoomIn
 	 */
 	public void zoom(boolean zoomIn) {
@@ -433,7 +433,7 @@ public class WorldMap {
 
 	/**
 	 * highlightHex highlights the hex that is currently selected
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate of the spot that the user clicks
 	 * @param y
@@ -456,7 +456,7 @@ public class WorldMap {
 
 	/**
 	 * drag implements panning
-	 * 
+	 *
 	 * @param deltaX
 	 * @param deltaY
 	 */
@@ -497,7 +497,7 @@ public class WorldMap {
 	/**
 	 * A method that, given a set of rectangular canvas coordinates, returns the
 	 * coordinates of the hex it is located in.
-	 * 
+	 *
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 * @return An {@code int} array containing the (r, c) coordinates of the closest
@@ -535,7 +535,7 @@ public class WorldMap {
 	/**
 	 * A method that converts a hex coordinate pair converts it to cartesian
 	 * coordinates.
-	 * 
+	 *
 	 * @param hexCoordinates
 	 * @return
 	 */

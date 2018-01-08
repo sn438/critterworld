@@ -28,7 +28,7 @@ public class Hex {
 
 	/**
 	 * Adds a world object to this hex, if it is empty.
-	 * 
+	 *
 	 * @param wo
 	 *            the object to add
 	 * @return whether or not {@code wo} was able to be added to this hex.

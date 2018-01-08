@@ -18,9 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import simulation.FileParser;
-import simulation.Hex;
 import simulation.SimpleCritter;
-import simulation.WorldObject;
 
 /** A class to handle client requests to the server. */
 public class ClientRequestHandler {
@@ -81,7 +79,7 @@ public class ClientRequestHandler {
 		return true;
 
 	}
-	
+
 	public WorldStateJSON getWorldObjects(int to_column, int from_column, int to_row, int from_row, int sessionId) throws SocketTimeoutException {
 		Gson gson = new Gson();
 		URL url = null;
@@ -164,7 +162,7 @@ public class ClientRequestHandler {
 
 	/**
 	 * Returns the number of columns in the world.
-	 * 
+	 *
 	 * @return The number of columns, or -1 if the user does not have permission
 	 */
 	public int getColumns(int sessionId) {
@@ -239,16 +237,16 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("The simulation rate was invalid.");
 			}
-			
+
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {
 			System.out.println("Could not connect to the server");
-		} 
+		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param f
 	 * @param n
 	 * @param sessionId
@@ -290,7 +288,7 @@ public class ClientRequestHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param f
 	 * @param c
 	 * @param r
@@ -377,7 +375,6 @@ public class ClientRequestHandler {
 	 * advanceTime steps the world by one timestep.
 	 */
 	public void advanceTime(int sessionId) {
-		
 		Gson gson = new Gson();
 		URL url;
 		try {
@@ -392,7 +389,6 @@ public class ClientRequestHandler {
 				alert.setHeaderText("Access Denied");
 				alert.setContentText("You do not have permission to view the world.");
 			}
-			
 		} catch (MalformedURLException e) {
 			System.out.println("The URL entered was not correct.");
 		} catch (IOException e) {

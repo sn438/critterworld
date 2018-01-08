@@ -66,6 +66,7 @@ public class Server {
 		writePassword = writePass;
 		adminPassword = adminPass;
 		model = new ServerWorldModel();
+		session_id_count = 0;
 		sessionIdMap = new HashMap<Integer, String>();
 		rwl = new ReentrantReadWriteLock();
 		simulationRate = 10;
@@ -110,6 +111,8 @@ public class Server {
 				session_id_count++;
 				responseValue.put("session_id", new Integer(session_id_count));
 				sessionIdMap.put(session_id_count, "admin");
+				System.out.println(sessionIdMap.get(0));
+				System.out.println(session_id_count);
 				response.status(200);
 				return responseValue;
 			} else {
@@ -381,6 +384,7 @@ public class Server {
 				return "User does not have write access.";
 			}
 			String json = request.body();
+			System.out.println(json);
 			CritterJSON loadCritterInfo = gson.fromJson(json, CritterJSON.class);
 			ParserImpl parser = new ParserImpl();
 			InputStream stream = new ByteArrayInputStream(
