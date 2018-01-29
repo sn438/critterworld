@@ -23,16 +23,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.jetty.websocket.server.WebSocketHandler.Simple;
-
 import com.google.gson.Gson;
-import com.sun.javafx.collections.MappingChange.Map;
 
 import ast.Program;
-import ast.ProgramImpl;
 import distributed.ClientRequestHandler;
 import distributed.JSONWorldObject;
-import distributed.Mutex;
 import distributed.SessionID;
 import distributed.WorldStateJSON;
 import javafx.animation.Animation;
@@ -77,7 +72,6 @@ import simulation.Food;
 import simulation.Hex;
 import simulation.Rock;
 import simulation.SimpleCritter;
-import simulation.World;
 import simulation.WorldObject;
 
 /**
@@ -232,8 +226,7 @@ public class Controller {
 
 			tl.getKeyFrames().add(updateGUI);
 			tl.play();
-		}
-		else {
+		} else {
 			handleNewWorldPressed(null);
 		}
 	}
@@ -658,7 +651,7 @@ public class Controller {
 
 	@FXML
 	private void handlePauseClicked(MouseEvent me) {
-		if(!localMode) {
+		if (!localMode) {
 			executor.shutdownNow();
 
 			newWorld.setDisable(false);
@@ -689,41 +682,41 @@ public class Controller {
 
 	/** Updates the contents of the critter information box. */
 	private void updateInfoBox() {
-			memSizeText.setText("");
-			speciesText.setText("");
-			defenseText.setText("");
-			offenseText.setText("");
-			sizeText.setText("");
-			energyText.setText("");
-			passText.setText("");
-			tagText.setText("");
-			postureText.setText("");
-			if (localMode) {
-				if (map.getSelectedHex() != null) {
-					int[] hexCoordinatesSelected = map.getSelectedHex();
-					columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
-					rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
-					if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
-						SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
-						memSizeText.setText(String.valueOf(critter.getMemLength()));
-						speciesText.setText(critter.getName());
-						int[] critterMemoryCopy = new int[critter.getMemLength()];
-						critterMemoryCopy = critter.getMemoryCopy();
-						defenseText.setText(String.valueOf(critterMemoryCopy[1]));
-						offenseText.setText(String.valueOf(critterMemoryCopy[2]));
-						sizeText.setText(String.valueOf(critterMemoryCopy[3]));
-						energyText.setText(String.valueOf(critterMemoryCopy[4]));
-						passText.setText(String.valueOf(critterMemoryCopy[5]));
-						tagText.setText(String.valueOf(critterMemoryCopy[6]));
-						postureText.setText(String.valueOf(critterMemoryCopy[7]));
-						lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
-					}
-				} else {
-					columnText.setText("");
-					rowText.setText("");
+		memSizeText.setText("");
+		speciesText.setText("");
+		defenseText.setText("");
+		offenseText.setText("");
+		sizeText.setText("");
+		energyText.setText("");
+		passText.setText("");
+		tagText.setText("");
+		postureText.setText("");
+		if (localMode) {
+			if (map.getSelectedHex() != null) {
+				int[] hexCoordinatesSelected = map.getSelectedHex();
+				columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
+				rowText.setText(String.valueOf(hexCoordinatesSelected[1]));
+				if (model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]) != null) {
+					SimpleCritter critter = model.getCritter(hexCoordinatesSelected[0], hexCoordinatesSelected[1]);
+					memSizeText.setText(String.valueOf(critter.getMemLength()));
+					speciesText.setText(critter.getName());
+					int[] critterMemoryCopy = new int[critter.getMemLength()];
+					critterMemoryCopy = critter.getMemoryCopy();
+					defenseText.setText(String.valueOf(critterMemoryCopy[1]));
+					offenseText.setText(String.valueOf(critterMemoryCopy[2]));
+					sizeText.setText(String.valueOf(critterMemoryCopy[3]));
+					energyText.setText(String.valueOf(critterMemoryCopy[4]));
+					passText.setText(String.valueOf(critterMemoryCopy[5]));
+					tagText.setText(String.valueOf(critterMemoryCopy[6]));
+					postureText.setText(String.valueOf(critterMemoryCopy[7]));
+					lastRuleDisplay.setText("Last rule: " + "\n" + critter.getLastRuleString());
 				}
 			} else {
-				synchronized (this.hexToCritterMap) {
+				columnText.setText("");
+				rowText.setText("");
+			}
+		} else {
+			synchronized (this.hexToCritterMap) {
 				int[] hexCoordinatesSelected = map.getSelectedHex();
 				if (hexCoordinatesSelected != null) {
 					columnText.setText(String.valueOf(hexCoordinatesSelected[0]));
