@@ -19,7 +19,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage stage) {
 		stage.setMinHeight(900);
-		stage.setMinWidth(1600);
+		stage.setMinWidth(1200); // reduced from 1600px to accommodate more devices
 
 		try {
 			URL r = getClass().getResource("gui.fxml");
@@ -37,9 +37,7 @@ public class GUI extends Application {
 	}
 }
 
-// Rishi:
-// TODO use MAX_SMELL_DIST instead of 10
-
-// Andy:
-// TODO when loading a world, given critter orientations are ignored -- random values are used
-// TODO reduce min width probably cuz it's a very high amount right now
+/*
+ * known bugs:
+ * TODO when loading a world, given critter orientations are ignored -- random values are used
+ */

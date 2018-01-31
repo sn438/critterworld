@@ -623,7 +623,8 @@ public class World extends AbstractWorld {
 
 					// moves on to the next hex if it has taken 11 steps to reach new hex (or 12 in
 					// the case of food)
-					if (currSmell.numSteps == (isFood ? 11 : 10)) {
+					double maxAllowedDist = CONSTANTS.get("MAX_SMELL_DISTANCE");
+					if (currSmell.numSteps == (isFood ? maxAllowedDist + 1 : maxAllowedDist)) {
 						continue;
 					}
 
