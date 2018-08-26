@@ -26,5 +26,4 @@ Pause -- pause simulation.
 
 Simulation Controls -- adjust the speed of the simulation when running.
 
-
-Made with ❤ by Andy Zhu, Rishi Advani, and Sujith Naapa Ramesh in CS 2112 at Cornell University.
+##### Made with ❤ by Andy Zhu, Rishi Advani, and Sujith Naapa Ramesh in CS 2112 at Cornell University.
