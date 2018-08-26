@@ -15,4 +15,4 @@ Run -- run simulation.
 Pause -- pause simulation.
 Simulation Controls -- adjust the speed of the simulation when running.
 
-Made by Andy Zhu, Rishi Advani, and Sujith Naapa Ramesh.
+Made by Andy Zhu, Rishi Advani, and Sujith Naapa Ramesh in CS 2112 at Cornell University.
